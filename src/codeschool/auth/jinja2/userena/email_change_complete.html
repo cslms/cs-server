@@ -1,0 +1,14 @@
+{% extends 'cs_auth/base.jinja2' %}
+
+{% block title %}{% trans "Email verification" %}{% endblock %}
+{% block content_title %}
+    <h2>{% trans 'Confirm your new email' %}</h2>{% endblock %}
+
+{% block content_body %}
+    <p>
+        {% blocktrans email=viewed_user.userena_signup.email_unconfirmed %}
+            You have received an email at {{ email }}.{% endblocktrans %}</p>
+    <p>{% blocktrans username=viewed_user.username %}To associate this
+        email address with your account ({{ username }}) click on the link
+        provided in this email.{% endblocktrans %}</p>
+{% endblock %}

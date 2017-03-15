@@ -1,0 +1,42 @@
+{% extends "page-list.jinja2" %}
+{% from 'components/cards.jinja2' import cs_card, cards_container %}
+
+{% block empty_list %}
+    {{ cs_card(
+            _('Empty'),
+            _('No activity found'),
+            faded=True,
+            icon='do_not_disturb') }}
+{% endblock %}
+
+{% block object_list %}
+    {% for activity in object_list %}
+        {{ cs_card(
+                activity.title,
+                activity.short_description,
+                icon=activity.material_icon,
+                href=activity.slug) }}
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    {% call cards_container(
+        page.title,
+        page.short_description) %}
+        {{ self.content_body() }}
+    {% endcall %}
+
+    {% if completed_activities %}
+        {% call cards_container(
+            _('Completed'),
+            _('Pending and completed activities')) %}
+            {% for activity in completed_activities %}
+                {{ cs_card(
+                        activity.title,
+                        activity.short_description,
+                        icon=activity.material_icon,
+                        href=activity.slug) }}
+            {% endfor %}
+        {% endcall %}
+    {% endif %}
+{% endblock %}

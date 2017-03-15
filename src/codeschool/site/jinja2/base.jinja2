@@ -1,0 +1,193 @@
+{%- if globals %}
+    {%- if not content_color %}
+        {% set content_color = globals['content_color'] %}
+    {% endif %}
+
+    {%- if not object_name %}
+        {% set object_name = globals['object_name'] %}
+    {% endif %}
+
+    {%- if not form_name %}
+        {% set form_name = globals['form_name'] %}
+    {% endif %}
+{%- endif %}
+{% from 'components/page.jinja2' import cs_head, cs_nav, cs_foot -%}
+
+<!DOCTYPE html>
+<html lang="pt-br" class="no-js">
+<head>
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description"
+              content="{{ page_description|default('Codeschool - learn through coding') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon"
+              href="{{ static('apple-touch-icon.png') }}">
+    {% endblock %}
+    <title>
+        {%- block title %}
+            {% if page %}
+                {%- if page.seo_title %}{{ page.seo_title|e }}{% else %}
+                    {{ page.title|e }}{% endif -%}
+            {% else %}
+                {{- title|default('Codeschool') -}}
+            {% endif %}
+        {% endblock %}
+        {%- block title_suffix %}
+            {% if title_suffix %}{{ title_suffix|e }}{% endif %}
+        {% endblock %}</title>
+
+    <!-- CSS and styles -->
+    {% block style %}
+        <link rel="stylesheet" href="{{ static('css/main.css') }}">
+        {% if content_color %}
+            <style>
+                #content-area main > *:nth-child(odd) {
+                    background-color: {{ content_color }};
+                }
+            </style>
+        {% endif %}
+    {% endblock %}
+
+    <!-- Javascript -->
+    {% block javascript_header %}
+        <script src="{{ static('js/vendor/modernizr-2.8.3.min.js') }}"></script>
+        <script src="{{ static('main.js') }}"></script>
+    {% endblock %}
+</head>
+
+<body class="{% block body_class %}cs-base-page{% if body_class %} {{ body_class }}{% endif %}{% endblock %}"
+      unresolved>
+<!--[if le IE 9]>
+<p class="browserupgrade">
+    You are using an <strong>outdated</strong> browser. Please
+    <a href="http://browsehappy.com/">upgrade your browser</a> to
+    improve your experience.
+</p>
+<![endif]-->
+
+{% block body %}
+    <div id="cs-body" class="mdl-grid mdl-grid mdl-grid--no-spacing">
+        {% call cs_head(request.user, cls='mdl-cell mdl-cell--12-col') %}
+            <a href="/questions/">{{ _('Questions') }}</a>
+        {% endcall %}
+
+        <div id="content-area" class="cs-stripes-layout">
+            {% if nav_sections is undefined %}
+                {% set nav_sections = make_nav_sections() %}
+            {% endif %}
+            {% if not disable_nav_bar and nav_sections %}
+                {% call cs_nav(cls="cs-stripes-layout__sidebar") %}
+                    {% for nav_section in nav_sections %}
+                        {{ nav_section }}
+                    {% endfor %}
+                {% endcall %}
+            {% endif %}
+
+            <main class="cs-stripes-layout__main">
+                <ul class="cs-stripes-layout__breadcrumbs">
+                    {% for item in breadcrumbs|breadcrumbs %}
+                        <li>{{ item|hyperlink }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="cs-stripes-layout__content">
+                    {% block content %}
+                        <section>
+                            {% block content_head %}
+                                <h1>{% block content_title %}
+                                    {{ content_title|e }}{% endblock %}</h1>
+                            {% endblock %}
+                        </section>
+
+                        {% block content_sessions %}
+                            <section>
+                                {% block content_body %}
+                                    {{ content_body }}
+                                {% endblock %}
+                            </section>
+                        {% endblock %}
+                    {% endblock %}
+                </div>
+            </main>
+        </div>
+
+        {% if not disable_footer %}
+            {% call cs_foot(request.user, has_data=not disable_footer_data, cls='mdl-cell mdl-cell--12-col') %}
+                {% if not disable_footer_data %}
+                    <div class="cs-foot__block">
+                        <p class="cs-foot__block-title">Amigos (em
+                            construção)</p>
+                        <ul>
+                            <li>Fulano fez isso</li>
+                            <li>Cicrano fez aquilo</li>
+                            <li>Beltrano fez aquio outro</li>
+                        </ul>
+                    </div>
+
+                    <div class="cs-foot__block">
+                        <p class="cs-foot__block-title">Agenda (em
+                            construção)</p>
+                        <ul>
+                            <li>Prova dia X</li>
+                            <li>Trabalho para dia Y</li>
+                            <li>Estudar XY</li>
+                        </ul>
+                    </div>
+
+                    <div class="cs-foot__block">
+                        <p class="cs-foot__block-title">Notícias (em
+                            construção)</p>
+                        <ul>
+                            <li>Adicionou notas</li>
+                            <li>Mensagem do prof. CB</li>
+                            <li>Não haverá prova dia XXX</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endcall %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block hidden_content %}
+    <dialog id="dialog" class="dialog mdl-dialog">
+        <i id="dialog-close" onclick="$('#dialog')[0].close()"
+           class="material-icons">close</i>
+        <div id="dialog-content">{% block dialog_content %}{% endblock %}</div>
+    </dialog>
+{% endblock %}
+
+<!-- Javascript in the end of file -->
+{% block javascript %}
+    <script src="{{ static('js/srvice/json.js') }}"></script>
+    <script src="{{ static('js/srvice/commands.js') }}"></script>
+    <script src="{{ static('js/srvice/util.js') }}"></script>
+    <script src="{{ static('js/srvice/core.js') }}"></script>
+    <script src="{{ static('js/srvice/dialog.js') }}"></script>
+    <script src="{{ static('js/srvice/actions.js') }}"></script>
+    <script src="{{ static('js/main.js') }}"></script>
+    <script src="{{ static('js/plugins.js') }}"></script>
+{% endblock %}
+
+{% if google_analytics|default(False) %}
+    <!-- Google Analytics -->
+    <script>
+        (function (b, o, i, l, e, r) {
+            b.GoogleAnalyticsObject = l;
+            b[l] || (b[l] =
+                    function () {
+                        (b[l].q = b[l].q || []).push(arguments)
+                    });
+            b[l].l = +new Date;
+            e = o.createElement(i);
+            r = o.getElementsByTagName(i)[0];
+            e.src = 'https://www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e, r)
+        }(window, document, 'script', 'ga'));
+        ga('create', '{{ google_analytics_site_id|default('codeschool') }}', 'auto');
+        ga('send', 'pageview');
+    </script>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "cs_auth/base.jinja2" %}
+
+{% block content_title %}{% trans "Signin" %}{% endblock %}
+
+{% block content_sessions %}
+    <div>
+        <form action="" method="post" id="signin">
+            {% csrf_token %}
+            <table class="form">
+                {{ form }}
+            </table>
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}"/>
+            {% endif %}
+
+            <div class="toolbar highlight">
+                <input type="submit" value="{{ _('Login') }}">
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <p class="forgot-password"><a href="{% url 'userena_password_reset' %}"
+                                      title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
+        </p>
+    </div>
+{% endblock %}

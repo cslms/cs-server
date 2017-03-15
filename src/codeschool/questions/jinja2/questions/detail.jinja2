@@ -1,0 +1,32 @@
+{% extends "questions/base.jinja2" %}
+{% if form_name is undefined %}{% set form_name='form' %}{% endif %}
+
+
+{% block content_body %}
+    <h2 class="cs-banner">{{ _('Description') }}</h2>
+    <article class="question-stem">
+        {{ question.body }}
+    </article>
+
+    {% block form_body %}
+        <form method="POST" id="{{ form_name|default('form') }}"
+              {% block form_options %}srvice-bind="./submit-response.api/"{% endblock %}>
+            {{ csrf_input }}
+            {% if context %}
+                <input type="hidden" name="response_context"
+                       value="{{ context.pk }}">
+            {% endif %}
+            {% block response_form %}
+                <h2 class="cs-banner">{{ _('Response') }}</h2>
+                <table class="form">{{ form.as_table() }}</table>
+            {% endblock %}
+        </form>
+
+        <div class="toolbar highlight">
+            <button class="mdl-button mdl-js-button"
+                    form="{{ form_name|default('form') }}">
+                {{ _('Send') }}
+            </button>
+        </div>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "page.jinja2" %}
+{% if form_name is undefined %}{% set form_name='form' %}{% endif %}
+
+{% block content_head %}
+    <div id="points-dashboard">
+        <table>
+            <tr class="points">
+                <td class="score">{{ page.score.points(request.user) }}/{{ page.points_total }}</td>
+                <td>{{ _('pts') }}</td>
+            </tr>
+            {% if page.stars_total != 0.0 %}
+                <tr class="stars">
+                    <td>{{ page.score.stars(request.user)|float }}/{{ page.stars_total }}</td>
+                    <td><i class="material-icons">star</i></td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+    {{ super() }}
+    <p>{{ question.short_description }}</p>
+{% endblock %}
+

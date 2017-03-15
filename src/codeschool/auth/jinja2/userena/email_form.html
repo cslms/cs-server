@@ -1,0 +1,16 @@
+{% extends 'cs_auth/base.jinja2' %}
+
+{% block content_title %}<h2>{% trans username=user.username %}Account &raquo;
+    {{ username }}{% endtrans %}</h2>{% endblock %}
+
+{% block content_body %}
+
+    <form id="form" method="post" id="userena-form">
+        {% csrf_token %}
+        <h2>{% trans "Change email address" %}</h2>
+        <table class="form">{{ form.as_table }}</table>
+    </form>
+    <div class="toolbar highlight">
+        <input type="submit" form="form" value="{% trans "Change email" %}">
+    </div>
+{% endblock %}

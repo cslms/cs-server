@@ -1,0 +1,52 @@
+{% extends 'base.jinja2' %}
+
+{% block style %}
+    {{ super() }}
+    <style>
+        .social-feed--new {
+            margin: 10px 20px;
+            padding: 20px;
+            border: 1px solid black;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-feed--post {
+            border-bottom: 1px solid gray;
+            margin: 20px 0;
+        }
+    </style>
+{% endblock %}
+
+{% block content_title %}
+    <h1>{{ gettext('%(user)s\'s news feed', user=request.user.first_name) }}</h1>
+{% endblock %}
+
+{% block content_body %}
+    <div class="social-feed--new">
+        <p>Add a new post</p>
+        <form method="post">
+            {{ csrf_input }}
+            <input type="hidden" name="post-id" value="{{ post_id }}">
+            <table class="form">
+                {{ form }}
+            </table>
+            <input type="submit" value="Send">
+        </form>
+    </div>
+
+    <h2>List of posts</h2>
+    <div class="social-feed--list">
+        {% if not posts %}
+            <p>Nothing to see :(</p>
+        {% else %}
+            {% for post in posts %}
+                <div class="social-feed--post">
+                    <div>
+                        {{ post.text|e }}
+                    </div>
+                    <p>Created at {{ post.created }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,84 @@
+
+.cs-stripes-layout {
+    margin: 0;
+    width: 100%;
+
+    > * {
+        margin: 0;
+    }
+
+    &__sidebar {
+        display: none;
+    }
+
+    &__main {
+        width: 100%;
+    }
+
+    &__content > * {
+        background-color: white;
+        color: black;
+        padding: 10px;
+    }
+
+    &__content > *:nth-child(odd) {
+        background-color: $color-primary-tint;
+        color: white;
+    }
+
+    &__breadcrumbs {
+        background: darken($color-primary-tint, 2);
+        text-align: right;
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-end;
+        padding: 0 $large-spacing 0 0;
+        border: 1px solid darken($color-primary-tint, 4);
+        font-size: 0.8em;
+
+        > li {
+            list-style: none;
+
+            a {
+                color: lighten($color-primary-tint, 30);
+                text-decoration: none;
+            }
+
+            a:hover {
+                color: white;
+            }
+
+        }
+
+        > li:before {
+            content: "\276F";
+            color: lighten($color-primary-tint, 10);
+            margin: 0 $large-spacing;
+        }
+
+        > li:first-child:before {
+            content: " ";
+        }
+    }
+}
+
+@media only screen and (min-width: $breakpoint-medium-screen) {
+    .cs-stripes-layout {
+        display: flex;
+        flex-flow: row-reverse;
+
+        &__content > * {
+            @include block-padding-large;
+        }
+
+        &__content {
+            flex-grow: 15;
+        }
+
+        &__sidebar {
+            display: block;
+            flex-grow: 3;
+            min-width: 190px;
+        }
+    }
+}

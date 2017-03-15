@@ -1,0 +1,40 @@
+{% extends 'auth/base.jinja2' %}
+
+{% block content_title %}{{ gettext('Profile: %(name)s', name=profile.get_full_name_or_username()) }}{% endblock %}
+
+{% block content_body %}
+    <div>
+        {% block profile_details %}
+            <img class="mugshot" src="{{ profile.get_mugshot_url() }}"
+                 alt="{{ _("Your mugshot") }}">
+            <dl class="user-details">
+                {% block profile_definition_list %}
+                    {% if profile.user.get_full_name() %}
+                        <dt>{{ _("Name") }}</dt>
+                        <dd>{{ profile.user.get_full_name()|e }}</dd>
+                    {% endif %}
+                    {% if profile.user.email and not hide_email %}
+                        <dt>{{ _("Email") }}</dt>
+                        <dd>{{ profile.user.email }}</dd>
+                    {% endif %}
+                    {% if profile.age %}
+                        <dt>{{ _("Age") }}</dt>
+                        <dd>{{ profile.age }}</dd>
+                    {% endif %}
+                    {% if profile.website %}
+                        <dt>{{ _("Website") }}</dt>
+                        <dd>{{ profile.website|urlize }}</dd>
+                    {% endif %}
+                    {% if profile.location %}
+                        <dt>{{ _("Location") }}</dt>
+                        <dd>{{ profile.location|e }}</dd>
+                    {% endif %}
+                    {% if profile.about_me %}
+                        <dt>{{ _("About me") }}</dt>
+                        <dd>{{ profile.about_me|markdown }}</dd>
+                    {% endif %}
+                {% endblock %}
+            </dl>
+        {% endblock %}
+    </div>
+{% endblock %}

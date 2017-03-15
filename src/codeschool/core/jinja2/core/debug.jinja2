@@ -1,0 +1,39 @@
+{% extends "base.jinja2" %}
+
+{% block content_title %}{{ _('Codeschool\'s debug page') }}{% endblock %}
+
+{% block content_body %}
+    <h2>Database</h2>
+    <dl>
+        <dt>Size</dt>
+        <dd>{{ '%.2f' % dbsize_mb }} MB</dd>
+    </dl>
+
+
+    <h2>Users</h2>
+    <dl>
+        <dt>Number of users</dt>
+        <dd>{{ num_users }}</dd>
+    </dl>
+
+    <h2>Content</h2>
+    <dl>
+        <dt>Activities</dt>
+        <dd>{{ num_activities }}</dd>
+
+        <dt>Programming I/O</dt>
+        <dd>{{ num_coding_io}}</dd>
+    </dl>
+
+    <h2>Responses</h2>
+    <dl>
+        <dt>Total responses</dt>
+        <dd>{{ num_responses }}</dd>
+
+        <dt>Total submissions</dt>
+        <dd>{{ num_submissions }}</dd>
+
+        <dt>Average retry rate</dt>
+        <dd>{{ submission_retry_rate }}</dd>
+    </dl>
+{% endblock %}

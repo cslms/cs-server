@@ -1,0 +1,34 @@
+# Cached builds
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.egg
+*.egg-info/
+
+# Non-required directories
+.cache/
+.gitignore
+.idea/
+.git/
+docs/
+docker/
+artwork/
+
+# Build directories
+build/
+dist/
+node_modules/
+src/codeschool/site/bower/
+src/codeschool/site/static/
+src/codeschool/site/static_src/
+
+# Database
+db/
+
+# Static files
+collect/
+node_modules/
+

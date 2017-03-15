@@ -1,0 +1,33 @@
+# Cached builds
+__pycache__/
+.cache/
+.idea/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.egg
+*.sqlite3
+*.egg-info/
+.cache/
+.sass-cache/
+.cs-debug.log
+.coverage
+
+# Build directories
+build/
+dist/
+collect/
+node_modules/
+docs/_build/
+
+# Static and media files
+static.tar.gz
+static-other.tar.gz
+
+# Sensible information
+db/*
+security/*
+logs/
+backup/

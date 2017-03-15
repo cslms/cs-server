@@ -1,0 +1,8 @@
+{% extends 'auth/base.jinja2' %}
+
+{% block title %}{{ _("Signed out") }}{% endblock %}
+{% block content_title %}{{ _("You have been signed out.") }}{% endblock %}
+
+{% block content_body %}
+    <p>{{ _("You have been signed out. Till we meet again.") }}</p>
+{% endblock %}

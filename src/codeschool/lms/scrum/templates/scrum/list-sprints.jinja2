@@ -1,0 +1,17 @@
+{% extends "page.jinja2" %}
+
+{% block content %}
+    <section>
+        <h1>{{ page.title|e }}</h1>
+    </section>
+
+    <section>
+        {% for sprint in sprints %}
+            <div>
+                <h2>{{ gettext('Sprint %(pos)s', pos=loop.index) }}</h2>
+                <p>{{ sprint.description }}</p>
+                <button onclick="document.location='./{{ sprint.id }}/'">{{ _('Go') }}</button>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

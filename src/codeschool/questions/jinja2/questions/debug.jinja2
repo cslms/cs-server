@@ -1,0 +1,16 @@
+{% extends "questions/base.jinja2" %}
+
+
+{% block content_body %}
+    <h2 class="banner">{{ _('Debug Information') }}</h2>
+
+    {% block debug_content %}
+        <p>
+            Is live? {{ page.live }} <br>
+            Has unpublished changes? {{ page.has_unpublished_changes }} <br>
+            Children: {{ page.numchild }} <br>
+            Expired? {{ page.expired }} <br>
+            Owner: {{ page.owner.get_full_name()|e or page.owner.username|e }}
+        </p>
+    {% endblock %}
+{% endblock %}

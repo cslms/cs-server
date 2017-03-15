@@ -1,0 +1,46 @@
+{% extends "base.jinja2" %}
+
+{% block body_class %}ternary{% endblock %}
+
+{% block body %}
+    <header class="dark">
+        {% block header %}
+            <div class="header-title">
+                <h1>{% block content_title %}{% endblock %}</h1>
+            </div>
+        {% endblock %}
+    </header>
+
+    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div class="mdl-tabs__tab-bar dark">
+            {% for (tab, title) in tabs %}
+                <a href="#{{ tab }}" class="mdl-tabs__tab
+                {%- if (active_tab is defined and tab == active_tab) or (active_tab is not defined and loop.index == 1) -%}
+                     {{- " is-active" }}{% endif %}">{{ title }}</a>
+            {% endfor %}
+        </div>
+
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+    </div>
+
+    <footer class="dark">
+        {% block footer %}
+            <div class="toolbar">
+                <button class="primary" onclick="submit()">{{ _('Next') }}</button>
+            </div>
+        {% endblock %}
+    </footer>
+{% endblock %}
+
+{% block style %}
+    {{ super() }}
+    <style>
+        footer.dark .toolbar,
+        header.dark .title {
+            margin: 0 auto;
+            max-width: 800px;
+        }
+    </style>
+{% endblock %}

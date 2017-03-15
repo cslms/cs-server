@@ -1,0 +1,17 @@
+{% extends 'questions/detail.jinja2' %}
+
+
+{% block response_form %}
+    <h2 class="cs-banner">{{ _('Choices') }}</h2>
+    {% for choice in choices %}
+        <div>
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect"
+               for="id-{{ choice.uuid }}">
+            <input class="mdl-radio__button" type="radio"
+                   id="id-{{ choice.uuid }}" name="choices"
+                   value="{{ choice.uuid }}">
+            <span class="mdl-radio__label">{{ choice.text|richtext }}</span>
+        </label>
+        </div>
+    {% endfor %}
+{% endblock %}

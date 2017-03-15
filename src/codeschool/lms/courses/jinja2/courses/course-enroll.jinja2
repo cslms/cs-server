@@ -1,0 +1,22 @@
+{% extends "page.jinja2" %}
+{% from 'components/cards.jinja2' import cs_card, cards_container %}
+
+{% block content_head %}
+    {{ super() }}
+    <p>{{ page.short_description|e }}</p>
+{% endblock %}
+
+{% block content_body %}
+{% trans %}
+        <p>You are not enrolled in this course. Please fill the secret
+            passphrase in order to register.
+        </p>
+    {% endtrans %}
+    <form method="post">
+        {{ csrf_input }}
+        <table class="form">
+            {{ form.as_table() }}
+        </table>
+        <input type="submit" name="send">
+    </form>
+{% endblock %}

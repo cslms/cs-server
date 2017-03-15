@@ -1,0 +1,16 @@
+{% extends 'auth/base.jinja2' %}
+
+{% block title %}{{ _("Account setup") }}{% endblock %}
+{% block content_title %}<h2>{{ _('Account settings') }}</h2>{% endblock %}
+
+{% block content_body %}
+    <form method="post" id="form">
+        {{ csrf_input }}
+        <h3>{{ _("Edit Profile") }}</h3>
+        <table class="form">{{ form.as_table() }}</table>
+    </form>
+
+    <div class="toolbar highlight">
+        <input type="submit" form="form" value="{{ _('Save changes') }}"/>
+    </div>
+{% endblock %}

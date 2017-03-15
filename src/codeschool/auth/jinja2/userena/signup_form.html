@@ -1,0 +1,38 @@
+{% extends 'cs_auth/base.jinja2' %}
+
+{% block content_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content_body %}
+    <form action="" method="post" id="signup">
+        {% csrf_token %}
+        <fieldset>
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                {{ field.errors }}
+                {% comment %} Displaying checkboxes differently {% endcomment %}
+                {% if field.name == 'tos' %}
+                    <p class="checkbox">
+                        <label for="id_{{ field.name }}">{{ field }} {{ field.label }}</label>
+                    </p>
+                {% else %}
+                    <p>
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+    <p class="forgot-password"><a href="{% url 'userena_password_reset' %}"
+                                  title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
+    </p>
+    <script>
+        function submit() {
+            $('#signup')[0].submit();
+        }
+    </script>
+{% endblock %}

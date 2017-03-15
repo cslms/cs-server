@@ -1,0 +1,114 @@
+{% extends "questions/detail.jinja2" %}
+
+{% block object_detail_dl %}
+    <dl>
+        <dt>{{ _('Maximum runtime') }}</dt>
+        <dd>{{ gettext('%(time)s seconds', time=question.timeout) }}</dd>
+    </dl>
+{% endblock %}
+
+{% block form_options %}{% endblock %}
+
+{% block response_form %}
+    <h2 class="cs-banner">{{ _('Response') }}</h2>
+    <div class="code-area mdl-shadow--4dp">
+        <div class="select">
+            <p>{{ _('Programming language:') }}
+                {% if select_language %}
+                    <select id="language-select" name="language">
+                        <option>-----</option>
+                        {% for language in languages %}
+                            <option value="{{ language.ref }}"
+                                    data-ace="{{ language.ace_mode() }}">{{ language }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    {{ question.language|e }}
+                {% endif %}
+            </p>
+        </div>
+
+        <textarea class="ace-editor" name="source"
+                  data-editor="{{ default_mode|default('python') }}"
+                  id="code-editor" rows="0"></textarea>
+    </div>
+{% endblock %}
+
+{% block style %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ static('render/iospec.css') }}">
+    <style>
+        .ace-editor {
+            height: 25em;
+            font-size: 1.2em;
+        }
+
+        .code-area {
+            margin-bottom: 20px;
+            border: 1px solid #666;
+        }
+
+        .code-area .select {
+            background-color: #666;
+            color: white;
+            text-align: right;
+            padding: 10px 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .code-area .select select {
+            color: black;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    {{ super() }}
+    <script>
+        $(function () {
+            $('textarea[data-editor]').each(function () {
+                var textarea = $(this);
+                var mode = textarea.data('editor');
+                var editDiv = $('<div>', {
+                    position: 'absolute',
+                    width: textarea.width(),
+                    height: textarea.height(),
+                    'class': textarea.attr('class')
+                });
+                textarea.css('display', 'none');
+                editDiv.insertBefore(textarea);
+                var editor = ace.edit(editDiv[0]);
+                editor.resize();
+                editor.getSession().setValue(textarea.val());
+                editor.getSession().setMode("ace/mode/" + (mode || 'python'));
+                editor.getSession().setUseSoftTabs(true);
+                editor.getSession().setUseWrapMode(true);
+                editor.setHighlightActiveLine(true);
+                editor.setShowPrintMargin(true);
+                editor.setTheme("ace/theme/xcode");
+                editor.setOptions({fontSize: '1.1em'});
+
+                // Copy back to textarea on form submit...
+                var form = textarea.closest('form');
+                form.submit(function (event) {
+                    event.preventDefault();
+                    textarea.val(editor.getSession().getValue());
+                    srvice.form('submit-response.api', form[0]);
+                });
+
+                // Change mode
+                $('#language-select').on("change", function () {
+                    var mode = $('#language-select').find(":selected").attr('data-ace');
+                    editor.getSession().setMode("ace/mode/" + mode);
+
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+
+{% block javascript_header %}
+    {{ super() }}
+    <script src="{{ static('ace.js') }}"></script>
+{% endblock %}

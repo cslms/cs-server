@@ -1,0 +1,28 @@
+{% extends 'cs_auth/base.jinja2' %}
+
+{% block title %}{% trans "Signup almost done!" %}{% endblock %}
+
+{% block content_title %}<h2>{% trans "Signup" %}</h2>{% endblock %}
+
+{% block content_body %}
+    <p>{% trans "Thank you for signing up with us!" %}</p>
+
+    {% if userena_activation_required %}
+        <p>{% trans %}You have been sent an e-mail with an activation link to
+            the supplied email.{% endtrans %}</p>
+        <p>{% trans %}We will store your signup information for
+            {{ userena_activation_days }} days on our server. {% endtrans %}</p>
+    {% else %}
+        <p>{% trans %}You can now use the supplied credentials to
+            signin.{% endtrans %}</p>
+    {% endif %}
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+    <script>
+        function submit() {
+            srvice.go('/auth/signin')
+        }
+    </script>
+{% endblock %}

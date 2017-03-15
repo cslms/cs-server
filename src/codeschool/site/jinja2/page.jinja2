@@ -1,0 +1,52 @@
+{% extends 'base.jinja2' %}
+
+{#
+    Page title
+    ----------
+
+    We use Wagtail's meta information to present the page title
+ #}
+{% block content_title %}{{ page.title|e }}{% endblock %}
+
+{#
+    Page body
+    ---------
+
+    First we check if the page have a .body attribute, which is typical of
+    wagtail pages that mainly hold stream field data.
+
+    Secondly, we try to render the page element as-is, which will call the
+    page's __str__ method or its __html__ method, if defined.
+
+ #}
+{% block content_body %}
+    {% if page.body is defined %}
+        {{ page.body }}
+    {% else %}
+        {{ page }}
+    {% endif %}
+{% endblock %}
+
+
+{#
+    Navigation
+    ----------
+
+    Insert a link to the parent page
+#}
+{% block nav_sections %}
+    {% if page.depth >= 4 %}
+        {% set parent_page = page.get_parent().specific %}
+        <nav>
+            <p>
+                <a href="{{ parent_page.get_absolute_url() }}">{{ gettext("Back (%(title)s)", title=parent_page.title)|e }}</a>
+            </p>
+            {% if user == page.owner %}
+                <ul>
+                    <li><a href="{{ parent_page.get_admin_url() }}">{{ _("Edit") }}</a></li>
+                </ul>
+            {% endif %}
+        </nav>
+    {% endif %}
+    {{ super() }}
+{% endblock %}

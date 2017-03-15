@@ -1,0 +1,31 @@
+{% macro nav_sections(page, session_title=None, user=None) %}
+    <p>
+        {% if session_title %}
+            {{ session_title }}
+        {% else %}
+            <a href="{{ page.get_absolute_url() }}">{{ _('Back to question') }}</a>
+        {% endif %}
+    </p>
+    <ul>
+        {% if user and user == page.owner %}
+            <li>
+                <a href="{{ page.get_admin_url() }}">{{ _('Edit') }}</a>
+            </li>
+            <li>
+                <a href="{{ page.get_absolute_url('debug') }}">{{ _('Debug info') }}</a>
+            </li>
+        {% endif %}
+        <li>
+            <a href="{{ page.get_absolute_url('submissions') }}">{{ _('Submissions') }}</a>
+        </li>
+        <li>
+            <a href="{{ page.get_absolute_url('statistics') }}">{{ _('Statistics') }}</a>
+        </li>
+        <li>
+            <a href="{{ page.get_absolute_url('leaderboard') }}">{{ _('Leaderboard') }}</a>
+        </li>
+        <li>
+            <a href="{{ page.get_absolute_url('social') }}">{{ _('Discuss') }}</a>
+        </li>
+    </ul>
+{% endmacro %}

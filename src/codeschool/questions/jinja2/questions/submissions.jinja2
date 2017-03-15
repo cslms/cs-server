@@ -1,0 +1,86 @@
+{% extends "page.jinja2" %}
+{% from "questions/macros.jinja2" import feedback_styles, nav_sections %}
+
+{% block content_title %}
+    {{ question.title }} ({{ _('all submissions') }})
+{% endblock %}
+
+{% block content_body %}
+    {% for submission in submissions %}
+        {% block submission scoped %}
+            <div>
+                {{ submission }}
+            </div>
+        {% endblock %}
+    {% endfor %}
+{% endblock %}
+
+
+{% block style %}
+    {{ super() }}
+    {{ feedback_styles() }}
+    <style>
+        .object-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .object-list li {
+            padding: 0;
+        }
+
+        .question-feedback {
+            padding: 20px;
+        }
+
+        h3.banner {
+            margin-left: -20px;
+            padding-left: 20px;
+        }
+
+        .source-code {
+            margin: -20px;
+        }
+        h3.iospec-title {
+            display: none;
+            color: #eee;
+            background: #666 url('{{ static("img/bg_dark_noise.png") }}') repeat;
+        }
+        h3.iospec-title.show {
+            display: block;
+            margin-bottom: -20px;
+        }
+        .feedback-title-handle {
+            float: right;
+        }
+
+        .iospec-feedback .congratulations {
+            margin: 0 -20px;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    {{ super() }}
+
+    <script>
+        function expand(obj) {
+            var expandable = $(obj).find('.expandable');
+            if (expandable[0].classList.contains('hidden')) {
+                expandable.removeClass('hidden').hide().show(200);
+            } else {
+                expandable.hide(200);
+                window.setTimeout(function () {expandable.addClass('hidden')}, 200);
+            }
+        }
+    </script>
+{% endblock %}
+
+
+{% block nav_sections %}
+    <nav>
+        {{ nav_sections(page) }}
+    </nav>
+    {{ super() }}
+{% endblock %}

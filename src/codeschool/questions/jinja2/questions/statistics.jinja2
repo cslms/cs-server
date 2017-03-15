@@ -1,0 +1,13 @@
+{% extends "questions/base.jinja2" %}
+
+
+{% block content_body %}
+    <h2 class="banner">{{ _('Page statistics') }}</h2>
+    <dl>
+        {% for name, value in statistics.items() %}
+            <dd>{{ name|e }}</dd>
+            <dd>{{ value|e }}</dd>
+        {% endfor %}
+    </dl>
+
+{% endblock %}

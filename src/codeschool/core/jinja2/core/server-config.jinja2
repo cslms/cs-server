@@ -1,0 +1,35 @@
+{% extends "base.jinja2" %}
+
+{% block content_title %}{{ _('Welcome to Codeschool') }}{% endblock %}
+{% block content_head %}{{ super() }}{{ _('We\'re almost there...') }}{% endblock %}
+
+
+{% block content_body %}
+    <p>{% trans %}Please fill up the configuration options before running the Codeschool server.{% endtrans %}</p>
+    <form method="POST">
+        {{ csrf_input }}
+        {% if create_superuser %}
+            <hr>
+            <h3>{{ _('Create superuser') }}</h3>
+            <table class="form">
+                {{ superuser_form.as_table() }}
+                {{ password_form.as_table() }}
+            </table>
+        {% endif %}
+
+        <hr>
+        <h3>{{ _('Server configuration') }}</h3>
+        <table class="form">
+            {{ options_form.as_table() }}
+        </table>
+
+        <hr>
+        <h3>{{ _('Populate the database') }}</h3>
+        <p>{% trans %}Please mark the options you would like to use to pre-populate the database.{% endtrans %}</p>
+        <table class="form">
+            {{ sys_profile_form.as_table() }}
+        </table>
+
+        <input type="submit" value="Start!">
+    </form>
+{% endblock %}

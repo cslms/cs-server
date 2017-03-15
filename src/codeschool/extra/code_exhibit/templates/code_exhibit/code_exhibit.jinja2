@@ -1,0 +1,36 @@
+{% extends "page.jinja2" %}
+
+{% block content_body %}
+    {% for entry in entries %}
+        <div class="code-exhibit--entry">
+            <h3>{{ entry.name|e }}</h3>
+            <img src="{{ entry.image.url }}" alt="{{ entry.name|e }}">
+            <div class="collapsable">
+                <ace-editor
+                        lang="{{ page.language.ace_mode() }}">{{ entry.source|e }}</ace-editor>
+            </div>
+        </div>
+        <div class="code-exhibit--vote">
+            <i class="material-icons">{{ entry.icon_for_user(user) }}</i>
+            <button>{{ _('Vote for me!') }}</button>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block nav_sections %}
+    <p>{{ page.title }}</p>
+    <ul>
+        {% if request.user and request.user == page.owner %}
+            <li>
+                <a href="{{ page.get_admin_url() }}">{{ _('Edit') }}</a>
+            </li>
+            <li>
+                <a href="{{ page.get_absolute_url('debug') }}">{{ _('Debug info') }}</a>
+            </li>
+        {% endif %}
+        <li>
+            <a onclick="srvice('get-form/')">{{ _('Send') }}</a>
+        </li>
+    </ul>
+    {{ super() }}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "questions/debug.jinja2" %}
+
+
+{% block debug_content %}
+    {{ super() }}
+
+    <h3>{{ _('Expanded pre-tests') }}</h3>
+    {% if page.pre_test_expanded_source %}
+        <pre style="overflow: auto; max-width: 100%">{{ page.pre_test_expanded_source|e }}</pre>
+    {% else %}
+        <p>No expanded iospec!</p>
+    {% endif %}
+
+    <h3>{{ _('Expanded post-tests') }}</h3>
+    {% if page.post_test_expanded_source %}
+        <pre style="overflow: auto; max-width: 100%">{{ page.post_test_expanded_source|e }}</pre>
+    {% else %}
+        <p>No expanded iospec!</p>
+    {% endif %}
+
+
+    <h3>{{ _('Answer keys') }}</h3>
+    {% if page.answers.count() == 0 %}
+        <p>{{ _('No answer keys!') }}</p>
+    {% endif %}
+    {% for answer in page.answers.all() %}
+        <div><strong>{{ answer.language|e }}</strong></div>
+        <p>
+            Has placeholder: {{ answer.placeholder|length != 0 }}<br>
+            Has program: {{ answer.source|length != 0 }}
+        </p>
+    {% endfor %}
+
+    <h3>{{ _('Actions') }}</h3>
+    {% if page.actions %}
+        {% for action in page.actions %}
+            <p>
+                <button onclick="srvice('../action/', '{{ action }}')">
+                    {{ action|replace('_', ' ')|capitalize }}
+                </button>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>{{ _('No actions registered for page!') }}</p>
+    {% endif %}
+{% endblock %}

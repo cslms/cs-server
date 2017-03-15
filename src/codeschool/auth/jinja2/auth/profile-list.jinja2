@@ -1,0 +1,58 @@
+{% extends 'auth/base.jinja2' %}
+
+{% block content_title %}<h2>{{ _('Profiles') }}</h2>{% endblock %}
+
+{% block content_body %}
+    <ul class="profile-list">
+        {% for profile in profile_list %}
+            <li class="user-profile">
+                <a href="{{ url('auth:profile-detail', args=(profile.user.username,)) }}"><img src="{{ profile.get_mugshot_url() }}"/></a>
+                <a href="{{ url('auth:profile-detail', args=(profile.user.username,)) }}">{{ profile.get_full_name_or_username() }}</a>
+            </li>
+        {% endfor %}
+
+    </ul>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ url('auth:profile-list-paginated', args=(page_obj.previous_page_number,)) }}">{{ _('previous') }}</a>
+                {% endif %}
+
+                <span class="current">
+                  {% trans page=page_obj.number, num_pages=page_obj.paginator.num_pages %}
+                      Page {{ page }} of {{ num_pages }}
+                  {% endtrans %}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="{{ url('auth:profile-list-paginated', args=(page_obj.next_page_number,)) }}">{{ _('next') }}</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{#
+    Move this to the global CSS and maybe create a Polymer tag representing a
+    codeschool user
+ #}
+{% block style %}
+    {{ super() }}
+    <style>
+        .profile-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .user-profile {
+            min-width: 200px;
+            background: #eee;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "page.jinja2" %}
+
+{% block content %}
+    <section>
+        <h1>{{ page.title|e }}</h1>
+        <p>{{ _('New sprint') }}</p>
+    </section>
+
+    <section>
+        <form method="POST">
+            {{ csrf_input }}
+            <table class="form">
+                {{ form }}
+            </table>
+            <input type="submit" title="send">
+        </form>
+    </section>
+{% endblock %}

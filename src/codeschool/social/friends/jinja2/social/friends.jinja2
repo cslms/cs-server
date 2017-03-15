@@ -1,0 +1,21 @@
+{% extends 'base.jinja2' %}
+
+{% block content_title %}
+    <h1>{{ gettext('%(user)s\'s friends', user=request.user.first_name) }}</h1>
+{% endblock %}
+
+{% block content_body %}
+    {% if not friends %}
+        <p>No friends found :(.</p>
+        <p>Perhaps you should consider <a href="./add/">adding</a> new friends!
+        </p>
+    {% else %}
+        <ul>
+            {% for friend in friends %}
+                <li><a href="{{ friend.profile.get_absolute_url() }}">{{ friend }}</a></li>
+            {% endfor %}
+
+        </ul>
+        <a href="./add/">Add new friends</a>
+    {% endif %}
+{% endblock %}

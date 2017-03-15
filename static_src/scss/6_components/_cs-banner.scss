@@ -1,0 +1,14 @@
+.cs-banner {
+    display: inline-block;
+    padding: 0 30px 0 20px;
+    margin-left: -10px;
+    color: white;
+    background: $color-teal;
+    margin-bottom: 20px;
+}
+
+@media only screen and (min-width: $breakpoint-medium-screen) {
+    .cs-banner {
+        margin-left: -40px;
+    }
+}

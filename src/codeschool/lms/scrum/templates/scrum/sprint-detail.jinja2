@@ -1,0 +1,41 @@
+{% extends "page.jinja2" %}
+
+{% macro render_task(task) %}
+{% endmacro %}
+
+{% macro render_tasks(tasks) %}
+    <ul>
+        {% for task in tasks %}
+            <li>{{ render_task(task) }}</li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+{% block content %}
+    <section>
+        <h1>{{ page.title|e }}</h1>
+        <p>{{ sprint.description }}</p>
+    </section>
+
+    <section>
+        <table>
+            <tr>
+                <th>To-do</th>
+                <th>Doing</th>
+                <th>Done</th>
+            </tr>
+            <tr>
+                <td>
+                    {{ render_tasks(sprint.tasks.todo()) }}
+                    <button onclick="srvice.dialog({url: 'add-task'})">Add</button>
+                </td>
+                <td>
+                    {{ render_tasks(sprint.tasks.doing()) }}
+                </td>
+                <td>
+                    {{ render_tasks(sprint.tasks.done()) }}
+                </td>
+            </tr>
+        </table>
+    </section>
+{% endblock %}

@@ -1,0 +1,27 @@
+<div class="iospec-feedback">
+    {% if feedback.is_correct|default(False) %}
+        <p class="iospec-feedback--congratulations">{{ _('Congratulations! Your answer is correct!') }}</p>
+    {% else %}
+        <h3 class="iospec-feedback-title">{{ _(feedback.title) }}</h3>
+        {% if feedback.is_build_error %}
+            <p>{{ _('An error occured while preparing your program for execution. Please check the source code syntax.') }}</p>
+            <h4>{{ _('Error message') }}</h4>
+            <pre>{{ feedback.get_error_message() }}</pre>
+        {% elif feedback.is_timeout_error %}
+            <p>{{ _('Program execution was cancelled because it was taking too long.') }}</p>
+        {% elif feedback.is_runtime_error %}
+            <p>{{ _('An error occurred during program execution.') }}</p>
+            <h4>{{ _('Error message') }}</h4>
+            <pre>{{ feedback.get_error_message() }}</pre>
+        {% else %}
+            <div>
+                <h4>{{ _('Your response') }}</h4>
+                {{ feedback.testcase|html }}
+            </div>
+            <div>
+                <h4>{{ _('Expected answer') }}</h4>
+                {{ feedback.answer_key|html }}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

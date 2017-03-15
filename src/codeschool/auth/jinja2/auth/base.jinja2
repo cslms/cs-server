@@ -1,0 +1,13 @@
+{% extends "base.jinja2" %}
+
+{% block content_title %}{{ gettext('Profile: %(name)s', name=request.user.get_full_name()) }}{% endblock %}
+
+{% block nav_sections %}
+    <p>{{ _('Profile') }}</p>
+    <ul>
+        <li><a href="{{ '/auth/%s/edit' % request.user.username }}">{{ _('Edit') }}</a></li>
+        <li><a href="{{ '/auth/%s/password' % request.user.username }}">{{ _('Change password') }}</a></li>
+        <li><a href="/auth/logout/">{{ _('Logout') }}</a></li>
+        <li><a href="/auth/">{{ _('Friends and users') }}</a></li>
+    </ul>
+{% endblock %}

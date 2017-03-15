@@ -1,0 +1,52 @@
+{% macro cards_container(title, description, cards=None, cls=None) %}
+    <section
+            class="cs-card-aside mdl-grid mdl-grid--no-spacing{% if cls %} {{ cls }}{% endif %}">
+        <aside class="cs-card-aside__aside mdl-cell mdl-cell--3-col">
+            <h1>{{ title }}</h1>
+            <p>{{ description }}</p>
+        </aside>
+
+        <article class="mdl-cell mdl-cell--9-col">
+            <div class="cs-card-aside__content mdl-grid">
+                {% if cards != None %}
+                    {% if cards %}
+                        {% for card in cards %}
+                            {{ card }}
+                        {% endfor %}
+                    {% else %}
+                        {{ caller() }}
+                    {% endif %}
+                {% else %}
+                    {{ caller() }}
+                {% endif %}
+            </div>
+        </article>
+    </section>
+{% endmacro %}
+
+{% macro cs_card(title, text=None, href=None, icon=None, faded=False, onclick=None, id=None, cls=None) %}
+    <div class="cs-card mdl-shadow--4dp mdl-cell
+            {{ ' cs-card--faded' if faded else '' }}{% if cls %} {{ cls }}{% endif %}"
+            {% if id != None %} id="{{ id }}"{% endif %}>
+        {% if href %}
+            <a href="{{ href }}" class="cs-card__link">
+                <i class="cs-card__icon material-icons">{{ icon|default('help') }}</i>
+            </a>
+        {% else %}
+            <span{% if onclick %} onclick="{{ onclick }}"{% endif %}
+                                  class="cs-card__link">
+                <i class="cs-card__icon material-icons">{{ icon|default('help') }}</i>
+            </span>
+        {% endif %}
+        <div>
+            <h1 class="cs-card__title">{{ title }}</h1>
+            <div class="cs-card__content">
+                {% if text == None %}
+                    {{ caller() }}
+                {% else %}
+                    <p>{{ text }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}

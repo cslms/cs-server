@@ -1,0 +1,11 @@
+{% extends 'cs_auth/base.jinja2' %}
+
+{% block title %}{% trans "Email changed!" %}{% endblock %}
+
+{% block content_title %}<h2>{% trans 'New email' %}</h2>{% endblock %}
+
+{% block content_body %}
+    <p>{% trans site=site.name %}Your new email address is saved.
+        You can continue using {{ site }} with this
+        email.{% endtrans %}</p>
+{% endblock %}

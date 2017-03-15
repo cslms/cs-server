@@ -1,0 +1,57 @@
+{% extends 'page.jinja2' %}
+
+{#
+    Page body
+    ---------
+
+    We define the  "objects_list" block, which have a bound "object" block.
+    This page requires an objects_list context variable. If it is not found,
+    we look for a page.objects_list attribute. Finally, if this attribute is
+    not defined, we call for page.get_children()
+
+    If the list of elements is empty, it will render the block empty_list. If
+    the empty_list context variable is defined, it will be displayed on the
+    page.
+ #}
+
+{% if object_list is undefined %}
+    {% if page.object_list is defined %}
+        {% set object_list = page.object_list %}
+    {% elif page.get_children is defined %}
+        {% set object_list = page.get_children() %}
+    {% endif %}
+{% endif %}
+
+{% block content_body %}
+    {# Display list of elements. #}
+    {% if object_list %}
+        {% block object_list %}
+            <ul id="object-list">
+                {% for object in object_list %}
+                    {% if object.specific is defined %}
+                        {% set object = object.specific %}
+                    {% endif %}
+                    <li>
+                        {% block object scoped %}
+                            {% if object.get_absolute_url is defined %}
+                                <a href="{{ object.get_absolute_url() }}">{{ object }}</a>
+                            {% else %}
+                                {{ object }}
+                            {% endif %}
+                        {% endblock %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endblock %}
+
+        {# Display a message for an empty list. #}
+    {% else %}
+        {% block empty_list %}
+            {% if empty_list is defined %}
+                {{ empty_list }}
+            {% else %}
+                {{ _('No elements found!') }}
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+{% endblock %}

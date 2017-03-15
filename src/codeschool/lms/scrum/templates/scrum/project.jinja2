@@ -1,0 +1,42 @@
+{% extends "page.jinja2" %}
+{% from 'components/cards.jinja2' import cs_card, cards_container %}
+
+{% block content %}
+    <section>
+        <h1>{{ page.title|e }}</h1>
+        <p>{{ page.description }}</p>
+    </section>
+
+    {% call cards_container(_('Sprints'), _('Control your sprints and backlog')) %}
+        {% if page.current_sprint %}
+            {{ cs_card(
+                    _('Current sprint'),
+                    page.current_sprint.description,
+                    href="./sprints/current",
+                    icon="help") }}
+        {% endif %}
+
+        {% if page.old_sprints %}
+            {{ cs_card(
+                    _('Old sprints'),
+                    _('Access past sprints'),
+                    href="./sprints/",
+                    icon="help") }}
+        {% endif %}
+
+        {{ cs_card(
+                _('New sprint'),
+                _('Create a new sprint'),
+                href="./sprints/new/",
+                icon="help") }}
+    {% endcall %}
+{% endblock %}
+
+
+{% block nav_sections %}
+    <p>Actions</p>
+    <ul>
+        <li><a onclick="srvice('score-board')">{{ _('Score board') }}</a></li>
+    </ul>
+    {{ super() }}
+{% endblock %}

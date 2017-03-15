@@ -1,0 +1,25 @@
+<h1>{{ _('Submit your digital art work') }}</h1>
+<p>You can submit once and later update your submission.</p>
+<form method="POST" id="code-exhibit--submit" action="submit-entry/" enctype="multipart/form-data">
+    <div>
+        {{ csrf_input }}
+        <div class="fieldWrapper">
+            {{ form.name.errors }}
+            {{ form.name.label_tag() }}
+            {{ form.name }}
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.image.errors }}
+            {{ form.image.label_tag() }}
+            {{ form.image }}
+        </div>
+    </div>
+    <label for="source">{{ _('Source code') }}</label>
+    <div class="mdl-shadow--4dp">
+        <ace-editor mode="{{ language.ace_mode() }}" name="source"></ace-editor>
+    </div>
+    <div>
+        <input type="submit" style="padding: 15px" value="{{ _('Send') }}">
+    </div>
+</form>
