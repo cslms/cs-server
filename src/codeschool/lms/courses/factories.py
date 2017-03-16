@@ -1,4 +1,4 @@
-from codeschool.auth.factories import make_yoda_teacher, make_students
+from codeschool.accounts.factories import make_yoda_teacher, make_students
 from codeschool.factories import make_page
 from codeschool.lms.courses.models import Course
 

@@ -1,8 +1,10 @@
-from . import managers
-from .fileformat import ProgrammingLanguage, FileFormat, programming_language
-from .syspages import RogueRoot, HiddenRoot
-from .config_options import ConfigOption, DataEntry
-from codeschool.core.config_dict import ConfigDict, DataDict
+import model_reference
 
-ConfigDict._model = ConfigOption
-DataDict._model = DataEntry
+from codeschool import models
+from .key_value_pairs import ConfigOptionKeyValuePair, DataEntryKeyValuePair
+from .fileformat import ProgrammingLanguage, FileFormat
+
+
+@model_reference.factory('root-page')
+def get_wagtail_root_page():
+    return models.Page.objects.get(path='00010001')

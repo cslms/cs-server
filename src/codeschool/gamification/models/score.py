@@ -368,7 +368,7 @@ class HasScorePage(models.Page):
         (DIFFICULTY_REGULAR, _('Regular')),
         (DIFFICULTY_HARD, _('Hard')),
         (DIFFICULTY_VERY_HARD, _('Very Hard')),
-        (DIFFICULTY_CHALLENGE, _('Challenge!')),
+        (DIFFICULTY_CHALLENGE, _('Challenge')),
     ]
     POINTS_FROM_DIFFICULTY = {
         DIFFICULTY_TRIVIAL: 10,

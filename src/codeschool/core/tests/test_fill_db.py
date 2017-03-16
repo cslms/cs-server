@@ -1,63 +1,14 @@
-import os
-
 import model_reference
 import pytest
 from iospec import IoSpec
 
-import codeschool.questions.coding_io
-from codeschool.auth.factories import make_yoda_teacher, make_teachers, \
+from codeschool.accounts.factories import make_yoda_teacher, make_teachers, \
     make_students, make_joe_user
 from codeschool.conftest import model_fixture
+from codeschool.core.factories import make_question_from_markio_example, \
+    make_hello_world_question, make_hello_world_submissions
 from codeschool.lms.activities.factories import make_basic_activities
 from codeschool.lms.courses.factories import make_cs101_course
-from codeschool.questions.coding_io.models import CodingIoQuestion
-
-
-def make_question_from_markio_example(path, parent=None):
-    base = os.path.dirname(codeschool.questions.coding_io.__file__)
-    path = os.path.join(base, 'examples', path)
-    question = CodingIoQuestion.import_markio_from_path(path, parent)
-    return question
-
-
-def make_hello_world_question(parent=None):
-    question = CodingIoQuestion(
-        title='Hello World',
-        body=[
-            ('markdown',
-             'The most basic operation you can do in most programming '
-             'languages is to display some message on the screen. Create a '
-             'program that shows `hello world!` when executed.'),
-        ],
-        pre_tests_source='hello world!',
-    )
-    parent = parent or model_reference.load('main-question-list')
-    parent.add_child(instance=question)
-    return question
-
-
-def make_example_questions(parent):
-    basic = parent.get_children().get(slug='basic')
-    loops = parent.get_children().get(slug='loops')
-    questions = [
-        make_hello_world_question(basic),
-        make_question_from_markio_example('simple.md', basic),
-        make_question_from_markio_example('fibonacci.md', loops)
-    ]
-    return questions
-
-
-def make_hello_world_submissions(question, user):
-    submit = question.submit
-    return [
-        submit(user,
-               source='print "hello world!"',
-               language='python'),
-        submit(user,
-               source='print("hello world!")',
-               language='python')
-    ]
-
 
 #
 # Tests
@@ -69,11 +20,6 @@ yoda_teacher = model_fixture(make_yoda_teacher)
 @pytest.fixture
 def root(db):
     return model_reference.load('root-page')
-
-
-@pytest.fixture
-def hidden_root(db):
-    return model_reference.load('hidden-root')
 
 
 @pytest.fixture

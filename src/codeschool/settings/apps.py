@@ -1,17 +1,17 @@
 INSTALLED_APPS = [
     # Codeschool apps
     'codeschool.questions.numeric',
-    'codeschool.questions.coding_io',
+    # 'codeschool.questions.coding_io',
     'codeschool.questions',
-    'codeschool.gamification',
+    # 'codeschool.gamification',
     'codeschool.lms.activities',
-    'codeschool.lms.courses',
+    # 'codeschool.lms.courses',
 
     # These are required
-    'codeschool.social.feed',
-    'codeschool.social.friends',
+    #'codeschool.social.feed',
+    #'codeschool.social.friends',
+    'codeschool.accounts',
     'codeschool.core',
-    'codeschool.auth.apps.AuthConfig',
 
     # Related apps
     'model_reference',
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     # Other 3rd party
     'polymorphic',
+    'django_extensions',
 
     # Django
     'django.contrib.admin',

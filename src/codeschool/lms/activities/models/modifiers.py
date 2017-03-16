@@ -82,7 +82,7 @@ class Conditions(models.PolymorphicModel):
             panels.FieldPanel('delay_penalty'),
         ], heading=_('Deadline')),
         panels.MultiFieldPanel([
-            panels.FieldPanel('programming_language'),
+            panels.FieldPanel('get_programming_language'),
             panels.FieldPanel('text_format'),
         ], heading=_('Deadline')),
     ]

@@ -17,7 +17,8 @@ from markio import parse_markio
 import codeschool
 from codeschool import models
 from codeschool import panels
-from codeschool.core.models import ProgrammingLanguage, programming_language
+from codeschool.core.models import ProgrammingLanguage
+from codeschool.core import get_programming_language
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import CodingIoSubmission
 from codeschool.questions.coding_io.models.validators import timeout_validator, \
@@ -276,7 +277,7 @@ class CodingIoQuestion(Question):
         self.pre_tests_source = md.tests_source or self.pre_tests_source
         self.post_tests_source = md.hidden_tests_source
         if md.language is not None:
-            self.language = programming_language(md.language)
+            self.language = get_programming_language(md.language)
         if md.points is not None:
             self.points_total = md.points
         if md.stars is not None:
@@ -288,7 +289,7 @@ class CodingIoQuestion(Question):
         # Add answer keys
         answer_keys = OrderedDict()
         for (lang, answer_key) in md.answer_key.items():
-            language = programming_language(lang)
+            language = get_programming_language(lang)
             key = self.answers.create(question=self,
                                       language=language,
                                       source=answer_key)
@@ -433,7 +434,7 @@ class CodingIoQuestion(Question):
         to expand tests.
         """
 
-        language = programming_language(language)
+        language = get_programming_language(language)
         answer_key = self.answers.get(language=language)
 
         if not answer_key.source:
@@ -493,7 +494,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = programming_language(language or self.language)
+        language = get_programming_language(language or self.language)
         timeout = timeout or self.timeout
         _check_with_code(source, tests, language, timeout)
 
@@ -503,7 +504,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = programming_language(language or self.language)
+        language = get_programming_language(language or self.language)
         timeout = timeout or self.timeout
         return _run_code(source, tests, language, timeout)
 
@@ -513,7 +514,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = programming_language(language or self.language)
+        language = get_programming_language(language or self.language)
         timeout = timeout or self.timeout
         return _grade_code(source, inputs, language, timeout)
 
@@ -523,7 +524,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = programming_language(language or self.language)
+        language = get_programming_language(language or self.language)
         timeout = timeout or self.timeout
         return _expand_from_code(source, inputs, language, timeout)
 
@@ -739,7 +740,7 @@ class CodingIoQuestion(Question):
 
         if language is None:
             language = self.language
-        qs = self.answers.all().filter(language=programming_language(language))
+        qs = self.answers.all().filter(language=get_programming_language(language))
         if qs:
             return qs.get().source
         return ''
@@ -772,7 +773,7 @@ class CodingIoQuestion(Question):
             raise ValueError('cannot set language per submission')
         elif self.language:
             language = self.language
-        language = programming_language(language)
+        language = get_programming_language(language)
         return super().submit(user_or_request, language=language, **kwargs)
 
     def run_post_grading(self, **kwargs):
@@ -836,7 +837,7 @@ class CodingIoQuestion(Question):
                 return None
             language = self.language
         else:
-            language = programming_language(language)
+            language = get_programming_language(language)
 
         return super().serve_ajax_submission(
             client=client,

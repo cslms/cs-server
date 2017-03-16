@@ -4,6 +4,7 @@ from django.utils.text import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
+from codeschool import settings
 
 
 def address_validator(value):
@@ -12,6 +13,10 @@ def address_validator(value):
 
 
 class NewUserForm(forms.ModelForm):
+    """
+    Create a new super user during initial configuration.
+    """
+
     class Meta:
         model = models.User
         fields = ['first_name', 'last_name', 'username', 'email']
@@ -27,6 +32,10 @@ class NewUserForm(forms.ModelForm):
 
 
 class PasswordForm(forms.Form):
+    """
+    Confirm password creation during initial configuration.
+    """
+
     password = forms.CharField(
         max_length=100, widget=forms.PasswordInput, required=False,
         help_text=_(
@@ -49,6 +58,34 @@ class PasswordForm(forms.Form):
 
 
 class ConfigForm(forms.Form):
+    """
+    Config server settings.
+    """
+
+    # Prepare valid initial page choices
+    PAGE_DESCRIPTION = [_(
+        '<span>Chooses which page is presented to users just after login.'
+    ), '</span>\n <dl>\n', _(
+        '<dt>Questions</dt> <dd>Show a global list of questions.</dd>\n'
+    )]
+
+    INITIAL_PAGE_OPTIONS = [('question-list', 'List of Questions')]
+    if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
+        INITIAL_PAGE_OPTIONS.append(('course-list', 'List of courses'))
+        PAGE_DESCRIPTION += [_(
+            '<dt>Courses</dt> <dd>Present a list of all courses related to the '
+            'user.</dd>\n'
+        )]
+    if 'codeschool.social' in settings.INSTALLED_APPS:
+        INITIAL_PAGE_OPTIONS.append(('social:timeline', 'Social network'))
+        PAGE_DESCRIPTION += [_(
+            '<dt>Social</dt> <dd>Start at user\'s news feed.</dd>\n'
+            '</dl>'
+        )]
+    PAGE_DESCRIPTION += ['</dl>\n']
+    PAGE_DESCRIPTION = ''.join(map(str, PAGE_DESCRIPTION))
+
+    # Fields
     address = forms.CharField(
         max_length=200,
         label=_('Server address'),
@@ -58,24 +95,17 @@ class ConfigForm(forms.Form):
         ),
         validators=[address_validator],
     )
-    initial_page = forms.ChoiceField([
-        ('course-list', 'List of courses'),
-        ('activities-list', 'List of activities'),
-        ('social:timeline', 'Social network'),
-    ], help_text=mark_safe(_(
-        '<span>Chooses which page is presented to users just after login.'
-        '</span>\n'
-        '<dl>\n'
-        '<dt>Courses</dt> <dd>Present a list of all courses related to the '
-        'user.</dd>\n'
-        '<dt>Activities</dt> <dd>Show the global list of activities '
-        'irrespective of any enrolled course.</dd>\n'
-        '<dt>Social</dt> <dd>Start at user\'s news feed.</dd>\n'
-        '</dl>'
-    )))
+    initial_page = forms.ChoiceField(
+        INITIAL_PAGE_OPTIONS,
+        help_text=mark_safe(PAGE_DESCRIPTION)
+    )
 
 
 class SysProfileForm(forms.Form):
+    """
+    Configure initial database values.
+    """
+
     basic_activities = forms.BooleanField(
         initial=True,
         required=False,
@@ -92,21 +122,22 @@ class SysProfileForm(forms.Form):
             'examples that help you get started with Codeshool.'
         )
     )
-    example_courses = forms.BooleanField(
-        initial=True,
-        required=False,
-        help_text=_(
-            'Create a two programming courses pre-filled with data and '
-            'student, teacher and staff profiles.'
+    if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
+        example_courses = forms.BooleanField(
+            initial=True,
+            required=False,
+            help_text=_(
+                'Create a two programming courses pre-filled with data and '
+                'student, teacher and staff profiles.'
+            )
         )
-    )
-    populate_courses = forms.BooleanField(
-        initial=False,
-        required=False,
-        help_text=_(
-            'Populate courses with random teachers and students.'
+        populate_courses = forms.BooleanField(
+            initial=False,
+            required=False,
+            help_text=_(
+                'Populate courses with random teachers and students.'
+            )
         )
-    )
     joe_user = forms.BooleanField(
         label=_('Joe user'),
         required=False,

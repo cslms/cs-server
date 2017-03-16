@@ -83,9 +83,7 @@ class Progress(models.CopyMixin,
     given_grade = models.DecimalField(
         _('grade'),
         max_digits=6, decimal_places=3, default=Decimal,
-        help_text=_(
-            'Final grade before applying any modifier.'
-        ),
+        help_text=_('Final grade before applying any modifier.'),
     )
     finished = models.DateTimeField(blank=True, null=True)
     best_submission = models.ForeignKey('Submission', blank=True, null=True,
@@ -131,25 +129,26 @@ class Progress(models.CopyMixin,
                 return self.pk == other.pk
         return NotImplemented
 
-    def submit(self, user_or_request, recycle=True, **kwargs):
+    def submit(self, request, recycle=True, **kwargs):
         """
         Creates new submission.
         """
 
         submission_class = self.activity.submission_class
         submission = submission_class(progress=self, **kwargs)
-
-        if not isinstance(user_or_request, models.User):
-            submission.ip_address = get_ip(user_or_request)
+        submission.ip_address = get_ip(request)
 
         if not recycle:
             submission.save()
             return submission
 
+        # Collect all submissions with the same hash as current one
         recyclable = submission_class.objects\
             .filter(progress=self, hash=submission.compute_hash()) \
             .order_by('created')
 
+        # Then check if any submission is actually equal to the current amongst
+        # all candidates
         for possibly_equal in recyclable:
             if submission.is_equal(possibly_equal):
                 possibly_equal.recycled = True
@@ -161,7 +160,7 @@ class Progress(models.CopyMixin,
 
     def register_feedback(self, feedback):
         """
-        This method is called after a submission is graded and produced a
+        This method is called after a submission is graded and produces a
         feedback.
         """
 
@@ -170,14 +169,16 @@ class Progress(models.CopyMixin,
 
         if not self.activity.has_submissions:
             print('first submission')
-
-        if feedback.is_correct:
-            if not self.activity.has_correct_submissions:
+            if feedback.is_correct:
                 print('first correct submission')
 
     def update_grades_from_feedback(self, feedback):
+        """
+        Update grades from the current progress object from the given feedback.
+        """
+
         # Update grades
-        if self.given_grade < feedback.given_grade or 0:
+        if self.given_grade < (feedback.given_grade or 0):
             self.given_grade = feedback.given_grade
 
         # TODO: decide better update strategy
@@ -206,32 +207,6 @@ class Progress(models.CopyMixin,
         # Update the is_correct field
         self.is_correct = self.is_correct or feedback.is_correct
         self.save()
-
-    def regrade(self, method=None, force_update=False):
-        """
-        Return the final grade for the user using the given method.
-
-        If not method is given, it uses the default grading method for the
-        activity.
-        """
-
-        activity = self.activity
-
-        # Choose grading method
-        if method is None and self.final_grade is not None:
-            return self.final_grade
-        elif method is None:
-            grading_method = activity.grading_method
-        else:
-            grading_method = GradingMethod.from_name(activity.owner, method)
-
-        # Grade response. We save the result to the final_grade attribute if
-        # no explicit grading method is given.
-        grade = grading_method.grade(self)
-        if method is None and (force_update or self.final_grade is None):
-            self.final_grade = grade
-        return grade
-
 
     def update_from_submissions(self, grades=True, score=True, commit=True,
                                 refresh=False):
@@ -266,3 +241,29 @@ class Progress(models.CopyMixin,
 
         if commit:
             self.save()
+
+
+    def regrade(self, method=None, force_update=False):
+        """
+        Return the final grade for the user using the given method.
+
+        If not method is given, it uses the default grading method for the
+        activity.
+        """
+
+        activity = self.activity
+
+        # Choose grading method
+        if method is None and self.final_grade is not None:
+            return self.final_grade
+        elif method is None:
+            grading_method = activity.grading_method
+        else:
+            grading_method = GradingMethod.from_name(activity.owner, method)
+
+        # Grade response. We save the result to the final_grade attribute if
+        # no explicit grading method is given.
+        grade = grading_method.grade(self)
+        if method is None and (force_update or self.final_grade is None):
+            self.final_grade = grade
+        return grade

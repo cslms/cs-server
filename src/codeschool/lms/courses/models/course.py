@@ -11,7 +11,6 @@ from lazyutils import lazy
 from codeschool import models
 from codeschool import panels
 from codeschool.phrases import phrase
-from codeschool.social.friends.models import FriendshipStatus
 
 # User-facing strings
 from pyml.helpers import hyperlink
@@ -214,7 +213,7 @@ class Course(models.RoutablePageMixin, models.TimeStampedModel, models.Page):
     def update_friendship_status(self, student=None):
         """
         Recompute the friendship status for a single student by marking it as
-        a colleague of all participants in the course..
+        a colleague of all participants in the course.
 
         If no student is given, update the status of all enrolled students.
         """

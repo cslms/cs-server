@@ -6,8 +6,8 @@ from codeschool import models
 
 class BadgeTrack(models.Model):
     """
-    A badge track represents a single type of action that can give an increasing
-    number of badges for different levels of accomplishment.
+    A badge track represents a single type of action that can give several
+    badges for different levels of accomplishment.
     """
 
     name = models.CharField(_('name'), max_length=200)
@@ -58,20 +58,6 @@ class Badge(models.Model):
         A sortable element that describes the overall badge difficulty.
         """
         return self.required_stars, self.required_points, self.required_score
-
-    @classmethod
-    def update_for_user(cls, user, **kwargs):
-        """
-
-        Parameters
-        ----------
-        user
-        kwargs
-
-        Returns
-        -------
-
-        """
 
 
 class GivenBadge(models.TimeStampedModel):

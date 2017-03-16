@@ -14,3 +14,9 @@ CODESCHOOL_USERNAME_VALIDATION = None
 
 #: Enable/disable sandboxing. You should always enable sandboxing in production.
 CODESCHOOL_SANDBOX = True
+
+#: Enable debug views at _admin/ and _debug/
+CODESCHOOL_DEBUG_VIEWS = True
+
+#: Enable a global "Questions" page
+CODESCHOOL_GLOBAL_QUESTIONS = True

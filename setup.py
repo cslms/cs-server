@@ -71,9 +71,7 @@ setup(
         'mommys_boy',
         'celery[redis]',
         'PyYAML',
-#        'editdistance',
-#        'uuid',
-       'python-social-auth',
+        'python-social-auth',
 
         # Services
         'invoke',
@@ -88,10 +86,13 @@ setup(
         'django-userena', 'django-guardian>=1.4.6',
         'django-ipware',
         'django-annoying',
+        'django-extensions',
         'social-auth-app-django',
         'django-redis',
         'social-auth-app-django',
         'django-compressor',
+        'django-extensions',
+        'werkzeug',
 
         # Wagtail
         'wagtail',
@@ -114,6 +115,8 @@ setup(
             'ipython',
             'manuel',
             'mock',
+            'python-boilerplate',
+            'invoke',
             'pytest',
             'pytest-cov',
             'pytest-django',

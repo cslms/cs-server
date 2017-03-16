@@ -4,29 +4,14 @@ import model_reference
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 
-from codeschool import config
 from codeschool import models
-from codeschool.auth.factories import make_joe_user, make_teachers, \
-    make_students, make_mr_robot
-from codeschool.auth.models import Profile
-from codeschool.core import data_store
+from codeschool import config_options, global_data_store
+from codeschool.accounts.models import Profile
 from codeschool.core.debug_info import DebugInfo
 from codeschool.core.forms import ConfigForm, NewUserForm, SysProfileForm, \
     PasswordForm
-from codeschool.core.tests.test_fill_db import make_example_questions
-from codeschool.lms.activities.factories import make_basic_activities
-from codeschool.lms.courses.factories import make_example_courses
-from codeschool.lms.courses.models import Course
 
 log = logging.getLogger('codeschool.core')
-
-
-def site_has_superuser():
-    """
-    Return True if site has a superuser defined.
-    """
-
-    return models.User.objects.filter(is_superuser=True).count() > 0
 
 
 def debug_page_view(request):
@@ -43,19 +28,19 @@ def index_view(request):
     Simple index view. Redirect to login or to user profile page.
     """
 
-    initial = config.get('initial-page', None)
+    initial = config_options.get('initial-page', None)
     if initial is None:
         return configure_server_view(request)
 
     if request.user.is_anonymous():
         return redirect('auth:login')
 
-    return redirect(config['initial-page'])
+    return redirect(config_options['initial-page'])
 
 
 def configure_server_view(request):
     """
-    Exhibit a form to perform basic server configuration.
+    Exhibit a form that performs basic server configuration.
     """
 
     has_superuser = site_has_superuser()
@@ -63,7 +48,7 @@ def configure_server_view(request):
         return render(request, 'core/forbidden-server-config.jinja2', {})
 
     context = {
-        'config': config,
+        'config': config_options,
         'user': request.user,
         'disable_footer_data': True,
         'disable_nav': False,
@@ -88,7 +73,7 @@ def configure_server_view(request):
                 login(request, user, backend=django_backend)
             else:
                 user = request.user
-            data_store['admin-user-id'] = user.id
+            global_data_store['admin-user-id'] = user.id
 
             # Populate the database
             data = sys_profile_form.cleaned_data
@@ -111,8 +96,8 @@ def configure_server_view(request):
 
             # Save global settings
             data = options_form.cleaned_data
-            config['address'] = data['address']
-            config['initial-page'] = initial_page = data['initial_page']
+            config_options['address'] = data['address']
+            config_options['initial-page'] = initial_page = data['initial_page']
             return index_view(request)
     else:
         options_form = ConfigForm()
@@ -126,6 +111,14 @@ def configure_server_view(request):
     context['password_form'] = password_form
 
     return render(request, 'core/server-config.jinja2', context)
+
+
+def site_has_superuser():
+    """
+    Return True if site has a superuser defined.
+    """
+
+    return models.User.objects.filter(is_superuser=True).count() > 0
 
 
 def fill_maurice_moss_profile(profile: Profile):
@@ -162,43 +155,55 @@ def create_superuser_from_forms(superuser_form, password_form) -> models.User:
 
 
 def fill_joe_user():
+    from codeschool.accounts.factories import make_joe_user
+
     joe = make_joe_user()
-    data_store['joe-user-id'] = joe.id
+    global_data_store['joe-user-id'] = joe.id
 
 
 def fill_basic_activities():
-    if 'main-question-list' not in data_store:
-        data_store['main-question-list'] = 'basic'
+    from codeschool.lms.activities.factories import make_basic_activities
+
+    if 'main-question-list' not in global_data_store:
+        global_data_store['main-question-list'] = 'basic'
         make_basic_activities()
 
 
 def fill_example_questions(user):
-    if not data_store.get('example-questions', False):
-        data_store['example-questions'] = True
+    from codeschool.core.factories import make_example_questions
+
+    if not global_data_store.get('example-questions', False):
+        global_data_store['example-questions'] = True
         activities = model_reference.load('main-question-list')
         questions = make_example_questions(activities)
-        for i in (1, 2):
+        for i in range(1, min(2, len(questions))):
             questions[i].owner = user
             questions[i].save()
 
 
 def fill_example_courses():
-    if not data_store.get('example-courses', False):
-        data_store['example-courses'] = True
+    from codeschool.lms.courses.factories import make_example_courses
+
+    if not global_data_store.get('example-courses', False):
+        global_data_store['example-courses'] = True
         cs101, *other_courses = courses = make_example_courses()
-        cs101.teacher = models.User.objects.get(id=data_store['admin-user-id'])
+        cs101.teacher = models.User.objects.get(id=global_data_store['admin-user-id'])
         cs101.save()
 
 
 def fill_courses_with_users():
-    if not data_store.get('courses-populated', False):
-        user = models.User.objects.get(id=data_store['admin-user-id'])
-        data_store['courses-populated'] = True
+    from codeschool.lms.courses.models import Course
+    from codeschool.accounts.factories import make_teachers, make_joe_user, make_mr_robot
+
+    if not global_data_store.get('courses-populated', False):
+        user = models.User.objects.get(id=global_data_store['admin-user-id'])
+        global_data_store['courses-populated'] = True
         teachers = [user]
         teachers.extend(make_teachers())
         common = [make_mr_robot(), make_joe_user()]
 
         for teacher, course in zip(teachers, Course.objects.all()):
+            from codeschool.accounts.factories import make_students
             for student in list(make_students(3)) + common:
                 course.enroll_student(student)
             course.teacher = teacher
@@ -206,8 +211,8 @@ def fill_courses_with_users():
 
 
 def fill_example_submissions():
-    if not data_store.get('example-submissions'):
-        data_store['example-submissions'] = True
+    if not global_data_store.get('example-submissions'):
+        global_data_store['example-submissions'] = True
 
         # TODO: implement this
         # make_example_submissions()

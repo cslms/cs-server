@@ -107,7 +107,7 @@ def test_stop_execution_of_submission_after_timeout(db, user):
     question = example('simple')
     question.timeout = 0.35
 
-    submission = question.submit(user_or_request=user,
+    submission = question.submit(request=user,
                                  source=source('hello-timeout.py'),
                                  language='python')
     feedback = submission.autograde()

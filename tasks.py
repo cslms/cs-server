@@ -7,6 +7,7 @@ from python_boilerplate.tasks import js
 from python_boilerplate.tasks import django
 ns.add_collection(js)
 ns.add_collection(django)
+sys.path += ['src']
 
 
 @task

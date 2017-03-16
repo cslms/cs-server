@@ -4,16 +4,18 @@ import logging
 import os
 
 from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.db.models.base import ModelBase
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from lazyutils import lazy_classattribute, lazy
 
 import srvice
+from wagtail.wagtailcore.models import PageBase
+
 from codeschool import blocks
 from codeschool import models
 from codeschool import panels
 from codeschool.components.navbar import NavSection
-from codeschool.gamification.models import HasScorePage
 from codeschool.lms.activities.score_map import ScoreMap
 
 logger = logging.getLogger('codeschool.lms.activities')
@@ -71,28 +73,34 @@ class Meta:
     instant_feedback = True
 
 
-class ActivityMeta(type(models.Page)):
+class ActivityMeta(PageBase):
+    """
+    Metaclass for Activity
+    """
+
     CONCRETE_ACTIVITY_TYPES = []
     META_VARS = (attr for attr in dir(Meta) if not attr.startswith('_'))
     META_VARS = {attr: getattr(Meta, attr) for attr in META_VARS}
 
-    def __init__(self, name, bases, namespace):
+    def __init__(cls, name, bases, namespace):
+        # Extract additional fields before intializing the metaclass
         meta = namespace.pop('Meta', None)
         if meta is not None:
-            fields, meta = self.extract_meta_fields()
+            fields, meta = cls._extract_meta_fields(meta)
             namespace['Meta'] = meta
         else:
             fields = {}
-
         super().__init__(name, bases, namespace)
 
         # Register concrete classes
-        if not self._meta.abstract:
-            self.CONCRETE_ACTIVITY_TYPES.append(self)
-            for attr, value in fields.items():
-                setattr(self._meta, attr, value)
+        if not cls._meta.abstract:
+            cls.CONCRETE_ACTIVITY_TYPES.append(cls)
 
-    def extract_meta_fields(self, meta):
+        # Register extra fields
+        for attr, value in fields.items():
+            setattr(cls._meta, attr, value)
+
+    def _extract_meta_fields(self, meta):
         """
         Takes a Meta class and return a tuple (fields, Meta) with the activity
         fields extracted from Meta and a new Meta class that can be passed to
@@ -107,9 +115,7 @@ class ActivityMeta(type(models.Page)):
         return fields, meta
 
 
-class Activity(models.RoutablePageMixin,
-               HasScorePage,
-               metaclass=ActivityMeta):
+class Activity(models.RoutablePageMixin, models.Page, metaclass=ActivityMeta):
     """
     Represents a gradable activity inside a course. Activities may not have an
     explicit grade, but yet may provide points to the students via the
@@ -306,21 +312,27 @@ class Activity(models.RoutablePageMixin,
 
         super().full_clean(*args, **kwargs)
 
-    def submit(self, user_or_request, **kwargs):
+    def submit(self, request, user=None, **kwargs):
         """
         Create a new Submission object for the given question and saves it on
         the database.
 
         Args:
-            user_or_request:
-                The user who submitted the submission.
+            request:
+                The request object for the current submission.
             recycle:
                 If true, recycle submission objects with the same content as the
                 current submission. If a submission exists with the same content
                 as the current submission, it simply returns the previous
                 submission.
                 If recycled, sets the submission.recycled to True.
+            user:
+                The user who submitted the response. If not given, uses the user
+                in the request object.
         """
+
+        if hasattr(request, 'username'):
+            raise ValueError
 
         # Test if activity is active
         if self.closed:
@@ -336,10 +348,11 @@ class Activity(models.RoutablePageMixin,
             )
 
         # Add progress information to the given submission kwargs
-        user = getattr(user_or_request, 'user', user_or_request)
+        if user is None:
+            user = request.user
         logger.info('%r, submission from user %r' % (self.title, user.username))
         progress = self.progress_set.for_user(user)
-        return progress.submit(user_or_request, **kwargs)
+        return progress.submit(request, **kwargs)
 
     # Permissions
     def user_can_edit(self, user):
@@ -762,12 +775,12 @@ class Activity(models.RoutablePageMixin,
     # promote_panels = models.Page.promote_panels + [
     #    panels.FieldPanel('icon_src')
     # ]
-    settings_panels = models.Page.settings_panels + [
-        panels.MultiFieldPanel([
-            panels.FieldPanel('points_total'),
-            panels.FieldPanel('stars_total'),
-        ], heading=_('Scores'))
-    ]
+    #settings_panels = models.Page.settings_panels + [
+    #    panels.MultiFieldPanel([
+    #        panels.FieldPanel('points_total'),
+    #        panels.FieldPanel('stars_total'),
+    #    ], heading=_('Scores'))
+    #]
 
 
 class ScoreDescriptor:

@@ -5,7 +5,6 @@ from codeschool import models
 from codeschool import panels
 from codeschool.questions.models import Question, QuestionFeedback, \
     QuestionSubmission, QuestionProgress
-from pyml import p
 
 
 class NumericQuestion(Question):

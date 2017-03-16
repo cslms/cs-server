@@ -8,7 +8,7 @@ import pytest
 from sulfur import Driver as _sulfur_driver
 from mommys_boy import mommy, fake
 
-from codeschool.auth.factories import UserFactory, FullUserFactory, birthday
+from codeschool.accounts.factories import UserFactory, FullUserFactory, birthday
 
 # Helper functions
 mommy_make = mommy.make

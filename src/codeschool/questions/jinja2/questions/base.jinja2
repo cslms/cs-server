@@ -2,7 +2,7 @@
 {% if form_name is undefined %}{% set form_name='form' %}{% endif %}
 
 {% block content_head %}
-    <div id="points-dashboard">
+    <!--div id="points-dashboard">
         <table>
             <tr class="points">
                 <td class="score">{{ page.score.points(request.user) }}/{{ page.points_total }}</td>
@@ -15,7 +15,7 @@
                 </tr>
             {% endif %}
         </table>
-    </div>
+    </div-->
     {{ super() }}
     <p>{{ question.short_description }}</p>
 {% endblock %}

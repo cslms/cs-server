@@ -15,43 +15,62 @@ Including another URLconf
 """
 import os
 
-import django.contrib.admin
 from django.conf.urls import url, include
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from wagtail.wagtailcore import urls as wagtail_urls
 
-from codeschool.auth.views import profile_view
+from codeschool import settings
+from codeschool.accounts.views import profile_view
 from codeschool.core.views import index_view
-from codeschool.lms.activities.views import main_question_list
-from codeschool.lms.courses.views import course_list
 
-
+# Basic URLS
 urlpatterns = [
-    # Basic URLS
-    url(r'^_admin/', django.contrib.admin.site.urls),
     url(r'^admin/', include('wagtail.wagtailadmin.urls')),
     url(r'^$', index_view),
     url(r'^profile/$', profile_view, name='profile-view'),
+    url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
+]
 
-    # Codeschool Apps
-    url(r'^auth/', include('codeschool.auth.urls', namespace='auth')),
-    url(r'^social/', include('codeschool.social.urls', namespace='social')),
-    url('', include('social.apps.django_app.urls', namespace='social')),
+# Optional debug views
+if settings.CODESCHOOL_DEBUG_VIEWS:
+    import django.contrib.admin
 
-    # Global dashboard and objects
-    url(r'^questions/$', main_question_list, name='question-list'),
-    url(r'^courses/$', course_list, name='course-list'),
+    urlpatterns += [
+        url(r'^_admin/', django.contrib.admin.site.urls),
+        url(r'^_debug/', include('codeschool.core.urls')),
+    ]
 
-    # Debugging
-    url(r'^_debug/', include('codeschool.core.urls')),
+# Optional "social" urls
+if 'codeschool.social' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        url(r'^social/', include('codeschool.social.urls', namespace='social')),
+    ]
 
-    # Wagtail endpoint
+# Global questions list
+if settings.CODESCHOOL_GLOBAL_QUESTIONS:
+    from codeschool.lms.activities.views import main_question_list
+
+    urlpatterns += [
+        url(r'^questions/$', main_question_list, name='question-list'),
+    ]
+
+# Courses interface
+if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
+    from codeschool.lms.courses.views import course_list
+
+    urlpatterns += [
+        url(r'^courses/$', course_list, name='course-list'),
+    ]
+
+# Wagtail endpoint (these must come last)
+urlpatterns += [
     wagtail_urls.urlpatterns[0],
     url(r'^((?:[\w\-\.]+/)*)$', wagtail_urls.views.serve, name='wagtail_serve'),
     url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:srvice|json|api)/?)$', wagtail_urls.views.serve, name='wagtail-api-serve'),
 ]
 
-# Django serves static urls. Should not be used in production: production
-# should rely on nginx, apache or any other proxy server.
+# Django serves static urls for the dev server.
+# Production relies on Nginx.
 if os.environ.get('DJANGO_SERVE_STATIC', True):
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
     urlpatterns += staticfiles_urlpatterns()

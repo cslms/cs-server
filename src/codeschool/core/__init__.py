@@ -1,7 +1,7 @@
 from codeschool.core.config_dict import ConfigDict, DataDict
 
 
-def sys_page(name):
+def get_sys_page(name):
     """
     Return system page by named reference.
     """
@@ -10,29 +10,44 @@ def sys_page(name):
     return model_reference.load(name)
 
 
-def wagtail_root():
+def get_wagtail_root():
     """
     Returns the Wagtail's root page.
     """
 
-    return sys_page('root-page')
+    return get_sys_page('root-page')
 
 
-def rogue_root():
+def get_programming_language(language, raises=True):
     """
-    Returns root for all rogue pages.
+    Return the :cls:`codeschool.core.models.ProgrammingLanguage` object
+    associated with the given language reference.
+
+    If a ProgrammingLanguage object is passed, it is returned as is. This makes
+    this function useful to normalize values that should be ProgrammingLanguage
+    instances. If raises=False, it will return None for non-existing languages.
+
+    Args:
+        language:
+            Either a ProgrammingLanguage object (which is returned as-is) or
+            a string with the short reference to the language (e.g., 'python',
+            'c', 'cpp', etc)
+        raises:
+            Controls if an exception should be raised if language does not exist
+            (default is True).
+
+    Returns:
+        A :cls:`codeschool.core.models.ProgrammingLanguage` object.
     """
 
-    return sys_page('rogue-root')
+    from codeschool.core.models import ProgrammingLanguage
+
+    if isinstance(language, ProgrammingLanguage):
+        return language
+    elif not raises and language is None:
+        return None
+    return ProgrammingLanguage.get_language(language, raises)
 
 
-def hidden_root():
-    """
-    Returns root for all rogue pages.
-    """
-
-    return sys_page('hidden-root')
-
-
-config = ConfigDict()
-data_store = DataDict()
+config_options = ConfigDict()
+global_data_store = DataDict()

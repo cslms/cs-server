@@ -128,30 +128,6 @@ class ProgrammingLanguage(FileFormat):
         super().save(*args, **kwargs)
 
 
-def programming_language(language, raises=True):
-    """Return the ProgrammingLanguage object associated with the given language
-    reference.
-
-    If a ProgrammingLanguage object is passed, it is returned as is. This makes
-    this function useful to normalize values that should be ProgrammingLanguage
-    instances. If raises=False, it will return None for non-existing languages.
-
-    Args:
-        ref:
-            The short primary key reference to the language (e.g., 'python',
-            'c', 'cpp', etc)
-        raises:
-            Controls if an exception should be raised if language does not exist
-            (default is True).
-    """
-
-    if isinstance(language, ProgrammingLanguage):
-        return language
-    elif not raises and language is None:
-        return None
-    return ProgrammingLanguage.get_language(language, raises)
-
-
 #
 # These functions associate data with specific programming languages and their
 # default support in codeschool.

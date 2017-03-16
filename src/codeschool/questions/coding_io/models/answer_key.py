@@ -1,20 +1,13 @@
-import collections
 from html import escape
 
-import ejudge
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from modelcluster.fields import ChildObjectsDescriptor
-from modelcluster.queryset import FakeQuerySet
 
 from codeschool import models, panels
-from codeschool.core.models import ProgrammingLanguage, programming_language
+from codeschool.core.models import ProgrammingLanguage
 from codeschool.questions.coding_io.models import CodingIoQuestion
-from codeschool.questions.coding_io.models.validators import \
-    inconsistent_iospec_error, reference_code_execution_error, \
-    invalid_related_answer_key_error, invalid_question_iospec_error
-from codeschool.questions.coding_io.utils import run_code
 from codeschool.utils import md5hash
 
 
@@ -83,7 +76,7 @@ class ChildDescriptor(ChildObjectsDescriptor):
 #         self._manager_cls = type(manager)
 #
 #     def __getitem__(self, language):
-#         return self.get(language=programming_language(language))
+#         return self.get(language=get_programming_language(language))
 #
 #     def __iter__(self):
 #         for lang_id in self.values_list('language', flat=True):
@@ -147,7 +140,7 @@ def check_syntax(source, lang):
     if lang == 'python':
         compile(source, '<input>', 'exec')
     else:
-        #FIXME: implement this in ejudge.
+        # FIXME: implement this in ejudge.
         pass
 
 
@@ -268,7 +261,6 @@ class AnswerKey(models.Model):
 
         return self.source_hash != md5hash(self.source)
 
-
     #
     #
     #
@@ -294,56 +286,3 @@ class AnswerKey(models.Model):
         panels.FieldPanel('placeholder'),
     ]
 
-
-# if self.question is None:
-#     return
-#
-# # We only have to update if the parent's hash is incompatible with the
-# # current hash and the source field is defined. We make this test to
-# # perform the expensive code re-evaluation only when strictly necessary
-# source_hash = md5hash(self.source)
-#
-# if source_hash != self.source_hash:
-#     # Source code has been removed. This is likely to occur if we have
-#     # an invalid example and want to delete it to use a correct program
-#     # written in another programming language. The safest bet is to
-#     # suggest the parent to recompute the iospec expansion
-#     if not self.source:
-#         self.question._iospec_expansion_is_dirty = True
-#         return
-#
-#     # Now we have a valid source code and need to check if it is
-#     # compatible with the iospec expansion
-#     try:
-#         correct = self.question.pre_tests_expanded
-#     except Exception as ex:
-#         raise invalid_question_iospec_error(self, ex)
-#
-#     # Question already has a reference iospec
-#     if correct is not None:
-#         try:
-#             obtained = self.expand(correct)
-#         except Exception as ex:
-#             raise reference_code_execution_error(self, ex)
-#
-#         # We have an inconsistency. We replace iospec if we are the only
-#         # answer key that defines a program for the question
-#         if obtained != correct:
-#             if self.single_reference():
-#                 self.question.pre_tests_expanded_source = obtained.source()
-#                 self.question.save(
-#                     update_fields=['pre_tests_expanded_source'])
-#             else:
-#                 raise inconsistent_iospec_error(self, correct, obtained)
-#
-#     # Question does not have an reference. Create from source
-#     else:
-#         try:
-#             obtained = self.expand(self.question.iospec)
-#         except Exception as ex:
-#             raise reference_code_execution_error(self, ex)
-#         self.question.iospec_reference_source = obtained
-#         self.question.save(update_fields=['pre_tests_expanded_source'])
-#
-#     # Update hash
-#     self.source_hash = source_hash

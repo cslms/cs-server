@@ -142,7 +142,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 ANONYMOUS_USER_ID = 1
-AUTH_PROFILE_MODULE = 'cs_auth.Profile'
+AUTH_PROFILE_MODULE = 'accounts.Profile'
 
 
 # Social authentication

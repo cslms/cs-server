@@ -7,10 +7,25 @@ from django.dispatch import Signal
 #: Args:
 #:     submission:
 #:         Submission instance.
-#:     given_grade (Decimal):
-#:         The grade given by the grader.
 #:     automatic (bool):
 #:         True if grading was performed by the autograder.
 submission_graded_signal = Signal(providing_args=['submission', 'given_grade',
                                                   'automatic'])
+
+#: This signal is emitted for the first submission sent for some specific
+#: activity.
+#:
+#: Args:
+#:     submission:
+#:         Submission instance.
+first_submission_signal = Signal(providing_args=['submission'])
+
+
+#: This signal is emitted when a graded submission is the first *correct*
+#: submission for some specific activity.
+#:
+#: Args:
+#:     submission:
+#:         Submission instance.
+first_correct_submission_signal = Signal(providing_args=['submission'])
 

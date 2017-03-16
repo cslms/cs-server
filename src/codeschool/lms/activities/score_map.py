@@ -1,3 +1,7 @@
+"""
+ScoreMap and ScoreTable are HTML-representable data structures that maps
+students to their specific grades.
+"""
 import collections
 import copy
 
