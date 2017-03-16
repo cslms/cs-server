@@ -17,12 +17,12 @@ class CodingIoFeedback(QuestionFeedback):
     )
     json_feedback = models.JSONField(blank=True, null=True)
 
-    feedback_status = property(lambda x: x.feedback.status)
-    is_wrong_answer = delegate_to('feedback')
-    is_presentation_error = delegate_to('feedback')
-    is_timeout_error = delegate_to('feedback')
-    is_build_error = delegate_to('feedback')
-    is_runtime_error = delegate_to('feedback')
+    feedback_status = property(lambda x: x.get_feedback.status)
+    is_wrong_answer = delegate_to('get_feedback')
+    is_presentation_error = delegate_to('get_feedback')
+    is_timeout_error = delegate_to('get_feedback')
+    is_build_error = delegate_to('get_feedback')
+    is_runtime_error = delegate_to('get_feedback')
 
     @lazy
     def feedback(self):

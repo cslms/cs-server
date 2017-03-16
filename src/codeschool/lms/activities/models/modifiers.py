@@ -37,10 +37,10 @@ class Conditions(models.PolymorphicModel):
         ),
     )
     delay_feedback = models.BooleanField(
-        _('delay feedback'),
+        _('delay get_feedback'),
         default=False,
         help_text=_(
-            'If set, students will be only be able to see the feedback after '
+            'If set, students will be only be able to see the get_feedback after '
             'the activity expires its deadline.'
         )
     )

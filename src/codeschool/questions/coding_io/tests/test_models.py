@@ -99,7 +99,7 @@ def test_submission_feedback_keeps_the_correct_code(db, user):
                                  language='python')
     feedback = submission.autograde()
     db_fb = Feedback.objects.get(id=submission.id)
-    assert feedback.feedback_status == db_fb.feedback.status
+    assert feedback.feedback_status == db_fb.get_feedback.status
 
 
 @pytest.mark.skip('ejduge not catching timeout errors?')

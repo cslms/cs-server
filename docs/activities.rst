@@ -3,7 +3,7 @@ Activities/Progress/Submission/Feedback
 =======================================
 
 Many students interactions with Codeschool is done through the activities/
-progress/submission/feedback cycle. Let us explain exactly the role of each
+progress/submission/get_feedback cycle. Let us explain exactly the role of each
 part and how students interactions are processed.
 
 Activities:

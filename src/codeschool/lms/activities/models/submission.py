@@ -1,6 +1,6 @@
 import logging
+from importlib import import_module
 
-from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
@@ -16,10 +16,22 @@ logger = logging.getLogger('codeschool.lms.activities')
 SubmissionManager.use_for_related_fields = True
 
 
+class SubmissionMeta(type(models.PolymorphicModel)):
+    """
+    Register subclasses during class creation.
+    """
+
+    def __init__(cls, name, bases, ns):
+        super().__init__(name, bases, ns)
+        try:
+            Submission._subclasses.append(cls)
+        except NameError:
+            pass
+
 class Submission(HasProgressMixin,
                  models.CopyMixin,
                  models.TimeStampedModel,
-                 models.PolymorphicModel):
+                 models.PolymorphicModel, metaclass=SubmissionMeta):
     """
     Represents a student's simple submission in response to some activity.
     """
@@ -32,11 +44,34 @@ class Submission(HasProgressMixin,
     hash = models.CharField(max_length=32, blank=True)
     ip_address = models.CharField(max_length=20, blank=True)
     num_recycles = models.IntegerField(default=0)
-    points_total = property(lambda x: x.progress.activity.points_total)
-    stars_total = property(lambda x: x.progress.activity.stars_total)
     feedback_class = None
     recycled = False
     objects = SubmissionManager()
+    _subclasses = []
+
+    @classmethod
+    def _register_subclass(cls):
+        if cls.feedback_class is not None:
+            return
+
+        # Get models module
+        models_path = cls.__module__.partition('.models')[0] + '.models'
+        models = import_module(models_path)
+
+        # Try importing feedback class
+        cls_name = cls.__name__
+        if cls_name.endswith('Submission'):
+            feedback_name = cls_name[:-10] + 'Feedback'
+            try:
+                feedback_cls = getattr(models, feedback_name)
+                cls.feedback_class = feedback_cls
+                return
+            except AttributeError:
+                pass
+
+        raise ImproperlyConfigured(
+            'please define the feedback_class attribute in %s' % cls_name
+        )
 
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self)
@@ -64,7 +99,7 @@ class Submission(HasProgressMixin,
 
     def autograde(self, silent=False):
         """
-        Performs automatic grading and return the feedback object.
+        Performs automatic grading and return the get_feedback object.
 
         Args:
             silent:
@@ -88,7 +123,7 @@ class Submission(HasProgressMixin,
 
     def register_feedback(self, feedback, commit=True):
         """
-        Update itself when a new feedback becomes available.
+        Update itself when a new get_feedback becomes available.
 
         This method should not update the progress instance.
         """
@@ -134,51 +169,18 @@ class Submission(HasProgressMixin,
 
         return {k: v for k, v in self.__dict__.items() if not forbidden_attr(k)}
 
-    @classmethod
-    def _ensure_feedback_class(cls):
-        if cls.feedback_class is None:
-            name = cls.__name__
-            try:
-                # Strip submission from class name
-                feedback_name = name.lower()[:-10] + 'feedback'
-                app = cls._meta.app_label
-                cls.feedback_class = apps.get_model(app, feedback_name)
-            except:
-                raise ImproperlyConfigured(
-                    'please define the feedback_class attribute in %s' % name
-                )
-
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-
-
-    def feedback(self, commit=True, force=False, silent=False):
+    def autograde_value(self, *args, **kwargs):
         """
-        Return the feedback object associated to the given response.
-
-        This method may trigger the autograde() method, if grading was not
-        performed yet. If you want to defer database access, call it with
-        commit=False to prevent saving any modifications to the response object
-        to the database.
-
-        The commit, force and silent arguments have the same meaning as in
-        the :func:`Submission.autograde` method.
+        This method should be implemented in subclasses.
         """
 
-        if self.status == self.STATUS_PENDING:
-            self.autograde(commit=commit, force=force, silent=silent)
-        elif self.status == self.STATUS_INVALID:
-            raise self.feedback_data
-        elif self.status == self.STATUS_WAITING:
-            return None
-        return self.feedback_data
+        raise ImproperlyConfigured(
+            'Progress subclass %r must implement the autograde_value().'
+            'This method should perform the automatic grading and return the '
+            'resulting grade. Any additional relevant get_feedback data might be '
+            'saved to the `feedback_data` attribute, which is then is pickled '
+            'and saved into the database.' % type(self).__name__
+        )
 
     def manual_grade(self, grade, commit=True, raises=False, silent=False):
         """
@@ -205,18 +207,36 @@ class Submission(HasProgressMixin,
 
         raise NotImplementedError('TODO')
 
-    def autograde_value(self, *args, **kwargs):
+    def update_progress(self, commit=True):
         """
-        This method should be implemented in subclasses.
+        Update all parameters for the progress object.
+
+        Return True if update was required or False otherwise.
         """
 
-        raise ImproperlyConfigured(
-            'Progress subclass %r must implement the autograde_value().'
-            'This method should perform the automatic grading and return the '
-            'resulting grade. Any additional relevant feedback data might be '
-            'saved to the `feedback_data` attribute, which is then is pickled '
-            'and saved into the database.' % type(self).__name__
-        )
+        update = False
+        progress = self.progress
+
+        if self.is_correct and not progress.is_correct:
+            update = True
+            progress.is_correct = True
+
+        if self.given_grade > progress.best_given_grade:
+            update = True
+            fmt = self.description, progress.best_given_grade, self.given_grade
+            progress.best_given_grade = self.given_grade
+            logger.info('(%s) grade: %s -> %s' % fmt)
+
+        if progress.best_given_grade > progress.grade:
+            old = progress.grade
+            new = progress.grade = progress.best_given_grade
+            logger.info(
+                '(%s) grade: %s -> %s' % (progress.description, old, new))
+
+        if commit and update:
+            progress.save()
+
+        return update
 
     def regrade(self, method, commit=True):
         """
@@ -232,10 +252,10 @@ class Submission(HasProgressMixin,
                 Only update if the if the grade increase.
             'worst':
                 Only update if the grades decrease.
-            'best-feedback':
+            'best-get_feedback':
                 Like 'best', but updates feedback_data even if the grades
                 change.
-            'worst-feedback':
+            'worst-get_feedback':
                 Like 'worst', but updates feedback_data even if the grades
                 change.
 
@@ -260,7 +280,7 @@ class Submission(HasProgressMixin,
                     self.save()
                 return False
             return True
-        elif method in ('best', 'best-feedback'):
+        elif method in ('best', 'best-get_feedback'):
             if self.given_grade <= state.get('given_grade', 0):
                 new_feedback_data = self.feedback_data
                 rollback()
@@ -274,7 +294,7 @@ class Submission(HasProgressMixin,
                 self.save()
             return True
 
-        elif method in ('worst', 'worst-feedback'):
+        elif method in ('worst', 'worst-get_feedback'):
             if self.given_grade >= state.get('given_grade', 0):
                 new_feedback_data = self.feedback_data
                 rollback()
@@ -290,74 +310,6 @@ class Submission(HasProgressMixin,
         else:
             rollback()
             raise ValueError('invalid method: %s' % method)
-
-    def update_response_grades(self, commit=True):
-        """
-        Update all response parameters.
-
-        Return True if update was required or False otherwise.
-        """
-
-        updated = False
-        response = self.progress
-
-        if self.is_correct and not response.is_correct:
-            updated = True
-            response.is_correct = True
-
-        if self.given_grade > response.best_given_grade:
-            updated = True
-            fmt = self.description, response.best_given_grade, self.given_grade
-            response.best_given_grade = self.given_grade
-            logger.info('(%s) grade: %s -> %s' % fmt)
-
-        if response.best_given_grade > response.grade:
-            old = response.grade
-            new = response.grade = response.best_given_grade
-            logger.info(
-                '(%s) grade: %s -> %s' % (response.description, old, new))
-
-        if commit and updated:
-            response.save()
-
-        return updated
-
-    def update_response_score(self, commit=True):
-        """
-        Recompute points and starts for submission and update the corresponding
-        response structure.
-        """
-
-        updated = False
-        response = self.progress
-        score = response.points, response.stars, response.score
-
-        if self.points < self.given_points():
-            self.points = self.given_points()
-            self.save(update_fields=['points'])
-        if self.stars < self.given_stars():
-            self.stars = self.given_stars()
-            self.save(update_fields=['stars'])
-
-        if response.points < self.points:
-            updated = True
-            response.points = self.points
-
-        if response.stars < self.stars:
-            updated = True
-            response.stars = self.stars
-
-        if response.score < self.score:
-            updated = True
-            response.score = self.score
-
-        if updated:
-            new = response.points, response.stars, response.score
-            logger.info('(%s) score: %s -> %s' % (self, score, new))
-
-        if commit and updated:
-            response.save()
-        return updated
 
 
 # Save a copy in the class namespace for convenience

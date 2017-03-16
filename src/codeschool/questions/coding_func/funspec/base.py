@@ -334,7 +334,7 @@ class Grader:
 
     def eval_testcases(self, cases):
         """
-        Return a feedback that compare the given cases with the cases predicted
+        Return a get_feedback that compare the given cases with the cases predicted
         by the funspec module.
         """
 

@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
                 ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, verbose_name='modified')),
-                ('manual_grading', models.BooleanField(default=True, help_text='True if feedback was created manually by a human.')),
+                ('manual_grading', models.BooleanField(default=True, help_text='True if get_feedback was created manually by a human.')),
                 ('given_grade', models.DecimalField(blank=True, decimal_places=3, help_text='This grade is given by the auto-grader and represents the grade for the response before accounting for any bonuses or penalties.', max_digits=6, null=True, validators=[codeschool.lms.activities.models.validators.grade_validator], verbose_name='percentage of maximum grade')),
                 ('final_grade', models.DecimalField(blank=True, decimal_places=3, help_text="Similar to given_grade, but can account for additional factors such as delay penalties or for any other reason the teacher may want to override the student's grade.", max_digits=6, null=True, validators=[codeschool.lms.activities.models.validators.grade_validator], verbose_name='final grade')),
                 ('is_correct', models.BooleanField(default=False)),
@@ -128,9 +128,9 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='feedback',
+            model_name='get_feedback',
             name='submission',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='feedback', to='activities.Submission'),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='get_feedback', to='activities.Submission'),
         ),
         migrations.AlterUniqueTogether(
             name='progress',

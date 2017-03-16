@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(codeschool.questions.models.QuestionMixin, 'activities.feedback'),
+            bases=(codeschool.questions.models.QuestionMixin, 'activities.get_feedback'),
         ),
         migrations.CreateModel(
             name='NumericProgress',

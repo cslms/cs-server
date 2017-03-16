@@ -252,7 +252,7 @@ class QuestionProgress(QuestionMixin, Progress):
 
 class QuestionFeedback(QuestionMixin, Feedback):
     """
-    Abstract class for representing feedback to users.
+    Abstract class for representing get_feedback to users.
     """
 
     class Meta:

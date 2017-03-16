@@ -23,3 +23,5 @@ Once the session finishes, it becomes marked for manual grading --if required--,
 or it may compute the final grade for the student using data from all
 intermediate response objects.
 """
+
+default_app_config = 'codeschool.lms.activities.apps.ActivitiesConfig'

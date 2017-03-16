@@ -11,10 +11,10 @@ from pyml.helpers import render
 
 @render.register(CodingIoFeedback)
 def _(x, **kwargs):
-    if x.feedback:
-        return render(x.feedback, **kwargs)
+    if x.get_feedback:
+        return render(x.get_feedback, **kwargs)
     else:
-        return _('Incomplete feedback')
+        return _('Incomplete get_feedback')
 
 
 @render.register(In)
@@ -51,4 +51,4 @@ def _(x):
         '<div class="iospec">%s</div>' % data)
 
 
-render.register_template(Feedback, 'render/iospec/feedback.jinja2')
+render.register_template(Feedback, 'render/iospec/get_feedback.jinja2')

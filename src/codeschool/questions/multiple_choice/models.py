@@ -97,7 +97,7 @@ class MultipleChoiceSubmission(QuestionSubmission):
 
 class MultipleChoiceFeedback(QuestionFeedback):
     """
-    Numeric feedback: autograde simply tests if value is within the requested
+    Numeric get_feedback: autograde simply tests if value is within the requested
     interval.
     """
 
