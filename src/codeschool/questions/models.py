@@ -75,6 +75,7 @@ class Question(models.ShortDescriptionPageMixin,
             'blank and manually insert all question fields.'
         )
     )
+    _subclass_root = 'Question'
 
     # Serve pages
     def get_submission_kwargs(self, request, kwargs):

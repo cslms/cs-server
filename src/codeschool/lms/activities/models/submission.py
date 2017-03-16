@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from codeschool import models
 from codeschool.errors import InvalidSubmissionError, GradingError
 from codeschool.lms.activities.models.mixins import HasProgressMixin, \
-    subclass_registry
+    subclass_registry_meta
 from codeschool.lms.activities.models.submission_queryset import \
     SubmissionManager
 from codeschool.lms.activities.signals import submission_graded_signal
@@ -21,7 +21,7 @@ class Submission(HasProgressMixin,
                  models.CopyMixin,
                  models.TimeStampedModel,
                  models.PolymorphicModel,
-                 metaclass=subclass_registry(type(models.PolymorphicModel))):
+                 metaclass=subclass_registry_meta(type(models.PolymorphicModel))):
     """
     Represents a student's simple submission in response to some activity.
     """

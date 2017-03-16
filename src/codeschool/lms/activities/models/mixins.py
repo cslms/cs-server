@@ -4,7 +4,6 @@ from django.core.exceptions import ImproperlyConfigured
 from pyml.utils import snake_case
 
 
-
 class HasProgressMixin:
     activity = property(lambda x: x.progress.activity)
     activity_id = property(lambda x: x.progress.activity_id)
@@ -13,7 +12,7 @@ class HasProgressMixin:
     sender_username = property(lambda x: x.progress.user.username)
 
 
-def subclass_registry(meta):
+def subclass_registry_meta(meta):
     """
     Return a new metaclass that inherits meta and register all sub-classes in
     the ._subclasses attribute.
@@ -42,9 +41,6 @@ def subclass_registry(meta):
 
 
 def _register_subclass(cls):
-    if cls.feedback_class is not None:
-        return
-
     # Get models module
     models_path = cls.__module__.partition('.models')[0] + '.models'
     models = import_module(models_path)
@@ -53,17 +49,25 @@ def _register_subclass(cls):
     cls_name = cls.__name__
     root_size = len(cls._subclass_root)
     if cls_name.endswith(cls._subclass_root):
-        for attr in cls._subclass_related:
-            related_name = cls_name[:-root_size] + attr
-            related_attr = snake_case(related_name)
+        for related in cls._subclass_related:
+            related_name = cls_name[:-root_size] + related
+            related_attr = snake_case(related + 'Class')
+
+            # Check if related attribute is defined
+            if getattr(cls, related_attr, None) is not None:
+                continue
+
+            # Try to find a suitable default value
             try:
                 related_cls = getattr(models, related_name)
                 setattr(cls, related_attr, related_cls)
             except AttributeError:
-                break
-        else:
-            return
+                raise ImproperlyConfigured(
+                    'please define the %s attribute in %s' % (related_attr, cls_name)
+                )
+    else:
+        raise ImproperlyConfigured(
+            'invalid class name: %s' % (cls_name)
+        )
 
-    raise ImproperlyConfigured(
-        'please define the feedback_class attribute in %s' % cls_name
-    )
+

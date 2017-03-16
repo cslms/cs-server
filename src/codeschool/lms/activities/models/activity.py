@@ -16,6 +16,7 @@ from codeschool import blocks
 from codeschool import models
 from codeschool import panels
 from codeschool.components.navbar import NavSection
+from codeschool.lms.activities.models import subclass_registry_meta
 from codeschool.lms.activities.score_map import ScoreMap
 
 logger = logging.getLogger('codeschool.lms.activities')
@@ -73,6 +74,7 @@ class Meta:
     instant_feedback = True
 
 
+@subclass_registry_meta
 class ActivityMeta(PageBase):
     """
     Metaclass for Activity
@@ -91,10 +93,6 @@ class ActivityMeta(PageBase):
         else:
             fields = {}
         super().__init__(name, bases, namespace)
-
-        # Register concrete classes
-        if not cls._meta.abstract:
-            cls.CONCRETE_ACTIVITY_TYPES.append(cls)
 
         # Register extra fields
         for attr, value in fields.items():
@@ -221,6 +219,7 @@ class Activity(models.RoutablePageMixin, models.Page, metaclass=ActivityMeta):
     extra_context = {}
 
     __imported_data = None
+    _subclass_related = ['Progress', 'Submission', 'Feedback']
 
     @property
     def submissions(self):
