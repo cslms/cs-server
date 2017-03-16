@@ -104,7 +104,7 @@ class MultipleChoiceFeedback(QuestionFeedback):
     def autograde(self):
         choice_id = self.submission.choice_id
         choice = self.question.choices.get(uuid=choice_id)
-        self.given_grade = choice.value
+        self.given_grade_pc = choice.value
 
 
 MultipleChoiceQuestion.submission_class = MultipleChoiceSubmission

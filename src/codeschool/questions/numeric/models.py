@@ -101,8 +101,8 @@ class NumericFeedback(QuestionFeedback):
         tol = self.question.tolerance
 
         if abs(value - correct) <= tol:
-            self.given_grade = 100
+            self.given_grade_pc = 100
         else:
-            self.given_grade = 0
+            self.given_grade_pc = 0
 
 NumericQuestion.submission_class = NumericSubmission

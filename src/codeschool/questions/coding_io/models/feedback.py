@@ -43,5 +43,5 @@ class CodingIoFeedback(QuestionFeedback):
                               lang=language_ref,
                               timeout=self.question.timeout)
         self.json_feedback = feedback.to_json()
-        self.given_grade = feedback.grade * 100
+        self.given_grade_pc = feedback.grade * 100
 

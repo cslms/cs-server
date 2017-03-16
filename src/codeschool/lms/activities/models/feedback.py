@@ -48,7 +48,7 @@ class Feedback(HasProgressMixin,
             'User that performed the manual grading.'
         )
     )
-    given_grade = models.DecimalField(
+    given_grade_pc = models.DecimalField(
         _('percentage of maximum grade'),
         help_text=_(
             'This grade is given by the auto-grader and represents the grade '
@@ -60,7 +60,7 @@ class Feedback(HasProgressMixin,
         blank=True,
         null=True,
     )
-    final_grade = models.DecimalField(
+    final_grade_pc = models.DecimalField(
         _('final grade'),
         help_text=_(
             'Similar to given_grade, but can account for additional factors '
@@ -75,8 +75,6 @@ class Feedback(HasProgressMixin,
     )
     is_correct = models.BooleanField(default=False)
     progress = lazy(lambda x: x.submission.progress)
-    points_total = property(lambda x: x.submission.points_total)
-    stars_total = property(lambda x: x.submission.stars_total)
 
     def autograde(self):
         """
@@ -96,52 +94,20 @@ class Feedback(HasProgressMixin,
         Compute final grade applying all possible penalties and bonuses.
         """
 
-        self.final_grade = self.given_grade
-        if self.given_grade == 100:
+        self.final_grade_pc = self.given_grade_pc
+        if self.given_grade_pc == 100:
             self.is_correct = True
-
-    def final_points(self):
-        """
-        Return the amount of points awarded to the submission after
-        considering all penalties and bonuses.
-        """
-
-        return self.final_grade * self.points_total / 100
-
-    def given_points(self):
-        """
-        Compute the number of points that should be awarded to the submission
-        without taking into account bonuses and penalties.
-        """
-
-        return self.given_grade * self.points_total / 100
-
-    def final_stars(self):
-        """
-        Return the amount of stars awarded to the submission after
-        considering all penalties and bonuses.
-        """
-
-        return self.final_grade * self.stars_total / 100
-
-    def given_stars(self):
-        """
-        Compute the number of stars that should be awarded to the submission
-        without taking into account bonuses and penalties.
-        """
-
-        return self.given_grade * self.stars_total / 100
 
     def render_message(self, **kwargs):
         """
         Renders feedback message.
         """
 
-        if self.is_correct and self.final_grade >= self.given_grade:
+        if self.is_correct and self.final_grade_pc >= self.given_grade_pc:
             msg = self.MESSAGE_OK
-        elif self.is_correct and self.final_grade < self.given_grade:
+        elif self.is_correct and self.final_grade_pc < self.given_grade_pc:
             msg = self.MESSAGE_OK_WITH_PENALTIES
-        elif not self.is_correct and self.given_grade > 0:
+        elif not self.is_correct and self.given_grade_pc > 0:
             msg = self.MESSAGE_PARTIAL
         else:
             msg = self.MESSAGE_WRONG
