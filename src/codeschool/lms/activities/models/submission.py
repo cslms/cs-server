@@ -73,7 +73,6 @@ class Submission(HasProgressMixin,
                 end of a successful grading.
         """
 
-        self._ensure_feedback_class()
         feedback = self.feedback_class(submission=self, manual_grading=False)
         feedback.autograde()
         feedback.update_final_grade()
@@ -187,15 +186,15 @@ class Submission(HasProgressMixin,
             update = True
             progress.is_correct = True
 
-        if self.given_grade > progress.best_given_grade:
+        if self.given_grade_pc > progress.best_given_grade_pc:
             update = True
-            fmt = self.description, progress.best_given_grade, self.given_grade
-            progress.best_given_grade = self.given_grade
+            fmt = self.description, progress.best_given_grade_pc, self.given_grade_pc
+            progress.best_given_grade_pc = self.given_grade_pc
             logger.info('(%s) grade: %s -> %s' % fmt)
 
-        if progress.best_given_grade > progress.grade:
+        if progress.best_given_grade_pc > progress.grade:
             old = progress.grade
-            new = progress.grade = progress.best_given_grade
+            new = progress.grade = progress.best_given_grade_pc
             logger.info(
                 '(%s) grade: %s -> %s' % (progress.description, old, new))
 
@@ -213,7 +212,7 @@ class Submission(HasProgressMixin,
             'update':
                 Recompute the grades and replace the old values with the new
                 ones. Only saves the submission if the feedback_data or the
-                given_grade attributes change.
+                given_grade_pc attributes change.
             'best':
                 Only update if the if the grade increase.
             'worst':
@@ -247,7 +246,7 @@ class Submission(HasProgressMixin,
                 return False
             return True
         elif method in ('best', 'best-get_feedback'):
-            if self.given_grade <= state.get('given_grade', 0):
+            if self.given_grade_pc <= state.get('given_grade_pc', 0):
                 new_feedback_data = self.feedback_data
                 rollback()
                 if new_feedback_data != self.feedback_data:
@@ -261,7 +260,7 @@ class Submission(HasProgressMixin,
             return True
 
         elif method in ('worst', 'worst-get_feedback'):
-            if self.given_grade >= state.get('given_grade', 0):
+            if self.given_grade_pc >= state.get('given_grade_pc', 0):
                 new_feedback_data = self.feedback_data
                 rollback()
                 if new_feedback_data != self.feedback_data:

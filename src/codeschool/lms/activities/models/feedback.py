@@ -35,7 +35,7 @@ class Feedback(HasProgressMixin,
         'Your response has not been graded yet!'
     )
 
-    submission = models.OneToOneField('Submission', related_name='get_feedback')
+    submission = models.OneToOneField('Submission', related_name='feedback')
     manual_grading = models.BooleanField(
         default=True,
         help_text=_(

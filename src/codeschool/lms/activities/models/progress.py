@@ -73,14 +73,14 @@ class Progress(models.CopyMixin,
 
     user = models.ForeignKey(models.User, on_delete=models.CASCADE)
     activity_page = models.ForeignKey(models.Page, on_delete=models.CASCADE)
-    final_grade = models.DecimalField(
+    final_grade_pc = models.DecimalField(
         _('final score'),
         max_digits=6, decimal_places=3, default=Decimal,
         help_text=_(
             'Final grade given to considering all submissions, penalties, etc.'
         ),
     )
-    given_grade = models.DecimalField(
+    given_grade_pc = models.DecimalField(
         _('grade'),
         max_digits=6, decimal_places=3, default=Decimal,
         help_text=_('Final grade before applying any modifier.'),
@@ -114,7 +114,7 @@ class Progress(models.CopyMixin,
         tries = self.num_submissions
         user = self.user
         activity = self.activity
-        grade = '%s pts' % (self.final_grade or 0)
+        grade = '%s pts' % (self.final_grade_pc or 0)
         fmt = '%s by %s (%s, %s tries)'
         return fmt % (activity, user, grade, tries)
 
@@ -178,31 +178,31 @@ class Progress(models.CopyMixin,
         """
 
         # Update grades
-        if self.given_grade < (feedback.given_grade or 0):
-            self.given_grade = feedback.given_grade
+        if self.given_grade_pc < (feedback.given_grade_pc or 0):
+            self.given_grade_pc = feedback.given_grade_pc
 
         # TODO: decide better update strategy
-        if self.final_grade < feedback.final_grade:
-            self.final_grade = feedback.final_grade
+        if self.final_grade_pc < feedback.final_grade_pc:
+            self.final_grade_pc = feedback.final_grade_pc
 
-        # Register points and stars associated with submission.
-        score_kwargs = {}
-        final_points = feedback.final_points()
-        final_stars = feedback.final_stars()
-        if final_points > self.points:
-            score_kwargs['points'] = final_points - self.points
-            self.points = final_points
-        if final_stars > self.stars:
-            score_kwargs['stars'] = final_stars - self.stars
-            self.stars = final_stars
-
-        # If some score has changed, we save the update fields and update the
-        # corresponding UserScore object
-        if score_kwargs:
-            from codeschool.gamification.models import UserScore
-            self.save(update_fields=score_kwargs.keys())
-            score_kwargs['diff'] = True
-            UserScore.update(self.user, self.activity_page, **score_kwargs)
+        # # Register points and stars associated with submission.
+        # score_kwargs = {}
+        # final_points = feedback.final_points()
+        # final_stars = feedback.final_stars()
+        # if final_points > self.points:
+        #     score_kwargs['points'] = final_points - self.points
+        #     self.points = final_points
+        # if final_stars > self.stars:
+        #     score_kwargs['stars'] = final_stars - self.stars
+        #     self.stars = final_stars
+        #
+        # # If some score has changed, we save the update fields and update the
+        # # corresponding UserScore object
+        # if score_kwargs:
+        #     from codeschool.gamification.models import UserScore
+        #     self.save(update_fields=score_kwargs.keys())
+        #     score_kwargs['diff'] = True
+        #     UserScore.update(self.user, self.activity_page, **score_kwargs)
 
         # Update the is_correct field
         self.is_correct = self.is_correct or feedback.is_correct
@@ -226,8 +226,8 @@ class Progress(models.CopyMixin,
         if refresh and submissions.count():
             first = submissions.first()
             if grades:
-                self.final_grade = first.given_grade
-                self.given_grade = first.given_grade
+                self.final_grade_pc = first.given_grade_pc
+                self.given_grade_pc = first.given_grade_pc
             if score:
                 self.points = first.points
                 self.stars = first.stars
@@ -254,16 +254,16 @@ class Progress(models.CopyMixin,
         activity = self.activity
 
         # Choose grading method
-        if method is None and self.final_grade is not None:
-            return self.final_grade
+        if method is None and self.final_grade_pc is not None:
+            return self.final_grade_pc
         elif method is None:
             grading_method = activity.grading_method
         else:
             grading_method = GradingMethod.from_name(activity.owner, method)
 
-        # Grade response. We save the result to the final_grade attribute if
+        # Grade response. We save the result to the final_grade_pc attribute if
         # no explicit grading method is given.
         grade = grading_method.grade(self)
-        if method is None and (force_update or self.final_grade is None):
-            self.final_grade = grade
+        if method is None and (force_update or self.final_grade_pc is None):
+            self.final_grade_pc = grade
         return grade
