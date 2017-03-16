@@ -5,8 +5,10 @@ from iospec import IoSpec
 from codeschool.accounts.factories import make_yoda_teacher, make_teachers, \
     make_students, make_joe_user
 from codeschool.conftest import model_fixture
-from codeschool.core.factories import make_question_from_markio_example, \
-    make_hello_world_question, make_hello_world_submissions
+from codeschool.core.factories import make_hello_world_question, make_hello_world_submissions
+from codeschool.questions.coding_io.factories import \
+    make_question_from_markio_example, make_hello_world_question, \
+    make_hello_world_submissions
 from codeschool.lms.activities.factories import make_basic_activities
 from codeschool.lms.courses.factories import make_cs101_course
 

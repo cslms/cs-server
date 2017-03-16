@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from django.shortcuts import render, redirect
 
 from codeschool import models
+from codeschool import settings
 from codeschool import config_options, global_data_store
 from codeschool.accounts.models import Profile
 from codeschool.core.debug_info import DebugInfo
@@ -91,8 +92,9 @@ def configure_server_view(request):
                 fill_example_submissions()
 
             # Ensure references to important pages were created
-            model_reference.load('course-list')
             model_reference.load('main-question-list')
+            if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
+                model_reference.load('course-list')
 
             # Save global settings
             data = options_form.cleaned_data

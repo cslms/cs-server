@@ -1,16 +1,13 @@
-import os
-
-import model_reference
 from mommys_boy import DjangoModelFactory, LazyAttributeSequence
 
-import codeschool.questions
 from codeschool import settings
 from codeschool.core import models
 
 #
 # File formats
 #
-from codeschool.questions.coding_io.models import CodingIoQuestion
+from codeschool.questions.coding_io.factories import \
+    make_question_from_markio_example, make_hello_world_question
 
 
 class ProgrammingLanguageFactory(DjangoModelFactory):
@@ -19,29 +16,6 @@ class ProgrammingLanguageFactory(DjangoModelFactory):
 
     ref = LazyAttributeSequence(lambda x: 'lang%s' % x)
     name = LazyAttributeSequence(lambda x: 'Lang-%s' % x)
-
-
-def make_question_from_markio_example(path, parent=None):
-    base = os.path.dirname(codeschool.questions.coding_io.__file__)
-    path = os.path.join(base, 'examples', path)
-    question = CodingIoQuestion.import_markio_from_path(path, parent)
-    return question
-
-
-def make_hello_world_question(parent=None):
-    question = CodingIoQuestion(
-        title='Hello World',
-        body=[
-            ('markdown',
-             'The most basic operation you can do in most programming '
-             'languages is to display some message on the screen. Create a '
-             'program that shows `hello world!` when executed.'),
-        ],
-        pre_tests_source='hello world!',
-    )
-    parent = parent or model_reference.load('main-question-list')
-    parent.add_child(instance=question)
-    return question
 
 
 def make_example_questions(parent):
@@ -82,15 +56,3 @@ def make_example_questions(parent):
         ])
 
     return questions
-
-
-def make_hello_world_submissions(question, user):
-    submit = question.submit
-    return [
-        submit(user,
-               source='print "hello world!"',
-               language='python'),
-        submit(user,
-               source='print("hello world!")',
-               language='python')
-    ]

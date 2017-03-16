@@ -1,5 +1,5 @@
 from codeschool.questions.coding_io.utils import expand_from_code
-from iospec import IoSpec, Out, In, StandardTestCase
+from iospec import IoSpec, Out, In, SimpleTestCase
 
 
 def test_expand_from_code_keep_simple_cases():
@@ -15,5 +15,5 @@ def test_expand_from_code_keep_simple_cases():
     )
     iospec = IoSpec(iospec)
     expanded = expand_from_code(src, iospec, lang='python')
-    expected = StandardTestCase([Out('x: '), In('foo'), Out('foo')])
+    expected = SimpleTestCase([Out('x: '), In('foo'), Out('foo')])
     assert expanded[0] == expected
