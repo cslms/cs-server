@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.errors import InvalidSubmissionError, GradingError
-from codeschool.lms.activities.models.mixins import HasProgressMixin
+from codeschool.lms.activities.models.mixins import HasProgressMixin, \
+    subclass_registry
 from codeschool.lms.activities.models.submission_queryset import \
     SubmissionManager
 from codeschool.lms.activities.signals import submission_graded_signal
@@ -16,22 +17,11 @@ logger = logging.getLogger('codeschool.lms.activities')
 SubmissionManager.use_for_related_fields = True
 
 
-class SubmissionMeta(type(models.PolymorphicModel)):
-    """
-    Register subclasses during class creation.
-    """
-
-    def __init__(cls, name, bases, ns):
-        super().__init__(name, bases, ns)
-        try:
-            Submission._subclasses.append(cls)
-        except NameError:
-            pass
-
 class Submission(HasProgressMixin,
                  models.CopyMixin,
                  models.TimeStampedModel,
-                 models.PolymorphicModel, metaclass=SubmissionMeta):
+                 models.PolymorphicModel,
+                 metaclass=subclass_registry(type(models.PolymorphicModel))):
     """
     Represents a student's simple submission in response to some activity.
     """
@@ -47,31 +37,7 @@ class Submission(HasProgressMixin,
     feedback_class = None
     recycled = False
     objects = SubmissionManager()
-    _subclasses = []
-
-    @classmethod
-    def _register_subclass(cls):
-        if cls.feedback_class is not None:
-            return
-
-        # Get models module
-        models_path = cls.__module__.partition('.models')[0] + '.models'
-        models = import_module(models_path)
-
-        # Try importing feedback class
-        cls_name = cls.__name__
-        if cls_name.endswith('Submission'):
-            feedback_name = cls_name[:-10] + 'Feedback'
-            try:
-                feedback_cls = getattr(models, feedback_name)
-                cls.feedback_class = feedback_cls
-                return
-            except AttributeError:
-                pass
-
-        raise ImproperlyConfigured(
-            'please define the feedback_class attribute in %s' % cls_name
-        )
+    _subclass_related = ['Feedback']
 
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self)
