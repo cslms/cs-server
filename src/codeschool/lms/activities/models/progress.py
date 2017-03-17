@@ -161,7 +161,7 @@ class Progress(models.CopyMixin,
     def register_feedback(self, feedback):
         """
         This method is called after a submission is graded and produces a
-        get_feedback.
+        feedback.
         """
 
         submission = feedback.submission
@@ -174,7 +174,7 @@ class Progress(models.CopyMixin,
 
     def update_grades_from_feedback(self, feedback):
         """
-        Update grades from the current progress object from the given get_feedback.
+        Update grades from the current progress object from the given feedback.
         """
 
         # Update grades

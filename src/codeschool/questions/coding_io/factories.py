@@ -1,8 +1,10 @@
 import os
 
 import model_reference
+from django.test import RequestFactory
 
 import codeschool.questions
+from codeschool.core.models import get_wagtail_root_page
 from codeschool.questions.coding_io.models import CodingIoQuestion
 
 example_path = os.path.join(os.path.dirname(__file__), 'examples')
@@ -13,6 +15,7 @@ def question_from_file(path, parent=None):
     Load question from markio file
     """
 
+    parent = parent or get_wagtail_root_page()
     return CodingIoQuestion.import_markio_from_path(path, parent)
 
 
@@ -39,6 +42,7 @@ def source_from_example(name):
 def make_question_from_markio_example(path, parent=None):
     base = os.path.dirname(codeschool.questions.coding_io.__file__)
     path = os.path.join(base, 'examples', path)
+    parent = parent or get_wagtail_root_page()
     question = CodingIoQuestion.import_markio_from_path(path, parent)
     return question
 
@@ -54,18 +58,20 @@ def make_hello_world_question(parent=None):
         ],
         pre_tests_source='hello world!',
     )
-    parent = parent or model_reference.load('main-question-list')
+    parent = parent or get_wagtail_root_page()
     parent.add_child(instance=question)
     return question
 
 
 def make_hello_world_submissions(question, user):
     submit = question.submit
+    request = RequestFactory().get('/')
+    request.user = user
     return [
-        submit(user,
+        submit(request,
                source='print "hello world!"',
                language='python'),
-        submit(user,
+        submit(request,
                source='print("hello world!")',
                language='python')
     ]

@@ -17,7 +17,7 @@ class CodingIoFeedback(QuestionFeedback):
     )
     json_feedback = models.JSONField(blank=True, null=True)
 
-    feedback_status = property(lambda x: x.get_feedback.status)
+    feedback_status = property(lambda x: x.feedback.status)
     is_wrong_answer = delegate_to('feedback')
     is_presentation_error = delegate_to('feedback')
     is_timeout_error = delegate_to('feedback')

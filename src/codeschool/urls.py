@@ -31,7 +31,7 @@ urlpatterns = [
 ]
 
 # Optional debug views
-if settings.CODESCHOOL_DEBUG_VIEWS:
+if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
     import django.contrib.admin
 
     urlpatterns += [

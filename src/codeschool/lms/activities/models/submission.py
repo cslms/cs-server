@@ -65,7 +65,7 @@ class Submission(HasProgressMixin,
 
     def autograde(self, silent=False):
         """
-        Performs automatic grading and return the get_feedback object.
+        Performs automatic grading and return the feedback object.
 
         Args:
             silent:
@@ -88,7 +88,7 @@ class Submission(HasProgressMixin,
 
     def register_feedback(self, feedback, commit=True):
         """
-        Update itself when a new get_feedback becomes available.
+        Update itself when a new feedback becomes available.
 
         This method should not update the progress instance.
         """
@@ -142,7 +142,7 @@ class Submission(HasProgressMixin,
         raise ImproperlyConfigured(
             'Progress subclass %r must implement the autograde_value().'
             'This method should perform the automatic grading and return the '
-            'resulting grade. Any additional relevant get_feedback data might be '
+            'resulting grade. Any additional relevant feedback data might be '
             'saved to the `feedback_data` attribute, which is then is pickled '
             'and saved into the database.' % type(self).__name__
         )
@@ -217,10 +217,10 @@ class Submission(HasProgressMixin,
                 Only update if the if the grade increase.
             'worst':
                 Only update if the grades decrease.
-            'best-get_feedback':
+            'best-feedback':
                 Like 'best', but updates feedback_data even if the grades
                 change.
-            'worst-get_feedback':
+            'worst-feedback':
                 Like 'worst', but updates feedback_data even if the grades
                 change.
 
@@ -245,7 +245,7 @@ class Submission(HasProgressMixin,
                     self.save()
                 return False
             return True
-        elif method in ('best', 'best-get_feedback'):
+        elif method in ('best', 'best-feedback'):
             if self.given_grade_pc <= state.get('given_grade_pc', 0):
                 new_feedback_data = self.feedback_data
                 rollback()
@@ -259,7 +259,7 @@ class Submission(HasProgressMixin,
                 self.save()
             return True
 
-        elif method in ('worst', 'worst-get_feedback'):
+        elif method in ('worst', 'worst-feedback'):
             if self.given_grade_pc >= state.get('given_grade_pc', 0):
                 new_feedback_data = self.feedback_data
                 rollback()

@@ -28,3 +28,5 @@ from codeschool.core import get_sys_page, get_wagtail_root, config_options, glob
 import codeschool.core.services.redis
 import codeschool.core.services.celery
 
+# Apply fixes
+from codeschool import fixes as _fixes

@@ -1,7 +1,7 @@
 import pytest
 from django.core.exceptions import ValidationError
 
-from codeschool.core.models import programming_language
+from codeschool.core import get_programming_language
 from markio import parse_markio
 
 from codeschool.lms.activities.models import Submission, Progress, Feedback
@@ -34,87 +34,89 @@ def test_hello_fixture(db):
 
 
 # Submissions
-def test_submission_correct_response(db, user):
+def test_submission_correct_response(db, user, request_with_user):
     question = example('simple')
     src = source('hello.py')
-    submission = question.submit(user, source=src, language='python')
+    submission = question.submit(request_with_user,
+                                 source=src,
+                                 language='python')
     feedback = submission.autograde()
-    assert feedback.given_grade == 100
-    assert feedback.final_grade == 100
+    assert feedback.given_grade_pc == 100
+    assert feedback.final_grade_pc == 100
     assert feedback.is_correct is True
 
 
-def test_submission_with_presentation_error(db, user):
+def test_submission_with_presentation_error(db, user, request_with_user):
     question = example('simple')
-    submission = question.submit(user,
+    submission = question.submit(request_with_user,
                                  source=source('hello-presentation.py'),
                                  language='python')
     feedback = submission.autograde()
     assert feedback.is_correct is False
     assert feedback.feedback_status == 'presentation-error'
     assert feedback.is_presentation_error
-    assert feedback.given_grade < 100
+    assert feedback.given_grade_pc < 100
 
 
-def test_submission_with_wrong_answer(db, user):
+def test_submission_with_wrong_answer(db, user, request_with_user):
     question = example('simple')
-    submission = question.submit(user,
+    submission = question.submit(request_with_user,
                                  source=source('hello-wrong.py'),
                                  language='python')
     feedback = submission.autograde()
     assert feedback.is_correct is False
     assert feedback.feedback_status == 'wrong-answer'
     assert feedback.is_wrong_answer
-    assert feedback.final_grade == 0
+    assert feedback.final_grade_pc == 0
 
 
-def test_submission_with_runtime_error(db, user):
+def test_submission_with_runtime_error(db, user, request_with_user):
     question = example('simple')
-    submission = question.submit(user,
+    submission = question.submit(request_with_user,
                                  source=source('hello-runtime.py'),
                                  language='python')
     feedback = submission.autograde()
     assert feedback.is_correct is False
     assert feedback.feedback_status == 'runtime-error'
     assert feedback.is_runtime_error
-    assert feedback.final_grade == 0
+    assert feedback.final_grade_pc == 0
 
 
-def test_submission_with_invalid_syntax(db, user):
+def test_submission_with_invalid_syntax(db, user, request_with_user):
     question = example('simple')
-    submission = question.submit(user,
+    submission = question.submit(request_with_user,
                                  source=source('hello-build.py'),
                                  language='python')
     feedback = submission.autograde()
     assert feedback.is_correct is False
     assert feedback.feedback_status == 'build-error'
     assert feedback.is_build_error
-    assert feedback.final_grade == 0
+    assert feedback.final_grade_pc == 0
 
 
-def test_submission_feedback_keeps_the_correct_code(db, user):
+def test_submission_feedback_keeps_the_correct_code(db, user, request_with_user):
     question = example('simple')
-    submission = question.submit(user,
+    submission = question.submit(request_with_user,
                                  source=source('hello-build.py'),
                                  language='python')
     feedback = submission.autograde()
     db_fb = Feedback.objects.get(id=submission.id)
-    assert feedback.feedback_status == db_fb.get_feedback.status
+    assert feedback.feedback_status == db_fb.feedback.status
 
 
 @pytest.mark.skip('ejduge not catching timeout errors?')
-def test_stop_execution_of_submission_after_timeout(db, user):
+def test_stop_execution_of_submission_after_timeout(db, user, request_with_user):
     question = example('simple')
     question.timeout = 0.35
 
-    submission = question.submit(request=user,
+    submission = question.submit(request_with_user,
                                  source=source('hello-timeout.py'),
                                  language='python')
     feedback = submission.autograde()
     assert feedback.is_correct is False
     assert feedback.feedback_status == 'timeout-error'
     assert feedback.is_timeout_error
-    assert feedback.final_grade == 0
+    assert feedback.final_grade_pc == 0
 
 
 # Invalid question creation
@@ -142,7 +144,7 @@ def test_do_not_validate_negative_timeout(db):
 # Complicated validation scenarios
 def test_validate_multiple_answer_keys(db):
     question = example('simple')
-    question.answers.create(language=programming_language('c'),
+    question.answers.create(language=get_programming_language('c'),
                             source=source('hello.c'))
     question.full_clean_all()
 

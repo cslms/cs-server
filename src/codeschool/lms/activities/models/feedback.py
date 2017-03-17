@@ -14,7 +14,7 @@ class Feedback(HasProgressMixin,
     """
     Feedback for user.
 
-    Usually there will be one get_feedback per submission, but this figure may
+    Usually there will be one feedback per submission, but this figure may
     vary from case to case.
     """
 
@@ -39,7 +39,7 @@ class Feedback(HasProgressMixin,
     manual_grading = models.BooleanField(
         default=True,
         help_text=_(
-            'True if get_feedback was created manually by a human.'
+            'True if feedback was created manually by a human.'
         )
     )
     grader_user = models.ForeignKey(
@@ -80,7 +80,7 @@ class Feedback(HasProgressMixin,
         """
         Compute and set self.given_grade.
 
-        This function may change other states in the get_feedback object, depending
+        This function may change other states in the feedback object, depending
         on the activity.
         """
 
@@ -100,7 +100,7 @@ class Feedback(HasProgressMixin,
 
     def render_message(self, **kwargs):
         """
-        Renders get_feedback message.
+        Renders feedback message.
         """
 
         if self.is_correct and self.final_grade_pc >= self.given_grade_pc:
@@ -111,4 +111,4 @@ class Feedback(HasProgressMixin,
             msg = self.MESSAGE_PARTIAL
         else:
             msg = self.MESSAGE_WRONG
-        return p(msg, cls='cs-get_feedback-message').render(**kwargs)
+        return p(msg, cls='cs-feedback-message').render(**kwargs)

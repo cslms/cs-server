@@ -211,7 +211,7 @@ class CodingIoQuestion(Question):
     # Serialization methods: support markio and sets it as the default
     # serialization method for CodingIoQuestion's
     @classmethod
-    def import_markio(cls, source, parent=None):
+    def import_markio(cls, source, parent):
         """
         Creates a CodingIoQuestion object from a Markio object or source
         string and saves the resulting question in the database.
@@ -227,26 +227,18 @@ class CodingIoQuestion(Question):
                 A question object.
         """
 
-        if parent is None:
-            parent = codeschool.rogue_root()
-
         md = source if hasattr(source, 'title') else parse_markio(source)
-
-        # FIXME: implement validation on Markio
-        if hasattr(md, 'validate'):
-            md.validate()
-
+        md.validate()
         obj = cls(title=md.title)
         obj.load_markio_data(md)
         parent.add_child(instance=obj)
         obj.full_clean_all()
-
         obj.save()
         logger.debug('question %r imported from markio' % obj.title)
         return obj
 
     @classmethod
-    def import_markio_from_path(cls, path, parent=None):
+    def import_markio_from_path(cls, path, parent):
         """
         Like .load_markio(), but reads source from the given file path.
         """

@@ -152,4 +152,11 @@ def user_with_password(db, password):
     return user
 
 
+@pytest.fixture
+def request_with_user(rf, user):
+    request = rf.get('/')
+    request.user = user
+    return request
+
+
 birthday = pytest.fixture(birthday)

@@ -1,15 +1,15 @@
 INSTALLED_APPS = [
-    # Codeschool apps
+    # Codeschool optional apps
     'codeschool.questions.numeric',
-    # 'codeschool.questions.coding_io',
-    'codeschool.questions',
-    # 'codeschool.gamification',
-    'codeschool.lms.activities',
-    # 'codeschool.lms.courses',
-
-    # These are required
+    'codeschool.questions.coding_io',
+    #'codeschool.gamification',
+    #'codeschool.lms.courses',
     #'codeschool.social.feed',
     #'codeschool.social.friends',
+
+    # These are always required
+    'codeschool.questions',
+    'codeschool.lms.activities',
     'codeschool.accounts',
     'codeschool.core',
 

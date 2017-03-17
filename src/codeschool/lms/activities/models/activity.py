@@ -70,7 +70,7 @@ class Meta:
     #: Defines if activity allows automatic grading
     automatic_grading = True
 
-    #: True for activities that do not allow instant get_feedback
+    #: True for activities that do not allow instant feedback
     instant_feedback = True
 
 

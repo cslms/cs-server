@@ -1,22 +1,11 @@
 import pytest
 
 from codeschool.models import Page
-from codeschool.core import models
+from codeschool.core import models, get_wagtail_root
 
 
-def _test_page(page):
-    assert isinstance(page, Page)
-    assert page.pk is not None
-
-
-@pytest.mark.django_db
-def test_rogue_root(db):
-    page = models.RogueRoot.instance()
-    _test_page(page)
-
-
-@pytest.mark.django_db
-def test_hidden_root(db):
-    page = models.HiddenRoot.instance()
-    _test_page(page)
-    assert page.live is False
+def test_wagtail_root(db):
+    root = get_wagtail_root()
+    assert isinstance(root, Page)
+    assert root.pk is not None
+    assert root.path == '00010001'

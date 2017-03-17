@@ -91,7 +91,7 @@ class NumericSubmission(QuestionSubmission):
 
 class NumericFeedback(QuestionFeedback):
     """
-    Numeric get_feedback: autograde simply tests if value is within the requested
+    Numeric feedback: autograde simply tests if value is within the requested
     interval.
     """
 
