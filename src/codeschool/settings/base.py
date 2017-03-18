@@ -32,7 +32,7 @@ else:
     print('Running server with DEBUG=False')
 
 if not DEBUG:
-    ALLOWED_HOSTS = ['localhost', 'codeschool.lappis.rocks']
+    ALLOWED_HOSTS = ['localhost', 'codeschool']
 
 
 # Application definition

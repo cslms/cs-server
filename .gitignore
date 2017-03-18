@@ -18,7 +18,6 @@ __pycache__/
 # Build directories
 build/
 dist/
-collect/
 node_modules/
 docs/_build/
 

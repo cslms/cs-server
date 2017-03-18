@@ -1,3 +1,7 @@
+# This Dockerfile is not very optimized and splits a few RUN commands that could
+# be joined together. It also do not clear the APT cache so it is easier to
+# install additional packages in the future. We will wait until dependencies
+# become more stable before optimizing for size and fewer layers.
 FROM pythonboilerplate/python3:latest
 
 
@@ -18,15 +22,17 @@ RUN apt-get update &&\
             python3-markdown \
             python3-html5lib \
             python3-bleach \
+            python3-rcssmin \
+            python3-rjsmin \
             python3-lxml \
     \
     # Extra deps
             python3-pillow \
             python3-psutil \
-            python3-pexpect &&\
+            python3-pexpect \
     \
     # Clean apt cache
-    rm -rf /var/lib/apt/lists/*
+    #rm -rf /var/lib/apt/lists/*
 
 
 # Install important deps with pip. This prevents hitting cache too frequently
@@ -47,6 +53,7 @@ RUN pip3 install \
             pygeneric \
             srvice \
             jinja2
+
 
 # E-judge support
 RUN pip3 install \
