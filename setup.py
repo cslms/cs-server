@@ -123,7 +123,6 @@ setup(
             'pytest-selenium',
             'pytest-factoryboy',
             'sulfur>=0.1.3',
-            'virtualenvwrapper',
         ]
     },
 

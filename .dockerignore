@@ -6,29 +6,35 @@ __pycache__/
 *.so
 *.dll
 *.egg
+*.sqlite3
 *.egg-info/
+.sass-cache/
+.coverage
 
-# Non-required directories
+
+# Non-required directories and files
+backup/
+logs/
 .cache/
-.gitignore
 .idea/
 .git/
-docs/
-docker/
-artwork/
+.gitignore
+.travis.yml
 
 # Build directories
 build/
 dist/
-node_modules/
-src/codeschool/site/bower/
-src/codeschool/site/static/
-src/codeschool/site/static_src/
+
 
 # Database
 db/
 
+
 # Static files
-collect/
 node_modules/
 
+
+# Sources and documentation
+static_src/
+artwork/
+docs/

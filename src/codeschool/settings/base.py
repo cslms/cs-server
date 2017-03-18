@@ -23,9 +23,16 @@ REPO_DIR = os.path.dirname(SRC_DIR)
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('CODESCHOOL_PRODUCTION', False) != 'true':
+    DEBUG = True
+    print(os.environ.get('CODESCHOOL_PRODUCTION', False))
+    print('Running server in DEBUG mode. Plese do *not* go to production!')
+else:
+    DEBUG = False
+    print('Running server with DEBUG=False')
 
-ALLOWED_HOSTS = []
+if not DEBUG:
+    ALLOWED_HOSTS = ['localhost', 'codeschool.lappis.rocks']
 
 
 # Application definition
@@ -189,11 +196,11 @@ SITE_ID = 1
 # Cache framework
 
 CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://%s:6379/1' % os.environ.get('REDIS_SERVER', 'localhost'),
+        'OPTIONS': {
+            'CLIENT_CLASS': "django_redis.client.DefaultClient",
         }
     }
 }

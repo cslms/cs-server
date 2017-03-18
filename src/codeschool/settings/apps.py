@@ -1,3 +1,6 @@
+from .base import DEBUG
+
+
 INSTALLED_APPS = [
     # Codeschool optional apps
     'codeschool.questions.numeric',
@@ -53,5 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
+
+    # Wagtail admin requires this even in production. We simply disable the
+    # staticfiles urls in production
     'django.contrib.staticfiles',
 ]

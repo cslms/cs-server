@@ -20,13 +20,15 @@ Packages
 """
 
 from .__meta__ import __author__, __version__
+import sys
 
 # Useful functions
 from codeschool.core import get_sys_page, get_wagtail_root, config_options, global_data_store
 
 # Required services: Redis and Celery support
-import codeschool.core.services.redis
-import codeschool.core.services.celery
+if 'runserver' in sys.argv or 'runserver_plus' in sys.argv:
+    import codeschool.core.services.redis
+    import codeschool.core.services.celery
 
 # Apply fixes
 from codeschool import fixes as _fixes

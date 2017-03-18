@@ -70,7 +70,7 @@ urlpatterns += [
 
 # Django serves static urls for the dev server.
 # Production relies on Nginx.
-if os.environ.get('DJANGO_SERVE_STATIC', True):
+if os.environ.get('DJANGO_SERVE_STATIC', False) or settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
     urlpatterns += staticfiles_urlpatterns()

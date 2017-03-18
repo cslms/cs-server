@@ -22,12 +22,12 @@ collect/
 node_modules/
 docs/_build/
 
-# Static and media files
-static.tar.gz
-static-other.tar.gz
-
 # Sensible information
-db/*
+db/redis/*
+db/*.*
 security/*
+docker/volumes/redis/dump.rdb
+docker/db/db.sqlite3
+collect/media/*
 logs/
 backup/

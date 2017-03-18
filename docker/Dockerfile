@@ -1,0 +1,124 @@
+FROM pythonboilerplate/python3:latest
+
+
+# Install apt dependencies
+
+RUN apt-get update &&\
+    apt-get install --no-install-recommends --no-install-suggests -y \
+    \
+    # Compilers and languages for the e-judge
+            build-essential \
+            gcc \
+    \
+    # Useful tooling
+            nano \
+            less \
+    \
+    # Python deps available in apt-get
+            python3-markdown \
+            python3-html5lib \
+            python3-bleach \
+            python3-lxml \
+    \
+    # Extra deps
+            python3-pillow \
+            python3-psutil \
+            python3-pexpect &&\
+    \
+    # Clean apt cache
+    rm -rf /var/lib/apt/lists/*
+
+
+# Install important deps with pip. This prevents hitting cache too frequently
+# due to changes in the package dependencies.
+
+# Base deps
+RUN pip3 install \
+            gunicorn \
+            lazyutils \
+            Markdown \
+            PyYAML \
+            fake-factory \
+            factory-boy \
+            mommys_boy \
+            pygments \
+            html5lib \
+            bleach \
+            pygeneric \
+            srvice \
+            jinja2
+
+# E-judge support
+RUN pip3 install \
+            markio \
+            iospec \
+            ejudge \
+            boxed
+
+
+RUN apt-get update
+RUN apt-get install --no-install-recommends --no-install-suggests -y \
+            python3-rcssmin \
+            python3-rjsmin
+
+
+# Django deps
+RUN pip3 install \
+            django==1.10 \
+            wagtail==1.9 \
+            wagtail-model-tools \
+            django-model-utils \
+            django-picklefield \
+            django-jsonfield \
+            django-annoying \
+            django-compressor \
+            django-userena \
+            django-polymorphic \
+            django-guardian>=1.4.6 \
+            django-model-reference
+
+# Extra dependencies for additional language support
+RUN pip3 install \
+            pytuga
+
+
+# Install Python dependencies. The list above is just a list of deps that are
+# very unlikely to change. We still have to update with the latest changes in
+# requirements.txt.
+#
+# It is also nice to create dummy VERSION and README.rst files to prevent cache
+# misses due to trivial and unimportant changes.
+
+COPY ["setup.py", "requirements.txt", "/app/"]
+RUN echo "README" > README.rst &&\
+    echo "0.1.0" > VERSION &&\
+    pip3 install -e .
+
+RUN pip3 install html5lib==0.9999999
+
+
+# Copy files and data
+# We specify each file individually and add collect media and static files
+# from a mount point
+
+COPY [ \
+      "boilerplate.ini", \
+      "manage.py", \
+      "package.json", \
+      "pytest.ini", \
+      "tasks.py", \
+      "tox.ini", \
+      "webpack.config.js", \
+      "/app/" \
+]
+COPY src/ /app/src/
+
+
+# Set variables and volumes
+
+ENV WSGI_APPLICATION=codeschool.wsgi \
+    MEDIA_FOLDER=/var/www/media \
+    CODESCHOOL_PRODUCTION=true \
+    PYTHONPATH=src
+VOLUME ["/app/db/", "/var/www/media/", "/sock/"]
+CMD python3 manage.py runserver

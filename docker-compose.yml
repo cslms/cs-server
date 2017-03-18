@@ -1,26 +1,47 @@
-# Docker-compose.yml file for atbaker/docker-django project
-
-# Nginx
-nginx:
-    build: ./docker/nginx
-    volumes:
-        - .:/usr/src/app
-    links:
-        - django
-    ports:
-        - "80:80"
-
-# This defines a service for the Django app
-django:
-    build: .
-    volumes:
-        - .:/usr/src/app
-    expose:
-        - "8000"
-    links:
-        - postgres
+version: '2'
+services:
+# Nginx proxy server. It will serve static files and redirect all other
+# requests to the Django Codeschool application. Both containers communicate
+# using a TCP connection on port 8000.
+    nginx:
+        image: nginx:1.11
+        container_name: nginx_proxy
+        volumes:
+            - ./docker/nginx.conf:/etc/nginx/nginx.conf
+            - ./collect/media/:/var/www/media/
+            - ./collect/static/:/var/www/static/
+            - ./docker/sock/:/tmp/sock/
+        depends_on:
+            - webapp
+        ports:
+            - '80:80'
 
 
-# This defines a service for the Postgres database
-postgres:
-    image: postgres:9.3
+# Codeschool app serves the dynamic pages. It has to communicate with the
+# underlying services using the default ports.
+    webapp:
+        image: cslms/codeschool
+        container_name: codeschool-app
+        volumes:
+            - ./collect/media/:/app/collect/media/
+            - ./src/:/app/src/
+            - ./docker/volumes/db/:/app/db/
+            - ./docker/sock/:/tmp/sock/
+        environment:
+            - CODESCHOOL_PRODUCTION=true
+            - REDIS_SERVER=redis
+        depends_on:
+            - redis
+        links:
+            - redis
+        command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && gunicorn codeschool.wsgi -b unix:///tmp/sock/webapp.sock --reload -w 4"
+
+
+# Redis database
+    redis:
+        image: redis:3
+        container_name: redis_db
+        volumes:
+            - ./docker/volumes/redis/:/data/
+        ports:
+            - '6379:6379'

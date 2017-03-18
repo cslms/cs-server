@@ -40,6 +40,12 @@ def docker_build(ctx, rebuild_static=False):
 
 @task
 def docker_run(ctx, deploy=False, shell=False):
+    """
+    Run dev:
+        docker run -it -p 8080:80 -v /app/codeschool/src:/app/src/ -v /app/db:/app/db -v /app/collect/media:/var/www/media -e PYTHONPATH=/app/src/ codeschool:deploy shell
+    Run production:
+        docker run -p 80:80 -v /app/codeschool/src:/app/src/ -v /app/db:/app/db -v /app/collect/media:/var/www/media -e PYTHONPATH=/app/src/ codeschool:deploy
+    """
     cmd = (
         'docker run -ti -p {port}:80 '
            '-v {src}:/app/src/ '

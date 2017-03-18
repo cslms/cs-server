@@ -26,3 +26,9 @@ except FileNotFoundError:
 
     with open(secrete_key_path , 'w') as F:
         SECRET_KEY = F.write(SECRET_KEY)
+
+
+# Check if db directory exists so database can be created
+db_dir = os.path.join(base_dir, 'db')
+if not os.path.exists(db_dir):
+    os.mkdir(db_dir)
