@@ -1,3 +1,4 @@
+from django import forms
 from wagtail.wagtailadmin.forms import WagtailAdminPageForm
 
 
@@ -16,3 +17,14 @@ class QuestionAdminModelForm(WagtailAdminPageForm):
                 if not data[field]:
                     data[field] = value
         super().__init__(data, files, instance=instance, **kwargs)
+
+
+class PushQuestionForm(forms.Form):
+    # FIXME: Temporary hack that should go away!
+
+    filename = forms.CharField(max_length=200)
+    contents = forms.CharField(widget=forms.Textarea)
+    response_format = forms.ChoiceField(choices=[('html', 'HTML'), ('json', 'JSON')])
+    parent = forms.CharField(required=False)
+    username = forms.CharField(required=False)
+    password = forms.CharField(required=False, widget=forms.PasswordInput)

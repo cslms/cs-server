@@ -29,10 +29,11 @@ RUN apt-get update &&\
     # Extra deps
             python3-pillow \
             python3-psutil \
-            python3-pexpect \
+            python3-pexpect &&\
     \
     # Clean apt cache
-    #rm -rf /var/lib/apt/lists/*
+    # rm -rf /var/lib/apt/lists/*
+    echo "FIXME: Skipping apt cache clean until deps are stable"
 
 
 # Install important deps with pip. This prevents hitting cache too frequently

@@ -25,7 +25,6 @@ REPO_DIR = os.path.dirname(SRC_DIR)
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('CODESCHOOL_PRODUCTION', False) != 'true':
     DEBUG = True
-    print(os.environ.get('CODESCHOOL_PRODUCTION', False))
     print('Running server in DEBUG mode. Plese do *not* go to production!')
 else:
     DEBUG = False

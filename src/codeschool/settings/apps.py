@@ -9,6 +9,7 @@ INSTALLED_APPS = [
     #'codeschool.lms.courses',
     #'codeschool.social.feed',
     #'codeschool.social.friends',
+    'codeschool.cli',
 
     # These are always required
     'codeschool.questions',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     # Other 3rd party
     'polymorphic',
     'django_extensions',
+    'rest_framework',
 
     # Django
     'django.contrib.admin',

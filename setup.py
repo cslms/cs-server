@@ -71,7 +71,7 @@ setup(
         'mommys_boy',
         'celery[redis]',
         'PyYAML',
-        'python-social-auth',
+        'json-rpc',
 
         # Services
         'invoke',
@@ -87,11 +87,11 @@ setup(
         'django-ipware',
         'django-annoying',
         'django-extensions',
-        'social-auth-app-django',
         'django-redis',
         'social-auth-app-django',
         'django-compressor',
         'django-extensions',
+        'djangorestframework',
         'werkzeug',
 
         # Wagtail
@@ -124,11 +124,6 @@ setup(
             'pytest-factoryboy',
             'sulfur>=0.1.3',
         ]
-    },
-
-    # Scripts
-    entry_points={
-        'console_scripts': ['codeschool = codeschool.__main__:main'],
     },
 
     # Other configurations

@@ -2,9 +2,9 @@ import logging
 
 import ejudge
 from annoying.functions import get_config
+from markio import parse_markio, Markio
 
 from codeschool.core.models import ProgrammingLanguage
-from iospec import IoSpec
 
 logger = logging.getLogger('codeschool.questions.question_io')
 
@@ -142,3 +142,31 @@ def combine_iospec(tests1, tests2):
     result = tests1.copy()
     result.extend(tests2)
     return result
+
+
+def load_markio(data, parent, update=False, incr_slug=False, validate=True):
+    """
+    Loads the given Markio data in the parent object.
+
+    Args:
+        data:
+            A string of data or a Markio object.
+        parent:
+            The parent page that should hold the CodingIoQuestion resource.
+        update
+    """
+
+    from codeschool.questions.coding_io.models import CodingIoQuestion
+
+    if isinstance(data, Markio):
+        md = data
+    else:
+        md = parse_markio(data)
+
+    md.validate()
+    obj = CodingIoQuestion(title=md.title)
+    obj.load_markio_data(md)
+    parent.add_child(instance=obj)
+    obj.full_clean_all()
+    obj.save()
+    return obj

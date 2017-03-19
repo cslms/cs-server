@@ -9,6 +9,7 @@ __pycache__/
 *.dll
 *.egg
 *.sqlite3
+*.rdb
 *.egg-info/
 .cache/
 .sass-cache/

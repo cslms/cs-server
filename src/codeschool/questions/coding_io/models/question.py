@@ -27,7 +27,7 @@ from codeschool.questions.coding_io.models.validators import timeout_validator, 
 from codeschool.questions.coding_io.utils import markdown_to_blocks, \
     blocks_to_markdown, combine_iospecs, run_code as _run_code, \
     check_with_code as _check_with_code, grade_code as _grade_code, \
-    combine_iospec, expand_from_code as _expand_from_code
+    combine_iospec, expand_from_code as _expand_from_code, load_markio
 from codeschool.questions.models import Question
 from codeschool.utils import md5hash_seq
 
@@ -227,15 +227,9 @@ class CodingIoQuestion(Question):
                 A question object.
         """
 
-        md = source if hasattr(source, 'title') else parse_markio(source)
-        md.validate()
-        obj = cls(title=md.title)
-        obj.load_markio_data(md)
-        parent.add_child(instance=obj)
-        obj.full_clean_all()
-        obj.save()
-        logger.debug('question %r imported from markio' % obj.title)
-        return obj
+        question = load_markio(source, parent)
+        logger.debug('question %r imported from markio' % question.title)
+        return question
 
     @classmethod
     def import_markio_from_path(cls, path, parent):

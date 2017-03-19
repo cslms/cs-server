@@ -61,6 +61,14 @@ if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
         url(r'^courses/$', course_list, name='course-list'),
     ]
 
+# Optional cli/clt interface
+if 'codeschool.cli' in settings.INSTALLED_APPS:
+    from codeschool.cli import api as jsonrpc_api
+
+    urlpatterns += [
+        url(r'^cli/jsonrpc/$', include(jsonrpc_api.urls)),
+    ]
+
 # Wagtail endpoint (these must come last)
 urlpatterns += [
     wagtail_urls.urlpatterns[0],
