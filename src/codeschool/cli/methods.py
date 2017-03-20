@@ -3,7 +3,7 @@ from functools import partial
 from django.contrib.auth import authenticate
 
 from codeschool import models
-from codeschool.questions.coding_io.utils import load_markio
+from codeschool.questions.coding_io.loaders import load_markio
 from . import api
 
 

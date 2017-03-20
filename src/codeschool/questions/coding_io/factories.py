@@ -5,6 +5,7 @@ from django.test import RequestFactory
 
 import codeschool.questions
 from codeschool.core.models import get_wagtail_root_page
+from codeschool.questions.coding_io.loaders import import_markio_from_path
 from codeschool.questions.coding_io.models import CodingIoQuestion
 
 example_path = os.path.join(os.path.dirname(__file__), 'examples')
@@ -16,7 +17,7 @@ def question_from_file(path, parent=None):
     """
 
     parent = parent or get_wagtail_root_page()
-    return CodingIoQuestion.import_markio_from_path(path, parent)
+    return import_markio_from_path(path, parent)
 
 
 def question_from_example(name, parent=None):
@@ -43,7 +44,7 @@ def make_question_from_markio_example(path, parent=None):
     base = os.path.dirname(codeschool.questions.coding_io.__file__)
     path = os.path.join(base, 'examples', path)
     parent = parent or get_wagtail_root_page()
-    question = CodingIoQuestion.import_markio_from_path(path, parent)
+    question = import_markio_from_path(path, parent)
     return question
 
 

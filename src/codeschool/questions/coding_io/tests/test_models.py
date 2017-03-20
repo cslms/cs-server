@@ -2,17 +2,15 @@ import pytest
 from django.core.exceptions import ValidationError
 
 from codeschool.core import get_programming_language
-from markio import parse_markio
-
-from codeschool.lms.activities.models import Submission, Progress, Feedback
 from codeschool.questions.coding_io import factories
-from codeschool.questions.coding_io.models import CodingIoQuestion
+from codeschool.questions.coding_io.models.question import expand_tests
 
 example = factories.question_from_example
 source = factories.source_from_example
 
 
-def test_simple_fixture(db, user):
+# Simple model creation
+def test_simple_question_creation(db):
     question = example('simple')
     question.timeout = 0.5
     question.full_clean()
@@ -21,7 +19,7 @@ def test_simple_fixture(db, user):
     assert question.title == 'Hello Person'
 
 
-def test_hello_fixture(db):
+def test_hello_question_creation(db):
     question = example('hello')
     question.full_clean_all()
     assert question.get_reference_source('python') == source('hello.py').strip()
@@ -33,93 +31,17 @@ def test_hello_fixture(db):
     assert question.answers.count() == 1
 
 
-# Submissions
-def test_submission_correct_response(db, user, request_with_user):
-    question = example('simple')
-    src = source('hello.py')
-    submission = question.submit(request_with_user,
-                                 source=src,
-                                 language='python')
-    feedback = submission.autograde()
-    assert feedback.given_grade_pc == 100
-    assert feedback.final_grade_pc == 100
-    assert feedback.is_correct is True
+def test_fibonacci_question_creation(db):
+    question = example('fibonacci')
+    question.full_clean_all()
+    assert question.pre_tests is not None
+    assert question.pre_tests.is_expanded is False
+    assert question.post_tests is not None
+    assert question.post_tests.is_expanded is False
+    assert question.answers.count() == 1
 
 
-def test_submission_with_presentation_error(db, user, request_with_user):
-    question = example('simple')
-    submission = question.submit(request_with_user,
-                                 source=source('hello-presentation.py'),
-                                 language='python')
-    feedback = submission.autograde()
-    assert feedback.is_correct is False
-    assert feedback.feedback_status == 'presentation-error'
-    assert feedback.is_presentation_error
-    assert feedback.given_grade_pc < 100
-
-
-def test_submission_with_wrong_answer(db, user, request_with_user):
-    question = example('simple')
-    submission = question.submit(request_with_user,
-                                 source=source('hello-wrong.py'),
-                                 language='python')
-    feedback = submission.autograde()
-    assert feedback.is_correct is False
-    assert feedback.feedback_status == 'wrong-answer'
-    assert feedback.is_wrong_answer
-    assert feedback.final_grade_pc == 0
-
-
-def test_submission_with_runtime_error(db, user, request_with_user):
-    question = example('simple')
-    submission = question.submit(request_with_user,
-                                 source=source('hello-runtime.py'),
-                                 language='python')
-    feedback = submission.autograde()
-    assert feedback.is_correct is False
-    assert feedback.feedback_status == 'runtime-error'
-    assert feedback.is_runtime_error
-    assert feedback.final_grade_pc == 0
-
-
-def test_submission_with_invalid_syntax(db, user, request_with_user):
-    question = example('simple')
-    submission = question.submit(request_with_user,
-                                 source=source('hello-build.py'),
-                                 language='python')
-    feedback = submission.autograde()
-    assert feedback.is_correct is False
-    assert feedback.feedback_status == 'build-error'
-    assert feedback.is_build_error
-    assert feedback.final_grade_pc == 0
-
-
-def test_submission_feedback_keeps_the_correct_code(db, user, request_with_user):
-    question = example('simple')
-    submission = question.submit(request_with_user,
-                                 source=source('hello-build.py'),
-                                 language='python')
-    feedback = submission.autograde()
-    db_fb = Feedback.objects.get(id=submission.id)
-    assert feedback.feedback_status == db_fb.feedback.status
-
-
-@pytest.mark.skip('ejduge not catching timeout errors?')
-def test_stop_execution_of_submission_after_timeout(db, user, request_with_user):
-    question = example('simple')
-    question.timeout = 0.35
-
-    submission = question.submit(request_with_user,
-                                 source=source('hello-timeout.py'),
-                                 language='python')
-    feedback = submission.autograde()
-    assert feedback.is_correct is False
-    assert feedback.feedback_status == 'timeout-error'
-    assert feedback.is_timeout_error
-    assert feedback.final_grade_pc == 0
-
-
-# Invalid question creation
+# Validation
 def test_do_not_validate_bad_pre_tests_source(db):
     question = example('simple')
     question.pre_tests_source = '$foo$'
@@ -141,7 +63,6 @@ def test_do_not_validate_negative_timeout(db):
     assert 'timeout' in ex.value.args[0]
 
 
-# Complicated validation scenarios
 def test_validate_multiple_answer_keys(db):
     question = example('simple')
     question.answers.create(language=get_programming_language('c'),
@@ -149,17 +70,15 @@ def test_validate_multiple_answer_keys(db):
     question.full_clean_all()
 
 
-# Expanding iospec sources
 def test_expand_iospec_source_with_commands(db):
     src = 'print(input("x: "))'
     question = example('hello-commands')
     question.full_clean_all()
 
 
-# Markio conversion
-@pytest.mark.skip
-def test_dump_markio_exports_successfully(db):
-    question = example('simple')
-    md_source = question.dump_markio()
-    md = parse_markio(source('simple.md'))
-    assert md_source == md.source()
+# Expanding tests
+def test_tests_expansion_fibonacci(db):
+    question = example('fibonacci')
+    tests = expand_tests(question, question.pre_tests)
+    assert tests.is_simple
+    assert tests.is_standard_test_case

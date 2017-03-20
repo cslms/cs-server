@@ -2,7 +2,7 @@ import json
 
 from codeschool import models
 from codeschool.questions.models import QuestionSubmission
-from codeschool.utils import queryset_class, md5hash
+from codeschool.utils import queryset_class, md5hash, manager_instance
 
 
 class CodingIoSubmissionQuerySet(queryset_class(QuestionSubmission)):
@@ -39,8 +39,8 @@ class CodingIoSubmission(QuestionSubmission):
     source = models.TextField(blank=True)
     language = models.ForeignKey('core.ProgrammingLanguage')
 
-    # objects = manager_instance(QuestionSubmission, CodingIoSubmissionQuerySet,
-    #                           use_for_related_fields=True)
+    objects = manager_instance(QuestionSubmission, CodingIoSubmissionQuerySet,
+                               use_for_related_fields=True)
 
     def compute_hash(self):
         return md5hash(self.source + self.language.ref)

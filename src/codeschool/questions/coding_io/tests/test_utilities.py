@@ -1,4 +1,4 @@
-from codeschool.questions.coding_io.utils import expand_from_code
+from codeschool.questions.coding_io.ejudge import expand_from_code
 from iospec import parse, Out, In, StandardTestCase
 
 

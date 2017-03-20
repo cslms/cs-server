@@ -3,7 +3,7 @@ from iospec.feedback import Feedback
 from lazyutils import lazy, delegate_to
 
 from codeschool import models
-from codeschool.questions.coding_io.utils import grade_code
+from codeschool.questions.coding_io.ejudge import grade_code
 from codeschool.questions.models import QuestionFeedback
 
 
@@ -42,6 +42,7 @@ class CodingIoFeedback(QuestionFeedback):
         feedback = grade_code(source, tests,
                               lang=language_ref,
                               timeout=self.question.timeout)
+        feedback.pprint()
         self.json_feedback = feedback.to_json()
         self.given_grade_pc = feedback.grade * 100
 

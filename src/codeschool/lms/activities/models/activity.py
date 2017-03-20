@@ -248,7 +248,7 @@ class Activity(models.RoutablePageMixin, models.Page, metaclass=ActivityMeta):
                     (self.title, self.import_file.name))
 
         # We fake POST data after loading data from file in order to make the
-        # required fields to validate. This part constructs a dictionary that
+        # required fields validate. This part constructs a dictionary that
         # will be used to feed a fake POST data in the QuestionAdminModelForm
         # instance
         fake_post_data = {

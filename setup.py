@@ -102,9 +102,9 @@ setup(
         'jinja2<2.9',
 
         # CodingIo question libraries
-        'markio>=0.2.2',
-        'iospec>=0.3.12',
-        'ejudge>=0.5.15',
+        'markio>=0.2.4',
+        'iospec>=0.3.14',
+        'ejudge>=0.5.17',
         'boxed>=0.3.11',
 
         # Related libraries

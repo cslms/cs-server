@@ -24,6 +24,7 @@ the Fibonacci sequence that should be printed on screen.
     5
     8
     13
+    21
 
 Tests
 -----
@@ -36,6 +37,7 @@ Tests
     5
     8
     13
+    21
     
     @input $int(2, 100)
     
