@@ -1,0 +1,67 @@
+# This Dockerfile is not very optimized and splits a few RUN commands that could
+# be joined together. It also do not clear the APT cache so it is easier to
+# install additional packages in the future. We will wait until dependencies
+# become more stable before optimizing for size and fewer layers.
+FROM codeschool:latest
+
+
+# Install additional dev dependencies
+
+RUN apt-get update &&\
+    apt-get install --no-install-recommends --no-install-suggests -y \
+    # Services
+        redis-server \
+    \
+    # Python dev libraries
+        python3-pytest-django \
+        python3-pytest-cov \
+        python3-ipython \
+        python3-selenium \
+    \
+    # Clean apt cache
+    rm -rf /var/lib/apt/lists/*
+
+
+# Install important deps with pip. This prevents hitting cache too frequently
+# due to changes in the package dependencies.
+
+# Base deps
+RUN pip3 install \
+            manuel \
+            mock \
+            python-boilerplate \
+            invoke \
+            pytest \
+            pytest-cov \
+            pytest-django \
+            pytest-selenium \
+            pytest-factoryboy \
+            sulfur
+
+
+# Install Python dependencies. The list above is just a list of deps that are
+# very unlikely to change. We still have to update with the latest changes in
+# requirements.txt.
+#
+# It is also nice to create dummy VERSION and README.rst files to prevent cache
+# misses due to trivial and unimportant changes.
+
+COPY ["setup.py", "requirements.txt", "/app/"]
+RUN echo "README" > README.rst &&\
+    echo "0.1.0" > VERSION &&\
+    pip3 install -e .[dev] &&\
+    pip3 install html5lib==0.9999999
+
+
+# During testing, we want to keep the most up-to-date with the current codebase.
+# This means that we want to use volumes instead of persisting data in the final
+#image
+
+# Set variables and volumes
+
+ENV WSGI_APPLICATION=codeschool.wsgi \
+    MEDIA_FOLDER=/var/www/media \
+    CODESCHOOL_PRODUCTION=false \
+    PYTHONPATH=src
+VOLUME ["/app/", "/var/www/media/"]
+CMD pytest-3

@@ -146,7 +146,7 @@ def user_with_password(db, password):
     User account with password (use together with the password fixture).
     """
 
-    user = UserFactory.create(password=None)
+    user = UserFactory.create()
     user.set_password(password)
     user.save()
     return user

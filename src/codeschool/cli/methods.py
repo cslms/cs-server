@@ -48,7 +48,7 @@ def check_write_permissions(user, parent_page):
     Raise an JSONEncodedError if user does not have permission to write a child
     page under the given parent page.
     """
-    if not user.is_superuser:
+    if not (user.is_superuser or parent_page.owner == user):
         path = parent_page.url_path.partition('/')[2]
         raise JSONEncodedError({
             'error': 'permission',
@@ -109,17 +109,14 @@ def push_resource_worker(data, resource_type, parent, auth):
     loader = get_loader(resource_type)
     try:
         result = loader(data, parent)
+        result.owner = user
+        return result
     except (SyntaxError, ValueError) as ex:
-        return {
+        raise JSONEncodedError({
             'error': 'resource',
             'type': resource_type,
             'message': str(ex)
-        }
-
-    return {
-        'url': result.get_absolute_url(),
-        'status': 'success',
-    }
+        })
 
 
 @api.dispatcher.add_method
@@ -129,6 +126,7 @@ def push_resource(data, resource_type, parent, auth):
     """
 
     try:
-        return push_resource_worker(data, resource_type, parent, auth)
+        result = push_resource_worker(data, resource_type, parent, auth)
     except JSONEncodedError:
         return JSONEncodedError.data
+    return {'url': result.get_absolute_url(), 'status': 'success'}

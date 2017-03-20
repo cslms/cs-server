@@ -25,6 +25,8 @@ RUN apt-get update &&\
             python3-rcssmin \
             python3-rjsmin \
             python3-lxml \
+            python3-rcssmin \
+            python3-rjsmin \
     \
     # Extra deps
             python3-pillow \
@@ -63,13 +65,6 @@ RUN pip3 install \
             ejudge \
             boxed
 
-
-RUN apt-get update
-RUN apt-get install --no-install-recommends --no-install-suggests -y \
-            python3-rcssmin \
-            python3-rjsmin
-
-
 # Django deps
 RUN pip3 install \
             django==1.10 \
@@ -100,9 +95,8 @@ RUN pip3 install \
 COPY ["setup.py", "requirements.txt", "/app/"]
 RUN echo "README" > README.rst &&\
     echo "0.1.0" > VERSION &&\
-    pip3 install -e .
-
-RUN pip3 install html5lib==0.9999999
+    pip3 install -e . &&\
+    pip3 install html5lib==0.9999999
 
 
 # Copy files and data

@@ -1,6 +1,5 @@
 import os
 
-import model_reference
 from django.test import RequestFactory
 
 import codeschool.questions
