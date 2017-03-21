@@ -105,8 +105,11 @@ def wrap_json_rpc(function):
 
         try:
             result = function(*args, **kwargs)
-        except JSONEncodedError as ex:
-            data = JSONEncodedError.data
+        except Exception as ex:
+            if isinstance(ex, JSONEncodedError):
+                data = JSONEncodedError.data
+            else:
+                data = {'error': 'runtime', 'message': str(ex)}
             tb = ex.__traceback__
             file = StringIO()
             traceback.print_tb(tb, file=file)
