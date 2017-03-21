@@ -32,7 +32,6 @@ def get_parent_from_hint(parent):
 
     parent = parent if parent.endswith('/') else parent + '/'
     pages = models.Page.objects.filter(url_path__endswith=parent)
-    print(pages)
     return pages.get()
 
 
@@ -109,6 +108,7 @@ def wrap_json_rpc(function):
         except Exception as ex:
             if isinstance(ex, JSONEncodedError):
                 data = JSONEncodedError.data
+                data.setdefault('error', 'RPCError')
             else:
                 data = {'error': 'runtime', 'message': str(ex)}
             tb = ex.__traceback__
