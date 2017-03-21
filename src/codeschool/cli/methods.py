@@ -1,3 +1,4 @@
+from codeschool.cli import api
 from codeschool.cli.utils import JSONEncodedError, get_parent_from_hint, \
     validate_user, check_write_permissions, normalize_resource_type, get_loader, \
     wrap_json_rpc, resource_to_url
@@ -44,7 +45,21 @@ def push_resource_worker(data, resource_type, parent, auth):
         })
 
 
+def echo_worker(*args, **kwargs):
+    """
+    Returns an echo. Checks if the CLI API is alive.
+    """
+    if args and kwargs:
+        kwargs['*args'] = args
+        return kwargs
+    else:
+        return args if args else kwargs
+
+
 #
 # Final JSON-RPC end points
 #
-push_resource = wrap_json_rpc(resource_to_url(push_resource_worker))
+push_resource = api.dispatcher.add_method(
+    wrap_json_rpc(resource_to_url(push_resource_worker)),
+    name='push')
+echo = api.dispatcher.add_method(echo_worker, name='echo')

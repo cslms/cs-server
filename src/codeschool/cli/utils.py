@@ -6,7 +6,6 @@ from io import StringIO
 from django.contrib.auth import authenticate
 
 from codeschool import models
-from codeschool.cli import api
 from codeschool.questions.coding_io.loaders import load_markio
 
 RESOURCE_TYPE_EQUIVALENCES = {
@@ -115,7 +114,7 @@ def wrap_json_rpc(function):
             return data
         return result
 
-    return api.dispatcher.add_method(decorated)
+    return decorated
 
 
 def resource_to_url(function):
@@ -134,4 +133,5 @@ def resource_to_url(function):
     def decorated(*args, **kwargs):
         result = function(*args, **kwargs)
         return {'url': result.get_absolute_url(), 'status': 'success'}
+
     return decorated
