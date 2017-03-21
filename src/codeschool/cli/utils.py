@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 from codeschool import models
 from codeschool.questions.coding_io.loaders import load_markio
 
+
 RESOURCE_TYPE_EQUIVALENCES = {
     'markio': 'coding_io/markio',
 }

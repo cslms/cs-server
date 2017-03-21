@@ -66,7 +66,7 @@ if 'codeschool.cli' in settings.INSTALLED_APPS:
     from codeschool.cli import api as jsonrpc_api
 
     urlpatterns += [
-        url(r'^cli/jsonrpc/$', include(jsonrpc_api.urls)),
+        url(r'^cli/jsonrpc/', include(jsonrpc_api.urls)),
     ]
 
 # Wagtail endpoint (these must come last)
