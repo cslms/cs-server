@@ -1,86 +1,11 @@
-from functools import partial
-
-from django.contrib.auth import authenticate
-
-from codeschool import models
-from codeschool.questions.coding_io.loaders import load_markio
-from . import api
+from codeschool.cli.utils import JSONEncodedError, get_parent_from_hint, \
+    validate_user, check_write_permissions, normalize_resource_type, get_loader, \
+    wrap_json_rpc, resource_to_url
 
 
-class JSONEncodedError(Exception):
-    """
-    An error that can be encoded in JSON and should be the return value for an
-    RPC method failure mode.
-    """
-
-    @property
-    def data(self):
-        return self.args[0]
-
-
-def get_parent_from_hint(parent):
-    """
-    Return the parent page from the given parent page hint.
-    """
-
-    parent = parent if parent.endswith('/') else parent + '/'
-    pages = models.Page.objects.filter(url_path__endswith=parent)
-    print(pages)
-    return pages.get()
-
-
-def validate_user(username, password):
-    """
-    Return valid user or raise JSONEncodedError({'error': 'auth', ...})
-    """
-
-    user = authenticate(username=username, password=password)
-    if user is None:
-        raise JSONEncodedError({
-            'error': 'auth',
-            'message': 'Invalid username/password.',
-        })
-    return user
-
-
-def check_write_permissions(user, parent_page):
-    """
-    Raise an JSONEncodedError if user does not have permission to write a child
-    page under the given parent page.
-    """
-    if not (user.is_superuser or parent_page.owner == user):
-        path = parent_page.url_path.partition('/')[2]
-        raise JSONEncodedError({
-            'error': 'permission',
-            'message': 'you don\'t have permissions to write under %s' % path
-        })
-
-
-def normalize_resource_type(resource_type):
-    """
-    Normalizes the resource_type string.
-    """
-
-    return resource_type.casefold()
-
-
-def get_loader(resource_type):
-    """
-    Return the loader function for the given resource type.
-
-    A loader function simply takes a data string and returns the corresponding
-    resource.
-    """
-
-    if resource_type == 'coding_io/markio':
-        return partial(load_markio, update=True)
-    else:
-        raise JSONEncodedError({
-            'error': 'resource_type',
-            'message': 'unknown resource type: %r' % resource_type
-        })
-
-
+#
+# Non-decorated test-friendly methods.
+#
 def push_resource_worker(data, resource_type, parent, auth):
     """
     Put or update resource to Codeschool.
@@ -114,19 +39,12 @@ def push_resource_worker(data, resource_type, parent, auth):
     except (SyntaxError, ValueError) as ex:
         raise JSONEncodedError({
             'error': 'resource',
-            'type': resource_type,
+            'type': str(resource_type),
             'message': str(ex)
         })
 
 
-@api.dispatcher.add_method
-def push_resource(data, resource_type, parent, auth):
-    """
-    API entry point with a JSON-RPC friendly handling of exceptions.
-    """
-
-    try:
-        result = push_resource_worker(data, resource_type, parent, auth)
-    except JSONEncodedError:
-        return JSONEncodedError.data
-    return {'url': result.get_absolute_url(), 'status': 'success'}
+#
+# Final JSON-RPC end points
+#
+push_resource = wrap_json_rpc(resource_to_url(push_resource_worker))
