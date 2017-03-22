@@ -118,6 +118,8 @@ setup(
             'python-boilerplate',
             'invoke',
             'pytest',
+            'flake8',
+            'tox',
             'pytest-cov',
             'pytest-django',
             'pytest-selenium',

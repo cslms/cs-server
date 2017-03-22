@@ -107,7 +107,7 @@ def wrap_json_rpc(function):
             result = function(*args, **kwargs)
         except Exception as ex:
             if isinstance(ex, JSONEncodedError):
-                data = JSONEncodedError.data
+                data = ex.data
                 data.setdefault('error', 'RPCError')
             else:
                 data = {'error': 'runtime', 'message': str(ex)}
@@ -130,7 +130,6 @@ def resource_to_url(function):
     ::
 
         {'url': obj.get_absolute_url(), 'status': 'success'}
-
     """
 
     @functools.wraps(function)

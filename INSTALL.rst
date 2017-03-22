@@ -59,16 +59,6 @@ start codeschool.
     Arch linux
     $ redis-server
 
-After installing, just start the server::
-
-    $ redis-server
-
-Instead, you may skip installation and use Docker::
-
-    $ docker run redis:alpine
-
-This way you have a redis server running without touching your system :).
-
 
 Invoke tasks
 ------------

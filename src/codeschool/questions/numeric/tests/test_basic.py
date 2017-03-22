@@ -14,7 +14,8 @@ def test_make_numeric_question(db):
 
 
 def test_make_numeric_question_fuzzy(db):
-    make_numeric_question_fuzzy()
+    question = make_numeric_question_fuzzy()
+    assert question.title == 'Pie'
 
 
 def test_correct_submission(rf, question_42, user):

@@ -12,6 +12,7 @@ __pycache__/
 *.rdb
 *.egg-info/
 .cache/
+.tox/
 .sass-cache/
 .cs-debug.log
 .coverage
