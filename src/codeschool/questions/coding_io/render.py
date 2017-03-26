@@ -1,34 +1,25 @@
 from html import escape
 
 from django.utils.translation import ugettext as _
-from iospec.feedback import Feedback
 from jinja2 import Markup
-
-from codeschool.questions.coding_io.models import CodingIoFeedback
-from iospec import In, Out, IoSpec, TestCase
 from pyml.helpers import render
 
-
-@render.register(CodingIoFeedback)
-def _(x, **kwargs):
-    if x.feedback:
-        return render(x.feedback, **kwargs)
-    else:
-        return _('Incomplete feedback')
+from iospec import In, Out, IoSpec, TestCase
+from iospec.feedback import Feedback
 
 
 @render.register(In)
 def _(x):
+    data = escape(x, False)
     return Markup(
-        '<span class="iospec-atom iospec-atom--in">%s</span><br>\n' % escape(x,
-                                                                             False))
+        '<span class="iospec-atom iospec-atom--in">%s</span><br>\n' % data)
 
 
 @render.register(Out)
 def _(x):
+    data = escape(x, False)
     return Markup(
-        '<span class="iospec-atom iospec-atom--out">%s</span>' % escape(x,
-                                                                        False))
+        '<span class="iospec-atom iospec-atom--out">%s</span>' % data)
 
 
 @render.register(TestCase)
@@ -36,12 +27,12 @@ def _(x):
     if len(x) != 0:
         data = ''.join(map(render, x))
         return Markup(
-            '<code class="iospec-testcase">%s</code>' % data)
+            '<div class="iospec-testcase"><code>%s</code></div>' % data)
     else:
         data = escape(_('empty'))
         return Markup(
-            '<code class="iospec-testcase iospec-testcase--empty">'
-            '-- %s --</code>' % data)
+            '<div class="iospec-testcase iospec-testcase--empty">'
+            '<code>-- %s --</code></div>' % data)
 
 
 @render.register(IoSpec)

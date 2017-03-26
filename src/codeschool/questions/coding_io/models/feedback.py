@@ -5,6 +5,7 @@ from lazyutils import lazy, delegate_to
 from codeschool import models
 from codeschool.questions.coding_io.ejudge import grade_code
 from codeschool.questions.models import QuestionFeedback
+from ..render import render
 
 
 class CodingIoFeedback(QuestionFeedback):
@@ -45,4 +46,7 @@ class CodingIoFeedback(QuestionFeedback):
         feedback.pprint()
         self.json_feedback = feedback.to_json()
         self.given_grade_pc = feedback.grade * 100
+
+    def render_message(self, **kwargs):
+        return render(self.feedback)
 
