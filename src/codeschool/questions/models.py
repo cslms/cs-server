@@ -143,7 +143,9 @@ class Question(codeschool.mixins.ShortDescriptionPageMixin,
         """
         kwargs = self.get_submission_kwargs(client.request, kwargs)
         submission = self.submit(client.request, **kwargs)
-        if self.instant_autograde:
+        if submission.recycled:
+            client.dialog(html='You cannot send the same response twice!')
+        elif self.instant_autograde:
             feedback = submission.autograde()
             data = feedback.render_message()
             client.dialog(html=data)
