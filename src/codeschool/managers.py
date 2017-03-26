@@ -2,6 +2,9 @@ import inspect
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
+from django.db.models.fields.related_descriptors import \
+    ReverseManyToOneDescriptor
+from lazyutils import lazy
 
 
 def apply_manager_extensions(*args):
@@ -173,7 +176,67 @@ class ExtensibleManagerDescriptor:
 #
 # Related managers
 #
+class RelatedDescriptorExt(ReverseManyToOneDescriptor):
+    """
+    A descriptor that automatically extends the default related manager
+    descriptor by inserting the given ext_class in the mro().
+    """
+    def __init__(self, descriptor, ext_class):
+        super().__init__(descriptor.rel)
+        self.descriptor = descriptor
+        self.ext_class = ext_class
+
+    @lazy
+    def ext_class_final(self):
+        # We test these two attributes in order to support ModelCluster
+        # descriptors and the vanilla Django ones.
+        for attr in ('child_object_manager_cls', 'related_manager_cls'):
+            try:
+                manager_cls = getattr(self.descriptor, attr)
+            except AttributeError:
+                continue
+            else:
+                class DescriptorExt(self.ext_class, manager_cls):
+                    def __new__(cls, *args, **kwargs):
+                        return manager_cls.__new__(cls, *args, **kwargs)
+
+                    def __init__(self, *args, **kwargs):
+                        manager_cls.__init__(self, *args, **kwargs)
+
+                    def __get__(self, instance, cls=None):
+                        return manager_cls.__get__(instance, cls=cls)
+
+                    def __getattr__(self, attr):
+                        return getattr(manager_cls, attr)
+
+                return DescriptorExt
+
+        raise RuntimeError('could not determine the manager class from the'
+                           'descriptor: %r' % self.descriptor)
+
+    def __get__(self, instance, cls=None):
+        if instance is None:
+            return self
+        return self.ext_class_final(instance)
+
+    def __set__(self, instance, value):
+        self.descriptor.__set__(instance, value)
 
 
+class RelatedManagerExt:
+    """
+    Base class for implementing extensions for a related manager defined with
+    the given `related_name`.
+    """
 
+    def __new__(cls, data):
+        if isinstance(data, Model):
+            new = object.__new__(cls)
+            new.instance = data
+            return new
+        else:
+            return RelatedDescriptorExt(data, cls)
+
+    def __init__(self, instance):
+        super().__init__(instance)
 

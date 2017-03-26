@@ -224,7 +224,7 @@ class Activity(models.RoutablePageMixin, models.Page, metaclass=ActivityMeta):
     @property
     def submissions(self):
         return self.submission_class.objects.filter(
-            response__activity_page_id=self.id
+            progress__activity_page_id=self.id
         )
 
     @property

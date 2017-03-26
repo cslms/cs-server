@@ -74,10 +74,10 @@ class Statistics(Sequence):
         """
 
         sorted_data = self.sorted(key)
-        N = len(sorted_data)
-        if N % 2:
-            return sorted_data[N // 2]
-        elif N == 0:
+        n = len(sorted_data)
+        if n % 2:
+            return sorted_data[n // 2]
+        elif n == 0:
             raise ValueError('empty data set has no median')
         else:
-            return (sorted_data[N // 2] + sorted_data[N // 2 - 1]) / 2
+            return (sorted_data[n // 2] + sorted_data[n // 2 - 1]) / 2

@@ -1,1 +1,1 @@
-require('./wagtailadmin/scss/home.scss');
+require('./wagtailadmin/scss/home_url.scss');

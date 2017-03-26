@@ -1,11 +1,13 @@
-from sulfur import urlchecker
-
-
-def test_basic_routes(user, request_with_user):
+def test_basic_urls(user, client):
     context = {'username': user.username}
     urls = [
         '/auth/{username}',
         '/auth/{username}/edit',
         '/auth/{username}/password',
     ]
-    urlchecker.check_url(urls, context, html5=True)
+    client.check_url(urls, context, html5=True)
+
+
+def test_login_with_valid_user(driver, user_with_password, password):
+    user = user_with_password
+    driver.open('/')

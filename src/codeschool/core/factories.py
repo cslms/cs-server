@@ -41,19 +41,19 @@ def make_example_questions(parent):
     # Multiple choice questions
     if 'codeschool.questions.multiple_choice' in settings.INSTALLED_APPS:
         questions.extend([
-            #TODO: make_multiple_choice
+            # TODO: make_multiple_choice
         ])
 
     # Form questions
     if 'codeschool.questions.form' in settings.INSTALLED_APPS:
         questions.extend([
-            #TODO: make_form
+            # TODO: make_form
         ])
 
     # Form questions
     if 'codeschool.questions.free_text' in settings.INSTALLED_APPS:
         questions.extend([
-            #TODO: make_form
+            # TODO: make_form
         ])
 
     return questions

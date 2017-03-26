@@ -140,11 +140,11 @@ def format_processor(func):
     arguments that could be passed to the SourceFormat constructor.
     """
 
-    def process(L, **kwargs):
-        L = (x.partition(':') for x in L)
-        L = ((ref, name) for (ref, _, name) in L)
-        L = (dict(kwargs, ref=ref, name=name) for (ref, name) in L)
-        return func(list(L))
+    def process(lst, **kwargs):
+        lst = (x.partition(':') for x in lst)
+        lst = ((ref, name) for (ref, _, name) in lst)
+        lst = (dict(kwargs, ref=ref, name=name) for (ref, name) in lst)
+        return func(list(lst))
 
     # Binary formats
     process([
@@ -193,13 +193,13 @@ def formats_yaml_dump():
 
     dump = []
 
-    def process(L, **kwargs):
+    def process(lst, **kwargs):
         def subs(v):
             if isinstance(v, bool):
                 return str(v).lower()
             return repr(v)
 
-        for kwargs in L:
+        for kwargs in lst:
             ref = kwargs.pop('ref')
             name = kwargs.pop('name')
             dump.append(
@@ -220,8 +220,8 @@ def init_file_formats():
     Initialize all file formats and save them to the db.
     """
 
-    def process(L):
-        for kwargs in L:
+    def process(lst):
+        for kwargs in lst:
             if not FileFormat.objects.filter(ref=kwargs['ref']):
                 FileFormat.objects.create(**kwargs)
 

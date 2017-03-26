@@ -33,9 +33,9 @@ class LoginView(TemplateView):
 
     def post_signin(self, request):
         return views.signin(
-                request,
-                template_name='auth/login.jinja2',
-                extra_context=self.get_context_data(action='signin')
+            request,
+            template_name='auth/login.jinja2',
+            extra_context=self.get_context_data(action='signin')
         )
 
     def post_signup(self, request):

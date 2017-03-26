@@ -592,7 +592,7 @@ class CodingIoQuestion(Question):
         )
 
     @srvice.route(r'^placeholder/$')
-    def serve_placeholder(self, request, language):
+    def route_placeholder(self, request, language):
         """
         Return the placeholder code for some language.
         """

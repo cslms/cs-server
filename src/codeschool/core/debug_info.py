@@ -51,10 +51,10 @@ class DebugInfo(collections.MutableMapping):
 
     def _update_keys(self):
         blacklist = set(dir(collections.MutableMapping))
-        self._keys = set([
+        self._keys = {
             name for name in dir(self)
             if name not in blacklist and not name.startswith('_')
-        ])
+        }
 
     #
     # Database
@@ -68,7 +68,6 @@ class DebugInfo(collections.MutableMapping):
 
     def dbsize_mb(self):
         return self['dbsize'] / 1024 / 1024
-
 
     #
     # Auth

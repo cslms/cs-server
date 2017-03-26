@@ -17,6 +17,10 @@ class Feedback(HasProgressMixin,
     Usually there will be one feedback per submission, but this figure may
     vary from case to case.
     """
+    TITLE_OK = _('Correct answer!')
+    TITLE_PARTIAL = _('Partially correct.')
+    TITLE_WRONG = _('Wrong answer.')
+    TITLE_NOT_GRADED = _('Not graded.')
 
     MESSAGE_OK = _(
         '*Congratulations!* Your response is correct!'
@@ -75,6 +79,30 @@ class Feedback(HasProgressMixin,
     )
     is_correct = models.BooleanField(default=False)
     progress = lazy(lambda x: x.submission.progress)
+
+    def get_feedback_title(self):
+        """
+        Return a title summarizing the feedback result. The default set of
+        titles come from the list:
+
+            * Correct answer!
+            * Partially correct.
+            * Wrong answer.
+            * Not graded.
+
+        Different question types may define additional values to this list.
+        """
+
+        grade = self.given_grade_pc
+
+        if grade == 100:
+            return self.TITLE_OK
+        elif grade is not None and grade > 0:
+            return self.TITLE_PARTIAL
+        elif grade == 0:
+            return self.TITLE_WRONG
+        else:
+            return self.TITLE_NOT_GRADED
 
     def autograde(self):
         """

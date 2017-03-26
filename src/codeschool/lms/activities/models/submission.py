@@ -39,14 +39,21 @@ class Submission(HasProgressMixin,
     objects = SubmissionManager()
     _subclass_related = ['Feedback']
 
+    # Delegated properties
+    @property
+    def final_grade_pc(self):
+        if self.feedback is None:
+            return None
+        return self.feedback.final_grade_pc
+
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self)
 
     def __str__(self):
         base = '%s by %s' % (self.activity_title, self.sender_username)
-        if self.final_feedback:
-            points = self.final_feedback.given_grade
-            base += ' (%s%%)' % points
+        # if self.feedback_set.last():
+        #     points = self.final_feedback_pc.given_grade
+        #     base += ' (%s%%)' % points
         return base
 
     def save(self, *args, **kwargs):
@@ -275,6 +282,15 @@ class Submission(HasProgressMixin,
         else:
             rollback()
             raise ValueError('invalid method: %s' % method)
+
+    def get_feedback_title(self):
+        """
+        Return the title for the feedback message.
+        """
+
+        if self.feedback is None:
+            return _('Grading submission...')
+        return self.feedback.get_feedback_title()
 
 
 # Save a copy in the class namespace for convenience

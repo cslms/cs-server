@@ -2,21 +2,51 @@
 
 {% block submission scoped %}
     <div class="mdl-shadow--4dp question-feedback">
-        <h3 class="iospec-title show">{{ submission.feedback_title }} ({{ submission.language.name }})
+        <h3 class="iospec-title show">{{ submission.get_feedback_title() }} ({{ submission.language.name }})
             <span class="feedback-title-handle" onclick="expand(this.parentNode.parentNode)"><i class="material-icons">menu</i></span>
         </h3>
 
         <div class="expandable hidden">
-            {{ submission.__html__() }}
+            {{ submission }}
             <h3 class="banner">{{ _('Details') }}</h3>
             <dl>
-                <dt>{{ _('Grade') }}</dt><dd>{{ submission.final_grade|int }}%</dd>
+                <dt>{{ _('Grade') }}</dt><dd>{{ submission.final_grade_pc|int }}%</dd>
                 <dt>{{ _('Date of submission') }}</dt><dd>{{ submission.created }}</dd>
             </dl>
             <h3 class="banner">{{ _('Source code') }}</h3>
-            <div class="source-code">
-                <ace-editor mode="{{ submission.language.ace_mode() }}" read-only>{{ submission.source|e }}</ace-editor>
-            </div>
+            <div class="codehilite">{{ submission.source|highlight(submission.language.pygments_mode()) }}</div>
         </div>
     </div>
+{% endblock %}
+
+
+{% block javascript %}
+    {{ super() }}
+    <script>
+        $(function () {
+            $('textarea[data-editor]').each(function () {
+                var textarea = $(this);
+                var mode = textarea.data('editor');
+                var editDiv = $('<div>', {
+                    position: 'absolute',
+                    width: textarea.width(),
+                    height: textarea.height(),
+                    readOnly: true,
+                    'class': textarea.attr('class')
+                });
+                textarea.css('display', 'none');
+                editDiv.insertBefore(textarea);
+                var editor = ace.edit(editDiv[0]);
+                editor.resize();
+                editor.getSession().setValue(textarea.val());
+                editor.getSession().setMode("ace/mode/" + (mode || 'python'));
+                editor.getSession().setUseSoftTabs(true);
+                editor.getSession().setUseWrapMode(true);
+                editor.setHighlightActiveLine(true);
+                editor.setShowPrintMargin(true);
+                editor.setTheme("ace/theme/xcode");
+                editor.setOptions({fontSize: '1.1em'});
+            });
+        });
+    </script>
 {% endblock %}

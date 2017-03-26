@@ -22,14 +22,14 @@ class SubmissionQuerySet(models.PolymorphicQuerySet):
         Filter submissions by activity.
         """
 
-        return self.filter(response__activity_page=activity)
+        return self.filter(progress__activity_page=activity)
 
     def for_user(self, user):
         """
         Filter submissions by user.
         """
 
-        return self.filter(response__user=user)
+        return self.filter(progress__user=user)
 
     def best(self, attrs=None, activity=None):
         """

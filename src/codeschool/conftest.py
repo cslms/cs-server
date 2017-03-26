@@ -7,7 +7,7 @@ import random
 import pytest
 from sulfur import Driver as _sulfur_driver
 from mommys_boy import mommy, fake
-import sulfur.env
+from sulfur.django import *
 
 from codeschool.accounts.factories import UserFactory, FullUserFactory, birthday
 
@@ -18,7 +18,6 @@ mommy_create = mommy.create
 mommy_factory = mommy.get_factory
 
 # Set up sulfur to use django
-sulfur.env.enable_django()
 
 
 def model_fixture(func):

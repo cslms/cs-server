@@ -8,7 +8,7 @@ module.exports = {
         ace: "./static_src/entry-ace.js",
         //wagtailadmin: "./static_src/entry-wagtail.js",
         //wagtailpageeditor: "./static_src/entry-wagtail-page-editor.js",
-        //wagtailhome: "./static_src/entry-wagtail-home.js"
+        //wagtailhome: "./static_src/entry-wagtail-home_url.js"
     },
     output: {
         path: './static/',

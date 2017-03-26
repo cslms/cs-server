@@ -3,14 +3,15 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import response
 from django.template import TemplateDoesNotExist
 from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import render
 
+import codeschool.mixins
 from codeschool import blocks
 from codeschool import models
 from codeschool import panels
 from codeschool.lms.activities.models import Activity, Submission, Progress
 from codeschool.lms.activities.models.feedback import Feedback
 from codeschool.questions.forms import QuestionAdminModelForm
-from pyml.helpers import render
 
 
 QUESTION_BODY_BLOCKS = [
@@ -31,7 +32,7 @@ class QuestionMeta(type(Activity)):
             self.CONCRETE_QUESTION_TYPES.append(self)
 
 
-class Question(models.ShortDescriptionPageMixin,
+class Question(codeschool.mixins.ShortDescriptionPageMixin,
                Activity, metaclass=QuestionMeta):
     """
     Base abstract class for all question types.
@@ -131,7 +132,7 @@ class Question(models.ShortDescriptionPageMixin,
     # Route implementations
     #
     # Wagtail routes do not handle subclasses well and we also do not want to
-    # to repeat the correct routing parameters each a route is subclassed.
+    # to repeat the correct routing parameters each time a route is subclassed.
     #
     # Subclass thus must override the serve_* methods instead of the route_*
     # versions.
@@ -154,10 +155,12 @@ class Question(models.ShortDescriptionPageMixin,
         Renders a user request for the list of submissions.
         """
 
-        submissions = self.submissions.for_user(request.for_user).order_by(
-            '-created')
+        submissions = self.submissions\
+            .for_user(request.user)\
+            .order_by('-created')
         context = self.get_context(request, response=None, *args, **kwargs)
         context['submissions'] = submissions
+        context['disable_nav_bar'] = True
         return self.render_from_template('submissions', request, context)
 
     def serve_statistics_page(self, request, *args, **kwargs):
@@ -208,7 +211,7 @@ class Question(models.ShortDescriptionPageMixin,
 
     # Wagtail admin
     subpage_types = []
-    content_panels = models.ShortDescriptionPageMixin.content_panels[:-1] + [
+    content_panels = codeschool.mixins.ShortDescriptionPageMixin.content_panels[:-1] + [
         panels.MultiFieldPanel([
             panels.FieldPanel('import_file'),
             panels.FieldPanel('short_description'),

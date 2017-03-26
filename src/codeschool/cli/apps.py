@@ -5,4 +5,4 @@ class CliConfig(AppConfig):
     name = 'codeschool.cli'
 
     def ready(self):
-        from . import methods
+        from . import methods  # noqa: F401

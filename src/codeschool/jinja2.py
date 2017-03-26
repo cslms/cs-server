@@ -1,17 +1,20 @@
+import collections
 from functools import singledispatch
 from logging import Logger
 
-import collections
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.urlresolvers import reverse
 from django.utils.html import escape
 from django.utils.translation import ugettext, ungettext
-from jinja2 import Environment, Markup, contextfilter, contextfunction, is_undefined
+from jinja2 import Environment, Markup, contextfilter, contextfunction, \
+    is_undefined
 from jinja2.runtime import Context
-from wagtail.wagtailcore.templatetags.wagtailcore_tags import richtext
-
+from pygments import highlight as pygments_highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import get_formatter_by_name
 from pyml.components.data_components import Mapping
 from pyml.helpers import render, hyperlink
+from wagtail.wagtailcore.templatetags.wagtailcore_tags import richtext
 
 jinja2_environment = None
 
@@ -51,6 +54,16 @@ def markdown(text, *args, **kwargs):
 
     from markdown import markdown
     return markdown(text, *args, **kwargs)
+
+
+def highlight(code, lang='python'):
+    """
+    Highlights source in the given programming language.
+    """
+
+    formatter = get_formatter_by_name('html')
+    lexer = get_lexer_by_name(lang)
+    return Markup(pygments_highlight(code, lexer, formatter))
 
 
 def icon(value):
@@ -163,6 +176,7 @@ def environment(**options):
     # Filters
     env.filters.update(
         markdown=markdown,
+        highlight=highlight,
         icon=icon,
         dl=dl,
         html=render,

@@ -103,7 +103,6 @@ def make_yoda_teacher():
 
 
 def make_girafales_teacher():
-    curr_date = dt.datetime.now().date()
     return make_user(
         update=True,
         is_teacher=True,
@@ -119,7 +118,6 @@ def make_girafales_teacher():
 
 
 def make_helena_teacher():
-    curr_date = dt.datetime.now().date()
     return make_user(
         update=True,
         is_teacher=True,
@@ -134,7 +132,6 @@ def make_helena_teacher():
 
 
 def make_miyagi_teacher():
-    curr_date = dt.datetime.now().date()
     return make_user(
         update=True,
         is_teacher=True,

@@ -10,7 +10,7 @@ class FamilyManager:
 
     def all(self):
         """
-        Query
+        QuerySet
         """
 
         return self._manager.filter(original_page_id=self.original_id())

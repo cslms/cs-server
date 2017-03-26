@@ -23,7 +23,7 @@ def setting_success_url(func, url, keywords):
     def decorated(request, *args, **kwargs):
         success_url = reverse(url, kwargs={
             k: v for k, v in kwargs.items() if k in keywords
-            })
+        })
         kwargs['success_url'] = success_url
         return func(request, *args, **kwargs)
 

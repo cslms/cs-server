@@ -1,9 +1,5 @@
-import collections
-
 import pyml
 from pyml import nav, a, p, ul, li, hyperlink
-from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
 
 
 class NavSection(pyml.Component):
@@ -14,9 +10,11 @@ class NavSection(pyml.Component):
     @property
     def title_element(self):
         if self.href:
-            return a(self.name, cls='cs-nav__block-title', attrs=self.title_kwargs)
+            return a(self.name, cls='cs-nav__block-title',
+                     attrs=self.title_kwargs)
         else:
-            return p(self.name, cls='cs-nav__block-title', attrs=self.title_kwargs)
+            return p(self.name, cls='cs-nav__block-title',
+                     attrs=self.title_kwargs)
 
     def __init__(self, name, href=None, title=None, **kwargs):
         self.links = []

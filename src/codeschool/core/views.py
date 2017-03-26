@@ -4,9 +4,9 @@ import model_reference
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 
+from codeschool import config_options, global_data_store
 from codeschool import models
 from codeschool import settings
-from codeschool import config_options, global_data_store
 from codeschool.accounts.models import Profile
 from codeschool.core.debug_info import DebugInfo
 from codeschool.core.forms import ConfigForm, NewUserForm, SysProfileForm, \
@@ -99,7 +99,7 @@ def configure_server_view(request):
             # Save global settings
             data = options_form.cleaned_data
             config_options['address'] = data['address']
-            config_options['initial-page'] = initial_page = data['initial_page']
+            config_options['initial-page'] = data['initial_page']
             return index_view(request)
     else:
         options_form = ConfigForm()
@@ -188,14 +188,16 @@ def fill_example_courses():
 
     if not global_data_store.get('example-courses', False):
         global_data_store['example-courses'] = True
-        cs101, *other_courses = courses = make_example_courses()
-        cs101.teacher = models.User.objects.get(id=global_data_store['admin-user-id'])
+        cs101, *other_courses = make_example_courses()
+        cs101.teacher = models.User.objects.get(
+            id=global_data_store['admin-user-id'])
         cs101.save()
 
 
 def fill_courses_with_users():
     from codeschool.lms.courses.models import Course
-    from codeschool.accounts.factories import make_teachers, make_joe_user, make_mr_robot
+    from codeschool.accounts.factories import make_teachers, make_joe_user, \
+        make_mr_robot
 
     if not global_data_store.get('courses-populated', False):
         user = models.User.objects.get(id=global_data_store['admin-user-id'])
