@@ -514,8 +514,10 @@ class CodingIoQuestion(Question):
     # Actions
     def submit(self, user_or_request, language=None, **kwargs):
         if language and self.language:
-            raise ValueError('cannot set language')
-        elif self.language:
+            if language != self.language:
+                args = language, self.language
+                raise ValueError('cannot set language: %r != %r' % args)
+        if self.language:
             language = self.language
         language = get_programming_language(language)
         return super().submit(user_or_request, language=language, **kwargs)
