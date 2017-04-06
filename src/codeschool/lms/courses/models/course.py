@@ -13,7 +13,7 @@ from codeschool import panels
 from codeschool.phrases import phrase
 
 # User-facing strings
-from pyml.helpers import hyperlink
+from bricks.helpers import hyperlink
 
 ACTIVITY_DESCRIPTION = _('Activities for the %(name)s course')
 

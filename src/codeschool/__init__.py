@@ -5,7 +5,7 @@ Packages
 
 - accounts: user authentication, login and signup (uses userena)
 - cli: command line scripts that helps managing codeschool
-- components: jinja2/pyml components
+- components: jinja2/bricks components
 - core: a mixed bag of core functionality
 - extra: optional codeschool activities
 - fixes: monkey-patch 3rd party libs

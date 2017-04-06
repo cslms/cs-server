@@ -10,15 +10,18 @@ from jinja2 import Environment, Markup, contextfilter, contextfunction, \
     is_undefined
 from jinja2.runtime import Context
 from pygments import highlight as pygments_highlight
-from pygments.lexers import get_lexer_by_name
 from pygments.formatters import get_formatter_by_name
-from pyml.components.data_components import Mapping
-from pyml.helpers import render, hyperlink
+from pygments.lexers import get_lexer_by_name
 from wagtail.wagtailcore.templatetags.wagtailcore_tags import richtext
+from markdown import Markdown
+
+from bricks.components.data_components import Mapping
+from bricks.helpers import render, hyperlink
+
 
 jinja2_environment = None
-
 log = Logger('codeschool.settings')
+md = Markdown(extensions=['mdx_math'])
 
 
 class CodeschoolContext(Context):
@@ -47,13 +50,12 @@ class GlobalConfig:
             return getattr(codeschool, attr, None)
 
 
-def markdown(text, *args, **kwargs):
+def markdown(text):
     """
     Convert a string of markdown source to HTML.
     """
 
-    from markdown import markdown
-    return markdown(text, *args, **kwargs)
+    return md.convert(text)
 
 
 def highlight(code, lang='python'):

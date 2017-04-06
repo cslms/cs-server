@@ -64,6 +64,7 @@ setup(
         'mistune',
         'pygments',
         'Markdown',
+        'python-markdown-math',
         'html5lib',
         'bleach',
         'fake-factory',

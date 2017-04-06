@@ -20,12 +20,14 @@ mdx = __name__ + '.mdx.'
 
 def render(text):
     return mark_safe(
-        bleach.clean(
+        # WARNING: FIXME. Risk of XSS attacks
+        #bleach.clean(
             markdown.markdown(
                 text,
                 extensions=[
                     'extra',
                     'codehilite',
+                    'math',
                     tables.TableExtension(),
                     linker.LinkerExtension({
                         '__default__': mdx + 'linkers.page',
@@ -38,34 +40,36 @@ def render(text):
                     'codehilite': [('guess_lang', False)]
                 },
                 output_format='html5'),
-            tags=[
-                'p', 'div', 'span', 'h1', 'h2', 'h3',
-                'h4', 'h5', 'h6', 'tt', 'pre',
-                'em', 'strong', 'ul', 'li', 'dl', 'dd',
-                'dt', 'code', 'img', 'a',
-                'table', 'tr', 'th', 'td', 'tbody',
-                'caption', 'colgroup', 'thead',
-                'tfoot', 'blockquote', 'ol', '<hr>', ],
-            attributes={
-                '*': ['class', 'style', 'id', ],
-                'a': ['href', 'target', 'rel', ],
-                'img': ['src', 'alt', ],
-                'tr': ['rowspan', 'colspan', ],
-                'td': ['rowspan', 'colspan', 'align', ],
-            },
-            styles=[
-                'color', 'background-color',
-                'font-family', 'font-weight',
-                'font-size',
-                'width', 'height', 'text-align',
-                'border', 'border-top',
-                'border-bottom', 'border-left',
-                'border-right',
-                'padding', 'padding-top',
-                'padding-bottom', 'padding-left',
-                'padding-right',
-                'margin', 'margin-top',
-                'margin-bottom', 'margin-left',
-                'margin-right',
-            ]
-        ))
+        #     tags=[
+        #         'p', 'div', 'span', 'h1', 'h2', 'h3',
+        #         'h4', 'h5', 'h6', 'tt', 'pre',
+        #         'em', 'strong', 'ul', 'li', 'dl', 'dd',
+        #         'dt', 'code', 'img', 'a',
+        #         'table', 'tr', 'th', 'td', 'tbody',
+        #         'caption', 'colgroup', 'thead',
+        #         'tfoot', 'blockquote', 'ol', '<hr>',
+        #     ],
+        #     attributes={
+        #         '*': ['class', 'style', 'id', ],
+        #         'a': ['href', 'target', 'rel', ],
+        #         'img': ['src', 'alt', ],
+        #         'tr': ['rowspan', 'colspan', ],
+        #         'td': ['rowspan', 'colspan', 'align', ],
+        #     },
+        #     styles=[
+        #         'color', 'background-color',
+        #         'font-family', 'font-weight',
+        #         'font-size',
+        #         'width', 'height', 'text-align',
+        #         'border', 'border-top',
+        #         'border-bottom', 'border-left',
+        #         'border-right',
+        #         'padding', 'padding-top',
+        #         'padding-bottom', 'padding-left',
+        #         'padding-right',
+        #         'margin', 'margin-top',
+        #         'margin-bottom', 'margin-left',
+        #         'margin-right',
+        #     ]
+        # )
+    )

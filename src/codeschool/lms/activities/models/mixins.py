@@ -1,7 +1,8 @@
 from importlib import import_module
 
 from django.core.exceptions import ImproperlyConfigured
-from pyml.utils import snake_case
+
+from bricks.utils import snake_case
 
 
 class HasProgressMixin:

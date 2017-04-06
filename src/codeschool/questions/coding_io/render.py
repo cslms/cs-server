@@ -2,8 +2,8 @@ from html import escape
 
 from django.utils.translation import ugettext as _
 from jinja2 import Markup
-from pyml.helpers import render
 
+from bricks.helpers import render
 from iospec import In, Out, IoSpec, TestCase
 from iospec.feedback import Feedback
 
