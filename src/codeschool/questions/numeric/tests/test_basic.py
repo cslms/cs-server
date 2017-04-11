@@ -12,10 +12,17 @@ def question_42(db):
 def question_pi(db):
     return make_numeric_question_fuzzy()
 
+def test_create_titleless_question(db):
+    with pytest.raises(Exception):
+        make_titleless_question()
+
+def test_create_big_title_question(db):
+    with pytest.raises(Exception):
+        make_big_title_question()
 
 def test_make_numeric_question(db):
-    make_numeric_question()
-
+    question = make_numeric_question()
+    assert question.correct_answer == 42
 
 def test_make_numeric_question_fuzzy(db):
     question = make_numeric_question_fuzzy()

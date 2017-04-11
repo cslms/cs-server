@@ -32,3 +32,30 @@ def make_numeric_question_fuzzy(parent=None):
     parent = parent or model_reference.load('root-page')
     parent.add_child(instance=question)
     return question
+
+def make_titleless_question(parent=None):
+    question = NumericQuestion(
+        title='',
+        body=[
+            ('markdown',
+             'Question description'),
+        ],
+        correct_answer=0,
+    )
+    parent = parent or model_reference.load('root-page')
+    parent.add_child(instance=question)
+    return question
+
+def make_big_title_question(parent=None):
+    question = NumericQuestion(
+        title='',
+        body=[
+            ('markdown',
+             'Question description with more than 100 characters '
+             'x' * 80),
+        ],
+        correct_answer=0,
+    )
+    parent = parent or model_reference.load('root-page')
+    parent.add_child(instance=question)
+    return question
