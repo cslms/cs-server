@@ -1,13 +1,11 @@
 import collections
-
 import datetime
-from random import choice
 
-import editdistance as editdistance
 from django.template.loader import render_to_string
 from django.utils.timezone import now
 
 from codeschool import models
+from codeschool.utils.string import string_distance
 
 
 class AttendanceSheet(models.Model):
@@ -198,15 +196,3 @@ class AttendanceCheck(models.Model):
             self.has_attended = True
         self.attempts += 1
         self.save()
-
-
-def string_distance(str1, str2):
-    """
-    String distance of two strings (casefolded).
-    """
-    str1 = str1.casefold()
-    str2 = str2.casefold()
-    if str1 == str2:
-        return 0
-    else:
-        return editdistance.eval(str1, str2)
