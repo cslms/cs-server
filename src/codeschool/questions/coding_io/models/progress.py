@@ -1,5 +1,5 @@
 from codeschool.questions.models import QuestionProgress
-from codeschool.utils import queryset_class, manager_instance
+from codeschool.utils.managers import manager_instance, queryset_class
 
 
 class CodingIoProgessQuerySet(queryset_class(QuestionProgress)):

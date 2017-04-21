@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.lms.activities.managers.progress import ProgressManager
-from codeschool.utils import get_ip
+from codeschool.utils.request import get_ip
 
 logger = logging.getLogger('codeschool.lms.activities')
 

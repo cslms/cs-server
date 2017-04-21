@@ -1,38 +1,6 @@
-import hashlib
-from functools import lru_cache
-
-from django.db.models import QuerySet, Model, Manager
+from django.db.models import Model, Manager, QuerySet
 from django.db.models.manager import BaseManager
-from lazyutils import delegate_to, lazy
-from ipware.ip import get_real_ip, get_ip as _get_ip
-
-
-class delegate_to_or_none(delegate_to):
-    """
-    Like delegate_to(), but return None if delegate is None.
-    """
-
-    def __get__(self, obj, cls=None):
-        if obj is None:
-            return self
-        owner = getattr(obj, self.attribute)
-        if owner is None:
-            return None
-        try:
-            attr = self._name
-        except AttributeError:
-            attr = self._name = self._get_name(cls)
-        return getattr(owner, attr)
-
-
-def indent(text, prefix=4):
-    """
-    Indent string of text.
-    """
-
-    if isinstance(prefix, int):
-        prefix = ' ' * prefix
-    return '\n'.join(prefix + line for line in text.splitlines())
+from lazyutils import lazy
 
 
 def manager_class(model, queryset_class=None, class_name=None,
@@ -94,17 +62,6 @@ def queryset_class(model):
         raise ValueError('could not determine queryset class')
 
 
-def exception_to_json(ex):
-    """
-    JSON compatible representation of an exception.
-    """
-
-    return {
-        'exception': ex.__class__.__name__,
-        'message': ex.args,
-    }
-
-
 class LazyManager:
     """
     Lazy accessor for a Model's manager.
@@ -126,31 +83,3 @@ class LazyManager:
 
     def __getattr__(self, attr):
         return getattr(self._manager, attr)
-
-
-@lru_cache(1024)
-def md5hash(st):
-    """
-    Compute the hex-md5 hash of string.
-
-    Returns a string of 32 ascii characters.
-    """
-
-    return hashlib.md5(st.encode('utf8')).hexdigest()
-
-
-def md5hash_seq(seq):
-    """
-    Combined md5hash for a sequence of string parameters.
-    """
-
-    hashes = [md5hash(x) for x in seq]
-    return md5hash(''.join(hashes))
-
-
-def get_ip(request):
-    """
-    Return the best possible inference for the user's ip adress from a request.
-    """
-
-    return get_real_ip(request) or _get_ip(request) or ''

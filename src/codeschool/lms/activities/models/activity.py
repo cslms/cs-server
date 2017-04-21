@@ -15,7 +15,7 @@ logger = logging.getLogger('codeschool.lms.activities')
 ZERO = decimal.Decimal(0)
 
 
-class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
+class Activity(models.RoutablePageExt, metaclass=ActivityMeta):
     """
     Represents a gradable activity inside a course. Activities may not have an
     explicit grade, but yet may provide points to the students via the

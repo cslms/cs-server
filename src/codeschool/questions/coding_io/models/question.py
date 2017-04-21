@@ -14,7 +14,7 @@ from codeschool.core.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
 from codeschool.questions.models import Question
-from codeschool.utils import md5hash_seq
+from codeschool.utils.string import md5hash_seq
 from iospec import parse as parse_iospec, IoSpec
 from .submission import CodingIoSubmission
 from .. import ejudge

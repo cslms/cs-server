@@ -73,6 +73,8 @@ setup(
         'celery[redis]',
         'PyYAML',
         'json-rpc',
+        'editdistance',
+        'placeholder',
 
         # Services
         'invoke',
