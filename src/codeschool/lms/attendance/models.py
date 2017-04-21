@@ -12,9 +12,9 @@ from codeschool import models
 
 class AttendanceSheet(models.Model):
     """
-    Controls student attendance by generating a new public passphrase under 
+    Controls student attendance by generating a new public pass-phrase under
     teacher request. Students confirm attendance by typing the secret phrase
-    in a small interval. 
+    within a small interval after the teacher starts checking the attendance.
     """
 
     max_attempts = models.SmallIntegerField(default=3)
@@ -201,30 +201,12 @@ class AttendanceCheck(models.Model):
 
 
 def string_distance(str1, str2):
+    """
+    String distance of two strings (casefolded).
+    """
     str1 = str1.casefold()
     str2 = str2.casefold()
     if str1 == str2:
         return 0
     else:
         return editdistance.eval(str1, str2)
-
-
-def new_random_passphrase():
-    return '%s %s' % (choice(PERSON), choice(ADJECTIVE))
-
-
-PERSON = [
-    # Physicists
-    'Einstein', 'Newton', 'Dirac', 'Bohr', 'Rutherford', 'Heisenberg',
-    'Curie', 'Langevin', 'Boltzmann',
-
-    # Mathematicians
-    'Pythagoras', 'Peano', 'Hilbert', 'Gauss', 'Galois',
-
-    # Computer science
-    'Knuth', 'Turing',
-]
-
-ADJECTIVE = [
-    'mal-humorado', 'pedante', 'esperto', 'manhoso',
-]
