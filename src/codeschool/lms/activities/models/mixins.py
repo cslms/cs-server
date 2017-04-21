@@ -13,7 +13,7 @@ class HasProgressMixin:
     sender_username = property(lambda x: x.progress.user.username)
 
 
-def subclass_registry_meta(meta):
+def _subclass_registry_meta(meta):
     """
     Return a new metaclass that inherits meta and register all sub-classes in
     the ._subclasses attribute.

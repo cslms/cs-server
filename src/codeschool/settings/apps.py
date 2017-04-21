@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'polymorphic',
     'django_extensions',
     'rest_framework',
+    'rules',
 
     # Django
     'django.contrib.admin',

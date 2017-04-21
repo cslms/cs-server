@@ -101,7 +101,7 @@ class MultipleChoiceFeedback(QuestionFeedback):
     interval.
     """
 
-    def autograde(self):
+    def update_autograde(self):
         choice_id = self.submission.choice_id
         choice = self.question.choices.get(uuid=choice_id)
         self.given_grade_pc = choice.value

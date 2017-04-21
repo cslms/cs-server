@@ -104,12 +104,30 @@ class Feedback(HasProgressMixin,
         else:
             return self.TITLE_NOT_GRADED
 
-    def autograde(self):
+    def update_autograde(self):
         """
         Compute and set self.given_grade.
 
         This function may change other states in the feedback object, depending
         on the activity.
+        """
+
+        activity = self.activity
+        submission = self.submission
+        self.given_grade_pc = self.get_given_autograde(submission, activity)
+
+    def get_given_autograde(self, submission, activity):
+        """
+        Atomic and testable version of autograde_update().
+
+        Subclasses should overide this method.
+
+        Args:
+            submission: a submission object
+            activity: the activity the submission refers to
+
+        Returns:
+            A numeric value between 0 and 100 with the assigned grade.
         """
 
         name = self.__class__.__name__

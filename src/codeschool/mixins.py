@@ -121,5 +121,3 @@ class AbsoluteUrlMixin:
             ))
         lines.append('</ul>')
         return '\n'.join(lines)
-
-

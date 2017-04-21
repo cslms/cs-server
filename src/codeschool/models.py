@@ -26,6 +26,8 @@ from model_utils.choices import Choices
 from model_utils.models import QueryManager, StatusModel, TimeFramedModel, TimeStampedModel
 from model_utils.managers import QueryManager, InheritanceManager, QuerySet, InheritanceQuerySet
 
+from .fixes.wagtailroutes import RoutablePage as ExtRoutablePage
+from .fixes.wagtailadmin import DecoupledAdminPage
 from .managers import *
 from .mixins import AbsoluteUrlMixin
 

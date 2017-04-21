@@ -10968,7 +10968,7 @@ button, input[type="button"], input[type="reset"], input[type="submit"] {
   color: #fff;
   cursor: pointer;
   display: inline-block;
-  font-family: Roboto, Roboto, Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  font-family: Roboto, Helvetica, Arial, Tahoma, Verdana, sans-serif;
   font-size: 1em;
   -webkit-font-smoothing: antialiased;
   font-weight: 600;
@@ -11760,7 +11760,7 @@ td {
 
 body {
   color: #1a1a1a;
-  font-family: Roboto, Roboto, Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  font-family: Roboto, Helvetica, Arial, Tahoma, Verdana, sans-serif;
   font-size: 1em;
   line-height: 1.5; }
 

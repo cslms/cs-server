@@ -1,35 +1,22 @@
-import json
-
-from django.contrib.auth import authenticate
-from django.http import JsonResponse
-from django.shortcuts import render
-
-from .import forms
-from . import ctl
+from .models import Question
 
 
-def push_question_ctl_view(request):
-    """
-    Allows a admin user to push a question defined in a external file to the
-    server.
-    """
+#TODO: make
+#@Question.register_route(r'^submit-response.api/$', name='submit-ajax')
+def ajax_submission_view(client, page, **kwargs):
+    return page.serve_ajax_submission(client, **kwargs)
 
-    if request.method == 'GET':
-        context = {'form': forms.PushQuestionForm()}
-    elif request.method == 'POST':
-        form = forms.PushQuestionForm(request.POST)
-        context = {'form': form}
-        if form.is_valid():
-            filename = form.cleaned_data['filename']
-            contents = form.cleaned_data['contents']
-            parent = form.cleaned_data['parent']
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
-            response = ctl.push_question_json(filename, contents, parent, user)
 
-            if form.cleaned_data['response_format'] == 'JSON':
-                return JsonResponse(response)
-            else:
-                context['response'] = json.dumps(response)
-    return render(request, 'questions/push_question_ctl.jinja2', context)
+@Question.register_route(r'^submissions/$', name='list-submissions')
+def list_submissions_view(request, page, *args, **kwargs):
+    raise NotImplementedError
+
+
+@Question.register_route(r'^statistics/$', name='statistics')
+def statistics_page_view(request, page, *args, **kwargs):
+    raise NotImplementedError
+
+
+@Question.register_route(r'^debug/$', name='debug')
+def debug_page_view(request, page, *args, **kwargs):
+    raise NotImplementedError

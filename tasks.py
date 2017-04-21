@@ -1,13 +1,45 @@
 import os
-import shlex
 import sys
 
 from python_boilerplate.tasks import *
-from python_boilerplate.tasks import js
 from python_boilerplate.tasks import django
+from python_boilerplate.tasks import js
+
 ns.add_collection(js)
 ns.add_collection(django)
 sys.path += ['src']
+
+
+@task
+def makemessages(ctx):
+    """
+    Runs the manage.py makemessages command with sane defaults.
+    """
+
+    paths = os.listdir(os.path.dirname(__file__))
+    paths.remove('src')
+    globs = [repr('%s/*' % f if os.path.isdir(f) else f) for f in paths]
+    ignore_patterns = globs * 2
+    ignore_patterns[::2] = ['-i'] * len(globs)
+    cmd = ['python', 'manage.py', 'makemessages', '-i', 'codeschool/vendor/*']
+    cmd.extend(ignore_patterns)
+    ctx.run(' '.join(cmd), echo=True, pty=True)
+
+
+@task
+def compilemessages(ctx):
+    """
+    Runs the manage.py makemessages command with sane defaults.
+    """
+
+    paths = os.listdir(os.path.dirname(__file__))
+    paths.remove('src')
+    globs = [repr('%s*' % f if os.path.isdir(f) else f) for f in paths]
+    ignore_patterns = globs * 2
+    ignore_patterns[::2] = ['-i'] * len(globs)
+    cmd = ['python', 'manage.py', 'makemessages', '-i', 'codeschool/vendor/*']
+    cmd.extend(ignore_patterns)
+    ctx.run(' '.join(cmd), echo=True, pty=True)
 
 
 @task
@@ -48,11 +80,11 @@ def docker_run(ctx, deploy=False, shell=False):
     """
     cmd = (
         'docker run -ti -p {port}:80 '
-           '-v {src}:/app/src/ '
-           '-v {db}:/app/db '
-           '-v {collect}/media:/var/www/media '
-           '-e PYTHONPATH=/app/src/ '
-           'codeschool:deploy{tail}'
+        '-v {src}:/app/src/ '
+        '-v {db}:/app/db '
+        '-v {collect}/media:/var/www/media '
+        '-e PYTHONPATH=/app/src/ '
+        'codeschool:deploy{tail}'
     )
 
     kwargs = {

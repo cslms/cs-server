@@ -36,11 +36,6 @@ class CodingIoQuestion(Question):
         verbose_name = _('Programming question (IO-based)')
         verbose_name_plural = _('Programming questions (IO-based)')
 
-    EXT_TO_METHOD_CONVERSIONS = dict(
-        Question.EXT_TO_METHOD_CONVERSIONS,
-        md='markio',
-    )
-
     num_pre_tests = models.PositiveIntegerField(
         _('# of pre-test examples'),
         default=3,
@@ -621,28 +616,6 @@ class CodingIoQuestion(Question):
     def action_grade_with_post_tests(self, client, *args, **kwargs):
         self.regrade_post()
         client.dialog('<p>Successful operation!</p>')
-
-    # Wagtail admin
-    content_panels = Question.content_panels[:]
-    content_panels.insert(-1, panels.MultiFieldPanel([
-        panels.FieldPanel('num_pre_tests'),
-        panels.FieldPanel('pre_tests_source'),
-    ], heading=_('Pre-tests definitions')))
-    content_panels.insert(-1, panels.MultiFieldPanel([
-        panels.FieldPanel('num_post_tests'),
-        panels.FieldPanel('post_tests_source'),
-    ], heading=_('Post-tests definitions')))
-
-    content_panels.insert(
-        -1,
-        panels.InlinePanel('answers', label=_('Answer keys'))
-    )
-    settings_panels = Question.settings_panels + [
-        panels.MultiFieldPanel([
-            panels.FieldPanel('language'),
-            panels.FieldPanel('timeout'),
-        ], heading=_('Options'))
-    ]
 
 
 def compute_test_state_hash(question):

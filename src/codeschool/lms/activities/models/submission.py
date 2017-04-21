@@ -1,15 +1,14 @@
 import logging
-from importlib import import_module
 
+from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.errors import InvalidSubmissionError, GradingError
-from codeschool.lms.activities.models.mixins import HasProgressMixin, \
-    subclass_registry_meta
-from codeschool.lms.activities.models.submission_queryset import \
+from codeschool.lms.activities.managers.submission import \
     SubmissionManager
+from codeschool.lms.activities.models.mixins import HasProgressMixin
 from codeschool.lms.activities.signals import submission_graded_signal
 
 logger = logging.getLogger('codeschool.lms.activities')
@@ -20,8 +19,7 @@ SubmissionManager.use_for_related_fields = True
 class Submission(HasProgressMixin,
                  models.CopyMixin,
                  models.TimeStampedModel,
-                 models.PolymorphicModel,
-                 metaclass=subclass_registry_meta(type(models.PolymorphicModel))):
+                 models.PolymorphicModel):
     """
     Represents a student's simple submission in response to some activity.
     """
@@ -34,7 +32,6 @@ class Submission(HasProgressMixin,
     hash = models.CharField(max_length=32, blank=True)
     ip_address = models.CharField(max_length=20, blank=True)
     num_recycles = models.IntegerField(default=0)
-    feedback_class = None
     recycled = False
     objects = SubmissionManager()
     _subclass_related = ['Feedback']
@@ -45,6 +42,11 @@ class Submission(HasProgressMixin,
         if self.feedback is None:
             return None
         return self.feedback.final_grade_pc
+
+    @property
+    def feedback_class(self):
+        name = self.__class__.__name__.replace('Submission', 'Feedback')
+        return apps.get_model(self._meta.app_label, name)
 
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self)
@@ -70,7 +72,7 @@ class Submission(HasProgressMixin,
             'Submission subclass must implement the compute_hash() method.'
         )
 
-    def autograde(self, silent=False):
+    def auto_feedback(self, silent=False):
         """
         Performs automatic grading and return the feedback object.
 
@@ -81,7 +83,7 @@ class Submission(HasProgressMixin,
         """
 
         feedback = self.feedback_class(submission=self, manual_grading=False)
-        feedback.autograde()
+        feedback.update_autograde()
         feedback.update_final_grade()
         feedback.save()
         self.progress.register_feedback(feedback)
@@ -234,7 +236,7 @@ class Submission(HasProgressMixin,
         Return a boolean telling if the regrading was necessary.
         """
         if self.status != self.STATUS_DONE:
-            return self.autograde()
+            return self.auto_feedback()
 
         # We keep a copy of the state, if necessary. We only have to take some
         # action if the state changes.
@@ -243,7 +245,7 @@ class Submission(HasProgressMixin,
             self.__dict__.update(state)
 
         state = self.__dict__.copy()
-        self.autograde(force=True, commit=False)
+        self.auto_feedback(force=True, commit=False)
 
         # Each method deals with the new state in a different manner
         if method == 'update':

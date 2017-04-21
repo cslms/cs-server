@@ -20,11 +20,12 @@ services:
 # Codeschool app serves the dynamic pages. It has to communicate with the
 # underlying services using the default ports.
     webapp:
-        image: cslms/codeschool
+        image: "cslms/codeschool:${TAG}"
         container_name: codeschool-app
         volumes:
             - ./collect/media/:/app/collect/media/
             - ./src/:/app/src/
+            - ./log/:/app/log/
             - ./docker/volumes/db/:/app/db/
             - ./docker/sock/:/tmp/sock/
         environment:

@@ -22,7 +22,7 @@ def test_correct_submission(rf, question_42, user):
     request = rf.get(question_42.url)
     request.user = user
     submission = question_42.submit(request, value=42)
-    feedback = submission.autograde()
+    feedback = submission.auto_feedback()
     assert feedback.is_correct
 
 
@@ -30,5 +30,5 @@ def test_wrong_submission(rf, question_42, user):
     request = rf.get(question_42.url)
     request.user = user
     submission = question_42.submit(request, value=43)
-    feedback = submission.autograde()
+    feedback = submission.auto_feedback()
     assert not feedback.is_correct

@@ -80,7 +80,7 @@ def test_can_send_submission_and_autograde(db, hello_world_question, user,
                                            request_with_user):
     submission = hello_world_question.submit(
         request_with_user, source='print("hello")', language='python')
-    feedback = submission.autograde()
+    feedback = submission.auto_feedback()
     assert feedback.given_grade_pc == 0
 
 

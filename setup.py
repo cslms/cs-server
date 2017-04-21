@@ -93,11 +93,12 @@ setup(
         'social-auth-app-django',
         'django-compressor',
         'django-extensions',
+        'rules',
         'djangorestframework',
         'werkzeug',
 
         # Wagtail
-        'wagtail',
+        'wagtail>=1.9',
         'wagtail-model-tools>=0.1.4',
 
         # Jinja support

@@ -4,7 +4,9 @@ from codeschool import models
 from codeschool.core import get_wagtail_root
 from codeschool.questions.coding_io.factories import \
     source_from_example as markio_example
-from ..methods import push_resource_worker
+from codeschool.cli.methods import push_resource_worker
+
+pytestmark = pytest.mark.integration
 
 
 @pytest.fixture

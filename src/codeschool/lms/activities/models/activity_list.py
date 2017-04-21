@@ -330,7 +330,6 @@ class ActivitySection(ScoreBoardMixin,
 
     # Wagtail Admin
     parent_page_types = [ActivityList]
-    subpage_types = Activity.CONCRETE_ACTIVITY_TYPES
     content_panels = codeschool.mixins.ShortDescriptionPageMixin.content_panels + [
         panels.FieldPanel('material_icon')
     ]
