@@ -1,0 +1,12 @@
+{% extends "questions/submissions.jinja2" %}
+
+
+{% block submission_title scoped %}
+    {{ super() }} ({{ submission.value }})
+{% endblock %}
+
+
+{% block submission_data scoped %}
+    <h3 class="banner">{{ _('Value') }}</h3>
+    <p><strong>{{ _('Submitted value:') }}</strong> {{ submission.value }}</p>
+{% endblock %}

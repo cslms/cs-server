@@ -2,7 +2,7 @@ from django.utils.text import ugettext_lazy as _
 
 from codeschool import panels
 from codeschool.fixes.wagtailadmin import WagtailAdmin
-from codeschool.mixins import ShortDescriptionPageMixin
+from codeschool.mixins import ShortDescriptionPage
 from . import models
 
 
@@ -15,7 +15,7 @@ class QuestionAdmin(WagtailAdmin):
     subpage_types = []
 
     content_panels = \
-        ShortDescriptionPageMixin.content_panels[:-1] + [
+        ShortDescriptionPage.content_panels[:-1] + [
             panels.MultiFieldPanel([
                 panels.FieldPanel('import_file'),
                 panels.FieldPanel('short_description'),

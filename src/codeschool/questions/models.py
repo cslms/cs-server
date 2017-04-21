@@ -1,7 +1,7 @@
 import srvice
 from django.utils.translation import ugettext_lazy as _
 
-import codeschool.mixins
+from codeschool import mixins
 from codeschool import blocks
 from codeschool import models
 from codeschool.lms.activities.models import Activity, Submission, Progress
@@ -16,7 +16,7 @@ QUESTION_BODY_BLOCKS = [
 
 
 class Question(models.DecoupledAdminPage,
-               codeschool.mixins.ShortDescriptionPageMixin,
+               mixins.ShortDescriptionPage,
                Activity):
     """
     Base abstract class for all question types.

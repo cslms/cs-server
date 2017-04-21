@@ -26,7 +26,7 @@ class ProgressQuerySet(models.PolymorphicQuerySet):
 
     def for_request(self, request, activity=None):
         """
-        Return progress associated with the request object.
+        Return progress instance associated with the request object.
 
         This usually means using the .user attribute from the request.
         """

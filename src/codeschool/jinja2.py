@@ -12,6 +12,7 @@ from jinja2.runtime import Context
 from pygments import highlight as pygments_highlight
 from pygments.formatters import get_formatter_by_name
 from pygments.lexers import get_lexer_by_name
+from pygments.util import ClassNotFound
 from wagtail.wagtailcore.templatetags.wagtailcore_tags import richtext
 from markdown import Markdown
 
@@ -64,7 +65,10 @@ def highlight(code, lang='python'):
     """
 
     formatter = get_formatter_by_name('html')
-    lexer = get_lexer_by_name(lang)
+    try:
+        lexer = get_lexer_by_name(lang)
+    except ClassNotFound:
+        lexer = get_lexer_by_name('python')
     return Markup(pygments_highlight(code, lexer, formatter))
 
 

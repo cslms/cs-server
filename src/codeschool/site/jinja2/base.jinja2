@@ -80,13 +80,13 @@
             {% if nav_sections is undefined %}
                 {% set nav_sections = make_nav_sections() %}
             {% endif %}
-            {% if not disable_nav_bar and nav_sections %}
+            {#% if not disable_nav_bar and nav_sections %}
                 {% call cs_nav(cls="cs-stripes-layout__sidebar") %}
                     {% for nav_section in nav_sections %}
                         {{ nav_section }}
                     {% endfor %}
                 {% endcall %}
-            {% endif %}
+            {% endif %#}
 
             <main class="cs-stripes-layout__main">
                 <ul class="cs-stripes-layout__breadcrumbs">

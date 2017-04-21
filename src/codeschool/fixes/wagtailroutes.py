@@ -1,3 +1,4 @@
+import os
 from collections import OrderedDict
 
 from django.views.generic import DetailView, View
@@ -102,17 +103,26 @@ class RoutablePage(RoutablePageMixin, Page):
         Load the views module for the given app.
         """
 
-        if not cls.__dict__.get('_has_loaded_views', False):
-            if hasattr(cls, 'views_module_path'):
-                path = cls.views_path
-                if path.startswith('.'):
-                    path = cls._meta.app_config.name + path
-            else:
-                mod_name = cls._meta.app_config.name
-                path = mod_name + '.views'
+        if cls.__dict__.get('_skip_load_views', False):
+            return
 
-            __import__(path)
-            cls._has_loaded_views = True
+        # Compute the views module path
+        if hasattr(cls, 'views_module_path'):
+            path = cls.views_path
+            if path.startswith('.'):
+                path = cls._meta.app_config.name + path
+        else:
+            mod_name = cls._meta.app_config.name
+            path = mod_name + '.views'
+
+        # Load views from all superclasses
+        for superclass in cls.mro()[1:]:
+            if issubclass(superclass, RoutablePage):
+                if superclass._meta.app_config:
+                    superclass.__load_views()
+
+        __import__(path)
+        cls._skip_load_views = True
 
     @classmethod
     def __external_routes(cls):
@@ -138,7 +148,8 @@ class RoutablePage(RoutablePageMixin, Page):
         return tuple(routes.values())
 
     @classmethod
-    def register_route(cls, url=r'^$', name=None, perms=None):
+    def register_route(cls, url=r'^$', name=None, perms=None,
+                       login_required=False):
         """
         A decorator that register a function to be a route for the given model
         and url pattern.
@@ -159,7 +170,7 @@ class RoutablePage(RoutablePageMixin, Page):
             name:
                 The name of the route. Be careful to pick unique and meaningful
                 names since we are in a global namespace.
-            permissions:
+            perms:
                 An optional list of permissions required to access the given
                 route.
         """
@@ -196,10 +207,28 @@ class RoutablePage(RoutablePageMixin, Page):
             ctx.setdefault(name, self)
         return ctx
 
-    def get_template(self, request, *args, **kwargs):
+    def get_template(self, request, *args,
+                     suffix=None, basename=None,
+                     **kwargs):
         template = super(RoutablePage, self).get_template(request, *args,
                                                           **kwargs)
         templates = [template] if isinstance(template, str) else list(template)
         if templates[-1].endswith('.html'):
             templates.append(templates[-1][:-5] + '.jinja2')
+
+        # Replace basename
+        if basename:
+            splitext = os.path.splitext
+            dirname = os.path.dirname
+            join = os.path.join
+            templates = (splitext(x) for x in templates)
+            templates = [join(dirname(base), basename + ext)
+                         for (base, ext) in templates]
+
+        # Add suffix before extension
+        if suffix:
+            splitext = os.path.splitext
+            templates = (splitext(x) for x in templates)
+            templates = [base + suffix + ext for (base, ext) in templates]
+
         return templates

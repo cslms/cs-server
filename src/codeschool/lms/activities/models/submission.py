@@ -33,13 +33,13 @@ class Submission(HasProgressMixin,
     ip_address = models.CharField(max_length=20, blank=True)
     num_recycles = models.IntegerField(default=0)
     recycled = False
+    has_feedback = property(lambda self: hasattr(self, 'feedback'))
     objects = SubmissionManager()
-    _subclass_related = ['Feedback']
 
     # Delegated properties
     @property
     def final_grade_pc(self):
-        if self.feedback is None:
+        if self.has_feedback:
             return None
         return self.feedback.final_grade_pc
 
@@ -290,9 +290,12 @@ class Submission(HasProgressMixin,
         Return the title for the feedback message.
         """
 
-        if self.feedback is None:
-            return _('Grading submission...')
-        return self.feedback.get_feedback_title()
+        try:
+            feedback = self.feedback
+        except AttributeError:
+            return _('Not graded')
+        else:
+            return feedback.get_feedback_title()
 
 
 # Save a copy in the class namespace for convenience

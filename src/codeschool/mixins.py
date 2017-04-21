@@ -5,7 +5,7 @@ from wagtail.wagtailadmin.edit_handlers import \
 from wagtail.wagtailcore.models import Page
 
 
-class ShortDescriptionPageMixin(Model):
+class ShortDescriptionPage(Page):
     """
     A mixin for a Page which has a short_description field.
     """

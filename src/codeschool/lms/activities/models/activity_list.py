@@ -4,9 +4,9 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
-import codeschool.mixins
+from codeschool import mixins
 from codeschool import models, panels
-from codeschool.lms.activities.types.score_map import ScoreTable, ScoreMap
+from ..types.score_map import ScoreTable, ScoreMap
 
 
 class ScoreBoardMixin(models.RoutablePageMixin,
@@ -73,7 +73,7 @@ ActivityListManager = _ActivityListManager.from_queryset(ActivityListQuerySet)
 
 
 class ActivityList(ScoreBoardMixin,
-                   codeschool.mixins.ShortDescriptionPageMixin,
+                   mixins.ShortDescriptionPage,
                    models.Page):
     """
     A list of ActivitySections.
@@ -179,7 +179,7 @@ class ActivityList(ScoreBoardMixin,
 
 
 class ActivitySection(ScoreBoardMixin,
-                      codeschool.mixins.ShortDescriptionPageMixin,
+                      mixins.ShortDescriptionPage,
                       models.Page):
     """
     List of activities.
@@ -331,7 +331,7 @@ class ActivitySection(ScoreBoardMixin,
 
     # Wagtail Admin
     parent_page_types = [ActivityList]
-    content_panels = codeschool.mixins.ShortDescriptionPageMixin.content_panels + [
+    content_panels = mixins.ShortDescriptionPage.content_panels + [
         panels.FieldPanel('material_icon')
     ]
 

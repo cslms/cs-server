@@ -1,22 +1,14 @@
 {% extends "questions/submissions.jinja2" %}
 
-{% block submission scoped %}
-    <div class="mdl-shadow--4dp question-feedback">
-        <h3 class="iospec-title show">{{ submission.get_feedback_title() }} ({{ submission.language.name }})
-            <span class="feedback-title-handle" onclick="expand(this.parentNode.parentNode)"><i class="material-icons">menu</i></span>
-        </h3>
 
-        <div class="expandable hidden">
-            {{ submission }}
-            <h3 class="banner">{{ _('Details') }}</h3>
-            <dl>
-                <dt>{{ _('Grade') }}</dt><dd>{{ submission.final_grade_pc|int }}%</dd>
-                <dt>{{ _('Date of submission') }}</dt><dd>{{ submission.created }}</dd>
-            </dl>
-            <h3 class="banner">{{ _('Source code') }}</h3>
-            <div class="codehilite">{{ submission.source|highlight(submission.language.pygments_mode()) }}</div>
-        </div>
-    </div>
+{% block submission_title scoped %}
+    {{ super() }} ({{ submission.language.name }})
+{% endblock %}
+
+
+{% block submission_data scoped %}
+    <h3 class="banner">{{ _('Source code') }}</h3>
+    <div class="codehilite">{{ submission.source|highlight(submission.language.pygments_mode()) }}</div>
 {% endblock %}
 
 
