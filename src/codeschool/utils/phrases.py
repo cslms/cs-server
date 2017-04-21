@@ -47,7 +47,7 @@ def subjective_adjective_phrase(subjectives=None, adjectives=None):
     """
     subjective = random.choice(subjectives or famous_scientists)
     adjective = random.choice(adjectives or adjective_list)
-    return '%s %s' % (adjective, subjective)
+    return '%s %s' % (adjective.title(), subjective)
 
 
 @is_phase_provider
@@ -71,8 +71,7 @@ def random_fake_phrase():
     """
     Use fake-factory names.
     """
-    adjective = random.choice(adjective_list)
-    return '%s %s' % (fake.first_name(), adjective)
+    return subjective_adjective_phrase([fake.first_name()])
 
 
 @is_phase_provider

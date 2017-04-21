@@ -1,0 +1,28 @@
+.cs-attendance {
+    &__passphrase {
+        @extend .mdl-shadow--6dp;
+        position: relative;
+        font-family: $roboto;
+        padding: 2 * $large-spacing $large-spacing;
+        margin: $large-spacing;
+        text-align: center;
+        background-color: $color-light-gray;
+
+        * {
+            font-size: 2em;
+            line-height: 1.5;
+        }
+        > a {
+            position: absolute;
+            top: $small-spacing;
+            right: $medium-spacing;
+            color: $color-medium-gray;
+            font-size: 0.9em;
+        }
+    }
+    &__formbox {
+        @extend .mdl-shadow--6dp;
+        padding: 2 * $large-spacing $large-spacing;
+        margin-top: $large-spacing 0;
+    }
+}
