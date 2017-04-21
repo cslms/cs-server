@@ -12,6 +12,7 @@ from codeschool.utils import md5hash
 
 
 class ChildDescriptor(ChildObjectsDescriptor):
+
     def __get__(self, instance, instance_type=None):
         if instance is None:
             return self
@@ -285,4 +286,3 @@ class AnswerKey(models.Model):
         panels.FieldPanel('source'),
         panels.FieldPanel('placeholder'),
     ]
-

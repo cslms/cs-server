@@ -49,4 +49,3 @@ class CodingIoFeedback(QuestionFeedback):
 
     def render_message(self, **kwargs):
         return render(self.feedback)
-

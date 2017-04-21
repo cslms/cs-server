@@ -14,6 +14,7 @@ from wagtail import wagtaildocs
 
 
 class Linker:
+
     def run(self, name, optstr):
         try:
             text = name

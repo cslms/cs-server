@@ -22,8 +22,8 @@ def get_possible_friends(user):
     """
 
     friends = get_all_friends(user) \
-              | users.filter(id=user.id) \
-              | users.filter(username='AnonymousUser')
+        | users.filter(id=user.id) \
+        | users.filter(username='AnonymousUser')
     friends_ids = friends.values_list('id', flat=True)
     return users.exclude(id__in=friends_ids)
 

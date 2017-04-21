@@ -14,6 +14,7 @@ admin.site.register(models.TestState)
 
 
 class CodingIoQuestionAdmin(QuestionAdmin):
+
     class Meta:
         model = models.CodingIoQuestion
 

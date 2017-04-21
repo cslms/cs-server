@@ -38,7 +38,7 @@ class FormQuestion(Question):
             'You can insert different types of fields for the student answers. '
             'This works as a simple form that accepts any combination of the'
             'different types of answer fields.'
-        )
+    )
     )
 
     def clean(self):

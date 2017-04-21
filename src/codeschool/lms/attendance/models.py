@@ -69,7 +69,7 @@ class AttendanceSheet(models.Model):
     def absence_table(self, users=None, method='fraction'):
         """
         Return a mapping between users and their respective absence rate. 
-        
+
         Args:
             users:
                 A queryset of users.

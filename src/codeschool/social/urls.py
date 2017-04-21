@@ -10,5 +10,3 @@ urlpatterns = [
     url(r'^friends/$', friends_view, name='friends'),
     url(r'^friends/add/$', add_friends_view, name='friends-add'),
 ]
-
-

@@ -15,18 +15,21 @@ PROFILE_GENDER = {'male': Profile.GENDER_MALE, 'female': Profile.GENDER_FEMALE}
 
 @factory.django.mute_signals(signals.pre_save, signals.post_save)
 class UserFactory(DjangoMommyFactory):
+
     class Meta:
         model = models.User
         recipe = 'global'
 
 
 class FullUserFactory(DjangoMommyFactory):
+
     class Meta:
         model = models.User
         recipe = 'global'
 
 
 class ProfileFactory(DjangoMommyFactory):
+
     class Meta:
         model = models.Profile
 

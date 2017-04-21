@@ -1,7 +1,8 @@
-# flake8: noqa
 #
 # One stop shop for models, fields and managers
 #
+
+# flake8: noqa
 from django.db.models.fields.related_descriptors import \
     ReverseManyToOneDescriptor
 from lazyutils import lazy

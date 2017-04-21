@@ -2,6 +2,7 @@ from codeschool import models
 
 
 class ActivityQueryset(models.PageQuerySet):
+
     def auth(self, user, role=None):
         """
         Filter only activities that the user can see.

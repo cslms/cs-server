@@ -10,7 +10,6 @@ from codeschool.utils import get_ip
 logger = logging.getLogger('codeschool.lms.activities')
 
 
-
 class Progress(models.CopyMixin,
                models.StatusModel,
                models.TimeStampedModel,
@@ -210,7 +209,6 @@ class Progress(models.CopyMixin,
 
         if commit:
             self.save()
-
 
     def regrade(self, method=None, force_update=False):
         """

@@ -148,7 +148,8 @@ class CodingIoQuestion(Question):
                 post_tests = parse_iospec(self.post_tests_source)
             else:
                 post_tests = IoSpec()
-            self._post_tests = ejudge.combine_iospec(self.pre_tests, post_tests)
+            self._post_tests = ejudge.combine_iospec(
+                self.pre_tests, post_tests)
             return self._post_tests
 
     @post_tests.setter

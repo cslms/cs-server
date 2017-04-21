@@ -6,6 +6,7 @@ from codeschool.utils import queryset_class, md5hash, manager_instance
 
 
 class CodingIoSubmissionQuerySet(queryset_class(QuestionSubmission)):
+
     def best_code_for_user(self, user, attrs=None, activity=None):
         """
         Return the code for the best submission for the given user.

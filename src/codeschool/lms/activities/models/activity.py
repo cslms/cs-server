@@ -245,7 +245,8 @@ class Activity(models.ExtRoutablePage,
         # Add progress information to the given submission kwargs
         if user is None:
             user = request.user
-        logger.info('%r, submission from user %r' % (self.title, user.username))
+        logger.info('%r, submission from user %r' %
+                    (self.title, user.username))
         progress = self.progress_set.for_user(user)
         return progress.submit(request, **kwargs)
 

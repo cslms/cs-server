@@ -51,6 +51,7 @@ class ScoreBoardMixin(models.RoutablePageMixin,
 
 
 class ActivityListQuerySet(models.PageQuerySet):
+
     def create_subpage(self, parent, **kwargs):
         """
         Return a new page as a child of the given parent page.
@@ -60,6 +61,7 @@ class ActivityListQuerySet(models.PageQuerySet):
 
 
 class _ActivityListManager(models.PageManager):
+
     def main(self):
         """
         Return the main ActivityList for the website.

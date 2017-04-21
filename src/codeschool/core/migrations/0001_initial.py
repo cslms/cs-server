@@ -16,10 +16,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ConfigOptionKeyValuePair',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30, unique=True)),
                 ('value', models.CharField(max_length=100)),
-                ('type', models.IntegerField(choices=[(0, 'str'), (1, 'int'), (2, 'float'), (3, 'bool')])),
+                ('type', models.IntegerField(choices=[
+                 (0, 'str'), (1, 'int'), (2, 'float'), (3, 'bool')])),
             ],
             options={
                 'abstract': False,
@@ -28,10 +30,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='DataEntryKeyValuePair',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30, unique=True)),
                 ('value', models.CharField(max_length=100)),
-                ('type', models.IntegerField(choices=[(0, 'str'), (1, 'int'), (2, 'float'), (3, 'bool')])),
+                ('type', models.IntegerField(choices=[
+                 (0, 'str'), (1, 'int'), (2, 'float'), (3, 'bool')])),
             ],
             options={
                 'abstract': False,
@@ -40,7 +44,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FileFormat',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('ref', models.CharField(max_length=10, unique=True)),
                 ('name', models.CharField(max_length=140)),
                 ('comments', models.TextField(blank=True)),

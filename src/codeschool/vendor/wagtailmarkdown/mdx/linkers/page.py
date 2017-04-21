@@ -16,6 +16,7 @@ from wagtail.wagtailcore.models import Page
 # TODO: In Waiflike, this only allowed linking to SitePage (the main
 # content type).  Should this be configurable?
 class Linker:
+
     def run(self, name, optstr):
         try:
             text = name

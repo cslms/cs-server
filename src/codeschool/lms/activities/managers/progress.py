@@ -5,6 +5,7 @@ from codeschool import models
 
 
 class ProgressQuerySet(models.PolymorphicQuerySet):
+
     def correct(self):
         """
         Filter only correct responses.

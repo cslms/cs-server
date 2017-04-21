@@ -2,6 +2,7 @@
 # One stop shop for fields.
 #
 
+# flake8: noqa
 from django.db.models.fields import *
 from wagtail.wagtailcore.fields import StreamField, RichTextField, BlockField
 #from wagtailmarkdown.fields import MarkdownField

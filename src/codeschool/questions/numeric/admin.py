@@ -12,6 +12,7 @@ admin.site.register(models.NumericFeedback)
 
 
 class NumericQuestionAdmin(QuestionAdmin):
+
     class Meta:
         model = models.NumericQuestion
 

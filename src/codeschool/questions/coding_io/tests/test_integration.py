@@ -121,7 +121,8 @@ def test_expand_iospec_source_with_commands(db):
 def test_hello_question_creation(db):
     question = example('hello')
     question.full_clean_all()
-    assert question.get_reference_source('python') == source('hello.py').strip()
+    assert question.get_reference_source(
+        'python') == source('hello.py').strip()
     assert question.title == 'Hello Person'
     assert question.pre_tests is not None
     assert question.pre_tests.is_expanded is True

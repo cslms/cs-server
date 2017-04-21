@@ -58,7 +58,8 @@ def apply_manager_extensions(*args):
 
     # A similar approach here: change the manager object class
     manager_exts['get_queryset'] = get_queryset
-    manager_class = type(manager_class_name, (type(manager_obj),), manager_exts)
+    manager_class = type(manager_class_name,
+                         (type(manager_obj),), manager_exts)
     manager_obj.__class__ = manager_class
     manager_obj._has_extensions = True
 
@@ -100,6 +101,7 @@ def _manager_from_qs(name, func):
     """
     Return a manager method from a queryset method.
     """
+
     def method(self, *args, **kwargs):
         qs = self.get_queryset()
         func = getattr(qs, name)
@@ -135,7 +137,6 @@ class DiscoverableManagerMeta(type(models.Model)):
 
     def __init__(self, name, bases, ns):
         super().__init__(name, bases, ns)
-
 
         try:
             DiscoverableManagerModel
@@ -181,6 +182,7 @@ class RelatedDescriptorExt(ReverseManyToOneDescriptor):
     A descriptor that automatically extends the default related manager
     descriptor by inserting the given ext_class in the mro().
     """
+
     def __init__(self, descriptor, ext_class):
         super().__init__(descriptor.rel)
         self.descriptor = descriptor
@@ -197,6 +199,7 @@ class RelatedDescriptorExt(ReverseManyToOneDescriptor):
                 continue
             else:
                 class DescriptorExt(self.ext_class, manager_cls):
+
                     def __new__(cls, *args, **kwargs):
                         return manager_cls.__new__(cls, *args, **kwargs)
 
@@ -239,4 +242,3 @@ class RelatedManagerExt:
 
     def __init__(self, instance):
         super().__init__(instance)
-

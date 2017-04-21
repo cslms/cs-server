@@ -5,6 +5,7 @@ from codeschool.core import models
 
 
 class ProgrammingLanguageFactory(DjangoModelFactory):
+
     class Meta:
         model = models.ProgrammingLanguage
 

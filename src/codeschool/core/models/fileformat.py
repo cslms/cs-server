@@ -2,6 +2,7 @@ from codeschool import models
 
 
 class SourceFormatQuerySet(models.QuerySet):
+
     def supported(self):
         """
         Filter-in only the supported formats.
@@ -208,7 +209,7 @@ def formats_yaml_dump():
                 '  fields:\n'
                 '    name: %r\n' % (ref, name) +
                 ''.join('    %s: %s\n' % (k, subs(v))
-                          for k, v in kwargs.items())
+                        for k, v in kwargs.items())
             )
 
     format_processor(process)

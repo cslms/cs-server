@@ -29,9 +29,9 @@ class ShortDescriptionPageMixin(Model):
         return super().full_clean(*args, **kwargs)
 
     content_panels = Page.content_panels + [
-       _MultiFieldPanel([
-           _FieldPanel('short_description'),
-       ], heading=_('Options')),
+        _MultiFieldPanel([
+            _FieldPanel('short_description'),
+        ], heading=_('Options')),
     ]
 
 

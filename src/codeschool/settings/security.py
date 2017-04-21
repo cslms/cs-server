@@ -11,7 +11,7 @@ security_path = os.path.join(base_dir, 'security')
 secrete_key_path = os.path.join(security_path, 'secret_key.dat')
 
 try:
-    with open(secrete_key_path , 'r') as F:
+    with open(secrete_key_path, 'r') as F:
         SECRET_KEY = F.read()
 
 except FileNotFoundError:
@@ -24,7 +24,7 @@ except FileNotFoundError:
     chars = ''.join([string.ascii_letters, string.digits, string.punctuation])
     SECRET_KEY = ''.join([choice(chars) for i in range(50)])
 
-    with open(secrete_key_path , 'w') as F:
+    with open(secrete_key_path, 'w') as F:
         SECRET_KEY = F.write(SECRET_KEY)
 
 

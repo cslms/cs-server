@@ -72,8 +72,10 @@ if 'codeschool.cli' in settings.INSTALLED_APPS:
 # Wagtail endpoint (these must come last)
 urlpatterns += [
     wagtail_urls.urlpatterns[0],
-    url(r'^((?:[\w\-\.]+/)*)$', wagtail_urls.views.serve, name='wagtail_serve'),
-    url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:srvice|json|api)/?)$', wagtail_urls.views.serve, name='wagtail-api-serve'),
+    url(r'^((?:[\w\-\.]+/)*)$',
+        wagtail_urls.views.serve, name='wagtail_serve'),
+    url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:srvice|json|api)/?)$',
+        wagtail_urls.views.serve, name='wagtail-api-serve'),
 ]
 
 # Django serves static urls for the dev server.

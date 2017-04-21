@@ -90,4 +90,3 @@ if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
         from codeschool.lms.courses.factories import make_cs101_course
 
         course = make_cs101_course(yoda_teacher)
-

@@ -56,7 +56,8 @@ def manager_class(model, queryset_class=None, class_name=None,
         mgm = Manager()
 
     if not isinstance(mgm, BaseManager):
-        raise TypeError('unexpected manager class: %s' % mgm.__class__.__name__)
+        raise TypeError('unexpected manager class: %s' %
+                        mgm.__class__.__name__)
 
     if queryset_class is not None:
         mgm = mgm.from_queryset(queryset_class, class_name=class_name)

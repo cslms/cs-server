@@ -1,3 +1,8 @@
+#
+# One-stop shop for wagtail blocks
+#
+
+# flake8: noqa
 from wagtail.wagtailcore.blocks import *
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailsnippets.blocks import SnippetChooserBlock

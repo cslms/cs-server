@@ -21,25 +21,25 @@ mdx = __name__ + '.mdx.'
 def render(text):
     return mark_safe(
         # WARNING: FIXME. Risk of XSS attacks
-        #bleach.clean(
-            markdown.markdown(
-                text,
-                extensions=[
-                    'extra',
-                    'codehilite',
-                    'math',
-                    tables.TableExtension(),
-                    linker.LinkerExtension({
-                        '__default__': mdx + 'linkers.page',
-                        'page:': mdx + 'linkers.page',
-                        'image:': mdx + 'linkers.image',
-                        'doc:': mdx + 'linkers.document',
-                    })
-                ],
-                extension_configs={
-                    'codehilite': [('guess_lang', False)]
-                },
-                output_format='html5'),
+        # bleach.clean(
+        markdown.markdown(
+            text,
+            extensions=[
+                'extra',
+                'codehilite',
+                'math',
+                tables.TableExtension(),
+                linker.LinkerExtension({
+                    '__default__': mdx + 'linkers.page',
+                    'page:': mdx + 'linkers.page',
+                    'image:': mdx + 'linkers.image',
+                    'doc:': mdx + 'linkers.document',
+                })
+            ],
+            extension_configs={
+                'codehilite': [('guess_lang', False)]
+            },
+            output_format='html5'),
         #     tags=[
         #         'p', 'div', 'span', 'h1', 'h2', 'h3',
         #         'h4', 'h5', 'h6', 'tt', 'pre',

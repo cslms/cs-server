@@ -9,4 +9,3 @@ default_app_config = 'codeschool.cli.apps.CliConfig'
 from jsonrpc.backend.django import JSONRPCAPI
 
 api = JSONRPCAPI()
-

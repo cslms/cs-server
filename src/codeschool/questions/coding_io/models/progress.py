@@ -3,6 +3,7 @@ from codeschool.utils import queryset_class, manager_instance
 
 
 class CodingIoProgessQuerySet(queryset_class(QuestionProgress)):
+
     def regrade_with(self, tests, **kwargs):
         """
         Recompute progress grades with the given tests.

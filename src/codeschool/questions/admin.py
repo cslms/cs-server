@@ -7,6 +7,7 @@ from . import models
 
 
 class QuestionAdmin(WagtailAdmin):
+
     class Meta:
         model = models.Question
         abstract = True

@@ -8,12 +8,14 @@ WAGTAIL_ADMIN_CLASSES = {}
 
 
 class WagtailAdminMeta:
+
     def __init__(self, model=None, abstract=False):
         self.model = model
         self.abstract = abstract
 
 
 class WagtailAdminBase(type):
+
     def __new__(cls, name, bases, ns):
         meta = ns.pop('Meta', None)
         meta_ns = (
@@ -34,6 +36,7 @@ class WagtailAdminBase(type):
 
 
 class WagtailAdmin(metaclass=WagtailAdminBase):
+
     class Meta:
         abstract = True
 
@@ -84,6 +87,7 @@ class WagtailAdmin(metaclass=WagtailAdminBase):
 
 
 class DecoupledAdminPage(Page):
+
     class Meta:
         abstract = True
 

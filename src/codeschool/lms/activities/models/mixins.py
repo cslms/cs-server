@@ -64,11 +64,10 @@ def _register_subclass(cls):
                 setattr(cls, related_attr, related_cls)
             except AttributeError:
                 raise ImproperlyConfigured(
-                    'please define the %s attribute in %s' % (related_attr, cls_name)
+                    'please define the %s attribute in %s' % (
+                        related_attr, cls_name)
                 )
     else:
         raise ImproperlyConfigured(
             'invalid class name: %s' % (cls_name)
         )
-
-

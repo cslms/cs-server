@@ -5,7 +5,8 @@ only in the cli.
 
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'codeschool.settings'
-import django; django.setup()
+import django
+django.setup()
 
 
 from .types.deferred import Deferred

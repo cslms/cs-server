@@ -26,7 +26,7 @@ class Rules:
         test = rules.test_rule
         model = self.model
         return user.is_superuser or \
-               reducer(test(rule, user, model) for rule in rule_list)
+            reducer(test(rule, user, model) for rule in rule_list)
 
     def test(self, user, *rules):
         """

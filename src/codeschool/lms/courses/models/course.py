@@ -23,14 +23,15 @@ def random_subscription_passphase():
 
 
 class CourseManager(models.PageManager):
+
     def for_user(self, user):
         """
         Return a list of all courses related to user either as a student,
         teacher or staff member.
         """
 
-        return (user.courses_as_teacher.all() \
-                | user.courses_as_student.all() \
+        return (user.courses_as_teacher.all()
+                | user.courses_as_student.all()
                 | user.courses_as_staff.all()).distinct()
 
     def open_for_user(self, user):

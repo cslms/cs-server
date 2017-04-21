@@ -9,5 +9,3 @@ def activity(db):
     page = Activity(title='Test')
     get_wagtail_root().add_child(instance=page)
     return page
-
-
