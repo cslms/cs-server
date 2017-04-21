@@ -289,3 +289,31 @@ class ScoreTable(ScoreTableMapCommon):
             row = '%s%s%s' % (key_trans(k), sep, row_body)
             rows.append(row)
         return '\n'.join(rows)
+
+
+def score_board(activity, users=None, info=None):
+    """
+    Return a mapping between users and their respective grades.
+
+    Args:
+        activity:
+            An activity instance.
+        users:
+            Filter users to the given set. The default behavior is to
+            include all users that made any single submission.
+        info ('points', 'grade', 'stars', 'score'):
+            The information used to construct the score board.
+    """
+
+    info = info or 'points'
+    if info not in ['points', 'grade', 'stars', 'score']:
+        raise ValueError('invalid info: %r' % info)
+
+    if users is None:
+        users = activity.users()
+
+    board = ScoreMap(activity.title)
+    for user in users:
+        response = activity.responses.response_for_user(user)
+        board[user] = getattr(response, info)
+    return board

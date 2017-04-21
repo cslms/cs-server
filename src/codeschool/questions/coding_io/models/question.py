@@ -8,7 +8,6 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ugettext as __
 
 from codeschool import models
-from codeschool import panels
 from codeschool.components.navbar import NavSection
 from codeschool.core import get_programming_language
 from codeschool.core.models import ProgrammingLanguage
@@ -530,13 +529,17 @@ class CodingIoQuestion(Question):
 
     def nav_section_for_activity(self, request):
         url = self.get_absolute_url
-        section = NavSection(__('Question'), url(),
-                             title=__('Back to question'))
-        if self.user_can_edit(request.user):
-            section.add_link(__('Edit'), self.get_admin_url(),
-                             title=__('Edit question'))
-        section.add_link(__('Submissions'), url('submissions'),
-                         title=__('View your submissions'))
+        section = NavSection(
+            __('Question'), url(), title=__('Back to question')
+        )
+        if self.rules.test(request.user, 'activities.edit_activity'):
+            section.add_link(
+                __('Edit'), self.get_admin_url(), title=__('Edit question')
+            )
+        section.add_link(
+            __('Submissions'), url('submissions'),
+            title=__('View your submissions')
+        )
         return section
 
     # Serving pages and routing
@@ -707,8 +710,9 @@ def check_expansions_with_all_programs(question, tests: IoSpec):
     # Other cases require more work: first we expand for each possible
     # language. Collect tuples of (expansion, language)
     languages = [answer.language for answer in answers]
-    first, *tail = [(expand_tests_from_program(question, tests, language), language)
-                    for language in languages]
+    first, *tail = [
+        (expand_tests_from_program(question, tests, language), language)
+        for language in languages]
 
     # All expansions should be equal.
     for expansion in tail:

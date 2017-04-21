@@ -1,5 +1,6 @@
 from codeschool import blocks
 
+
 RESOURCE_BLOCKS = [
     ('paragraph', blocks.RichTextBlock()),
     ('image', blocks.ImageChooserBlock()),

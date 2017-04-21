@@ -67,11 +67,10 @@ def make_hello_world_submissions(question, user):
     submit = question.submit
     request = RequestFactory().get('/')
     request.user = user
-    return [
-        submit(request,
-               source='print "hello world!"',
-               language='python'),
-        submit(request,
-               source='print("hello world!")',
-               language='python')
-    ]
+    sub1 = submit(request,
+                  source='print "hello world!"',
+                  language='python')
+    sub2 = submit(request,
+                  source='print("hello world!")',
+                  language='python')
+    return [sub1, sub2]

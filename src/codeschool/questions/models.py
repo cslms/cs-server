@@ -53,8 +53,6 @@ class Question(models.DecoupledAdminPage,
             'blank and manually insert all question fields.'
         )
     )
-    _subclass_root = 'Question'
-    instant_autograde = True
 
     # Serve pages
     def get_submission_kwargs(self, request, kwargs):

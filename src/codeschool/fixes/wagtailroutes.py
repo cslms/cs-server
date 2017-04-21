@@ -6,6 +6,8 @@ from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, \
     route as wagtail_route
 from wagtail.wagtailcore.models import Page
 
+from bricks.utils import snake_case
+
 
 class PageDetailView(DetailView):
     """
@@ -20,8 +22,7 @@ class PageDetailView(DetailView):
         return self.page.get_template()
 
     def get_context_data(self, **kwargs):
-        context = self.page.get_context(
-            self.request, *self.args, **self.kwargs)
+        context = self.page.get_context(self.request, *self.args, **self.kwargs)
         context.update(kwargs)
         return context
 
@@ -175,6 +176,25 @@ class RoutablePage(RoutablePageMixin, Page):
             return view
 
         return decorator
+
+    @classmethod
+    def __get_context_names(cls):
+        varname = '_context_names_'
+        if varname not in cls.__dict__:
+            names = []
+            for subclass in cls.mro():
+                if issubclass(subclass, Page):
+                    name = snake_case(subclass.__name__)
+                    names.append(name)
+            setattr(cls, varname, names)
+        return cls.__dict__[varname]
+
+    def get_context(self, request, *args, **kwargs):
+        names = self.__get_context_names()
+        ctx = super().get_context(request, *args, **kwargs)
+        for name in names:
+            ctx.setdefault(name, self)
+        return ctx
 
     def get_template(self, request, *args, **kwargs):
         template = super(RoutablePage, self).get_template(request, *args,

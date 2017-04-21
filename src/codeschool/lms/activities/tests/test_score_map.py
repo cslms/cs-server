@@ -1,7 +1,7 @@
 import pytest
 
-from codeschool.lms.activities.score_map import ScoreMap, ScoreTable, \
-    ScoreTableMapCommon
+from codeschool.lms.activities.types.score_map import \
+    ScoreMap, ScoreTable, ScoreTableMapCommon
 
 ScoreTableMapCommon._translate = lambda self, x: str(x)
 

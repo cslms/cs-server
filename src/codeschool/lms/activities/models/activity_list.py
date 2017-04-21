@@ -6,8 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import codeschool.mixins
 from codeschool import models, panels
-from codeschool.lms.activities.score_map import ScoreTable, ScoreMap
-from .activity import Activity
+from codeschool.lms.activities.types.score_map import ScoreTable, ScoreMap
 
 
 class ScoreBoardMixin(models.RoutablePageMixin,

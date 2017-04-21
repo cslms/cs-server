@@ -5,6 +5,17 @@ from codeschool import models
 
 
 class ProgressQuerySet(models.PolymorphicQuerySet):
+    def _get_activity(self, activity):
+        # Fetch activity from related manager. This makes it usable from a
+        # queryset related to an activity without having to explicitly pass the
+        # activity instance
+        if activity is None:
+            try:
+                return self._hints['instance']
+            except (KeyError, AttributeError):
+                msg = "missing required positional argument 'activity'"
+                raise TypeError(msg)
+        return activity
 
     def correct(self):
         """
@@ -27,10 +38,11 @@ class ProgressQuerySet(models.PolymorphicQuerySet):
         Return progress associated with the given user and activity page.
         """
 
+        activity = self._get_activity(activity)
         response, _ = self.get_or_create(user=user, activity_page=activity)
         return response
 
-    def gradebook(self, activity, *,
+    def gradebook(self, activity=None, *,
                   fields=('final_grade_pc',),
                   user_fields=('username',), order_by=None):
         """
@@ -64,13 +76,14 @@ class ProgressQuerySet(models.PolymorphicQuerySet):
             order_by = 'user__' + user_fields[0]
 
         fields = ['user__' + f for f in user_fields] + list(fields)
+        activity = self._get_activity(activity)
         return list(
             self.filter(activity_page=activity)
                 .order_by(order_by)
                 .values_list(*fields)
         )
 
-    def gradebook_csv(self, activity, *,
+    def gradebook_csv(self, activity=None, *,
                       header=True, dialect='excel',
                       fields=('final_grade_pc',), user_fields=('username',),
                       order_by=None):
@@ -102,6 +115,17 @@ class ProgressQuerySet(models.PolymorphicQuerySet):
         writer.writerows(rows)
         return F.getvalue()
 
+    def users(self, activity=None):
+        """
+        Return a queryset with all users that made a submission to the given
+        activity.
+        """
 
-ProgressManager = models.PolymorphicManager.from_queryset(ProgressQuerySet,
-                                                          'ProgressManager')
+        activity = self._get_activity(activity)
+        qs = self.filter(activity=activity)
+        user_ids = qs.values_list('user', flat=True)
+        return models.User.objects.in_bulk(user_ids)
+
+
+ProgressManager = \
+    models.PolymorphicManager.from_queryset(ProgressQuerySet, 'ProgressManager')
