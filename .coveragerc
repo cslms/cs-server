@@ -26,6 +26,7 @@ exclude_lines =
     if __name__ == .__main__.:
     while 0:
     while False:
+    if commit:
 
 ignore_errors = True
 

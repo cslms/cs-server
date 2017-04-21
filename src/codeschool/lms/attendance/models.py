@@ -62,21 +62,24 @@ class AttendanceSheet(models.Model):
             user = self.owner.get_full_name() or self.owner.username
             return _('Attendance sheet (%s)' % user)
 
-    def new_event(self):
+    def new_event(self, commit=True):
         """
         Create a new event in attendance sheet.
         """
 
         current_time = now()
-        new = self.events.create(
+        event = Event(
             passphrase=phrase(),
             date=current_time.date(),
             created=current_time,
-            expires=current_time + self.expiration_interval
+            expires=current_time + self.expiration_interval,
+            sheet=self,
         )
-        self.last_event = new
-        self.save(update_fields=['last_event'])
-        return new
+        self.last_event = event
+        if commit:
+            event.save()
+            self.save(update_fields=['last_event'])
+        return event
 
     def current_passphrase(self):
         """
@@ -158,7 +161,7 @@ class AttendanceSheet(models.Model):
                 return 0.0
             else:
                 dt = self.last_event.expires - time
-                return dt.minutes
+                return dt.total_seconds() / 60.
         if raises:
             raise ValueError('last event is not defined')
         else:
@@ -201,14 +204,18 @@ class Event(models.Model):
         ),
     )
 
-    def update(self):
+    def update(self, commit=True):
         """
         Regenerate passphrase and increases expiration time.
         """
 
-        self.passphrase = phrase()
+        new = self.passphrase
+        while new == self.passphrase:
+            new = phrase()
+        self.passphrase = new
         self.expires += self.sheet.expiration_interval
-        self.save()
+        if commit:
+            self.save()
 
 
 class AttendanceCheck(models.Model):
@@ -275,32 +282,28 @@ class AttendancePage(models.DecoupledAdminPage, models.RoutablePageExt):
             setattr(cls, k, delegate_to('attendance_sheet'))
 
     def clean(self):
-        if self.title is None:
-            self.title = _('Attendance sheet')
         if self.attendance_sheet is None:
             self.attendance_sheet = AttendanceSheet(owner=self.owner)
-        elif self.attendance_sheet.owner is None:
-            self.attendance_sheet.owner = self.owner
+        self.attendance_sheet.owner = self.attendance_sheet.owner or self.owner
+        self.title = str(self.title or _('Attendance sheet'))
         super().clean()
 
     def get_context(self, request, *args, **kwargs):
         from . import forms
 
-        ctx = super().get_context(request)
         is_teacher = self.rules.has_perm(request.user,
                                          'attendance.see_passphrase')
-        ctx.update(sheet=self.attendance_sheet, is_teacher=is_teacher)
 
-        if not is_teacher:
-            ctx['form'] = forms.PassphraseForm()
-        else:
-            ctx['passphrase'] = self.current_passphrase()
-        if self.is_expired():
-            ctx['is_expired'] = True
+        ctx = super().get_context(request)
+        ctx['is_teacher'] = is_teacher
+        ctx['attendance_sheet'] = self.attendance_sheet
+        ctx['form'] = forms.PassphraseForm() if not is_teacher else None
+        ctx['passphrase'] = self.current_passphrase() if is_teacher else None
+        ctx['is_expired'] = self.is_expired()
         return ctx
 
     @srvice.route(r'^check.api/$')
-    def api(self, client, passphrase, **kwargs):
+    def check_presence(self, client, passphrase, **kwargs):
         html = ('<div class="cs-attendance-dialog cs-attendance-dialog--%s">'
                 '<h1>%s</h1>'
                 '<p>%s</p>'
@@ -310,7 +313,8 @@ class AttendancePage(models.DecoupledAdminPage, models.RoutablePageExt):
             html = html % ('success', _('Yay!'), _('Presence confirmed!'))
         else:
             html = html % (
-            'failure', _('Oh oh!'), _('Could not validate this passphrase :-('))
+                'failure', _('Oh oh!'),
+                _('Could not validate this passphrase :-('))
         client.dialog(html=html)
 
 
