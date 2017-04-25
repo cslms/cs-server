@@ -46,3 +46,4 @@ class NavSection(pyml.Component):
             ul(items, cls='cs-nav__block-items'),
         ]
         return dom.render(**kwargs)
+

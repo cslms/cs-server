@@ -1,0 +1,26 @@
+{% extends "base.jinja2" %}
+{% from 'components/cards.jinja2' import cards_container, cs_card %}
+
+{% block content %}
+    {% call cards_container(
+            title=_('Subscriptions'),
+            description=_('List of all courses that you are attending to')) %}
+
+        {% if classroom_list %}
+            {% for classroom in classroom_list -%}
+                {{ cs_card(
+                        classroom.title,
+                        classroom.short_description,
+                        icon=classroom.material_icon|default('class'),
+                        href=classroom.get_absolute_url()) }}
+            {%- endfor %}
+        {% else %}
+            {{ cs_card(
+                    _('Subscribe here'),
+                    _('Sorry, you are not subscribed in any course.<br>'
+                      'Please click on the "add" button above.')|safe,
+                    icon='add_circle',
+                    href='subscribe') }}
+        {% endif %}
+    {% endcall %}
+{% endblock %}

@@ -1,12 +1,16 @@
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+#
+# This app is still under construction
+#
+
 from django.utils.text import slugify
+from django.utils.translation import ugettext as __
+from lazyutils import delegate_to
 from wagtail.wagtailcore import blocks
+
 from codeschool import models
-from codeschool import panels
-from codeschool.utils import delegate_to
 
 
-class Calendar(models.Page):
+class Calendar(models.Model):
     """
     A page that gathers a list of lessons in the course.
     """
@@ -45,7 +49,7 @@ class Calendar(models.Page):
         return LessonInfo.objects.create(*args, **kwargs)
 
     # Wagtail admin
-    parent_page_types = ['courses.Course']
+    parent_page_types = ['courses.Classroom']
     subpage_types = ['courses.Lesson']
     content_panels = models.Page.content_panels + [
         panels.InlinePanel(
@@ -140,4 +144,69 @@ class LessonInfo(models.Orderable):
     panels = [
         panels.FieldPanel('title'),
         panels.FieldPanel('date'),
+    ]
+
+
+from django.utils.translation import ugettext_lazy as _
+
+from codeschool import models, panels
+
+
+class TimeSlot(models.Model):
+    """
+    Represents the weekly time slot that can be assigned to lessons for a
+    given course.
+    """
+
+    class Meta:
+        ordering = ('weekday', 'start')
+
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY = range(7)
+    WEEKDAY_CHOICES = [
+        (MONDAY, _('Monday')),
+        (TUESDAY, _('Tuesday')),
+        (WEDNESDAY, _('Wednesday')),
+        (THURSDAY, _('Thursday')),
+        (FRIDAY, _('Friday')),
+        (SATURDAY, _('Saturday')),
+        (SUNDAY, _('Sunday'))
+    ]
+    course = models.ParentalKey(
+        'Classroom',
+        related_name='time_slots'
+    )
+    weekday = models.IntegerField(
+        _('weekday'),
+        choices=WEEKDAY_CHOICES,
+        help_text=_('Day of the week in which this class takes place.')
+    )
+    start = models.TimeField(
+        _('start'),
+        blank=True,
+        null=True,
+        help_text=_('The time in which the class starts.'),
+    )
+    end = models.TimeField(
+        _('ends'),
+        blank=True,
+        null=True,
+        help_text=_('The time in which the class ends.'),
+    )
+    room = models.CharField(
+        _('classroom'),
+        max_length=100,
+        blank=True,
+        help_text=_('Name for the room in which this class takes place.'),
+    )
+
+    # Wagtail admin
+    panels = [
+        panels.FieldRowPanel([
+            panels.FieldPanel('weekday', classname='col6'),
+            panels.FieldPanel('room', classname='col6'),
+        ]),
+        panels.FieldRowPanel([
+            panels.FieldPanel('start', classname='col6'),
+            panels.FieldPanel('end', classname='col6'),
+        ]),
     ]

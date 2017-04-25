@@ -53,12 +53,12 @@ if settings.CODESCHOOL_GLOBAL_QUESTIONS:
         url(r'^questions/$', main_question_list, name='question-list'),
     ]
 
-# Courses interface
-if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
-    from codeschool.lms.courses.views import course_list
+# Codeschool classrooms
+if 'codeschool.lms.classrooms' in settings.INSTALLED_APPS:
+    from codeschool.lms.classrooms import urls as classrooms_urls
 
     urlpatterns += [
-        url(r'^courses/$', course_list, name='course-list'),
+        url(r'^classes/', include(classrooms_urls, namespace='classrooms')),
     ]
 
 # Optional cli/clt interface
