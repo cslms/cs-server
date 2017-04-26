@@ -1,31 +1,12 @@
 from codeschool.accounts.factories import make_yoda_teacher, make_students
 from codeschool.factories import make_page
-from codeschool.lms.courses.models import Course
 
-
-def make_cs101_discipline():
-    return make_page(
-        'courses.Discipline',
-        name='Programming 101',
-        slug='cs101',
-        description=(
-            'Introductory programming course. Teachers basic programming '
-            'concepts and enable students to make small software projects.'
-        ),
-        syllabus=(
-            '<ul>'
-            '<li>Variables and functions</li>'
-            '<li>Conditionals and control loops</li>'
-            '<li>Data structures</li>'
-            '<li>Algorithms</li>'
-            '</ul>'
-        )
-    )
+from codeschool.lms.academic.factories import make_cs101_discipline
 
 
 def make_cs101_course(teacher=None, discipline=None, students=None):
     course = make_page(
-        'courses.Course',
+        'courses.Classroom',
         root='course-list',
         title='Programming 101',
         slug='cs101',
@@ -39,7 +20,7 @@ def make_cs101_course(teacher=None, discipline=None, students=None):
     return course
 
 
-def make_example_courses(students=None):
+def make_example_course_list(students=None):
     cs101 = make_cs101_course(students=students)
     course_list = [cs101]
     return Course.objects.filter(id__in=[course.id for course in course_list])
