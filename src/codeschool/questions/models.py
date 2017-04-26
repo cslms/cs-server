@@ -77,7 +77,7 @@ class Question(models.DecoupledAdminPage,
         submission = self.submit(client.request, **kwargs)
         if submission.recycled:
             client.dialog(html='You already submitted this response!')
-        elif self.instant_autograde:
+        elif self._meta.instant_feedback:
             feedback = submission.auto_feedback()
             data = feedback.render_message()
             client.dialog(html=data)

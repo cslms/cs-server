@@ -15,7 +15,8 @@ def ejudge_kwargs(lang, timeout):
     if timeout is None or timeout <= 0:
         raise ValueError('invalid timeout: %r' % timeout)
 
-    sandbox = get_config('CODESCHOOL_SANDBOX', True)
+    is_testing = get_config('IS_RUNNING_TESTS', False)
+    sandbox = get_config('CODESCHOOL_SANDBOX', True) and not is_testing
     if sandbox:
         logger.debug('running %s code in sandbox' % lang)
     else:
