@@ -210,10 +210,12 @@ CELERY_RESULT_SERIALIZER = 'json'
 # Tries to detect if it is running on a test session
 
 IS_RUNNING_TESTS = (
-    'pytest' in sys.argv or
-    sys.argv[0].endswith('pytest') or
+    'py.test' in sys.argv or
+    sys.argv[0].endswith('py.test') or
     'test' in sys.argv or
     os.environ.get('IS_TESTING', 'false') == 'true'
 )
 if IS_RUNNING_TESTS:
     print('running tests and disabling sandboxed execution')
+else:
+    print('Deu false')

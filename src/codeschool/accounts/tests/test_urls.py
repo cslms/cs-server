@@ -1,4 +1,4 @@
-def test_basic_urls(user, client):
+def _test_basic_urls(user, client):
     context = {'username': user.username}
     urls = [
         '/auth/{username}',
