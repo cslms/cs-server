@@ -1,0 +1,48 @@
+{% extends "base.jinja2" %}
+
+{% block content_head %}
+    <h1>{{ classroom.title }}</h1>
+    <p>{{ classroom.short_description }}</p>
+{% endblock %}
+
+{% block content_body %}
+    {% if enrolled %}
+        <h2>{{ _('Description') }}</h2>
+        <dl>
+            <dt>{{ _('Teacher') }}</dt>
+            <dd>
+                <a href="{{ url('auth:profile-detail', kwargs={'username': classroom.teacher.username}) }}">
+                    {{ classroom.teacher.get_full_name() }}
+                </a>
+            </dd>
+
+            <dt>{{ _('Staff members') }}</dt>
+            <dd>
+                {{ classroom.staff.count() }}
+            </dd>
+
+            <dt>{{ _('Enrolled students') }}</dt>
+            <dd>{{ classroom.students.count() }}</dd>
+
+            <dt>{{ _('Passphrase') }}</dt>
+            <dd>{{ '%r' % classroom.subscription_passphrase }}</dd>
+        </dl>
+
+        <div class="cs-classroom__description">
+            {{ classroom.description|richtext }}
+        </div>
+    {% else %}
+        <p>{% trans %}
+            You are not enrolled in this course. Please fill the secret
+            passphrase in order to register.
+        {% endtrans %}</p>
+
+        <form method="post">
+            {{ csrf_input }}
+            <table class="form">
+                {{ form.as_table() }}
+            </table>
+            <input type="submit" name="send">
+        </form>
+    {% endif %}
+{% endblock %}

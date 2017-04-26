@@ -362,6 +362,7 @@ def builtins():
 
 
 class Generator:
+
     def __init__(self, hint):
         self.hint = hint
 
@@ -370,11 +371,13 @@ class Generator:
 
 
 class CommandGenerator(Generator):
+
     def __call__(self, idx):
         pass
 
 
 class TypeHintGenerator(Generator):
+
     def __call__(self, idx):
         method = getattr(self, 'from_' + self.hint.__name__)
         return method(idx)

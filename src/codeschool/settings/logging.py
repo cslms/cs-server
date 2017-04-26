@@ -1,4 +1,9 @@
+import os
 from codeschool.settings import DEBUG
+
+# Force existence of a log/ directory
+if not os.path.exists('log'):
+    os.mkdir('log')
 
 LOGGING = {
     'version': 1,
@@ -21,7 +26,7 @@ LOGGING = {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'formatter': 'verbose',
-            'filename': '.cs-debug.log',
+            'filename': 'log/cs.log',
         },
 
     },

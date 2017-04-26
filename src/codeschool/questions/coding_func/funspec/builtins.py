@@ -6,4 +6,3 @@ def answer_key(func):
 
     func._is_answer_key = True
     return func
-

@@ -17,7 +17,8 @@ class Post(models.TimeStampedModel, models.PolymorphicModel):
 
     user = models.ForeignKey(models.User)
     text = models.RichTextField()
-    visibility = models.IntegerField(choices=VISIBILITY_OPTIONS, default=VISIBILITY_FRIENDS)
+    visibility = models.IntegerField(
+        choices=VISIBILITY_OPTIONS, default=VISIBILITY_FRIENDS)
 
     def __str__(self):
         return 'Post by %s at %s' % (self.user, self.created)

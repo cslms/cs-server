@@ -5,7 +5,7 @@ from wagtail.wagtailadmin.edit_handlers import \
 from wagtail.wagtailcore.models import Page
 
 
-class ShortDescriptionPageMixin(Model):
+class ShortDescriptionPage(Page):
     """
     A mixin for a Page which has a short_description field.
     """
@@ -29,9 +29,9 @@ class ShortDescriptionPageMixin(Model):
         return super().full_clean(*args, **kwargs)
 
     content_panels = Page.content_panels + [
-       _MultiFieldPanel([
-           _FieldPanel('short_description'),
-       ], heading=_('Options')),
+        _MultiFieldPanel([
+            _FieldPanel('short_description'),
+        ], heading=_('Options')),
     ]
 
 
@@ -121,5 +121,3 @@ class AbsoluteUrlMixin:
             ))
         lines.append('</ul>')
         return '\n'.join(lines)
-
-

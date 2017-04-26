@@ -1,7 +1,8 @@
 from importlib import import_module
 
 from django.core.exceptions import ImproperlyConfigured
-from pyml.utils import snake_case
+
+from bricks.utils import snake_case
 
 
 class HasProgressMixin:
@@ -12,7 +13,7 @@ class HasProgressMixin:
     sender_username = property(lambda x: x.progress.user.username)
 
 
-def subclass_registry_meta(meta):
+def _subclass_registry_meta(meta):
     """
     Return a new metaclass that inherits meta and register all sub-classes in
     the ._subclasses attribute.
@@ -63,11 +64,10 @@ def _register_subclass(cls):
                 setattr(cls, related_attr, related_cls)
             except AttributeError:
                 raise ImproperlyConfigured(
-                    'please define the %s attribute in %s' % (related_attr, cls_name)
+                    'please define the %s attribute in %s' % (
+                        related_attr, cls_name)
                 )
     else:
         raise ImproperlyConfigured(
             'invalid class name: %s' % (cls_name)
         )
-
-

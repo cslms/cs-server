@@ -33,12 +33,14 @@ SignupForm.base_fields = OrderedDict(
 
 
 class SignupOptionalForm(forms.ModelForm):
+
     class Meta:
         model = models.Profile
         fields = ['gender', 'date_of_birth', 'about_me']
 
 
 class EditProfileForm(userena_forms.EditProfileForm):
+
     class Meta:
         page_fields = [field.name for field in Page._meta.concrete_fields]
         model = models.Profile

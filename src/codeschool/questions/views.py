@@ -1,35 +1,34 @@
-import json
-
-from django.contrib.auth import authenticate
-from django.http import JsonResponse
 from django.shortcuts import render
 
-from .import forms
-from . import ctl
+from .models import Question
 
 
-def push_question_ctl_view(request):
-    """
-    Allows a admin user to push a question defined in a external file to the
-    server.
-    """
+# TODO: make
+# @Question.register_route(r'^submit-response.api/$', name='submit-ajax')
+def ajax_submission_view(client, page, **kwargs):
+    return page.serve_ajax_submission(client, **kwargs)
 
-    if request.method == 'GET':
-        context = {'form': forms.PushQuestionForm()}
-    elif request.method == 'POST':
-        form = forms.PushQuestionForm(request.POST)
-        context = {'form': form}
-        if form.is_valid():
-            filename = form.cleaned_data['filename']
-            contents = form.cleaned_data['contents']
-            parent = form.cleaned_data['parent']
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
-            response = ctl.push_question_json(filename, contents, parent, user)
 
-            if form.cleaned_data['response_format'] == 'JSON':
-                return JsonResponse(response)
-            else:
-                context['response'] = json.dumps(response)
-    return render(request, 'questions/push_question_ctl.jinja2', context)
+@Question.register_route(r'^submissions/$',
+                         name='question-list-submissions',
+                         login_required=True)
+def list_submissions_view(request, page, *args, **kwargs):
+    template = page.get_template(request, basename='submissions')
+    context = page.get_context(request)
+    submissions = page.progress_set.for_user(request.user).submissions.all()
+    context['submissions'] = submissions
+    return render(request, template, context)
+
+
+@Question.register_route(r'^statistics/$',
+                         name='question-statistics',
+                         login_required=True)
+def statistics_page_view(request, page, *args, **kwargs):
+    raise NotImplementedError
+
+
+@Question.register_route(r'^debug/$',
+                         name='question-debug',
+                         login_required=True)
+def debug_page_view(request, page, *args, **kwargs):
+    raise NotImplementedError

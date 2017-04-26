@@ -17,6 +17,7 @@ from wagtail import wagtailimages
 # dependent on how the project is set up.  Hard-coding of 'left',
 # 'right' and 'full-width' should be removed.
 class Linker:
+
     def run(self, fname, optstr):
         opts = {}
 

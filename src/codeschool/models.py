@@ -1,7 +1,8 @@
-# flake8: noqa
 #
 # One stop shop for models, fields and managers
 #
+
+# flake8: noqa
 from django.db.models.fields.related_descriptors import \
     ReverseManyToOneDescriptor
 from lazyutils import lazy
@@ -26,6 +27,8 @@ from model_utils.choices import Choices
 from model_utils.models import QueryManager, StatusModel, TimeFramedModel, TimeStampedModel
 from model_utils.managers import QueryManager, InheritanceManager, QuerySet, InheritanceQuerySet
 
+from .fixes.wagtailroutes import RoutablePage as RoutablePageExt
+from .fixes.wagtailadmin import DecoupledAdminPage
 from .managers import *
 from .mixins import AbsoluteUrlMixin
 

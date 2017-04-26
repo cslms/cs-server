@@ -3,6 +3,8 @@
 # class that interacts with Feedback instances and store info on points, xp and
 # stars.
 #
+
+
 class FeedbackPatch:
     """
     Gamify lms.activities.Feedback

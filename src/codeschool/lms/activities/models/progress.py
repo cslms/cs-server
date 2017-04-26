@@ -4,42 +4,10 @@ from decimal import Decimal
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool.utils import get_ip
+from codeschool.lms.activities.managers.progress import ProgressManager
+from codeschool.utils.request import get_ip
 
 logger = logging.getLogger('codeschool.lms.activities')
-
-
-class ProgressQuerySet(models.PolymorphicQuerySet):
-    def correct(self):
-        """
-        Filter only correct responses.
-        """
-
-        return self.filter(is_correct=True) | self.filter(grade=100)
-
-
-class _ProgressManager(models.PolymorphicManager):
-    def for_request(self, request, activity=None):
-        """
-        Return progress associated with the request object.
-
-        This usually means using the .user attribute from the request.
-        """
-
-        return self.for_user(request.user, activity)
-
-    def for_user(self, user, activity=None):
-        """
-        Return progress associated with the given user.
-        """
-
-        response, _ = self.get_or_create(user=user, activity_page=activity)
-        return response
-
-
-ProgressManager = _ProgressManager.from_queryset(ProgressQuerySet,
-                                                 'ProgressManager')
-ProgressManager.use_for_related_fields = True
 
 
 class Progress(models.CopyMixin,
@@ -241,7 +209,6 @@ class Progress(models.CopyMixin,
 
         if commit:
             self.save()
-
 
     def regrade(self, method=None, force_update=False):
         """

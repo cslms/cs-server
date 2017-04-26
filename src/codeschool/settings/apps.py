@@ -1,14 +1,18 @@
-from .base import DEBUG
-
+#
+# List of all installed apps
+#
 
 INSTALLED_APPS = [
     # Codeschool optional apps
+    'codeschool.sparta',
     'codeschool.questions.numeric',
     'codeschool.questions.coding_io',
-    #'codeschool.gamification',
-    #'codeschool.lms.courses',
-    #'codeschool.social.feed',
-    #'codeschool.social.friends',
+    'codeschool.lms.attendance',
+    'codeschool.lms.classrooms',
+    'codeschool.lms.academic',
+    # 'codeschool.gamification',
+    # 'codeschool.social.feed',
+    # 'codeschool.social.friends',
     'codeschool.cli',
 
     # These are always required
@@ -50,6 +54,7 @@ INSTALLED_APPS = [
     'polymorphic',
     'django_extensions',
     'rest_framework',
+    'rules',
 
     # Django
     'django.contrib.admin',

@@ -101,6 +101,7 @@ class Sprint(models.Model):
 
 
 class TaskQuerySet(models.QuerySet):
+
     def todo(self):
         return self.filter(status=Task.STATUS_TODO)
 
@@ -109,7 +110,6 @@ class TaskQuerySet(models.QuerySet):
 
     def done(self):
         return self.filter(status=Task.STATUS_DONE)
-
 
 
 class Task(models.Model):
@@ -141,6 +141,7 @@ class Task(models.Model):
 # Forms
 #
 class SprintForm(forms.ModelForm):
+
     class Meta:
         model = Sprint
         fields = ['description', 'duration_weeks']

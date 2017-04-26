@@ -8,14 +8,12 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ugettext as __
 
 from codeschool import models
-from codeschool import panels
-from codeschool.components.navbar import NavSection
 from codeschool.core import get_programming_language
 from codeschool.core.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
 from codeschool.questions.models import Question
-from codeschool.utils import md5hash_seq
+from codeschool.utils.string import md5hash_seq
 from iospec import parse as parse_iospec, IoSpec
 from .submission import CodingIoSubmission
 from .. import ejudge
@@ -35,11 +33,6 @@ class CodingIoQuestion(Question):
     class Meta:
         verbose_name = _('Programming question (IO-based)')
         verbose_name_plural = _('Programming questions (IO-based)')
-
-    EXT_TO_METHOD_CONVERSIONS = dict(
-        Question.EXT_TO_METHOD_CONVERSIONS,
-        md='markio',
-    )
 
     num_pre_tests = models.PositiveIntegerField(
         _('# of pre-test examples'),
@@ -153,7 +146,8 @@ class CodingIoQuestion(Question):
                 post_tests = parse_iospec(self.post_tests_source)
             else:
                 post_tests = IoSpec()
-            self._post_tests = ejudge.combine_iospec(self.pre_tests, post_tests)
+            self._post_tests = ejudge.combine_iospec(
+                self.pre_tests, post_tests)
             return self._post_tests
 
     @post_tests.setter
@@ -534,13 +528,17 @@ class CodingIoQuestion(Question):
 
     def nav_section_for_activity(self, request):
         url = self.get_absolute_url
-        section = NavSection(__('Question'), url(),
-                             title=__('Back to question'))
-        if self.user_can_edit(request.user):
-            section.add_link(__('Edit'), self.get_admin_url(),
-                             title=__('Edit question'))
-        section.add_link(__('Submissions'), url('submissions'),
-                         title=__('View your submissions'))
+        section = NavSection(
+            __('Question'), url(), title=__('Back to question')
+        )
+        if self.rules.test(request.user, 'activities.edit_activity'):
+            section.add_link(
+                __('Edit'), self.get_admin_url(), title=__('Edit question')
+            )
+        section.add_link(
+            __('Submissions'), url('submissions'),
+            title=__('View your submissions')
+        )
         return section
 
     # Serving pages and routing
@@ -621,28 +619,6 @@ class CodingIoQuestion(Question):
     def action_grade_with_post_tests(self, client, *args, **kwargs):
         self.regrade_post()
         client.dialog('<p>Successful operation!</p>')
-
-    # Wagtail admin
-    content_panels = Question.content_panels[:]
-    content_panels.insert(-1, panels.MultiFieldPanel([
-        panels.FieldPanel('num_pre_tests'),
-        panels.FieldPanel('pre_tests_source'),
-    ], heading=_('Pre-tests definitions')))
-    content_panels.insert(-1, panels.MultiFieldPanel([
-        panels.FieldPanel('num_post_tests'),
-        panels.FieldPanel('post_tests_source'),
-    ], heading=_('Post-tests definitions')))
-
-    content_panels.insert(
-        -1,
-        panels.InlinePanel('answers', label=_('Answer keys'))
-    )
-    settings_panels = Question.settings_panels + [
-        panels.MultiFieldPanel([
-            panels.FieldPanel('language'),
-            panels.FieldPanel('timeout'),
-        ], heading=_('Options'))
-    ]
 
 
 def compute_test_state_hash(question):
@@ -733,8 +709,9 @@ def check_expansions_with_all_programs(question, tests: IoSpec):
     # Other cases require more work: first we expand for each possible
     # language. Collect tuples of (expansion, language)
     languages = [answer.language for answer in answers]
-    first, *tail = [(expand_tests_from_program(question, tests, language), language)
-                    for language in languages]
+    first, *tail = [
+        (expand_tests_from_program(question, tests, language), language)
+        for language in languages]
 
     # All expansions should be equal.
     for expansion in tail:

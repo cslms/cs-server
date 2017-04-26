@@ -13,6 +13,7 @@ class GivenXpQuerySet(models.QuerySet):
 
 
 class _GivenXpManager(models.Manager):
+
     def update(self, user, value, token, index=None):
         """
         Set user experience points to "points".
@@ -99,7 +100,8 @@ class ScoreHandler(models.TimeStampedModel):
 
     page = models.ForeignKey(models.Page, related_name='+')
     points = models.IntegerField(default=0)
-    stars = models.DecimalField(default=Decimal(0), decimal_places=1, max_digits=5)
+    stars = models.DecimalField(default=Decimal(
+        0), decimal_places=1, max_digits=5)
 
     @lazy_classattribute
     def _wagtail_root(cls):

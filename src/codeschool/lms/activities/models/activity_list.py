@@ -4,10 +4,10 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
-import codeschool.mixins
+from codeschool import mixins
 from codeschool import models, panels
-from codeschool.lms.activities.score_map import ScoreTable, ScoreMap
-from .activity import Activity
+from ..types.score_map import ScoreTable, ScoreMap
+from .. import components
 
 
 class ScoreBoardMixin(models.RoutablePageMixin,
@@ -51,6 +51,7 @@ class ScoreBoardMixin(models.RoutablePageMixin,
 
 
 class ActivityListQuerySet(models.PageQuerySet):
+
     def create_subpage(self, parent, **kwargs):
         """
         Return a new page as a child of the given parent page.
@@ -60,6 +61,7 @@ class ActivityListQuerySet(models.PageQuerySet):
 
 
 class _ActivityListManager(models.PageManager):
+
     def main(self):
         """
         Return the main ActivityList for the website.
@@ -72,7 +74,7 @@ ActivityListManager = _ActivityListManager.from_queryset(ActivityListQuerySet)
 
 
 class ActivityList(ScoreBoardMixin,
-                   codeschool.mixins.ShortDescriptionPageMixin,
+                   mixins.ShortDescriptionPage,
                    models.Page):
     """
     A list of ActivitySections.
@@ -170,7 +172,8 @@ class ActivityList(ScoreBoardMixin,
     def get_context(self, request, *args, **kwargs):
         return dict(
             super().get_context(request, *args, **kwargs),
-            object_list=[obj.specific for obj in self.get_children()]
+            object_list=[obj.specific for obj in self.get_children()],
+            navbar=components.activity_list_navbar(self, request.user),
         )
 
     # Wagtail admin
@@ -178,7 +181,7 @@ class ActivityList(ScoreBoardMixin,
 
 
 class ActivitySection(ScoreBoardMixin,
-                      codeschool.mixins.ShortDescriptionPageMixin,
+                      mixins.ShortDescriptionPage,
                       models.Page):
     """
     List of activities.
@@ -325,13 +328,13 @@ class ActivitySection(ScoreBoardMixin,
     def get_context(self, request, *args, **kwargs):
         return dict(
             super().get_context(request, *args, **kwargs),
-            object_list=[obj.specific for obj in self.get_children()]
+            object_list=[obj.specific for obj in self.get_children()],
+            navbar=components.activity_section_navbar(self, request.user),
         )
 
     # Wagtail Admin
     parent_page_types = [ActivityList]
-    subpage_types = Activity.CONCRETE_ACTIVITY_TYPES
-    content_panels = codeschool.mixins.ShortDescriptionPageMixin.content_panels + [
+    content_panels = mixins.ShortDescriptionPage.content_panels + [
         panels.FieldPanel('material_icon')
     ]
 

@@ -154,11 +154,11 @@ class Deadline(models.Model):
         if self.start is not None and now < self.start:
             return 'closed'
         elif ((self.hard_deadline is not None and now > self.hard_deadline) or
-                  (self.hard_deadline is None and self.deadline is not None
-                   and now > self.deadline)):
+              (self.hard_deadline is None and self.deadline is not None
+               and now > self.deadline)):
             return 'expired'
         elif (self.hard_deadline is not None and now < self.hard_deadline and
-                      self.deadline is not None and now > self.deadline):
+              self.deadline is not None and now > self.deadline):
             return 'penalty'
         else:
             return 'valid'
@@ -222,4 +222,3 @@ class Personalization(models.Model):
         """
 
         return '<i class="material-icon">%s</i>' % self.material_icon
-

@@ -27,6 +27,7 @@ class CodeExhibit(Activity):
 
     def get_submit_form(self, *args, **kwargs):
         class ExhibitEntryForm(forms.ModelForm):
+
             class Meta:
                 model = ExhibitEntry
                 fields = ['name', 'image', 'source']

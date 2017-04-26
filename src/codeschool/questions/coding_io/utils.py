@@ -26,5 +26,3 @@ def blocks_to_markdown(children):
             raise ValueError('cannot convert stream block: %s' %
                              child.block.name)
     return '\n'.join(lines)
-
-

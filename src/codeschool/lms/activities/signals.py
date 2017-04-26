@@ -7,7 +7,6 @@ auto_grading = Signal(providing_args=['submission', 'given_grade'])
 manual_grading = Signal(providing_args=['submission', 'given_grade'])
 
 
-
 #: This signal is emitted when a submission finishes its autograde() method
 #: successfully and sets the Submission status to STATUS_DONE.
 #:
@@ -35,4 +34,3 @@ first_submission_signal = Signal(providing_args=['submission'])
 #:     submission:
 #:         Submission instance.
 first_correct_submission_signal = Signal(providing_args=['submission'])
-

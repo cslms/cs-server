@@ -1,15 +1,47 @@
 {% extends "page.jinja2" %}
 {% from "questions/macros.jinja2" import feedback_styles, nav_sections %}
 
+
 {% block content_title %}
     {{ question.title }} ({{ _('all submissions') }})
 {% endblock %}
 
+
 {% block content_body %}
     {% for submission in submissions %}
         {% block submission scoped %}
-            <div>
-                {{ submission }}
+            <div class="mdl-shadow--4dp question-feedback">
+                <h3 class="iospec-title show">
+                    {% block submission_title %}
+                        {{ submission.get_feedback_title() }}
+                    {% endblock %}
+                    <span class="feedback-title-handle"
+                          onclick="expand(this.parentNode.parentNode)">
+                            <i class="material-icons">menu</i>
+                        </span>
+                </h3>
+
+                <div class="expandable hidden">
+                    {% block submission_info %}
+                        {{ submission }}
+                        <h3 class="banner">{{ _('Details') }}</h3>
+                        <dl>
+                            <dt>{{ _('Grade') }}</dt>
+                            <dd>
+                                {% if submission.has_feedback %}
+                                    {{ submission.final_grade_pc|int }}%
+                                {% else %}
+                                    {{ _('Not given') }}
+                                {% endif %}
+                            </dd>
+                            <dt>{{ _('Date of submission') }}</dt>
+                            <dd>{{ submission.created }}</dd>
+                        </dl>
+                    {% endblock %}
+                    {% block submission_data %}
+                        <h3 class="banner">{{ _('Submission data') }}</h3>
+                    {% endblock %}
+                </div>
             </div>
         {% endblock %}
     {% endfor %}
@@ -26,7 +58,9 @@
                 expandable.removeClass('hidden').hide().show(200);
             } else {
                 expandable.hide(200);
-                window.setTimeout(function () {expandable.addClass('hidden')}, 200);
+                window.setTimeout(function () {
+                    expandable.addClass('hidden')
+                }, 200);
             }
         }
     </script>

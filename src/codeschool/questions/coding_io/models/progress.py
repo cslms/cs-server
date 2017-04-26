@@ -1,8 +1,9 @@
 from codeschool.questions.models import QuestionProgress
-from codeschool.utils import queryset_class, manager_instance
+from codeschool.utils.managers import manager_instance, queryset_class
 
 
 class CodingIoProgessQuerySet(queryset_class(QuestionProgress)):
+
     def regrade_with(self, tests, **kwargs):
         """
         Recompute progress grades with the given tests.

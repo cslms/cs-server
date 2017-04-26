@@ -64,6 +64,7 @@ setup(
         'mistune',
         'pygments',
         'Markdown',
+        'python-markdown-math',
         'html5lib',
         'bleach',
         'fake-factory',
@@ -72,12 +73,15 @@ setup(
         'celery[redis]',
         'PyYAML',
         'json-rpc',
+        'editdistance',
+        'placeholder',
 
         # Services
         'invoke',
 
         # Django and extensions
         'django==1.10',
+        'django-bricks>=0.1.2',
         'django-polymorphic',
         'django-model-utils',
         'django-model-reference',
@@ -91,11 +95,12 @@ setup(
         'social-auth-app-django',
         'django-compressor',
         'django-extensions',
+        'rules',
         'djangorestframework',
         'werkzeug',
 
         # Wagtail
-        'wagtail',
+        'wagtail>=1.9',
         'wagtail-model-tools>=0.1.4',
 
         # Jinja support

@@ -11,3 +11,6 @@ dialogPolyfill = require('dialog-polyfill-js');
 $ = jQuery = require('jquery');
 mdl = require('mdl-js');
 componentHandler = require('exports?componentHandler!mdl-js');
+
+// Latex support
+require('mathjax');

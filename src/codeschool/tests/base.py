@@ -27,7 +27,8 @@ class ClassTesterMeta(type):
     def _create_fixtures_for_base_args(cls):
         methods = dir(cls)
         base_args = [m[11:] for m in methods if m.startswith('base_args__')]
-        base_kwargs = [m[13:] for m in methods if m.startswith('base_kwargs__')]
+        base_kwargs = [m[13:]
+                       for m in methods if m.startswith('base_kwargs__')]
 
         # Fill missing kwargs and args
         for arg in base_args:
@@ -135,7 +136,7 @@ class ClassTester(metaclass=ClassTesterMeta):
         inv_names = [
             name for name in dir(self)
             if not name.startswith('test_') and name.endswith('_invariant')
-            ]
+        ]
         return [getattr(self, attr) for attr in inv_names]
 
     @pytest.fixture

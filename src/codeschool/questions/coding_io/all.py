@@ -33,7 +33,7 @@ def find_suspects(question=None, dedent=False, **kwargs):
     """
     Find suspicious submissions.
     """
-    
+
     question = get_page(ask(question, input, 'Question: '), CodingIoQuestion)
     codes = CodingIoSubmission.objects \
         .for_activity(question) \

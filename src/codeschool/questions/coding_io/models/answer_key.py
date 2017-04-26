@@ -8,10 +8,11 @@ from modelcluster.fields import ChildObjectsDescriptor
 from codeschool import models, panels
 from codeschool.core.models import ProgrammingLanguage
 from codeschool.questions.coding_io.models import CodingIoQuestion
-from codeschool.utils import md5hash
+from codeschool.utils.string import md5hash
 
 
 class ChildDescriptor(ChildObjectsDescriptor):
+
     def __get__(self, instance, instance_type=None):
         if instance is None:
             return self
@@ -285,4 +286,3 @@ class AnswerKey(models.Model):
         panels.FieldPanel('source'),
         panels.FieldPanel('placeholder'),
     ]
-

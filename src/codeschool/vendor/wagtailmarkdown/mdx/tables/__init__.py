@@ -68,7 +68,7 @@ class TableProcessor(BlockProcessor):
         if parent.tag == 'thead':
             tag = 'th'
         cells = self._split_row(row, border)
-        # We use align here rather than cells to ensure every row 
+        # We use align here rather than cells to ensure every row
         # contains the same number of columns.
         for i, a in enumerate(align):
             c = etree.SubElement(tr, tag)

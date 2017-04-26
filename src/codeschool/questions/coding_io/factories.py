@@ -10,7 +10,7 @@ from codeschool.questions.coding_io.models import CodingIoQuestion
 example_path = os.path.join(os.path.dirname(__file__), 'examples')
 
 
-def question_from_file(path, parent=None):
+def question_from_file(path, parent=None) -> CodingIoQuestion:
     """
     Load question from markio file
     """
@@ -19,7 +19,7 @@ def question_from_file(path, parent=None):
     return import_markio_from_path(path, parent)
 
 
-def question_from_example(name, parent=None):
+def question_from_example(name, parent=None) -> CodingIoQuestion:
     """
     Load question from markio file in examples.
     """
@@ -67,11 +67,10 @@ def make_hello_world_submissions(question, user):
     submit = question.submit
     request = RequestFactory().get('/')
     request.user = user
-    return [
-        submit(request,
-               source='print "hello world!"',
-               language='python'),
-        submit(request,
-               source='print("hello world!")',
-               language='python')
-    ]
+    sub1 = submit(request,
+                  source='print "hello world!"',
+                  language='python')
+    sub2 = submit(request,
+                  source='print("hello world!")',
+                  language='python')
+    return [sub1, sub2]

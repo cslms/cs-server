@@ -17,6 +17,7 @@ from . import utils
 
 
 class MarkdownBlock(TextBlock):
+
     def __init__(self, required=True, help_text=None, **kwargs):
         if 'classname' in kwargs:
             kwargs['classname'] += ' markdown'
@@ -38,6 +39,7 @@ class MarkdownBlock(TextBlock):
 
 
 class MarkdownPanel(FieldPanel):
+
     def __init__(self, field_name, classname="", widget=None):
         super(MarkdownPanel, self).__init__(field_name, classname, None)
 
@@ -47,6 +49,7 @@ class MarkdownPanel(FieldPanel):
 
 
 class MarkdownTextarea(WidgetWithScript, forms.widgets.Textarea):
+
     def __init__(self, **kwargs):
         super(MarkdownTextarea, self).__init__(**kwargs)
 

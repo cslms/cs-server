@@ -135,4 +135,5 @@ def create_profile_on_user_save(instance, created, **kwargs):
         profile.save()
 
 
-models.User.get_absolute_url = lambda x: reverse('auth:profile-detail', args=(x.username,))
+models.User.get_absolute_url = lambda x: reverse(
+    'auth:profile-detail', args=(x.username,))

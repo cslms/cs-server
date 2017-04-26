@@ -24,6 +24,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon"
               href="{{ static('apple-touch-icon.png') }}">
+        <script type="text/javascript" async
+                src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
     {% endblock %}
     <title>
         {%- block title %}
@@ -74,15 +77,8 @@
         {% endcall %}
 
         <div id="content-area" class="cs-stripes-layout">
-            {% if nav_sections is undefined %}
-                {% set nav_sections = make_nav_sections() %}
-            {% endif %}
-            {% if not disable_nav_bar and nav_sections %}
-                {% call cs_nav(cls="cs-stripes-layout__sidebar") %}
-                    {% for nav_section in nav_sections %}
-                        {{ nav_section }}
-                    {% endfor %}
-                {% endcall %}
+            {% if navbar %}
+                {{ navbar|render }}
             {% endif %}
 
             <main class="cs-stripes-layout__main">
@@ -114,37 +110,35 @@
 
         {% if not disable_footer %}
             {% call cs_foot(request.user, has_data=not disable_footer_data, cls='mdl-cell mdl-cell--12-col') %}
-                {% if not disable_footer_data %}
-                    <div class="cs-foot__block">
-                        <p class="cs-foot__block-title">Amigos (em
-                            construção)</p>
-                        <ul>
-                            <li>Fulano fez isso</li>
-                            <li>Cicrano fez aquilo</li>
-                            <li>Beltrano fez aquio outro</li>
-                        </ul>
-                    </div>
-
-                    <div class="cs-foot__block">
-                        <p class="cs-foot__block-title">Agenda (em
-                            construção)</p>
-                        <ul>
-                            <li>Prova dia X</li>
-                            <li>Trabalho para dia Y</li>
-                            <li>Estudar XY</li>
-                        </ul>
-                    </div>
-
-                    <div class="cs-foot__block">
-                        <p class="cs-foot__block-title">Notícias (em
-                            construção)</p>
-                        <ul>
-                            <li>Adicionou notas</li>
-                            <li>Mensagem do prof. CB</li>
-                            <li>Não haverá prova dia XXX</li>
-                        </ul>
-                    </div>
-                {% endif %}
+{#                <div class="cs-foot__block">#}
+{#                    <p class="cs-foot__block-title">Amigos (em#}
+{#                        construção)</p>#}
+{#                    <ul>#}
+{#                        <li>Fulano fez isso</li>#}
+{#                        <li>Cicrano fez aquilo</li>#}
+{#                        <li>Beltrano fez aquio outro</li>#}
+{#                    </ul>#}
+{#                </div>#}
+{##}
+{#                <div class="cs-foot__block">#}
+{#                    <p class="cs-foot__block-title">Agenda (em#}
+{#                        construção)</p>#}
+{#                    <ul>#}
+{#                        <li>Prova dia X</li>#}
+{#                        <li>Trabalho para dia Y</li>#}
+{#                        <li>Estudar XY</li>#}
+{#                    </ul>#}
+{#                </div>#}
+{##}
+{#                <div class="cs-foot__block">#}
+{#                    <p class="cs-foot__block-title">Notícias (em#}
+{#                        construção)</p>#}
+{#                    <ul>#}
+{#                        <li>Adicionou notas</li>#}
+{#                        <li>Mensagem do prof. CB</li>#}
+{#                        <li>Não haverá prova dia XXX</li>#}
+{#                    </ul>#}
+{#                </div>#}
             {% endcall %}
         {% endif %}
     </div>

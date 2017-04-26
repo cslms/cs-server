@@ -32,7 +32,7 @@ class CodingIoFeedback(QuestionFeedback):
         else:
             return None
 
-    def autograde(self):
+    def update_autograde(self):
         if self.for_pre_test:
             tests = self.question.get_expanded_pre_tests()
         else:
@@ -49,4 +49,3 @@ class CodingIoFeedback(QuestionFeedback):
 
     def render_message(self, **kwargs):
         return render(self.feedback)
-

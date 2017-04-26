@@ -8,6 +8,7 @@ PARENT_PREFETCH_CLASSES = set()
 # requires a parent reference for validation
 #
 class ClusterFormPatch:
+
     def is_valid(self):
         form_is_valid = super(ClusterForm, self).is_valid()
         prefetch = self.requires_parent_prefetch()

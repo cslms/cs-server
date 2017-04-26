@@ -1,8 +1,7 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool import panels
 from codeschool.questions.models import Question, QuestionFeedback, \
     QuestionSubmission, QuestionProgress
 
@@ -11,9 +10,6 @@ class NumericQuestion(Question):
     """
     A very simple question with a simple numeric answer.
     """
-    class Meta:
-        verbose_name = _('Numeric question')
-        verbose_name_plural = _('Numeric questions')
 
     correct_answer = models.FloatField(
         _('Correct answer'),
@@ -21,6 +17,7 @@ class NumericQuestion(Question):
             'The expected numeric answer for question.'
         )
     )
+
     tolerance = models.FloatField(
         _('Tolerance'),
         default=0,
@@ -44,7 +41,9 @@ class NumericQuestion(Question):
         )
     )
 
-    instant_autograde = True
+    class Meta:
+        verbose_name = _('Numeric question')
+        verbose_name_plural = _('Numeric questions')
 
     def get_form_class(self):
         class NumericForm(forms.Form):
@@ -66,23 +65,18 @@ class NumericQuestion(Question):
     def get_submission_kwargs(self, request, kwargs):
         return {'value': float(kwargs.get('value', None) or 0)}
 
-    # Wagtail admin
-    content_panels = Question.content_panels + [
-        panels.MultiFieldPanel([
-            panels.FieldPanel('correct_answer'),
-            panels.FieldPanel('tolerance'),
-            panels.FieldPanel('label'),
-            panels.FieldPanel('help_text'),
-        ], heading=_('Numeric value'))
-    ]
-    content_panels.append(content_panels.pop(-2))
-
 
 class NumericProgress(QuestionProgress):
-    pass
+    """
+    Progress class for numeric questions.
+    """
 
 
 class NumericSubmission(QuestionSubmission):
+    """
+    Submission class for numeric questions.
+    """
+
     value = models.FloatField()
 
     def compute_hash(self):
@@ -91,16 +85,11 @@ class NumericSubmission(QuestionSubmission):
 
 class NumericFeedback(QuestionFeedback):
     """
-    Numeric feedback: autograde simply tests if value is within the requested
-    interval.
+    Numeric feedback: autograde tests if value is within the requested interval.
     """
 
-    def autograde(self):
-        value = self.submission.value
-        correct = self.question.correct_answer
-        tol = self.question.tolerance
-
-        if abs(value - correct) <= tol:
-            self.given_grade_pc = 100
-        else:
-            self.given_grade_pc = 0
+    def get_given_autograde(self, submission, question):
+        value = submission.value
+        correct = question.correct_answer
+        tol = question.tolerance
+        return 100 if abs(value - correct) <= tol else 0

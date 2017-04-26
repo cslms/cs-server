@@ -22,18 +22,26 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Profile',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('mugshot', easy_thumbnails.fields.ThumbnailerImageField(blank=True, help_text='A personal image displayed in your profile.', upload_to=userena.models.upload_to_mugshot, verbose_name='mugshot')),
-                ('privacy', models.CharField(choices=[('open', 'Open'), ('registered', 'Registered'), ('closed', 'Closed')], default='registered', help_text='Designates who can view your profile.', max_length=15, verbose_name='privacy')),
-                ('school_id', models.CharField(blank=True, help_text='Identification number in your school issued id card.', max_length=50, null=True, verbose_name='school id')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('mugshot', easy_thumbnails.fields.ThumbnailerImageField(
+                    blank=True, help_text='A personal image displayed in your profile.', upload_to=userena.models.upload_to_mugshot, verbose_name='mugshot')),
+                ('privacy', models.CharField(choices=[('open', 'Open'), ('registered', 'Registered'), ('closed', 'Closed')],
+                                             default='registered', help_text='Designates who can view your profile.', max_length=15, verbose_name='privacy')),
+                ('school_id', models.CharField(blank=True, help_text='Identification number in your school issued id card.',
+                                               max_length=50, null=True, verbose_name='school id')),
                 ('is_teacher', models.BooleanField(default=False)),
                 ('nickname', models.CharField(blank=True, max_length=50, null=True)),
                 ('phone', models.CharField(blank=True, max_length=20, null=True)),
-                ('gender', models.SmallIntegerField(blank=True, choices=[(0, 'Male'), (1, 'Female')], null=True, verbose_name='gender')),
-                ('date_of_birth', models.DateField(blank=True, null=True, verbose_name='date of birth')),
+                ('gender', models.SmallIntegerField(blank=True, choices=[
+                 (0, 'Male'), (1, 'Female')], null=True, verbose_name='gender')),
+                ('date_of_birth', models.DateField(
+                    blank=True, null=True, verbose_name='date of birth')),
                 ('website', models.URLField(blank=True, null=True)),
-                ('about_me', wagtail.wagtailcore.fields.RichTextField(blank=True, null=True)),
-                ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='profile', to=settings.AUTH_USER_MODEL, verbose_name='user')),
+                ('about_me', wagtail.wagtailcore.fields.RichTextField(
+                    blank=True, null=True)),
+                ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                              related_name='profile', to=settings.AUTH_USER_MODEL, verbose_name='user')),
             ],
             options={
                 'permissions': (('student', "Can access/modify data visible to student's"), ('teacher', "Can access/modify data visible only to Teacher's")),

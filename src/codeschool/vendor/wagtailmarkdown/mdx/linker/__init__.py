@@ -16,6 +16,7 @@ LINKER_RE = r'<:([a-z]+:)?([^>|\n]+)((\|[^>|\n]+){0,})>'
 
 
 class LinkerPattern(markdown.inlinepatterns.Pattern):
+
     def __init__(self, re, md, linktypes):
         markdown.inlinepatterns.Pattern.__init__(self, re, md)
         self.linktypes = linktypes
@@ -37,6 +38,7 @@ class LinkerPattern(markdown.inlinepatterns.Pattern):
 
 
 class LinkerExtension(markdown.Extension):
+
     def __init__(self, linktypes):
         markdown.Extension.__init__(self)
         self.linktypes = linktypes
