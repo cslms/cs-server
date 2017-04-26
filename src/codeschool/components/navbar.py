@@ -28,18 +28,7 @@ def navsection(title, links, href=None):
     ]
 
 
-def navbar(sections, class_=('cs-stripes-layout__sidebar',)):
-    """
-    Construct a navbar from a list of nav sections.
-    """
-
-    return div(class_=('cs-nav',) + tuple(class_))[
-        div(sections),
-        img(class_='cs-nav__dingbat', src='/static/img/dingbat.svg')
-    ]
-
-
-def navbar_page_admin(page, user, links=()):
+def navsection_page_admin(page, user, links=()):
     """
     Return a list of links for administrative tasks.
 
@@ -51,3 +40,46 @@ def navbar_page_admin(page, user, links=()):
     return navsection(_('Settings'), (
         a('Edit', href='/admin/pages/%s/edit/' % pk),
     ) + tuple(links))
+
+
+
+def navbar(sections=None, class_=('cs-stripes-layout__sidebar',),
+           admin=False, admin_links=(), admin_perms=None, user=None, page=None):
+    """
+    Construct a navbar from a list of nav sections.
+
+    Args:
+        sections:
+            List of sections.
+        class:
+            Optional class to root navbar div
+        user:
+            User making request.
+        page:
+            Page associated with request. Necessary for
+        admin:
+            If True or a callable of admin(page, user), it builds an admin
+            section for allowed users.
+        admin_perms:
+            The permissions required to use the admin.
+        admin_links:
+            Any extra links to be included in the default admin section.
+    """
+
+    sections = list(sections or [])
+
+    # Insert admin sections
+    if admin:
+        page_args = () if page is None else (page,)
+        if admin_perms and user.has_perms(admin_perms, *page_args) or \
+                user.is_superuser:
+            if callable(admin):
+                admin = admin(page, user)
+            else:
+                admin = navsection_page_admin(page, user, admin_links)
+            sections.insert(0, admin)
+
+    return div(class_=('cs-nav',) + tuple(class_))[
+        div(sections),
+        img(class_='cs-nav__dingbat', src='/static/img/dingbat.svg')
+    ]

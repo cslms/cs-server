@@ -3,7 +3,7 @@ import rules
 from django.utils.translation import ugettext as _
 
 from bricks.components.tags import a
-from codeschool.components.navbar import navbar_page_admin, navsection, navbar
+from codeschool.components.navbar import navsection_page_admin, navsection, navbar
 
 
 def navsection_classroom_common(page, user):
@@ -34,7 +34,7 @@ def navbar_classroom(page, user):
 
     # Admin tasks
     if user.has_perm('classrooms.edit_classroom'):
-        sections.append(navbar_page_admin(page, user))
+        sections.append(navsection_page_admin(page, user))
 
     # Common section
     sections.append(navsection_classroom_common(page, user))
