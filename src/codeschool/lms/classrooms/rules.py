@@ -15,6 +15,18 @@ def is_registered(user, classroom):
 
 
 @rules.predicate
+def is_student(user, classroom):
+    """
+    Must belong to the students set of a classroom object.
+    """
+
+    try:
+        return classroom.students.filter(pk=user.pk).exists()
+    except AttributeError:
+        return False
+
+
+@rules.predicate
 def is_staff(user, classroom):
     """
     Users with staff privileges.
@@ -33,7 +45,7 @@ def is_owner(user, classroom):
 
     * The teacher.
     """
-    return classroom.owner == user or classroom.teacher == user
+    return classroom.teacher == user # or classroom.owner == user
 
 
 @rules.predicate
@@ -64,3 +76,5 @@ def is_student_of(user1, user2):
 
 
 rules.add_perm('classrooms.view_classroom', is_registered)
+rules.add_perm('classrooms.edit_classroom', is_owner)
+rules.add_rule('classrooms.can_leave', is_student)

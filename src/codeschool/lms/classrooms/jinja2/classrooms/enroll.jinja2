@@ -1,0 +1,32 @@
+{% extends "base.jinja2" %}
+
+{% block content_head %}
+    <h1>{{ _('Enroll') }}</h1>
+    <p>{{ _('Choose the course you want to enroll') }}</p>
+{% endblock %}
+
+{% block content_body %}
+    {% if classroom_list %}
+        <div class="cs-clasroom-enroll">
+            <ul class="cs-clasroom-enroll__list">
+                {% for classroom in classroom_list %}
+                    <li>
+                        <div class="cs-classroom-enroll__item mdl-shadow--4dp">
+                            <h1>{{ classroom.title }}</h1>
+                            <p>{{ classroom.short_description }}</p>
+                            <p><a class="cs-classroom-enroll__button button"
+                                  href="{{ classroom.get_absolute_url() }}">
+                                {{ _('Enroll') }}
+                                </a>
+                            </p>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <div>
+            <p>{{ _('No new classrooms to enroll :(') }}</p>
+        </div>
+    {% endif %}
+{% endblock %}

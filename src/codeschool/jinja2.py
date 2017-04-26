@@ -17,7 +17,7 @@ from wagtail.wagtailcore.templatetags.wagtailcore_tags import richtext
 from markdown import Markdown
 
 from bricks.components.data_components import Mapping
-from bricks.helpers import render, hyperlink
+from bricks.helpers import render as _render, hyperlink
 
 
 jinja2_environment = None
@@ -141,6 +141,16 @@ def dl(ctx, object, *args, **kwargs):
     return Markup(component.render(ctx['request']))
 
 
+@contextfilter
+def render(ctx, object):
+    """
+    Renders object with the bricks.render() function passing the correct
+    request object.
+    """
+
+    return _render(object, request=ctx['request'])
+
+
 @contextfunction
 def make_nav_sections(ctx, obj=None):
     """
@@ -189,6 +199,7 @@ def environment(**options):
         breadcrumbs=breadcrumbs,
         hyperlink=hyperlink,
         richtext=richtext,
+        render=render,
     )
 
     # Finalizer

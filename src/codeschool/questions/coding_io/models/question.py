@@ -8,7 +8,6 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ugettext as __
 
 from codeschool import models
-from codeschool.components.navbar import NavSection
 from codeschool.core import get_programming_language
 from codeschool.core.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch

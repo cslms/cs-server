@@ -13,15 +13,20 @@ class ClassroomQuerySet(models.PageQuerySet):
                 | user.classrooms_as_student.all()
                 | user.classrooms_as_staff.all())
 
-    def open_for_user(self, user):
+    def can_enroll(self, user):
         """
-        List of courses that the user can subscribe.
+        List of courses that the user can enroll.
         """
 
-        user_courses = self.for_user(user)
-        qs = self.filter(is_public=True, accept_subscriptions=True,
-                         live=True)
-        return qs.exclude(id__in=user_courses)
+        user_courses = self.enrolled(user)
+        qs = self.filter(is_public=True, accept_subscriptions=True, live=True)
+
+        # This works on Django 1.11
+        try:
+            return qs.difference(user_courses)
+        # Slow fallback
+        except AttributeError:
+            return qs.exclude(id__in=user_courses)
 
 
 # Fix bug on Wagtail

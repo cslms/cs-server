@@ -1,49 +1,53 @@
-import pyml
-from pyml import nav, a, p, ul, li, hyperlink
+from django.template.context_processors import static
+from django.utils.translation import ugettext as _
+
+from bricks.components.tags import a
+from bricks.tags import nav, a, p, ul, li, div, img
 
 
-class NavSection(pyml.Component):
+def navsection(title, links, href=None):
     """
-    Basic NavSection component.
+    Creates a navsection element.
+
+    Args:
+        title: Title of the nav section.
+        links: a list of links for this section.
+        href: the optional link for the title element
     """
 
-    @property
-    def title_element(self):
-        if self.href:
-            return a(self.name, cls='cs-nav__block-title',
-                     attrs=self.title_kwargs)
-        else:
-            return p(self.name, cls='cs-nav__block-title',
-                     attrs=self.title_kwargs)
+    title_cls = 'cs-nav__block-title'
+    if href:
+        title = a(class_=title_cls, href=href)[title]
+    else:
+        title = p(class_=title_cls)[title]
+    return nav(class_='cs-nav__block')[
+        title,
+        ul(class_='cs-nav__block-items')[[
+            li(elem) for elem in links
+        ]],
+    ]
 
-    def __init__(self, name, href=None, title=None, **kwargs):
-        self.links = []
-        self.name = name
-        self.title_kwargs = {k[6:]: v for k, v in kwargs.items()
-                             if k.startswith('title_')}
-        self.href = href
-        if href is not None:
-            self.title_kwargs['href'] = href
-        if title is not None:
-            self.title_kwargs['title'] = title
 
-        self.ul_element = ul(cls='cs-nav__block-items')
-        kwargs = {k: v for k, v in kwargs.items() if not k.startswith('title_')}
-        super().__init__(**kwargs)
+def navbar(sections, class_=('cs-stripes-layout__sidebar',)):
+    """
+    Construct a navbar from a list of nav sections.
+    """
 
-    def add_link(self, *args, **kwargs):
-        """
-        Adds a new link to nav section.
-        """
+    return div(class_=('cs-nav',) + tuple(class_))[
+        div(sections),
+        img(class_='cs-nav__dingbat', src='/static/img/dingbat.svg')
+    ]
 
-        link = hyperlink(*args, **kwargs)
-        self.links.append(link)
 
-    def render(self, **kwargs):
-        items = [li(x) for x in self.links]
-        dom = nav(cls='cs-nav__block')[
-            self.title_element,
-            ul(items, cls='cs-nav__block-items'),
-        ]
-        return dom.render(**kwargs)
+def navbar_page_admin(page, user, links=()):
+    """
+    Return a list of links for administrative tasks.
 
+    The default list includes just an edit page. It can be supplemented with
+    additional links.
+    """
+    pk = page.pk
+
+    return navsection(_('Settings'), (
+        a('Edit', href='/admin/pages/%s/edit/' % pk),
+    ) + tuple(links))
