@@ -1,0 +1,4 @@
+
+# Basic URLS
+urlpatterns = [
+]
