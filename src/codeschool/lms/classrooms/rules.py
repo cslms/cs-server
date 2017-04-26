@@ -11,7 +11,7 @@ def is_registered(user, classroom):
     * All registered students.
     """
     return is_staff(user, classroom) or \
-           classroom.students.filter(id=user.id).exists()
+        classroom.students.filter(id=user.id).exists()
 
 
 @rules.predicate
@@ -35,7 +35,7 @@ def is_staff(user, classroom):
     * Staff members.
     """
     return is_owner(user, classroom) or \
-           classroom.staff.filter(id=user.id).exists()
+        classroom.staff.filter(id=user.id).exists()
 
 
 @rules.predicate
@@ -45,7 +45,7 @@ def is_owner(user, classroom):
 
     * The teacher.
     """
-    return classroom.teacher == user # or classroom.owner == user
+    return classroom.teacher == user  # or classroom.owner == user
 
 
 @rules.predicate

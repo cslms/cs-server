@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='passphrase',
-            field=models.CharField(help_text='The passphrase is case-insensitive. We tolerate small typing errors.', max_length=200, verbose_name='Passphrase'),
+            field=models.CharField(
+                help_text='The passphrase is case-insensitive. We tolerate small typing errors.', max_length=200, verbose_name='Passphrase'),
         ),
     ]

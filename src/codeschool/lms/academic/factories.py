@@ -19,4 +19,3 @@ def make_cs101_discipline():
             '</ul>'
         )
     )
-

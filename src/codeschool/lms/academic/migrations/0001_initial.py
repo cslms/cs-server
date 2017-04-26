@@ -20,12 +20,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Course',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
-                ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, verbose_name='modified')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('created', model_utils.fields.AutoCreatedField(
+                    default=django.utils.timezone.now, editable=False, verbose_name='created')),
+                ('modified', model_utils.fields.AutoLastModifiedField(
+                    default=django.utils.timezone.now, editable=False, verbose_name='modified')),
                 ('name', models.CharField(max_length=100, verbose_name='name')),
-                ('slug', models.SlugField(help_text='Unique short name used on urls.', verbose_name='Short name')),
-                ('description', wagtail.wagtailcore.fields.RichTextField(blank=True, verbose_name='Description')),
+                ('slug', models.SlugField(
+                    help_text='Unique short name used on urls.', verbose_name='Short name')),
+                ('description', wagtail.wagtailcore.fields.RichTextField(
+                    blank=True, verbose_name='Description')),
             ],
             options={
                 'abstract': False,
@@ -34,12 +39,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Discipline',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
-                ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, verbose_name='modified')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('created', model_utils.fields.AutoCreatedField(
+                    default=django.utils.timezone.now, editable=False, verbose_name='created')),
+                ('modified', model_utils.fields.AutoLastModifiedField(
+                    default=django.utils.timezone.now, editable=False, verbose_name='modified')),
                 ('name', models.CharField(max_length=100, verbose_name='name')),
-                ('slug', models.SlugField(help_text='Unique short name used on urls.', verbose_name='Short name')),
-                ('description', wagtail.wagtailcore.fields.RichTextField(blank=True, verbose_name='Description')),
+                ('slug', models.SlugField(
+                    help_text='Unique short name used on urls.', verbose_name='Short name')),
+                ('description', wagtail.wagtailcore.fields.RichTextField(
+                    blank=True, verbose_name='Description')),
                 ('code', models.CharField(blank=True, max_length=50)),
                 ('since', models.DateField(blank=True, null=True)),
                 ('syllabus', wagtail.wagtailcore.fields.RichTextField(blank=True)),
@@ -53,12 +63,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Faculty',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
-                ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, editable=False, verbose_name='modified')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('created', model_utils.fields.AutoCreatedField(
+                    default=django.utils.timezone.now, editable=False, verbose_name='created')),
+                ('modified', model_utils.fields.AutoLastModifiedField(
+                    default=django.utils.timezone.now, editable=False, verbose_name='modified')),
                 ('name', models.CharField(max_length=100, verbose_name='name')),
-                ('slug', models.SlugField(help_text='Unique short name used on urls.', verbose_name='Short name')),
-                ('description', wagtail.wagtailcore.fields.RichTextField(blank=True, verbose_name='Description')),
+                ('slug', models.SlugField(
+                    help_text='Unique short name used on urls.', verbose_name='Short name')),
+                ('description', wagtail.wagtailcore.fields.RichTextField(
+                    blank=True, verbose_name='Description')),
             ],
             options={
                 'abstract': False,
@@ -67,11 +82,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='discipline',
             name='faculty',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='academic.Faculty'),
+            field=models.ForeignKey(
+                blank=True, on_delete=django.db.models.deletion.CASCADE, to='academic.Faculty'),
         ),
         migrations.AddField(
             model_name='course',
             name='faculty',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='academic.Faculty'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='academic.Faculty'),
         ),
     ]

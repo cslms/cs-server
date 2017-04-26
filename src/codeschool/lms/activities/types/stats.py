@@ -1,4 +1,5 @@
 class Stats:
+
     def get_statistics(self, user, **kwargs):
         """
         Return a dictionary with relevant statistics for activity.

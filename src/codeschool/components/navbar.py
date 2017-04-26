@@ -42,7 +42,6 @@ def navsection_page_admin(page, user, links=()):
     ) + tuple(links))
 
 
-
 def navbar(sections=None, class_=('cs-stripes-layout__sidebar',),
            admin=False, admin_links=(), admin_perms=None, user=None, page=None):
     """

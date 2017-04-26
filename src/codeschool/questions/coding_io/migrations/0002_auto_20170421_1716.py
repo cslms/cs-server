@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='codingioquestion',
             name='disabled_message',
-            field=models.TextField(blank=True, help_text='Messsage explaining why the activity was disabled.', verbose_name='Disabled message'),
+            field=models.TextField(
+                blank=True, help_text='Messsage explaining why the activity was disabled.', verbose_name='Disabled message'),
         ),
     ]

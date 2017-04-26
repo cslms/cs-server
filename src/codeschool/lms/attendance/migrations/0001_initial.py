@@ -19,7 +19,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AttendanceCheck',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('has_attended', models.BooleanField(default=bool)),
                 ('attempts', models.SmallIntegerField(default=int)),
             ],
@@ -27,7 +28,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AttendanceSheet',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('max_attempts', models.SmallIntegerField(default=3)),
                 ('expiration_minutes', models.SmallIntegerField(default=5)),
                 ('max_string_distance', models.SmallIntegerField(default=0)),
@@ -37,32 +39,38 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField()),
                 ('created', models.DateTimeField()),
                 ('expires', models.DateTimeField()),
                 ('passphrase', models.CharField(max_length=100)),
-                ('sheet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events', to='attendance.AttendanceSheet')),
+                ('sheet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                            related_name='events', to='attendance.AttendanceSheet')),
             ],
         ),
         migrations.AddField(
             model_name='attendancesheet',
             name='last_event',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='attendance.Event'),
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='attendance.Event'),
         ),
         migrations.AddField(
             model_name='attendancesheet',
             name='owner',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='attendancecheck',
             name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='attendance.Event'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='attendance.Event'),
         ),
         migrations.AddField(
             model_name='attendancecheck',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
     ]

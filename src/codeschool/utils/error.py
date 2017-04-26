@@ -2,6 +2,7 @@
 # Error handling utilities
 #
 
+
 def exception_to_json(ex):
     """
     JSON compatible representation of an exception.

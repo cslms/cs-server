@@ -1,4 +1,5 @@
 class FileLoader:
+
     def _load_post_file_data(self, file_data):
         """
         Import content from raw file data.

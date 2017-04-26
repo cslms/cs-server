@@ -28,7 +28,7 @@ def CodeschoolNameField(verbose=_('name'), max_length=100, **kwargs):  # noqa
     return CharField(verbose, max_length=max_length, **kwargs)
 
 
-def CodeschoolSlugField(verbose=_('Short name'), **kwargs): # noqa
+def CodeschoolSlugField(verbose=_('Short name'), **kwargs):  # noqa
     """
     Default parameters for the name field.
     """
@@ -38,7 +38,7 @@ def CodeschoolSlugField(verbose=_('Short name'), **kwargs): # noqa
     return SlugField(verbose, **kwargs)
 
 
-def CodeschoolDescriptionField(verbose=_('Description'), **kwargs): # noqa
+def CodeschoolDescriptionField(verbose=_('Description'), **kwargs):  # noqa
     """
     Default parameters for the name field.
     """
