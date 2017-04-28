@@ -5,7 +5,7 @@ from lazyutils import lazy
 from codeschool import models
 from codeschool.lms.activities.models import HasProgressMixin
 from codeschool.lms.activities.models.validators import grade_validator
-from pyml import p
+from bricks.html5 import p
 
 
 class Feedback(HasProgressMixin,
