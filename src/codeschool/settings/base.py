@@ -1,11 +1,5 @@
 """
 Django settings for server project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.9/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
@@ -23,6 +17,7 @@ REPO_DIR = os.path.dirname(SRC_DIR)
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = os.environ.get('CODESCHOOL_PRODUCTION', False) != 'true'
 if not DEBUG:
     ALLOWED_HOSTS = ['localhost', 'codeschool']
@@ -204,10 +199,9 @@ CELERY_RESULT_SERIALIZER = 'json'
 # Tries to detect if it is running on a test session
 
 IS_RUNNING_TESTS = (
-    'py.test' in sys.argv or
-    sys.argv[0].endswith('py.test') or
-    'test' in sys.argv or
-    os.environ.get('IS_TESTING', 'false') == 'true'
+    sys.argv[0].endswith('py.test') or sys.argv[0].endswith('pytest') or
+    os.environ.get('IS_TESTING', 'false') == 'true' or
+    'test' in sys.argv
 )
 if IS_RUNNING_TESTS:
-    print('running tests and disabling sandboxed execution')
+    print('Running tests and disabling sandboxed execution')

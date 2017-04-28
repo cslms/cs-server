@@ -1,5 +1,5 @@
 import model_reference
-import srvice
+import bricks.rpc
 from django.db import transaction
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
@@ -35,7 +35,7 @@ class ScoreBoardMixin(models.RoutablePageMixin,
             board.add_column(col)
         return board
 
-    @srvice.route(r'^score-board/$')
+    @bricks.rpc.route(r'^score-board/$')
     def serve_score_board(self, client):
         board = self.score_board()
         board.sort()

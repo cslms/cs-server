@@ -1,7 +1,7 @@
 import logging
 from difflib import Differ
 
-import srvice
+import bricks.rpc
 from annoying.functions import get_config
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
@@ -526,21 +526,6 @@ class CodingIoQuestion(Question):
         self.closed = True
         self.save()
 
-    def nav_section_for_activity(self, request):
-        url = self.get_absolute_url
-        section = NavSection(
-            __('Question'), url(), title=__('Back to question')
-        )
-        if self.rules.test(request.user, 'activities.edit_activity'):
-            section.add_link(
-                __('Edit'), self.get_admin_url(), title=__('Edit question')
-            )
-        section.add_link(
-            __('Submissions'), url('submissions'),
-            title=__('View your submissions')
-        )
-        return section
-
     # Serving pages and routing
     template = 'questions/coding_io/detail.jinja2'
     template_submissions = 'questions/coding_io/submissions.jinja2'
@@ -570,7 +555,7 @@ class CodingIoQuestion(Question):
     def serve_ajax_submission(self, client, source=None, language=None,
                               **kwargs):
         """
-        Handles student responses via AJAX and a srvice program.
+        Handles student responses via AJAX and a bricks program.
         """
 
         # User must choose language
@@ -591,7 +576,7 @@ class CodingIoQuestion(Question):
             source=source,
         )
 
-    @srvice.route(r'^placeholder/$')
+    @bricks.rpc.route(r'^placeholder/$')
     def route_placeholder(self, request, language):
         """
         Return the placeholder code for some language.

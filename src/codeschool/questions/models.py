@@ -1,4 +1,4 @@
-import srvice
+import bricks.rpc
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import mixins
@@ -94,7 +94,7 @@ class Question(models.DecoupledAdminPage,
         else:
             client.dialog(html='Your submission is on the correction queue!')
 
-    @srvice.route(r'^submit-response.api/$', name='submit-ajax')
+    @bricks.rpc.route(r'^submit-response.api/$', name='submit-ajax')
     def route_ajax_submission(self, client, **kwargs):
         return self.serve_ajax_submission(client, **kwargs)
 

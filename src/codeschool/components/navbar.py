@@ -1,8 +1,8 @@
 from django.template.context_processors import static
 from django.utils.translation import ugettext as _
 
-from bricks.components.tags import a
-from bricks.tags import nav, a, p, ul, li, div, img
+from bricks.components.html5_tags import a
+from bricks.html5 import nav, a, p, ul, li, div, img
 
 
 def navsection(title, links, href=None):

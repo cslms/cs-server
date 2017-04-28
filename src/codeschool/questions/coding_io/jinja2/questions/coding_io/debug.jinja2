@@ -35,7 +35,7 @@
     {% if page.actions %}
         {% for action in page.actions %}
             <p>
-                <button onclick="srvice('../action/', '{{ action }}')">
+                <button onclick="bricks('../action/', '{{ action }}')">
                     {{ action|replace('_', ' ')|capitalize }}
                 </button>
             </p>
