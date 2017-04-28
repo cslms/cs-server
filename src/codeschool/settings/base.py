@@ -12,6 +12,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # This is <repo>/src/codeschool/
+import sys
+
 SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
 SRC_DIR = os.path.dirname(BASE_DIR)
@@ -23,14 +25,11 @@ REPO_DIR = os.path.dirname(SRC_DIR)
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('CODESCHOOL_PRODUCTION', False) != 'true':
     DEBUG = True
-    print('Running server in DEBUG mode. Plese do *not* go to production!')
 else:
     DEBUG = False
-    print('Running server with DEBUG=False')
 
 if not DEBUG:
     ALLOWED_HOSTS = ['localhost', 'codeschool']
-
 
 # Application definition
 
@@ -66,7 +65,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -85,7 +83,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -94,7 +91,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -115,7 +111,6 @@ MEDIA_ROOT = os.path.join(COLLECT_DIR, 'media')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-
 # Django compressor
 
 COMPRESS_ENABLED = True
@@ -131,12 +126,10 @@ COMPRESS_PRECOMPILERS = [
     ('text/stylus', 'stylus < {infile} > {outfile}'),
 ]
 
-
 # Wagtail
 # http://docs.wagtail.io/en/latest/getting_started/integrating_into_django.html
 
 WAGTAIL_SITE_NAME = 'Codeschool'
-
 
 # Authentication
 
@@ -149,12 +142,10 @@ AUTHENTICATION_BACKENDS = (
 ANONYMOUS_USER_ID = 1
 AUTH_PROFILE_MODULE = 'accounts.Profile'
 
-
 # Social authentication
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_URL = '/auth/login/'
-
 
 # OAUTH keys (not working yet)
 
@@ -168,7 +159,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '9f6ba5c8721172acaf25a733c4c81a99'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_TWITTER_KEY = 'JrIVXbXZguPeUsnqcjtbQEWXH'
 SOCIAL_AUTH_TWITTER_SECRET = 'vMZjdO7DsUV8mVo46smQK2SHyhCxnXyc24gxH6J6cH08anWqHA'
-
 
 # Userena support
 
@@ -190,25 +180,23 @@ LOGIN_URL = '/auth/login/'
 LOGOUT_URL = '/auth/signout/'
 SITE_ID = 1
 
-
 # Cache framework
 
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://%s:6379/1' % os.environ.get('REDIS_SERVER', 'localhost'),
+        'LOCATION': 'redis://%s:6379/1' % os.environ.get('REDIS_SERVER',
+                                                         'localhost'),
         'OPTIONS': {
             'CLIENT_CLASS': "django_redis.client.DefaultClient",
         }
     }
 }
 
-
 # Django sessions
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
-
 
 # Celery settings
 
@@ -216,3 +204,14 @@ BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+# Tries to detect if it is running on a test session
+
+IS_RUNNING_TESTS = (
+    sys.argv[0].endswith('py.test') or
+    sys.argv[0].endswith('pytest') or
+    os.environ.get('IS_TESTING', 'false') == 'true' or 
+    'test' in sys.argv or
+)
+if IS_RUNNING_TESTS:
+    print('running tests and disabling sandboxed execution')

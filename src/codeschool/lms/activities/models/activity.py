@@ -5,7 +5,6 @@ from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool.components.navbar import NavSection
 from codeschool.lms.activities.managers.activity import ActivityManager
 from codeschool.lms.activities.meta import ActivityMeta
 from codeschool.lms.activities.models.utils import AuxiliaryClassIntrospection
@@ -15,7 +14,7 @@ logger = logging.getLogger('codeschool.lms.activities')
 ZERO = decimal.Decimal(0)
 
 
-class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
+class Activity(models.RoutablePageExt, metaclass=ActivityMeta):
     """
     Represents a gradable activity inside a course. Activities may not have an
     explicit grade, but yet may provide points to the students via the
@@ -162,25 +161,3 @@ class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
                     (self.title, user.username))
         progress = self.progress_set.for_user(user)
         return progress.submit(request, **kwargs)
-
-    def nav_sections(self, request):
-        """
-        Return a list of navigation sections for the given request.
-        """
-
-        sections = []
-        default = self.nav_section_for_activity(request)
-        if default.links:
-            sections.append(default)
-        return sections
-
-    def nav_section_for_activity(self, request):
-        """
-        Return links pertinent to the activity.
-
-        Returns:
-            A NavSection instance.
-        """
-
-        nav = NavSection(self.section_title, self.get_absolute_url())
-        return nav

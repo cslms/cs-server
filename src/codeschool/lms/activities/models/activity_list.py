@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from codeschool import mixins
 from codeschool import models, panels
 from ..types.score_map import ScoreTable, ScoreMap
+from .. import components
 
 
 class ScoreBoardMixin(models.RoutablePageMixin,
@@ -171,7 +172,8 @@ class ActivityList(ScoreBoardMixin,
     def get_context(self, request, *args, **kwargs):
         return dict(
             super().get_context(request, *args, **kwargs),
-            object_list=[obj.specific for obj in self.get_children()]
+            object_list=[obj.specific for obj in self.get_children()],
+            navbar=components.activity_list_navbar(self, request.user),
         )
 
     # Wagtail admin
@@ -326,7 +328,8 @@ class ActivitySection(ScoreBoardMixin,
     def get_context(self, request, *args, **kwargs):
         return dict(
             super().get_context(request, *args, **kwargs),
-            object_list=[obj.specific for obj in self.get_children()]
+            object_list=[obj.specific for obj in self.get_children()],
+            navbar=components.activity_section_navbar(self, request.user),
         )
 
     # Wagtail Admin

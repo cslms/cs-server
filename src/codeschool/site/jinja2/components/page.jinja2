@@ -55,50 +55,19 @@
 {# Footer component. #}
 {% macro cs_foot(user, has_data=True, cls=None) %}
     <div class="cs-foot{% if cls %} {{ cls }}{% endif %}">
-        {% if has_data %}
-            <!--div class="cs-foot__main">
-                <div>
-                    {{ caller() }}
-                </div>
-            </div-->
-        {% endif %}
+{#        {% if has_data %}#}
+{#            <div class="cs-foot__main">#}
+{#                <div>#}
+{#                    {{ caller() }}#}
+{#                </div>#}
+{#            </div>#}
+{#        {% endif %}#}
+        {{ caller() }}
 
         <div class="cs-foot__copyright">
-            <p>Copyright 2016 - <a
-                    href="http://github.com/fabiommendes/codeschool">Codeschool</a>
+            <p>Copyright 2016 - <a href="http://github.com/fabiommendes/codeschool">Codeschool</a>
             </p>
             <p>Site gerenciado por Fábio M. Mendes na UnB/Gama.</p>
         </div>
     </div>
-{% endmacro %}
-
-
-{# Nav component. #}
-{% macro cs_nav(user, cls=None) %}
-    <div class="cs-nav{% if cls %} {{ cls }}{% endif %}">
-        <div>
-            {{ caller() }}
-        </div>
-        <img class="cs-nav__dingbat" src="{{ static('img/dingbat.svg') }}">
-    </div>
-{% endmacro %}
-
-
-{# Nav block. #}
-{% macro cs_nav_section(title, links, href=None, cls=None) %}
-    <nav class="cs-nav{% if cls %} {{ cls }}{% endif %}">
-        <p class="cs-nav__block-title">
-            {% if href %}
-                <a href="{{ href }}">{{ title }}</a>
-            {% else %}
-                {{ title }}
-            {% endif %}
-        </p>
-
-        <ul class="cs-nav__block-items">
-            {% for link in links %}
-                <li>{{ link|hyperlink }}</li>
-            {% endfor %}
-        </ul>
-    </nav>
 {% endmacro %}

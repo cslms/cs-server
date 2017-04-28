@@ -23,7 +23,8 @@ class PageDetailView(DetailView):
         return self.page.get_template()
 
     def get_context_data(self, **kwargs):
-        context = self.page.get_context(self.request, *self.args, **self.kwargs)
+        context = self.page.get_context(
+            self.request, *self.args, **self.kwargs)
         context.update(kwargs)
         return context
 

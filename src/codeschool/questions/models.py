@@ -54,6 +54,15 @@ class Question(models.DecoupledAdminPage,
         )
     )
 
+    def get_navbar(self, user):
+        """
+        Returns the navbar for the given question.
+        """
+
+        from .components import navbar_question
+
+        return navbar_question(self, user)
+
     # Serve pages
     def get_submission_kwargs(self, request, kwargs):
         return {}
@@ -63,6 +72,7 @@ class Question(models.DecoupledAdminPage,
             super().get_context(request, *args, **kwargs),
             question=self,
             form_name='response-form',
+            navbar=self.get_navbar(request.user)
         )
         return context
 
@@ -77,7 +87,7 @@ class Question(models.DecoupledAdminPage,
         submission = self.submit(client.request, **kwargs)
         if submission.recycled:
             client.dialog(html='You already submitted this response!')
-        elif self.instant_autograde:
+        elif self._meta.instant_feedback:
             feedback = submission.auto_feedback()
             data = feedback.render_message()
             client.dialog(html=data)

@@ -2,7 +2,8 @@ import json
 
 from codeschool import models
 from codeschool.questions.models import QuestionSubmission
-from codeschool.utils import queryset_class, md5hash, manager_instance
+from codeschool.utils.managers import manager_instance, queryset_class
+from codeschool.utils.string import md5hash
 
 
 class CodingIoSubmissionQuerySet(queryset_class(QuestionSubmission)):

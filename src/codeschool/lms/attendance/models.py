@@ -1,59 +1,100 @@
 import collections
-
 import datetime
-from random import choice
+from types import FunctionType
 
-import editdistance as editdistance
-from django.template.loader import render_to_string
+import srvice
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+from lazyutils import delegate_to
 
 from codeschool import models
+from codeschool.types.rules import Rules
+from codeschool.utils.phrases import phrase
+from codeschool.utils.string import string_distance
 
 
 class AttendanceSheet(models.Model):
     """
-    Controls student attendance by generating a new public passphrase under 
+    Controls student attendance by generating a new public pass-phrase under
     teacher request. Students confirm attendance by typing the secret phrase
-    in a small interval. 
+    within a small interval after the teacher starts checking the attendance.
     """
 
-    max_attempts = models.SmallIntegerField(default=3)
-    expiration_minutes = models.SmallIntegerField(default=5)
+    max_attempts = models.SmallIntegerField(
+        _('Maximum number of attempts'),
+        default=3,
+        help_text=_(
+            'How many times a student can attempt to prove attendance. A '
+            'maximum is necessary to avoid a brute force attack.'
+        ),
+    )
+    expiration_minutes = models.SmallIntegerField(
+        _('Expiration time'),
+        default=5,
+        help_text=_(
+            'Time (in minutes) before attendance session expires.'
+        )
+    )
     owner = models.ForeignKey(models.User)
     last_event = models.ForeignKey('Event', blank=True, null=True)
-    max_string_distance = models.SmallIntegerField(default=0)
+    max_string_distance = models.SmallIntegerField(
+        _('Fuzzyness'),
+        default=1,
+        help_text=_(
+            'Maximum number of wrong characters that is considered acceptable '
+            'when comparing the expected passphrase with the one given by the'
+            'student.'
+        ),
+    )
     max_number_of_absence = models.IntegerField(blank=True, null=True)
 
-    @property
-    def expiration_interval(self):
-        return datetime.timedelta(minutes=self.expiration_minutes)
+    # Properties
+    expiration_interval = property(
+        lambda self: datetime.timedelta(minutes=self.expiration_minutes))
+    attendance_checks = property(
+        lambda self: AttendanceCheck.objects.filter(event__sheet=self)
+    )
 
-    @property
-    def attendance_checks(self):
-        return AttendanceCheck.objects.filter(event__sheet=self)
+    def __str__(self):
+        try:
+            return self.attendancepage_set.first().title
+        except models.ObjectDoesNotExist:
+            user = self.owner.get_full_name() or self.owner.username
+            return _('Attendance sheet (%s)' % user)
 
-    def new_event(self):
+    def new_event(self, commit=True):
         """
         Create a new event in attendance sheet.
         """
 
         current_time = now()
-        new = self.events.create(
-            passphrase=new_random_passphrase(),
+        event = Event(
+            passphrase=phrase(),
             date=current_time.date(),
             created=current_time,
-            expires=current_time + self.expiration_interval
+            expires=current_time + self.expiration_interval,
+            sheet=self,
         )
-        self.last_event = new
-        self.save(update_fields=['last_event'])
-        return new
+        self.last_event = event
+        if commit:
+            event.save()
+            self.save(update_fields=['last_event'])
+        return event
 
-    def get_today_event(self):
+    def current_passphrase(self):
         """
-        Return the last event created for today
+        Return the current passphrase.
+        """
+        return self.current_event().passphrase
+
+    def current_event(self):
+        """
+        Return the last event created for today.
+
+        If no event is found, create a new one.
         """
 
-        if self.last_event.date() == now().date():
+        if self.last_event and self.last_event.date == now().date():
             return self.last_event
         else:
             return self.new_event()
@@ -98,24 +139,6 @@ class AttendanceSheet(models.Model):
             result[user] = get_value_from_absence(absence)
         return result
 
-    def render_dialog(self, request):
-        """
-        Renders attendance dialog based on request.
-        """
-
-        context = {
-            'passphrase': self.passphrase,
-            'is_expired': self.is_expired(),
-            'minutes_left': self.minutes_left(raises=False)
-        }
-        user = request.user
-        if user == self.owner:
-            template = 'attendance/edit.jinja2'
-        else:
-            template = 'attendance/view.jinja2'
-            context['attempts'] = self.user_attempts(user)
-        return render_to_string(template, request=request, context=context)
-
     def user_attempts(self, user):
         """
         Return the number of user attempts in the last attendance event.
@@ -138,7 +161,7 @@ class AttendanceSheet(models.Model):
                 return 0.0
             else:
                 dt = self.last_event.expires - time
-                return dt.minutes
+                return dt.total_seconds() / 60.
         if raises:
             raise ValueError('last event is not defined')
         else:
@@ -153,6 +176,15 @@ class AttendanceSheet(models.Model):
             return False
         return self.last_event.expires < now()
 
+    def is_valid(self, passphrase):
+        """
+        Check if passphrase is valid.
+        """
+        if self.is_expired():
+            return False
+        distance = string_distance(passphrase, self.current_passphrase())
+        return distance <= self.max_string_distance
+
 
 class Event(models.Model):
     """
@@ -163,16 +195,27 @@ class Event(models.Model):
     date = models.DateField()
     created = models.DateTimeField()
     expires = models.DateTimeField()
-    passphrase = models.CharField(max_length=100)
+    passphrase = models.CharField(
+        _('Passphrase'),
+        max_length=200,
+        help_text=_(
+            'The passphrase is case-insensitive. We tolerate small typing '
+            'errors.'
+        ),
+    )
 
-    def update(self):
+    def update(self, commit=True):
         """
         Regenerate passphrase and increases expiration time.
         """
 
-        self.passphrase = new_random_passphrase()
+        new = self.passphrase
+        while new == self.passphrase:
+            new = phrase()
+        self.passphrase = new
         self.expires += self.sheet.expiration_interval
-        self.save()
+        if commit:
+            self.save()
 
 
 class AttendanceCheck(models.Model):
@@ -200,31 +243,91 @@ class AttendanceCheck(models.Model):
         self.save()
 
 
-def string_distance(str1, str2):
-    str1 = str1.casefold()
-    str2 = str2.casefold()
-    if str1 == str2:
-        return 0
-    else:
-        return editdistance.eval(str1, str2)
+class AttendancePage(models.DecoupledAdminPage, models.RoutablePageExt):
+    """
+    A Page object that exhibit an attendance sheet.
+    """
+
+    rules = Rules()
+
+    @property
+    def attendance_sheet(self):
+        try:
+            return self._attendance_sheet
+        except AttributeError:
+            pass
+
+        try:
+            self._attendance_sheet = self.attendance_sheet_single_list.first()
+            return self._attendance_sheet
+        except models.ObjectDoesNotExist:
+            return None
+
+    @attendance_sheet.setter
+    def attendance_sheet(self, value):
+        sheet = AttendanceSheetChild(owner=self.owner)
+        self.attendance_sheet_single_list = [sheet]
+        self._attendance_sheet = sheet
+
+    expiration_interval = delegate_to('attendance_sheet')
+    last_event = delegate_to('attendance_sheet')
+    max_attempts = delegate_to('attendance_sheet')
+    max_string_distance = delegate_to('attendance_sheet')
+
+    @classmethod
+    def _update_model(cls):
+        for k, v in vars(AttendanceSheet).items():
+            if k.startswith('_') or not isinstance(v, FunctionType):
+                continue
+            setattr(cls, k, delegate_to('attendance_sheet'))
+
+    def clean(self):
+        if self.attendance_sheet is None:
+            self.attendance_sheet = AttendanceSheet(owner=self.owner)
+        self.attendance_sheet.owner = self.attendance_sheet.owner or self.owner
+        self.title = str(self.title or _('Attendance sheet'))
+        super().clean()
+
+    def get_context(self, request, *args, **kwargs):
+        from . import forms
+
+        is_teacher = self.rules.has_perm(request.user,
+                                         'attendance.see_passphrase')
+
+        ctx = super().get_context(request)
+        ctx['is_teacher'] = is_teacher
+        ctx['attendance_sheet'] = self.attendance_sheet
+        ctx['form'] = forms.PassphraseForm() if not is_teacher else None
+        ctx['passphrase'] = self.current_passphrase() if is_teacher else None
+        ctx['is_expired'] = self.is_expired()
+        return ctx
+
+    @srvice.route(r'^check.api/$')
+    def check_presence(self, client, passphrase, **kwargs):
+        html = ('<div class="cs-attendance-dialog cs-attendance-dialog--%s">'
+                '<h1>%s</h1>'
+                '<p>%s</p>'
+                '</div>')
+
+        if self.is_valid(passphrase):
+            html = html % ('success', _('Yay!'), _('Presence confirmed!'))
+        else:
+            html = html % (
+                'failure', _('Oh oh!'),
+                _('Could not validate this passphrase :-('))
+        client.dialog(html=html)
 
 
-def new_random_passphrase():
-    return '%s %s' % (choice(PERSON), choice(ADJECTIVE))
+class AttendanceSheetChild(AttendanceSheet):
+    """
+    A attendance sheet associated with a page.
+
+    This hack is required since wagtail cannot edit sub-fields inplace. We
+    should make a patch and fix this someday. Create a InlineObjectPanel().
+    """
+
+    page = models.ParentalKey(AttendancePage,
+                              related_name='attendance_sheet_single_list')
 
 
-PERSON = [
-    # Physicists
-    'Einstein', 'Newton', 'Dirac', 'Bohr', 'Rutherford', 'Heisenberg',
-    'Curie', 'Langevin', 'Boltzmann',
-
-    # Mathematicians
-    'Pythagoras', 'Peano', 'Hilbert', 'Gauss', 'Galois',
-
-    # Computer science
-    'Knuth', 'Turing',
-]
-
-ADJECTIVE = [
-    'mal-humorado', 'pedante', 'esperto', 'manhoso',
-]
+AttendancePage._update_model()
