@@ -23,13 +23,7 @@ REPO_DIR = os.path.dirname(SRC_DIR)
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get('CODESCHOOL_PRODUCTION', False) != 'true':
-    DEBUG = True
-    print('Running server in DEBUG mode. Plese do *not* go to production!')
-else:
-    DEBUG = False
-    print('Running server with DEBUG=False')
-
+DEBUG = os.environ.get('CODESCHOOL_PRODUCTION', False) != 'true'
 if not DEBUG:
     ALLOWED_HOSTS = ['localhost', 'codeschool']
 
@@ -217,5 +211,3 @@ IS_RUNNING_TESTS = (
 )
 if IS_RUNNING_TESTS:
     print('running tests and disabling sandboxed execution')
-else:
-    print('Deu false')

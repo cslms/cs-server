@@ -81,7 +81,7 @@ setup(
 
         # Django and extensions
         'django==1.10',
-        'django-bricks>=0.1.2',
+        'django-bricks>=0.2.0',
         'django-polymorphic',
         'django-model-utils',
         'django-model-reference',
@@ -111,9 +111,6 @@ setup(
         'iospec>=0.3.16',
         'ejudge>=0.5.17',
         'boxed>=0.3.11',
-
-        # Related libraries
-        'srvice>=0.1.5',
     ],
     extras_require={
         'dev': [
