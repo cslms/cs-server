@@ -1,6 +1,8 @@
 language: python
 cache: pip
 sudo: false
+services:
+  - redis-server
 
 # Test environments
 matrix:
