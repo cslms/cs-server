@@ -1,6 +1,7 @@
 from functools import singledispatch
 
-from bricks.helpers import js_class
+from bricks.components.utils import ifset
+from bricks.helpers import js_class, join_classes
 from bricks.html5 import div, a_or_span, h1, p, aside, article, section
 from . import mdl
 
@@ -56,8 +57,9 @@ def card_container(cards, title=None, description=None, class_=None, **kwargs):
         description:
             Short description bellow title.
     """
+    lhs_aside = None
     if title:
-        cls = 'cs-card-aside__aside mdl-cell mdl-cell--3-col'
+        cls = 'cs-card-container__aside mdl-cell mdl-cell--3-col'
         lhs_aside = \
             aside(class_=cls)[
                 h1(title),
@@ -65,12 +67,13 @@ def card_container(cards, title=None, description=None, class_=None, **kwargs):
             ]
 
     ncols = 9 if title else 12
-    cls = js_class('cs-card-aside mdl-grid mdl-grid--no-spacing', class_)
+    cls = join_classes('cs-card-container mdl-grid mdl-grid--no-spacing',
+                       class_)
     return \
         section(class_=cls)[
-            title and lhs_aside,
+            ifset(title, lhs_aside),
 
-            article(class_='mdl-cell mdl-cell--%-col' % ncols)[
+            article(class_='mdl-cell mdl-cell--%s-col' % ncols)[
                 div(class_='cs-card-aside__content mdl-grid')[
                     cards,
                 ]

@@ -12148,7 +12148,7 @@ code {
     text-align: center; }
     .cs-card__icon {
       margin-right: inherit; } }
-.cs-card-aside__aside {
+.cs-card-container__aside {
   padding: 12px;
   padding-left: 40px; }
 
