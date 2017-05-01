@@ -1,76 +1,13 @@
 import model_reference
-import bricks.rpc
 from django.db import transaction
-from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import mixins
 from codeschool import models, panels
-from ..types.score_map import ScoreTable, ScoreMap
-from .. import components
-
-
-class ScoreBoardMixin(models.RoutablePageMixin,
-                      models.Page):
-    """
-    Basic ScoreBoard functionality.
-    """
-
-    class Meta:
-        abstract = True
-
-    def score_board(self, info=None):
-        """
-        Return a ScoreTable object with the grades of all students from the
-        sub-page activities.
-        """
-
-        info = info or 'points'
-        if info not in ['points', 'grade', 'stars', 'score']:
-            raise ValueError('invalid info: %r' % info)
-
-        board = ScoreTable(name=self.title)
-        for page in self.get_children():
-            col = page.specific.score_board(info=info)
-            board.add_column(col)
-        return board
-
-    @bricks.rpc.route(r'^score-board/$')
-    def serve_score_board(self, client):
-        board = self.score_board()
-        board.sort()
-        board.add_total('total', method='sum')
-        client.dialog(html=str(board))
-
-    @models.route(r'^score-board[\.]csv/$')
-    def serve_score_board_csv(self, request):
-        board = self.score_board()
-        board.sort()
-        board.add_total('total', method='sum')
-        return HttpResponse(board.to_csv())
-
-
-class ActivityListQuerySet(models.PageQuerySet):
-
-    def create_subpage(self, parent, **kwargs):
-        """
-        Return a new page as a child of the given parent page.
-        """
-
-        return self.model.create_subpage(parent, **kwargs)
-
-
-class _ActivityListManager(models.PageManager):
-
-    def main(self):
-        """
-        Return the main ActivityList for the website.
-        """
-
-        return model_reference.load('root-page', model=ActivityList)
-
-
-ActivityListManager = _ActivityListManager.from_queryset(ActivityListQuerySet)
+from codeschool.lms.activities import components
+from codeschool.lms.activity_lists.managers import ActivitySectionManager
+from codeschool.lms.activity_lists.mixins import ScoreBoardMixin
+from .score_map import ScoreTable, ScoreMap
 
 
 class ActivityList(ScoreBoardMixin,
@@ -83,6 +20,7 @@ class ActivityList(ScoreBoardMixin,
     class Meta:
         verbose_name = _('list of activities')
         verbose_name_plural = _('lists of activities')
+        app_label = 'activities'
 
     BEGINNER_SECTIONS = [
         'basic', 'conditionals', 'loops', 'functions', 'files', 'lists'
@@ -190,13 +128,14 @@ class ActivitySection(ScoreBoardMixin,
     class Meta:
         verbose_name = _('section')
         verbose_name_plural = _('sections')
+        app_label = 'activities'
 
     material_icon = models.CharField(
         _('Optional icon'),
         max_length=20,
         default='help',
     )
-    objects = ActivityListManager()
+    objects = ActivitySectionManager()
 
     @property
     def activities(self):

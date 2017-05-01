@@ -483,8 +483,8 @@ class CodingIoQuestion(Question):
             return qs.get().source
         return ''
 
-    def get_submission_kwargs(self, request, kwargs):
-        return dict(language=kwargs['language'], source=kwargs['source'])
+    def filter_user_submission_payload(self, request, payload):
+        return dict(language=payload['language'], source=payload['source'])
 
     # Access answer key queryset
     def answers_with_code(self):

@@ -8,7 +8,6 @@ from codeschool import models
 from codeschool import panels
 from codeschool.questions.models import Question, QuestionFeedback, \
     QuestionSubmission, QuestionProgress
-from codeschool.utils import md5hash
 
 
 class MultipleChoiceQuestion(Question):
@@ -48,8 +47,8 @@ class MultipleChoiceQuestion(Question):
         ctx['choices'] = self.choices.all()
         return ctx
 
-    def get_submission_kwargs(self, request, kwargs):
-        choice_id = kwargs['choices']
+    def filter_user_submission_payload(self, request, payload):
+        choice_id = payload['choices']
         return {'choice_id': choice_id}
 
     # Wagtail admin
@@ -90,9 +89,6 @@ class MultipleChoiceProgress(QuestionProgress):
 
 class MultipleChoiceSubmission(QuestionSubmission):
     choice_id = models.CharField(max_length=32)
-
-    def compute_hash(self):
-        return md5hash(self.choice_id)
 
 
 class MultipleChoiceFeedback(QuestionFeedback):

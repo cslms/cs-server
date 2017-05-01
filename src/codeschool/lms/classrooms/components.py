@@ -3,7 +3,7 @@ import rules
 from django.utils.translation import ugettext as _
 
 from bricks.components.html5_tags import a
-from codeschool.components.navbar import navsection_page_admin, navsection, navbar
+from codeschool.components.navigation import navsection_page_admin, navsection, navbar
 
 
 def navsection_classroom_common(page, user):
