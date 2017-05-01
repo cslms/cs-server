@@ -44,3 +44,16 @@ class TestCards:
         print(html)
         assert '<aside' not in html
         assert 'mdl-cell--12-col' in html
+
+
+class TestNavbar:
+    """
+    Test the navbar components.
+    """
+
+
+class TestNavigationComponents:
+    """
+    Test the cs-head and cs-foot components.
+    """
+

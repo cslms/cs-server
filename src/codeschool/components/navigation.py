@@ -92,7 +92,7 @@ def navbar(sections=None, class_=('cs-stripes-layout__sidebar',),
 #
 # Foot component
 #
-def footer(children=None, class_=None, **kwargs):
+def footer(class_=None, **kwargs):
     """
     Renders the default foot element.
     """
@@ -100,7 +100,6 @@ def footer(children=None, class_=None, **kwargs):
     class_ = join_classes('cs-foot', class_)
     return \
         div(class_=class_, **kwargs)[
-            children,
             div(class_="cs-foot__copyright")[
                 p([
                     'Copyright 2016 - ',
@@ -117,6 +116,13 @@ def footer(children=None, class_=None, **kwargs):
 def head(links=None, user=None, class_=None, **kwargs):
     """
     Renders the default head element.
+
+    Args:
+        links:
+            A list of hyperlinks that enter the main navigation area.
+        user:
+            The user requesting the page. The user name is used to set the
+            fab button icon.
     """
 
     fabletter = None
@@ -168,7 +174,7 @@ def _head_script():
     return \
         script()[
             """
-            $('.cs-head.cs-head--links').click(function () {
+            $('.cs-head--links').click(function () {
                 var nav = this;
 
                 if (nav.style.display === 'none' || nav.style.display === '') {
