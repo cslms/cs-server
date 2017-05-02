@@ -7,8 +7,7 @@ FROM pythonboilerplate/python3:latest
 
 # Install apt dependencies and locale
 
-RUN locale-gen pt_BR.UTF-8 \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests -y \
     \
     # Locales and basic services
@@ -39,9 +38,12 @@ RUN locale-gen pt_BR.UTF-8 \
             python3-numpy \
     \
     # Clean apt cache
-    # rm -rf /var/lib/apt/lists/*
-    && echo "FIXME: Skipping apt cache clean until deps are stable"
-
+    # rm -rf /var/lib/apt/lists/* \
+    && echo "FIXME: Skipping apt cache clean until deps are stable" \
+    \
+    # Generate locales
+    && locale-gen pt_BR.UTF-8
+    
 
 # Install important deps with pip. This prevents hitting cache too frequently
 # due to changes in the package dependencies.
