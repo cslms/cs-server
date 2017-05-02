@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
 # Nginx proxy server. It will serve static files and redirect all other
 # requests to the Django Codeschool application. Both containers communicate
@@ -20,7 +20,7 @@ services:
 # Codeschool app serves the dynamic pages. It has to communicate with the
 # underlying services using the default ports.
     webapp:
-        image: "cslms/codeschool:${TAG}"
+        image: "cslms/codeschool:${TAG-latest}"
         container_name: codeschool-app
         volumes:
             - ./collect/media/:/app/collect/media/

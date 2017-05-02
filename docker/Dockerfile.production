@@ -123,7 +123,7 @@ COPY ["setup.py", "requirements.txt", "/app/"]
 RUN echo "README" > README.rst \
     && echo "0.1.0" > VERSION \
     && pip3 install -e . \
-    && pip3 install html5lib==0.9999999
+    && pip3 install html5lib==0.999999999
 
 
 # Copy files and data
