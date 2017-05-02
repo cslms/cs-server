@@ -81,7 +81,7 @@ setup(
 
         # Django and extensions
         'django==1.10',
-        'django-bricks>=0.2.0',
+        'django-bricks>=0.2.2',
         'django-polymorphic',
         'django-model-utils',
         'django-model-reference',

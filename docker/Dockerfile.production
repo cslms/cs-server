@@ -138,5 +138,5 @@ COPY src/ /app/src/
 
 # Set volumes
 
-VOLUME ["/app/db/", "/var/www/media/", "/sock/"]
+VOLUME ["/app/db/", "/app/log/", ""/var/www/media/", "/sock/"]
 CMD python3 manage.py runserver
