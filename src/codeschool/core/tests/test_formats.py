@@ -4,17 +4,20 @@ from codeschool.core import get_programming_language
 from codeschool.core.models import ProgrammingLanguage
 
 
+@pytest.mark.integration
 def test_get_language_support_most_common_languages(db):
     assert get_programming_language('python').name == 'Python 3.5'
     assert get_programming_language('python2').name == 'Python 2.7'
 
 
+@pytest.mark.integration
 def test_c_language_aliases(db):
     lang = get_programming_language
     assert lang('c') == lang('gcc')
     assert lang('cpp') == lang('g++')
 
 
+@pytest.mark.integration
 def test_new_unsupported_language(db):
     # Explicit mode
     with pytest.raises(ProgrammingLanguage.DoesNotExist):
