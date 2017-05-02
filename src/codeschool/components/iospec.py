@@ -1,13 +1,10 @@
 """
-Iospec renderers
+Iospec renderers.
 """
-from collections import Mapping
 
 from django.utils.translation import ugettext as _
 
-from bricks.components import BaseComponent
 from bricks.components.html5_tags import span
-from bricks.helpers import join_classes
 from bricks.html5 import div, br, code
 from codeschool.components.utils import with_class, tag_join
 from iospec import In
@@ -37,13 +34,13 @@ def testcase_to_html(testcase, **kwargs):
     return \
         div(**kwargs)[
             code()[
-                map(atom_to_html, testcase)
+                [atom_to_html(x) for x in testcase]
             ]
         ]
 
 
 def atom_to_html(atom):
-    class_ = ['iospec-atom', 'iospec-atom--%s' % type(atom).lower()]
+    class_ = ['iospec-atom', 'iospec-atom--%s' % type(atom).__name__.lower()]
     tag = span(str(atom), class_=class_)
     if isinstance(atom, In):
         return [tag, br()]

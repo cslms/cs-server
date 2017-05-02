@@ -1,4 +1,5 @@
 from collections import Mapping
+from functools import singledispatch
 
 from bricks.components import BaseComponent
 from bricks.components.html5_tags import br
@@ -28,7 +29,11 @@ def with_class(obj, *classes):
         <div class="foo bar">data</div>
     """
 
-    if isinstance(obj, Mapping):
+    if isinstance(obj, BaseComponent):
+        obj.classes = join_classes(classes, obj.classes)
+        return obj
+
+    elif isinstance(obj, Mapping):
         class_ = obj.get('class_', None)
         obj['class_'] = join_classes(classes, class_)
         return obj
@@ -42,10 +47,6 @@ def with_class(obj, *classes):
             return with_class(result, *classes)
 
         return decorated
-
-    elif isinstance(obj, BaseComponent):
-        obj.classes = join_classes(classes, obj.classes)
-        return obj
 
     else:
         def decorator(func):
@@ -75,3 +76,15 @@ def tag_join(seq, tag=None):
         result.append(tag)
     result.pop()
     return result
+
+
+@singledispatch
+def title(obj):
+    """
+    Return a title string for object.
+    """
+
+    try:
+        return obj.title
+    except AttributeError:
+        return str(obj)

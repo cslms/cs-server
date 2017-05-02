@@ -1,75 +1,76 @@
 from functools import singledispatch
 
-from bricks.contrib.mdl import div, span, icon
+from django.utils.translation import ugettext as _
+
+from bricks.contrib import mdl
 from bricks.helpers import join_classes
-from bricks.html5 import h3, dl, dt, dd
+from bricks.html5 import h3, dl, dt, dd, span, div
+from codeschool.components.utils import with_class, title
 from codeschool.lms.activities.models import Submission
 
 
-@singledispatch
-def title(obj):
-    """
-    Return a title string for object.
-    """
-
-    try:
-        return obj.title
-    except AttributeError:
-        return str(obj)
-
-
 @title.register(Submission)
-def _(x):
+def __(x):
     return x.get_feedback_title()
 
 
-def submission(submission, class_=None):
+@with_class('cs-submission')
+def submission(sub, hidden=True, **kwargs):
     """
     Display a submission object.
     """
-
-    class_ = join_classes(class_, 'cs-submission')
     return \
-        div(class_=class_, shadow=4)[
-            submission_title(submission),
-            submission_body(submission),
+        mdl.div(shadow=4, **kwargs)[
+            submission_title(sub),
+            submission_body(sub, hidden=hidden),
         ]
 
 
-@singledispatch
-def submission_title(submission):
+def submission_title(sub):
     return \
         h3(class_='cs-submission__title')[
-            span(title(submission)),
+            span(title(sub)),
             span(class_="cs-submission__title-handle",
                  onclick="expandSubmission(this.parentNode.parentNode)")[
-                icon('menu'),
+                mdl.icon('menu'),
             ],
         ],
 
 
 @singledispatch
-def submission_body(submission, hidden=True):
+def submission_body(sub, hidden=True):
     class_ = join_classes('cs-submission__content', hidden and 'hidden')
-    grade = (int(submission.final_grade_pc)
-             if submission.has_feedback else _('Not given'))
+    grade = str(int(sub.final_grade_pc or 0)
+                if sub.has_feedback else _('Not given'))
 
     # Collect submission data
     sub_data_title = h3(_('Submission data'), class_="banner")
-    sub_data = submission_data(submission)
-    sub_data = sub_data and [submission_title, sub_data]
+    sub_data = submission_data(sub)
+    sub_data = \
+        sub_data and \
+        div('cs-submission__data')[
+            submission_title,
+            sub_data,
+        ]
 
     return \
         div(class_=class_)[
-            str(submission),
-            h3(_('Details'), class_='banner'),
-            dl()[
-                dt(_('Grade')),
-                dd(grade),
-                dt(_('Date of submission')),
-                dd(submission.created),
+            div(class_='cs-submission__description')[
+                str(sub),
+
             ],
-            sub_data
+
+            div(class_='cs-submission__detail')[
+                h3(_('Details'), class_='banner'),
+                dl()[
+                    dt(_('Grade')),
+                    dd(grade),
+                    dt(_('Date of submission')),
+                    dd(str(sub.created)),
+                ],
+            ],
+
+            sub_data,
         ]
 
 
@@ -80,8 +81,8 @@ def submission_data(submission):
 
 submission_script = """
 function expandSubmission(obj) {
-    var expandable = $(obj).find('.expandable');
-    if (expandable[0].classList.contains('hidden')) {
+    var expandable = $(obj).find('.cs-submission__content');
+    if (expandable.length && expandable[0].classList.contains('hidden')) {
         expandable.removeClass('hidden').hide().show(200);
     } else {
         expandable.hide(200);

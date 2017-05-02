@@ -37,6 +37,7 @@ if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
     urlpatterns += [
         url(r'^_admin/', django.contrib.admin.site.urls),
         url(r'^_debug/', include('codeschool.core.urls')),
+        url(r'^_components/', include('codeschool.components.urls')),
     ]
 
 # Optional "social" urls

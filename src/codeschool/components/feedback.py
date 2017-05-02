@@ -6,6 +6,8 @@ CONGRATULATIONS = _('Congratulations! Your answer is correct!')
 
 
 def feedback(feedback):
+    raise NotImplementedError
+
     if feedback.is_correct:
         return \
             div(class_='cs-feedback')[

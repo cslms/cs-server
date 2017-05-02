@@ -7,7 +7,7 @@ from . import mdl
 
 
 @singledispatch
-def simple_card(text, title=None, href=None, icon='help', faded=False,
+def simple_card(title, text=None, href=None, icon='help', faded=False,
                 onclick=None,
                 id=None, class_=None):
     """
@@ -17,10 +17,10 @@ def simple_card(text, title=None, href=None, icon='help', faded=False,
     different implementations for specific models/types.
 
     Args:
-        text:
-            Card description and main content.
         title:
             Card title.
+        text:
+            Card description and main content.
         href:
             Optional address for the class icon.
         icon:

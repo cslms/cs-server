@@ -5,10 +5,11 @@
 FROM pythonboilerplate/python3:latest
 
 
-# Install apt dependencies
+# Install apt dependencies and locale
 
-RUN apt-get update &&\
-    apt-get install --no-install-recommends --no-install-suggests -y \
+RUN locale-gen pt_BR.UTF-8 \
+    && apt-get update \
+    && apt-get install --no-install-recommends --no-install-suggests -y \
     \
     # Compilers and languages for the e-judge
             build-essential \
@@ -32,11 +33,11 @@ RUN apt-get update &&\
             python3-pillow \
             python3-psutil \
             python3-pexpect \
-            python3-numpy &&\
+            python3-numpy \
     \
     # Clean apt cache
     # rm -rf /var/lib/apt/lists/*
-    echo "FIXME: Skipping apt cache clean until deps are stable"
+    && echo "FIXME: Skipping apt cache clean until deps are stable"
 
 
 # Install important deps with pip. This prevents hitting cache too frequently
@@ -56,18 +57,17 @@ RUN pip3 install \
             bleach \
             pygeneric \
             srvice \
-            jinja2
-
-
-# E-judge support
-RUN pip3 install \
+            jinja2 \
+    \
+    # E-judge support
+    && pip3 install \
             markio \
             iospec \
             ejudge \
-            boxed
-
-# Django deps
-RUN pip3 install \
+            boxed \
+    \
+    # Django deps
+    && pip3 install \
             django==1.10 \
             wagtail==1.9 \
             wagtail-model-tools \
@@ -79,10 +79,10 @@ RUN pip3 install \
             django-userena \
             django-polymorphic \
             django-guardian>=1.4.6 \
-            django-model-reference
-
-# Extra dependencies for additional language support
-RUN pip3 install \
+            django-model-reference \
+    \
+    # Extra dependencies for additional language support
+    && pip3 install \
             pytuga
 
 
@@ -94,10 +94,10 @@ RUN pip3 install \
 # misses due to trivial and unimportant changes.
 
 COPY ["setup.py", "requirements.txt", "/app/"]
-RUN echo "README" > README.rst &&\
-    echo "0.1.0" > VERSION &&\
-    pip3 install -e . &&\
-    pip3 install html5lib==0.9999999
+RUN echo "README" > README.rst \
+    && echo "0.1.0" > VERSION \
+    && pip3 install -e . \
+    && pip3 install html5lib==0.9999999
 
 
 # Copy files and data
@@ -119,9 +119,13 @@ COPY src/ /app/src/
 
 # Set variables and volumes
 
+
 ENV WSGI_APPLICATION=codeschool.wsgi \
     MEDIA_FOLDER=/var/www/media \
     CODESCHOOL_PRODUCTION=true \
-    PYTHONPATH=src
+    PYTHONPATH=src \
+    ENV LANG pt_BR.UTF-8 \
+    ENV LANGUAGE pt_BR:pt \
+    ENV LC_ALL pt_BR.UTF-8
 VOLUME ["/app/db/", "/var/www/media/", "/sock/"]
 CMD python3 manage.py runserver
