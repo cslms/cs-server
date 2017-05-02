@@ -12,9 +12,11 @@ def question_42(db):
 def test_make_numeric_question(db):
     make_numeric_question()
 
+
 def test_make_numeric_question_fuzzy(db):
     question = make_numeric_question_fuzzy()
     assert question.title == 'Pie'
+
 
 def test_correct_submission(rf, question_42, user):
     request = rf.get(question_42.url)
@@ -22,6 +24,7 @@ def test_correct_submission(rf, question_42, user):
     submission = question_42.submit(request, value=42)
     feedback = submission.auto_feedback()
     assert feedback.is_correct
+
 
 def test_wrong_submission(rf, question_42, user):
     request = rf.get(question_42.url)
