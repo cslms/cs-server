@@ -49,7 +49,7 @@ def birthday(age=None):
     return dt.date(year, 1, 1) + dt.timedelta(days=day)
 
 
-def make_user(username, email, password, update=False, **kwargs):
+def make_user(username, email, password, update=False, commit=True, **kwargs):
     """
     Creates a user and sets its password.
 
@@ -66,7 +66,7 @@ def make_user(username, email, password, update=False, **kwargs):
     user = models.User(username=username, email=email, **user_kwargs)
     user.set_password(password)
     try:
-        user.save()
+        user.save(commit=commit)
     except IntegrityError:
         if not update:
             raise
