@@ -4,6 +4,7 @@ from codeschool.models import Page
 from codeschool.core import models, get_wagtail_root
 
 
+@pytest.mark.integration
 def test_wagtail_root(db):
     root = get_wagtail_root()
     assert isinstance(root, Page)

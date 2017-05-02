@@ -27,29 +27,35 @@ def hello_world_question(root):
     return make_hello_world_question(root)
 
 
+@pytest.mark.integration
 def test_hello_world_submissions(hello_world_question, joe_user):
     from codeschool.questions.coding_io.factories import make_hello_world_submissions
     sub1, sub2 = make_hello_world_submissions(hello_world_question, joe_user)
 
 
+@pytest.mark.integration
 def test_create_yoda(db):
     yoda = make_yoda_teacher()
     assert yoda.profile
     assert yoda.profile.age == 900
 
 
+@pytest.mark.integration
 def test_create_teachers(db):
     teachers = make_teachers()
 
 
+@pytest.mark.integration
 def test_create_students(db):
     students = make_students(5)
 
 
+@pytest.mark.integration
 def test_create_standard_activities(db):
     make_basic_activities()
 
 
+@pytest.mark.integration
 def test_create_basic_coding_io_questions(db):
     parent = get_wagtail_root_page()
     from codeschool.questions.coding_io.factories import \
@@ -58,6 +64,7 @@ def test_create_basic_coding_io_questions(db):
     make_question_from_markio_example('simple.md', parent)
 
 
+@pytest.mark.integration
 def test_basic_coding_io_can_expand_tests(hello_world_question):
     question = hello_world_question
     pre = question.get_expanded_pre_tests()
@@ -66,6 +73,7 @@ def test_basic_coding_io_can_expand_tests(hello_world_question):
     assert pre == post
 
 
+@pytest.mark.integration
 def test_consecutive_submissions_recycle(db, hello_world_question, user,
                                          request_with_user):
     qst = hello_world_question
@@ -81,6 +89,7 @@ def test_consecutive_submissions_recycle(db, hello_world_question, user,
     assert sub2.num_recycles == 1
 
 
+@pytest.mark.integration
 def test_can_send_submission_and_autograde(db, hello_world_question, user,
                                            request_with_user):
     submission = hello_world_question.submit(
@@ -91,6 +100,7 @@ def test_can_send_submission_and_autograde(db, hello_world_question, user,
 
 # Optional apps
 if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
+    @pytest.mark.integration
     def test_create_course(db, yoda_teacher):
         from codeschool.lms.courses.factories import make_cs101_course
 

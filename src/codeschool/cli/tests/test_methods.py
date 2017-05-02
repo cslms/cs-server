@@ -26,6 +26,7 @@ def question_root(db, auth):
     return sub_page
 
 
+@pytest.mark.integration
 def test_push_resource_worker(question_root, auth):
     data = markio_example('fibonacci.md')
     user, password = auth
