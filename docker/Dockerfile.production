@@ -104,6 +104,13 @@ RUN pip3 install \
     && pip3 install \
             pytuga
 
+# Python dev packages
+
+RUN apt-get install --no-install-recommends --no-install-suggests -y \
+            python3-dev \
+    \
+    # Install PyPI packages that requires compilation
+    && pip3 install editdistance
 
 # Install Python dependencies. The list above is just a list of deps that are
 # very unlikely to change. We still have to update with the latest changes in
