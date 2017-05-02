@@ -124,8 +124,8 @@ ENV WSGI_APPLICATION=codeschool.wsgi \
     MEDIA_FOLDER=/var/www/media \
     CODESCHOOL_PRODUCTION=true \
     PYTHONPATH=src \
-    ENV LANG pt_BR.UTF-8 \
-    ENV LANGUAGE pt_BR:pt \
-    ENV LC_ALL pt_BR.UTF-8
+    LANG=pt_BR.UTF-8 \
+    LANGUAGE=pt_BR:pt \
+    LC_ALL=pt_BR.UTF-8
 VOLUME ["/app/db/", "/var/www/media/", "/sock/"]
 CMD python3 manage.py runserver

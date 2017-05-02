@@ -10,6 +10,41 @@ ns.add_collection(django)
 sys.path += ['src']
 
 
+#
+# Convenience
+#
+@task
+def develop(ctx):
+    """
+    Prepares environment for development.
+    """
+
+    # Install [dev]
+    print('Installing Python dev dependencies...')
+    ctx.run('pip install .[dev] -r requirements.txt')
+
+    # Js configurations
+    js.install()
+    print()
+    js.build()
+
+    # Run manage.py commands
+    # django_manage('makemigrations')
+    # django_manage('migrate')
+    # createsuperuser(ctx)
+
+
+@task
+def run(ctx):
+    """
+    Runs the development server.
+    """
+    ctx.run('python manage.py runserver', pty=True)
+
+
+#
+# Translations
+#
 @task
 def makemessages(ctx):
     """
@@ -42,32 +77,15 @@ def compilemessages(ctx):
     ctx.run(' '.join(cmd), echo=True, pty=True)
 
 
-@task
-def develop(ctx):
-    """
-    Prepares environment for development.
-    """
-
-    # Install [dev]
-    print('Installing Python dev dependencies...')
-    ctx.run('pip install .[dev] -r requirements.txt')
-
-    # Js configurations
-    js.install()
-    print()
-    js.build()
-
-    # Run manage.py commands
-    # django_manage('makemigrations')
-    # django_manage('migrate')
-    # createsuperuser(ctx)
-
-
+#
+# Docker
+#
 @task
 def docker_build(ctx, rebuild_static=False):
     if rebuild_static:
         ctx.run('tar czpf static.tar.gz collect/static/')
-    ctx.run('docker build -t codeschool:deploy .', pty=True)
+    ctx.run('docker build -f docker/Dockerfile.production '
+            '-t codeschool:deploy .', pty=True)
 
 
 @task
@@ -104,6 +122,9 @@ def docker_run(ctx, deploy=False, shell=False):
         run(cmd.format(port=8080, **kwargs))
 
 
+#
+# Redis
+#
 def is_redis_running(port=None):
     """
     Check if redis is running in the given port.
