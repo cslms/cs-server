@@ -85,7 +85,7 @@ def docker_build(ctx, rebuild_static=False):
     if rebuild_static:
         ctx.run('tar czpf static.tar.gz collect/static/')
     ctx.run('docker build -f docker/Dockerfile.production '
-            '-t codeschool:deploy .', pty=True)
+            '-t cslms/codeschool .', pty=True)
 
 
 @task

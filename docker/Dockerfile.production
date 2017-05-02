@@ -11,6 +11,9 @@ RUN locale-gen pt_BR.UTF-8 \
     && apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests -y \
     \
+    # Locales and basic services
+            locales \
+    \
     # Compilers and languages for the e-judge
             build-essential \
             gcc \
