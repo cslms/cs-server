@@ -13,9 +13,9 @@ class TestCards:
                 simple_card('text2', 'title2'), ]
 
     def test_simple_card(self):
-        card = simple_card('My card.', 'Title')
+        card = simple_card('Title', 'My card.')
         html = str(card)
-        assert '>Title</h1>' in html
+        assert 'Title' in html
         assert '<p>My card.</p>' in html
 
     def test_simple_card_dispatch(self):
@@ -24,7 +24,7 @@ class TestCards:
 
         @simple_card.register(Foo)
         def _(foo, **kwargs):
-            return simple_card('Foo is bar.', 'Foo')
+            return simple_card('Foo', 'Foo is bar.')
 
         html = str(simple_card(Foo()))
         assert '>Foo</h1>' in html
