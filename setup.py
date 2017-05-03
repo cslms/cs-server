@@ -67,7 +67,7 @@ setup(
         'python-markdown-math',
         'html5lib==0.999999999',
         'bleach==2.0.0',
-        'fake-factory',
+        'Faker',
         'factory-boy',
         'mommys_boy',
         'celery[redis]',
@@ -100,7 +100,7 @@ setup(
         'werkzeug',
 
         # Wagtail
-        'wagtail>=1.9',
+        'wagtail~=1.9',
         'wagtail-model-tools>=0.1.4',
 
         # Jinja support
