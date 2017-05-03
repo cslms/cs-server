@@ -7,8 +7,8 @@ FROM codeschool:latest
 
 # Install additional dev dependencies
 
-RUN apt-get update &&\
-    apt-get install --no-install-recommends --no-install-suggests -y \
+RUN apt-get update \
+    && apt-get install --no-install-recommends --no-install-suggests -y \
     # Services
         redis-server \
     \
@@ -19,7 +19,7 @@ RUN apt-get update &&\
         python3-selenium \
     \
     # Clean apt cache
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 
 # Install important deps with pip. This prevents hitting cache too frequently
@@ -47,10 +47,10 @@ RUN pip3 install \
 # misses due to trivial and unimportant changes.
 
 COPY ["setup.py", "requirements.txt", "/app/"]
-RUN echo "README" > README.rst &&\
-    echo "0.1.0" > VERSION &&\
-    pip3 install -e .[dev] &&\
-    pip3 install html5lib==0.9999999
+RUN echo "README" > README.rst \
+    && echo "0.1.0" > VERSION \
+    && pip3 install -e .[dev] \
+    && pip3 install html5lib==0.9999999
 
 
 # During testing, we want to keep the most up-to-date with the current codebase.

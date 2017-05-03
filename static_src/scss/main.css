@@ -10189,7 +10189,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 .mdl-shadow--4dp {
   box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2); }
 
-.mdl-shadow--6dp {
+.mdl-shadow--6dp, .cs-attendance__passphrase, .cs-attendance__formbox {
   box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.2); }
 
 .mdl-shadow--8dp {
@@ -12148,7 +12148,7 @@ code {
     text-align: center; }
     .cs-card__icon {
       margin-right: inherit; } }
-.cs-card-aside__aside {
+.cs-card-container__aside {
   padding: 12px;
   padding-left: 40px; }
 
@@ -12163,6 +12163,45 @@ code {
 @media only screen and (min-width: 480px) {
   .cs-banner {
     margin-left: -40px; } }
+.cs-submission__title {
+  padding: 5px;
+  background: #eee;
+  color: #333;
+  font-family: "Amatic SC", cursive;
+  font-weight: bold;
+  position: relative; }
+.cs-submission__title-handle {
+  position: absolute;
+  right: 12px; }
+.cs-submission__content {
+  padding: 12px; }
+.cs-submission__description {
+  padding-bottom: 20px; }
+.cs-submission__detail h3 {
+  margin-bottom: 5px; }
+.cs-submission__detail dl {
+  margin-top: 5px; }
+
+.cs-attendance__passphrase {
+  position: relative;
+  font-family: Roboto, Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  padding: 40px 20px;
+  margin: 20px;
+  text-align: center;
+  background-color: #eee; }
+  .cs-attendance__passphrase * {
+    font-size: 2em;
+    line-height: 1.5; }
+  .cs-attendance__passphrase > a {
+    position: absolute;
+    top: 5px;
+    right: 12px;
+    color: #999;
+    font-size: 0.9em; }
+.cs-attendance__formbox {
+  padding: 40px 20px;
+  margin-top: 20px 0; }
+
 .cs-stripes-layout {
   margin: 0;
   width: 100%; }

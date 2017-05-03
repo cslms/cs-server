@@ -9,6 +9,7 @@ from codeschool.lms.activities.factories import make_basic_activities
 from codeschool.accounts.factories import make_yoda_teacher, make_teachers, \
     make_students, make_joe_user
 
+pytestmark = pytest.mark.integration
 
 # Tests
 joe_user = model_fixture(make_joe_user)
@@ -72,6 +73,10 @@ def test_consecutive_submissions_recycle(db, hello_world_question, user,
                       language='python')
     sub2 = qst.submit(request_with_user, source='print("hello")',
                       language='python')
+
+    hash = sub1.compute_hash()
+    assert sub1.hash == hash
+    assert sub1.hash == sub2.hash
     assert sub1.id == sub2.id
     assert sub2.num_recycles == 1
 

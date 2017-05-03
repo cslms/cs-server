@@ -5,6 +5,7 @@ from codeschool import models
 
 
 class ProgressQuerySet(models.PolymorphicQuerySet):
+
     def _get_activity(self, activity):
         # Fetch activity from related manager. This makes it usable from a
         # queryset related to an activity without having to explicitly pass the
@@ -128,4 +129,5 @@ class ProgressQuerySet(models.PolymorphicQuerySet):
 
 
 ProgressManager = \
-    models.PolymorphicManager.from_queryset(ProgressQuerySet, 'ProgressManager')
+    models.PolymorphicManager.from_queryset(
+        ProgressQuerySet, 'ProgressManager')

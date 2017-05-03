@@ -4,13 +4,15 @@ from decimal import Decimal
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool.lms.activities.managers.progress import ProgressManager
-from codeschool.utils import get_ip
+from codeschool.utils.request import get_ip
+from .mixins import CommitMixin
+from ..managers.progress import ProgressManager
 
 logger = logging.getLogger('codeschool.lms.activities')
 
 
-class Progress(models.CopyMixin,
+class Progress(CommitMixin,
+               models.CopyMixin,
                models.StatusModel,
                models.TimeStampedModel,
                models.PolymorphicModel):
@@ -86,151 +88,63 @@ class Progress(models.CopyMixin,
         fmt = '%s by %s (%s, %s tries)'
         return fmt % (activity, user, grade, tries)
 
-    def __hash__(self):
-        return hash(self.id)
-
-    def __eq__(self, other):
-        if isinstance(other, Progress):
-            if self.pk is None:
-                return False
-            else:
-                return self.pk == other.pk
-        return NotImplemented
-
-    def submit(self, request, recycle=True, **kwargs):
+    def submit(self, request, payload, recycle=True, commit=True):
         """
         Creates new submission.
+
+        Args:
+            recycle:
+                If True, recycle submission objects with the same content as the
+                current submission. If a submission exists with the same content
+                as the current submission, it simply returns the previous
+                submission. If recycled, sets the submission.recycled to True.
         """
 
         submission_class = self.activity.submission_class
-        submission = submission_class(progress=self, **kwargs)
+        submission = submission_class(progress=self, **payload)
         submission.ip_address = get_ip(request)
+        submission.hash = submission.compute_hash()
 
-        if not recycle:
-            submission.save()
-            return submission
-
-        # Collect all submissions with the same hash as current one
-        recyclable = submission_class.objects\
-            .filter(progress=self, hash=submission.compute_hash()) \
-            .order_by('created')
-
-        # Then check if any submission is actually equal to the current amongst
-        # all candidates
+        # Then check if any submission is equal to some past submission and
+        # then recycle it
+        recyclable = submission_class.objects.recyclable(submission)
+        recyclable = recyclable if recycle else ()
         for possibly_equal in recyclable:
             if submission.is_equal(possibly_equal):
                 possibly_equal.recycled = True
                 possibly_equal.bump_recycles()
                 return possibly_equal
         else:
-            submission.save()
-            return submission
+            return submission.commit(commit)
 
-    def register_feedback(self, feedback):
+    def register_feedback(self, feedback, commit=True):
         """
         This method is called after a submission is graded and produces a
         feedback.
         """
 
         submission = feedback.submission
-        self.update_grades_from_feedback(feedback)
 
-        if not self.activity.has_submissions:
-            print('first submission')
-            if feedback.is_correct:
-                print('first correct submission')
+        # Check if it is the best submission
+        grade = feedback.given_grade_pc
+        if (self.best_submission is None or
+                    self.best_submission.given_grade_pc < grade):
+            self.best_submission = submission
+
+        # Update grades for activity considering past submissions
+        self.update_grades_from_feedback(feedback)
+        self.commit(commit)
 
     def update_grades_from_feedback(self, feedback):
         """
         Update grades from the current progress object from the given feedback.
         """
 
-        # Update grades
+        # Update grades, keeping always the best grade
         if self.given_grade_pc < (feedback.given_grade_pc or 0):
             self.given_grade_pc = feedback.given_grade_pc
-
-        # TODO: decide better update strategy
         if self.final_grade_pc < feedback.final_grade_pc:
             self.final_grade_pc = feedback.final_grade_pc
 
-        # # Register points and stars associated with submission.
-        # score_kwargs = {}
-        # final_points = feedback.final_points()
-        # final_stars = feedback.final_stars()
-        # if final_points > self.points:
-        #     score_kwargs['points'] = final_points - self.points
-        #     self.points = final_points
-        # if final_stars > self.stars:
-        #     score_kwargs['stars'] = final_stars - self.stars
-        #     self.stars = final_stars
-        #
-        # # If some score has changed, we save the update fields and update the
-        # # corresponding UserScore object
-        # if score_kwargs:
-        #     from codeschool.gamification.models import UserScore
-        #     self.save(update_fields=score_kwargs.keys())
-        #     score_kwargs['diff'] = True
-        #     UserScore.update(self.user, self.activity_page, **score_kwargs)
-
         # Update the is_correct field
         self.is_correct = self.is_correct or feedback.is_correct
-        self.save()
-
-    def update_from_submissions(self, grades=True, score=True, commit=True,
-                                refresh=False):
-        """
-        Update grades and gamification scores for all submissions.
-
-        Args:
-            grades, score (bool):
-                choose to update final grades and/or final scores.
-            commit:
-                if True (default), save changes to database.
-            refresh:
-                if True (default), recompute grade from scratch.
-        """
-
-        submissions = self.submissions.all()
-        if refresh and submissions.count():
-            first = submissions.first()
-            if grades:
-                self.final_grade_pc = first.given_grade_pc
-                self.given_grade_pc = first.given_grade_pc
-            if score:
-                self.points = first.points
-                self.stars = first.stars
-                self.score = first.score
-
-        for submission in submissions:
-            if grades:
-                submission.update_response_grades(commit=False)
-            if score:
-                submission.update_response_score(commit=False)
-
-        if commit:
-            self.save()
-
-    def regrade(self, method=None, force_update=False):
-        """
-        Return the final grade for the user using the given method.
-
-        If not method is given, it uses the default grading method for the
-        activity.
-        """
-
-        activity = self.activity
-
-        # Choose grading method
-        if method is None and self.final_grade_pc is not None:
-            return self.final_grade_pc
-        elif method is None:
-            grading_method = activity.grading_method
-        else:
-            grading_method = GradingMethod.from_name(activity.owner, method)
-
-        # Grade response. We save the result to the final_grade_pc attribute if
-        # no explicit grading method is given.
-        grade = grading_method.grade(self)
-        if method is None and (force_update or self.final_grade_pc is None):
-            self.final_grade_pc = grade
-        return grade

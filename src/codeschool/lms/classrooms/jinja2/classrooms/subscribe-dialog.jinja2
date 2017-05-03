@@ -1,0 +1,47 @@
+<div id="course-subscription-dialog">
+        <h2>{{ _('Available courses') }}</h2>
+
+        {% if open_courses %}
+            <div id="course-subscription-help" class="hidden">
+                <i class="material-icons">warning</i>
+                <p>{{ _('Please select a course') }}</p>
+            </div>
+            <form method="POST" id="course-subscription-form">
+                {{ csrf_input }}
+                <input type="hidden" name="action" value="subscribe">
+                <input type="hidden" name="course" id="course-subscription-selected">
+            </form>
+
+            <paper-menu id="course-subscription-menu">
+                {% for course in open_courses %}
+                    <paper-item data-id="{{ course.pk }}">
+                        <div>
+                            <p><h4>{{ course.name }}</h4></p>
+                            <p>{{ course.short_description }}
+                                ({{ gettext('Prof. %(name)s', name=course.teacher.get_full_name()) }})</p>
+                        </div>
+                    </paper-item>
+                {% endfor %}
+            </paper-menu>
+
+            <nav class="toolbar highlight">
+                <button class="separated" onclick="bricks.closeDialog()">
+                    {{ _('Cancel') }}
+                </button>
+
+                <button class="primary"
+                        name="action"
+                        value="subscribe"
+                        form="subscription-form"
+                        onclick="subscribe()">
+                    {{ _('Subscribe') }}
+                </button>
+            </nav>
+        {% else %}
+            <p>{{ _('Sorry, there are no courses available!') }}</p>
+            <div class="toolbar highlight">
+                <button class="separated" onclick="bricks.closeDialog()">{{ _('Cancel') }}</button>
+                <button class="primary" onclick="bricks.closeDialog()">{{ _('Close') }}</button>
+            </div>
+        {% endif %}
+    </div>

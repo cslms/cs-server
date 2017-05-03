@@ -37,6 +37,7 @@ if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
     urlpatterns += [
         url(r'^_admin/', django.contrib.admin.site.urls),
         url(r'^_debug/', include('codeschool.core.urls')),
+        url(r'^_components/', include('codeschool.components.urls')),
     ]
 
 # Optional "social" urls
@@ -53,12 +54,12 @@ if settings.CODESCHOOL_GLOBAL_QUESTIONS:
         url(r'^questions/$', main_question_list, name='question-list'),
     ]
 
-# Courses interface
-if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
-    from codeschool.lms.courses.views import course_list
+# Codeschool classrooms
+if 'codeschool.lms.classrooms' in settings.INSTALLED_APPS:
+    from codeschool.lms.classrooms import urls as classrooms_urls
 
     urlpatterns += [
-        url(r'^courses/$', course_list, name='course-list'),
+        url(r'^classes/', include(classrooms_urls, namespace='classrooms')),
     ]
 
 # Optional cli/clt interface
@@ -74,7 +75,7 @@ urlpatterns += [
     wagtail_urls.urlpatterns[0],
     url(r'^((?:[\w\-\.]+/)*)$',
         wagtail_urls.views.serve, name='wagtail_serve'),
-    url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:srvice|json|api)/?)$',
+    url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:bricks|json|api)/?)$',
         wagtail_urls.views.serve, name='wagtail-api-serve'),
 ]
 

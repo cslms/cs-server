@@ -1,16 +1,13 @@
 """
 Functions and fixtures that aids writing unit tests.
 """
-import datetime as dt
-import random
 
 import pytest
-from sulfur import Driver as _sulfur_driver
 from mommys_boy import mommy, fake
-from sulfur.django import *
 
 from codeschool.accounts.factories import UserFactory, FullUserFactory, birthday
-
+from sulfur import Driver as _SulfurDriver
+from sulfur.django import client
 
 # Helper functions
 mommy_make = mommy.make
@@ -18,6 +15,7 @@ mommy_create = mommy.create
 mommy_factory = mommy.get_factory
 
 # Set up sulfur to use django
+client = pytest.fixture(client)
 
 
 def model_fixture(func):
@@ -68,7 +66,7 @@ def ui(selenium, live_server, sulfur_wait):
     The sulfur driver wraps selenium in a more convenient interface.
     """
 
-    return _sulfur_driver(selenium, base_url=live_server.url, wait=sulfur_wait)
+    return _SulfurDriver(selenium, base_url=live_server.url, wait=sulfur_wait)
 
 
 @pytest.fixture

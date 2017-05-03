@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-import srvice
+import bricks
 from codeschool.questions.models import Question
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -148,10 +148,10 @@ class FormQuestion(Question):
         return {blk.value['ref']: blk for blk in self.form_data}
 
     # Serving pages and routing
-    @srvice.route(r'^submit-response/$')
+    @bricks.route(r'^submit-response/$')
     def serve_ajax_submission(self, client, fileData=None, **kwargs):
         """
-        Handles student responses via AJAX and a srvice program.
+        Handles student responses via AJAX and a bricks program.
         """
 
         data = {}

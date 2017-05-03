@@ -1,20 +1,19 @@
 import logging
 from difflib import Differ
 
-import srvice
+import bricks.rpc
 from annoying.functions import get_config
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _, ugettext as __
 
 from codeschool import models
-from codeschool.components.navbar import NavSection
 from codeschool.core import get_programming_language
 from codeschool.core.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
 from codeschool.questions.models import Question
-from codeschool.utils import md5hash_seq
+from codeschool.utils.string import md5hash_seq
 from iospec import parse as parse_iospec, IoSpec
 from .submission import CodingIoSubmission
 from .. import ejudge
@@ -484,8 +483,8 @@ class CodingIoQuestion(Question):
             return qs.get().source
         return ''
 
-    def get_submission_kwargs(self, request, kwargs):
-        return dict(language=kwargs['language'], source=kwargs['source'])
+    def filter_user_submission_payload(self, request, payload):
+        return dict(language=payload['language'], source=payload['source'])
 
     # Access answer key queryset
     def answers_with_code(self):
@@ -527,21 +526,6 @@ class CodingIoQuestion(Question):
         self.closed = True
         self.save()
 
-    def nav_section_for_activity(self, request):
-        url = self.get_absolute_url
-        section = NavSection(
-            __('Question'), url(), title=__('Back to question')
-        )
-        if self.rules.test(request.user, 'activities.edit_activity'):
-            section.add_link(
-                __('Edit'), self.get_admin_url(), title=__('Edit question')
-            )
-        section.add_link(
-            __('Submissions'), url('submissions'),
-            title=__('View your submissions')
-        )
-        return section
-
     # Serving pages and routing
     template = 'questions/coding_io/detail.jinja2'
     template_submissions = 'questions/coding_io/submissions.jinja2'
@@ -571,7 +555,7 @@ class CodingIoQuestion(Question):
     def serve_ajax_submission(self, client, source=None, language=None,
                               **kwargs):
         """
-        Handles student responses via AJAX and a srvice program.
+        Handles student responses via AJAX and a bricks program.
         """
 
         # User must choose language
@@ -592,7 +576,7 @@ class CodingIoQuestion(Question):
             source=source,
         )
 
-    @srvice.route(r'^placeholder/$')
+    @bricks.rpc.route(r'^placeholder/$')
     def route_placeholder(self, request, language):
         """
         Return the placeholder code for some language.

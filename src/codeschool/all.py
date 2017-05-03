@@ -2,6 +2,7 @@
 Import most models and useful function into the same namespace. Should be used
 only in the cli.
 """
+# flake8: noqa
 
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'codeschool.settings'

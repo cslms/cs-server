@@ -2,8 +2,11 @@ import os
 from codeschool.settings import DEBUG
 
 # Force existence of a log/ directory
-if not os.path.exists('log'):
-    os.mkdir('log')
+cd = os.path.dirname
+base = cd(cd(cd(cd(__file__))))
+LOGDIR = os.path.join(base, 'log')
+if not os.path.exists(LOGDIR):
+    os.mkdir(LOGDIR)
 
 LOGGING = {
     'version': 1,

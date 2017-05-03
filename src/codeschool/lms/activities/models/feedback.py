@@ -1,14 +1,15 @@
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+from django.utils.translation import ugettext_lazy as _
 from lazyutils import lazy
 
+from bricks.html5 import p
 from codeschool import models
-from codeschool.lms.activities.models import HasProgressMixin
-from codeschool.lms.activities.models.validators import grade_validator
-from pyml import p
+from .mixins import FromProgressAttributesMixin, CommitMixin
+from ..validators import grade_validator
 
 
-class Feedback(HasProgressMixin,
+class Feedback(CommitMixin,
+               FromProgressAttributesMixin,
                models.TimeStampedModel,
                models.PolymorphicModel):
     """
@@ -104,27 +105,13 @@ class Feedback(HasProgressMixin,
         else:
             return self.TITLE_NOT_GRADED
 
-    def update_autograde(self):
+    def get_autograde_value(self):
         """
-        Compute and set self.given_grade.
+        Return the (given_grade_pc value, field_updates) for the current
+        submission.
 
-        This function may change other states in the feedback object, depending
-        on the activity.
-        """
-
-        activity = self.activity
-        submission = self.submission
-        self.given_grade_pc = self.get_given_autograde(submission, activity)
-
-    def get_given_autograde(self, submission, activity):
-        """
-        Atomic and testable version of autograde_update().
-
-        Subclasses should overide this method.
-
-        Args:
-            submission: a submission object
-            activity: the activity the submission refers to
+        The second parameter is a dictionary with all fields that should be
+        updated in the feedback model.
 
         Returns:
             A numeric value between 0 and 100 with the assigned grade.
@@ -132,17 +119,16 @@ class Feedback(HasProgressMixin,
 
         name = self.__class__.__name__
         raise ImproperlyConfigured(
-            'Class %s must implement the .autograde() method.' % name
+            'Class %s must implement the .get_autograde_value() method.' % name
         )
 
-    def update_final_grade(self):
+    def get_final_grade_value(self):
         """
-        Compute final grade applying all possible penalties and bonuses.
+        Compute and return the final grade applying all possible penalties and
+        bonuses.
         """
 
-        self.final_grade_pc = self.given_grade_pc
-        if self.given_grade_pc == 100:
-            self.is_correct = True
+        return self.given_grade_pc
 
     def render_message(self, **kwargs):
         """

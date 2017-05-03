@@ -1,0 +1,41 @@
+{% extends "base.jinja2" %}
+{% from 'components/cards.jinja2' import cards_container, cs_card %}
+
+{% block content %}
+    {% call cards_container(
+            title=_('Subscriptions'),
+            description=_('List of all courses that you are attending to')) %}
+
+        {% for course in course_list -%}
+            {{ cs_card(
+                    course.title,
+                    course.short_description,
+                    icon=course.material_icon|default('class'),
+                    href=course.get_absolute_url()) }}
+        {%- endfor %}
+
+{#        {{ cs_card(#}
+{#                _('Add'),#}
+{#                _('Subscribe to other courses.'),#}
+{#                onclick="bricks('subscribe')",#}
+{#                faded=True,#}
+{#                icon='add_circle')}}#}
+    {% endcall %}
+
+    {% call cards_container(
+            title=_('Available courses'),
+            description=_('Courses you can subscribe.')) %}
+
+        {% if not open_courses %}
+            <p>{% trans %}There are no available courses!{% endtrans %}</p>
+        {% else %}
+            {% for course in open_courses -%}
+                {{ cs_card(
+                        course.title,
+                        course.short_description,
+                        icon=course.material_icon|default('class'),
+                        href=course.get_absolute_url()) }}
+            {%- endfor %}
+        {% endif %}
+    {% endcall %}
+{% endblock %}

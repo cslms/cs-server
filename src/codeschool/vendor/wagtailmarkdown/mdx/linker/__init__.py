@@ -24,17 +24,16 @@ class LinkerPattern(markdown.inlinepatterns.Pattern):
     def handleMatch(self, m):
         linktypes = self.linktypes
         opts = []
-        if m.group(3) != None and len(m.group(4)):
+        if m.group(3) is not None and len(m.group(4)):
             opts = m.group(4).split('|')[1:]
 
         type = m.group(2)
-        if type == None:
+        if type is None:
             type = '__default__'
         mod = import_module(linktypes[type])
         c = mod.Linker()
 
         return c.run(m.group(3), opts)
-        return '[invalid link]'
 
 
 class LinkerExtension(markdown.Extension):

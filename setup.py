@@ -46,7 +46,7 @@ setup(
 
     # Classifiers (see https://pypi.python.org/pypi?%3Aaction=list_classifiers)
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: POSIX',
@@ -65,21 +65,23 @@ setup(
         'pygments',
         'Markdown',
         'python-markdown-math',
-        'html5lib',
-        'bleach',
+        'html5lib==0.999999999',
+        'bleach==2.0.0',
         'fake-factory',
         'factory-boy',
         'mommys_boy',
         'celery[redis]',
         'PyYAML',
         'json-rpc',
+        'editdistance',
+        'placeholder',
 
         # Services
         'invoke',
 
         # Django and extensions
         'django==1.10',
-        'django-bricks',
+        'django-bricks>=0.2.2',
         'django-polymorphic',
         'django-model-utils',
         'django-model-reference',
@@ -109,9 +111,6 @@ setup(
         'iospec>=0.3.16',
         'ejudge>=0.5.17',
         'boxed>=0.3.11',
-
-        # Related libraries
-        'srvice>=0.1.5',
     ],
     extras_require={
         'dev': [
@@ -128,6 +127,7 @@ setup(
             'pytest-selenium',
             'pytest-factoryboy',
             'sulfur>=0.1.3',
+            'django-mock-queries',
         ]
     },
 

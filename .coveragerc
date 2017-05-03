@@ -18,6 +18,7 @@ exclude_lines =
     # Don't complain if tests don't hit defensive assertion code:
     raise AssertionError
     raise NotImplementedError
+    raise ImproperlyConfigured
     return NotImplemented
 
     # Don't complain if non-runnable code isn't run:
@@ -26,6 +27,7 @@ exclude_lines =
     if __name__ == .__main__.:
     while 0:
     while False:
+    if commit:
 
 ignore_errors = True
 
