@@ -35,11 +35,22 @@ def develop(ctx):
 
 
 @task
-def run(ctx):
+def run(ctx, production=False):
     """
     Runs the development server.
     """
-    ctx.run('python manage.py runserver', pty=True)
+    if not production:
+        ctx.run('python manage.py runserver', pty=True)
+    else:
+        ctx.run('python3 manage.py makemigrations')
+        ctx.run('python3 manage.py migrate')
+        ctx.run('python3 manage.py clean_orphan_obj_perms')
+        ctx.run('python3 manage.py check_permissions')
+        ctx.run('python3 manage.py check_permissions')
+        ctx.run('python3 manage.py clean_expired')
+        ctx.run('python3 manage.py fixtree')
+        ctx.run('gunicorn codeschool.wsgi -b unix:///tmp/sock/webapp.sock '
+                '--reload -w 4')
 
 
 #
