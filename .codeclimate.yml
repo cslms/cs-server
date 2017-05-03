@@ -11,6 +11,6 @@ engines:
     enabled: true
 ratings:
   paths:
-  - "**.py"
+  - "src/codeschool/**.py"
 exclude_paths:
-  - src/codeschoo/**/migrations/
+  - src/codeschool/**/migrations/
