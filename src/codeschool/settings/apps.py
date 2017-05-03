@@ -23,7 +23,7 @@ INSTALLED_APPS = [
 
     # Related apps
     'model_reference',
-    'srvice',
+    'bricks.app',
 
     # Wagtail and dependencies
     'codeschool.vendor.wagtailmarkdown',

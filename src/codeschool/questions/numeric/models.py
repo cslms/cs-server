@@ -62,8 +62,8 @@ class NumericQuestion(Question):
         ctx['form'] = self.get_form(request.POST)
         return ctx
 
-    def get_submission_kwargs(self, request, kwargs):
-        return {'value': float(kwargs.get('value', None) or 0)}
+    def filter_user_submission_payload(self, request, payload):
+        return {'value': float(payload.get('value', None) or 0)}
 
 
 class NumericProgress(QuestionProgress):
@@ -79,17 +79,18 @@ class NumericSubmission(QuestionSubmission):
 
     value = models.FloatField()
 
-    def compute_hash(self):
-        return str(hash(self.value))
-
 
 class NumericFeedback(QuestionFeedback):
     """
     Numeric feedback: autograde tests if value is within the requested interval.
     """
 
-    def get_given_autograde(self, submission, question):
+    def get_autograde_value(self):
+        question = self.question
+        submission = self.submission
+
         value = submission.value
         correct = question.correct_answer
         tol = question.tolerance
-        return 100 if abs(value - correct) <= tol else 0
+
+        return 100 if abs(value - correct) <= tol else 0, {}

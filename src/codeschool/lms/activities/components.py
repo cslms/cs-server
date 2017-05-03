@@ -1,4 +1,4 @@
-from codeschool.components.navbar import navbar
+from codeschool.components.navigation import navbar
 
 
 def activity_list_navbar(page, user):

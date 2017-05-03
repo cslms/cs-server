@@ -38,6 +38,7 @@ if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
     urlpatterns += [
         url(r'^_admin/', django.contrib.admin.site.urls),
         url(r'^_debug/', include('codeschool.core.urls')),
+        url(r'^_components/', include('codeschool.components.urls')),
     ]
 
 # Optional "social" urls
@@ -75,7 +76,7 @@ urlpatterns += [
     wagtail_urls.urlpatterns[0],
     url(r'^((?:[\w\-\.]+/)*)$',
         wagtail_urls.views.serve, name='wagtail_serve'),
-    url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:srvice|json|api)/?)$',
+    url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:bricks|json|api)/?)$',
         wagtail_urls.views.serve, name='wagtail-api-serve'),
 ]
 

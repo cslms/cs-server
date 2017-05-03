@@ -12,7 +12,7 @@
                 {% endtrans %}
             </p>
             <div class="cs-attendance__passphrase">
-                <a srvice-bind="refresh-phrase.api/"><i class="cs-attendance__refresh material-icons">refresh</i></a>
+                <a bricks-bind="refresh-phrase.api/"><i class="cs-attendance__refresh material-icons">refresh</i></a>
                 <p>{{ passphrase|upper }}</p>
             </div>
 
@@ -41,7 +41,7 @@
                     {% endtrans %}
                 </p>
 
-                <form srvice-bind="check.api/">
+                <form bricks-bind="check.api/">
                     {{ csrf_input }}
                     {{ form.as_p() }}
                     <input type="submit">

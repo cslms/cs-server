@@ -1,22 +1,21 @@
 import logging
 
 from django.apps import apps
-from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.errors import InvalidSubmissionError, GradingError
-from codeschool.lms.activities.managers.submission import \
-    SubmissionManager
-from codeschool.lms.activities.models.mixins import HasProgressMixin
-from codeschool.lms.activities.signals import submission_graded_signal
+from codeschool.utils.misc import update_state
+from codeschool.utils.string import md5hash
+from .mixins import FromProgressAttributesMixin, CommitMixin
+from ..managers.submission import SubmissionManager
+from ..signals import submission_graded_signal
 
 logger = logging.getLogger('codeschool.lms.activities')
 
-SubmissionManager.use_for_related_fields = True
 
-
-class Submission(HasProgressMixin,
+class Submission(CommitMixin,
+                 FromProgressAttributesMixin,
                  models.CopyMixin,
                  models.TimeStampedModel,
                  models.PolymorphicModel):
@@ -24,15 +23,17 @@ class Submission(HasProgressMixin,
     Represents a student's simple submission in response to some activity.
     """
 
+    progress = models.ForeignKey('Progress', related_name='submissions')
+    hash = models.CharField(max_length=32)
+    ip_address = models.CharField(max_length=20, blank=True)
+    num_recycles = models.IntegerField(default=0)
+    recycled = False
+
     class Meta:
         verbose_name = _('submission')
         verbose_name_plural = _('submissions')
 
-    progress = models.ForeignKey('Progress', related_name='submissions')
-    hash = models.CharField(max_length=32, blank=True)
-    ip_address = models.CharField(max_length=20, blank=True)
-    num_recycles = models.IntegerField(default=0)
-    recycled = False
+    # Properties
     has_feedback = property(lambda self: hasattr(self, 'feedback'))
     objects = SubmissionManager()
 
@@ -48,31 +49,47 @@ class Submission(HasProgressMixin,
         name = self.__class__.__name__.replace('Submission', 'Feedback')
         return apps.get_model(self._meta.app_label, name)
 
+    @classmethod
+    def data_fields(cls):
+        """
+        Return a list of attributes that store submission data.
+
+        It ignores metadata such as creation and modification times, number of
+        recycles, etc. This method should only return fields relevant to grading
+        the submission.
+        """
+
+        blacklist = {
+            'id', 'num_recycles', 'ip_address', 'created', 'modified', 'hash',
+            'final_feedback_id', 'submission_ptr_id', 'polymorphic_ctype_id',
+            'progress_id',
+        }
+
+        fields = [field.attname for field in cls._meta.fields]
+        return [field for field in fields if field not in blacklist]
+
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self)
 
     def __str__(self):
-        base = '%s by %s' % (self.activity_title, self.sender_username)
-        # if self.feedback_set.last():
-        #     points = self.final_feedback_pc.given_grade
-        #     base += ' (%s%%)' % points
+        username = self.user.username
+        base = '%s by %s' % (self.activity_title, username)
         return base
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         if not self.hash:
             self.hash = self.compute_hash()
-        super().save(*args, **kwargs)
+        super().clean()
 
     def compute_hash(self):
         """
         Computes a hash of data to deduplicate submissions.
         """
 
-        raise ImproperlyConfigured(
-            'Submission subclass must implement the compute_hash() method.'
-        )
+        fields = get_default_fields(type(self))
+        return md5hash(';'.join(map(lambda f: str(getattr(self, f)), fields)))
 
-    def auto_feedback(self, silent=False):
+    def auto_feedback(self, silent=False, commit=True):
         """
         Performs automatic grading and return the feedback object.
 
@@ -82,11 +99,15 @@ class Submission(HasProgressMixin,
                 end of a successful grading.
         """
 
+        # Create feedback object
         feedback = self.feedback_class(submission=self, manual_grading=False)
-        feedback.update_autograde()
-        feedback.update_final_grade()
-        feedback.save()
-        self.progress.register_feedback(feedback)
+        feedback.given_grade_pc, state = feedback.get_autograde_value()
+        feedback.is_correct = feedback.given_grade_pc == 100
+        update_state(feedback, state)
+        feedback.final_grade_pc = feedback.get_final_grade_value()
+        feedback.commit(commit)
+
+        # Register graded feedback
         self.register_feedback(feedback)
 
         # Send signal
@@ -95,16 +116,16 @@ class Submission(HasProgressMixin,
                                           feedback=feedback, automatic=True)
         return feedback
 
-    def register_feedback(self, feedback, commit=True):
+    def is_equal(self, other):
         """
-        Update itself when a new feedback becomes available.
-
-        This method should not update the progress instance.
+        Check both submissions are equal/equivalent to each other.
         """
 
-        self.final_feedback = feedback
-        if commit:
-            self.save()
+        if self.hash != other.hash and self.hash and other.hash:
+            return False
+
+        fields = get_default_fields(type(self))
+        return all(getattr(self, f) == getattr(other, f) for f in fields)
 
     def bump_recycles(self):
         """
@@ -114,47 +135,15 @@ class Submission(HasProgressMixin,
         self.num_recycles += 1
         self.save(update_fields=['num_recycles'])
 
-    def is_equal(self, other):
+    def register_feedback(self, feedback, commit=True):
         """
-        Check both submissions are equal/equivalent to each other.
-        """
+        Update itself when a new feedback becomes available.
 
-        if self.hash == other.hash and self.hash is not None:
-            return True
-
-        return self.submission_data() == other.submission_data()
-
-    def submission_data(self):
-        """
-        Return a dictionary with data specific for submission.
-
-        It ignores metadata such as creation and modification times, number of
-        recycles, etc. This method should only return data relevant to grading
-        the submission.
+        This method should not update the progress instance.
         """
 
-        blacklist = {
-            'id', 'num_recycles', 'ip_address', 'created', 'modified', 'hash',
-            'final_feedback_id', 'submission_ptr_id', 'polymorphic_ctype_id',
-        }
-
-        def forbidden_attr(k):
-            return k.startswith('_') or k in blacklist
-
-        return {k: v for k, v in self.__dict__.items() if not forbidden_attr(k)}
-
-    def autograde_value(self, *args, **kwargs):
-        """
-        This method should be implemented in subclasses.
-        """
-
-        raise ImproperlyConfigured(
-            'Progress subclass %r must implement the autograde_value().'
-            'This method should perform the automatic grading and return the '
-            'resulting grade. Any additional relevant feedback data might be '
-            'saved to the `feedback_data` attribute, which is then is pickled '
-            'and saved into the database.' % type(self).__name__
-        )
+        # Call the register feedback of the progress object
+        self.progress.register_feedback(feedback)
 
     def manual_grade(self, grade, commit=True, raises=False, silent=False):
         """
@@ -181,110 +170,6 @@ class Submission(HasProgressMixin,
 
         raise NotImplementedError('TODO')
 
-    def update_progress(self, commit=True):
-        """
-        Update all parameters for the progress object.
-
-        Return True if update was required or False otherwise.
-        """
-
-        update = False
-        progress = self.progress
-
-        if self.is_correct and not progress.is_correct:
-            update = True
-            progress.is_correct = True
-
-        if self.given_grade_pc > progress.best_given_grade_pc:
-            update = True
-            fmt = self.description, progress.best_given_grade_pc, self.given_grade_pc
-            progress.best_given_grade_pc = self.given_grade_pc
-            logger.info('(%s) grade: %s -> %s' % fmt)
-
-        if progress.best_given_grade_pc > progress.grade:
-            old = progress.grade
-            new = progress.grade = progress.best_given_grade_pc
-            logger.info(
-                '(%s) grade: %s -> %s' % (progress.description, old, new))
-
-        if commit and update:
-            progress.save()
-
-        return update
-
-    def regrade(self, method, commit=True):
-        """
-        Recompute the grade for the given submission.
-
-        If status != 'done', it simply calls the .autograde() method. Otherwise,
-        it accept different strategies for updating to the new grades:
-            'update':
-                Recompute the grades and replace the old values with the new
-                ones. Only saves the submission if the feedback_data or the
-                given_grade_pc attributes change.
-            'best':
-                Only update if the if the grade increase.
-            'worst':
-                Only update if the grades decrease.
-            'best-feedback':
-                Like 'best', but updates feedback_data even if the grades
-                change.
-            'worst-feedback':
-                Like 'worst', but updates feedback_data even if the grades
-                change.
-
-        Return a boolean telling if the regrading was necessary.
-        """
-        if self.status != self.STATUS_DONE:
-            return self.auto_feedback()
-
-        # We keep a copy of the state, if necessary. We only have to take some
-        # action if the state changes.
-        def rollback():
-            self.__dict__.clear()
-            self.__dict__.update(state)
-
-        state = self.__dict__.copy()
-        self.auto_feedback(force=True, commit=False)
-
-        # Each method deals with the new state in a different manner
-        if method == 'update':
-            if state != self.__dict__:
-                if commit:
-                    self.save()
-                return False
-            return True
-        elif method in ('best', 'best-feedback'):
-            if self.given_grade_pc <= state.get('given_grade_pc', 0):
-                new_feedback_data = self.feedback_data
-                rollback()
-                if new_feedback_data != self.feedback_data:
-                    self.feedback_data = new_feedback_data
-                    if commit:
-                        self.save()
-                    return True
-                return False
-            elif commit:
-                self.save()
-            return True
-
-        elif method in ('worst', 'worst-feedback'):
-            if self.given_grade_pc >= state.get('given_grade_pc', 0):
-                new_feedback_data = self.feedback_data
-                rollback()
-                if new_feedback_data != self.feedback_data:
-                    self.feedback_data = new_feedback_data
-                    if commit:
-                        self.save()
-                    return True
-                return False
-            elif commit:
-                self.save()
-            return True
-        else:
-            rollback()
-            raise ValueError('invalid method: %s' % method)
-
     def get_feedback_title(self):
         """
         Return the title for the feedback message.
@@ -296,6 +181,18 @@ class Submission(HasProgressMixin,
             return _('Not graded')
         else:
             return feedback.get_feedback_title()
+
+
+def get_default_fields(cls):
+    """
+    Return the default field names for class.
+    """
+
+    try:
+        fields = cls._meta.data_fields
+    except AttributeError:
+        cls._meta.data_fields = fields = cls.data_fields()
+    return fields
 
 
 # Save a copy in the class namespace for convenience

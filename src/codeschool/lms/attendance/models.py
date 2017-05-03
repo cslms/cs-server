@@ -2,7 +2,7 @@ import collections
 import datetime
 from types import FunctionType
 
-import srvice
+import bricks.rpc
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from lazyutils import delegate_to
@@ -302,7 +302,7 @@ class AttendancePage(models.DecoupledAdminPage, models.RoutablePageExt):
         ctx['is_expired'] = self.is_expired()
         return ctx
 
-    @srvice.route(r'^check.api/$')
+    @bricks.rpc.route(r'^check.api/$')
     def check_presence(self, client, passphrase, **kwargs):
         html = ('<div class="cs-attendance-dialog cs-attendance-dialog--%s">'
                 '<h1>%s</h1>'

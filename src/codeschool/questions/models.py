@@ -1,8 +1,8 @@
-import srvice
 from django.utils.translation import ugettext_lazy as _
 
-from codeschool import mixins
+import bricks.rpc
 from codeschool import blocks
+from codeschool import mixins
 from codeschool import models
 from codeschool.lms.activities.models import Activity, Submission, Progress
 from codeschool.lms.activities.models.feedback import Feedback
@@ -64,9 +64,6 @@ class Question(models.DecoupledAdminPage,
         return navbar_question(self, user)
 
     # Serve pages
-    def get_submission_kwargs(self, request, kwargs):
-        return {}
-
     def get_context(self, request, *args, **kwargs):
         context = dict(
             super().get_context(request, *args, **kwargs),
@@ -77,24 +74,32 @@ class Question(models.DecoupledAdminPage,
         return context
 
     #
-    # Routes
+    # Ajax submissions for user responses
     #
+    def render_from_submission(self, submission):
+        """
+        Render a user-facing message from the supplied submission.
+        """
+
+        if submission.recycled and submission.feedback:
+            feedback = submission.feedback
+            return feedback.render_message()
+        elif self._meta.instant_feedback:
+            feedback = submission.auto_feedback()
+            return feedback.render_message()
+        else:
+            return 'Your submission is on the correction queue!'
+
     def serve_ajax_submission(self, client, **kwargs):
         """
         Serve AJAX request for a question submission.
         """
-        kwargs = self.get_submission_kwargs(client.request, kwargs)
-        submission = self.submit(client.request, **kwargs)
-        if submission.recycled:
-            client.dialog(html='You already submitted this response!')
-        elif self._meta.instant_feedback:
-            feedback = submission.auto_feedback()
-            data = feedback.render_message()
-            client.dialog(html=data)
-        else:
-            client.dialog(html='Your submission is on the correction queue!')
 
-    @srvice.route(r'^submit-response.api/$', name='submit-ajax')
+        submission = self.submit_with_user_payload(client.request, kwargs)
+        data = self.render_from_submission(submission)
+        client.dialog(html=data)
+
+    @bricks.rpc.route(r'^submit-response.api/$', name='submit-ajax')
     def route_ajax_submission(self, client, **kwargs):
         return self.serve_ajax_submission(client, **kwargs)
 
@@ -103,14 +108,9 @@ class QuestionMixin:
     """
     Shared properties for submissions, progress and feedback models.
     """
+
     question = property(lambda x: x.activity)
     question_id = property(lambda x: x.activity_id)
-
-    def __init__(self, *args, **kwargs):
-        question = kwargs.pop('question', None)
-        if question is not None:
-            kwargs.setdefault('activity', question)
-        super().__init__(*args, **kwargs)
 
 
 class QuestionSubmission(QuestionMixin, Submission):
@@ -138,3 +138,9 @@ class QuestionFeedback(QuestionMixin, Feedback):
 
     class Meta:
         abstract = True
+
+
+# Update the Question._meta attribute
+Question._meta.submission_class = QuestionSubmission
+Question._meta.progress_class = QuestionProgress
+Question._meta.feedback_class = QuestionFeedback

@@ -10,7 +10,7 @@
 
     {% block form_body %}
         <form method="POST" id="{{ form_name|default('form') }}"
-              {% block form_options %}srvice-bind="./submit-response.api/"{% endblock %}>
+              {% block form_options %}bricks-bind="./submit-response.api/"{% endblock %}>
             {{ csrf_input }}
             {% if context %}
                 <input type="hidden" name="response_context"

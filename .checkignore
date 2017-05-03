@@ -1,0 +1,10 @@
+# Namespace packages
+docker/**
+src/codeschool/models.py
+src/codeschool/panels.py
+src/codeschool/blocks.py
+src/codeschool/mixins.py
+src/codeschool/errors.py
+src/codeschool/managers.py
+src/codeschool/fields.py
+src/codeschool/settings/__init__.py

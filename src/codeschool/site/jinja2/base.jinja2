@@ -110,35 +110,6 @@
 
         {% if not disable_footer %}
             {% call cs_foot(request.user, has_data=not disable_footer_data, cls='mdl-cell mdl-cell--12-col') %}
-{#                <div class="cs-foot__block">#}
-{#                    <p class="cs-foot__block-title">Amigos (em#}
-{#                        construção)</p>#}
-{#                    <ul>#}
-{#                        <li>Fulano fez isso</li>#}
-{#                        <li>Cicrano fez aquilo</li>#}
-{#                        <li>Beltrano fez aquio outro</li>#}
-{#                    </ul>#}
-{#                </div>#}
-{##}
-{#                <div class="cs-foot__block">#}
-{#                    <p class="cs-foot__block-title">Agenda (em#}
-{#                        construção)</p>#}
-{#                    <ul>#}
-{#                        <li>Prova dia X</li>#}
-{#                        <li>Trabalho para dia Y</li>#}
-{#                        <li>Estudar XY</li>#}
-{#                    </ul>#}
-{#                </div>#}
-{##}
-{#                <div class="cs-foot__block">#}
-{#                    <p class="cs-foot__block-title">Notícias (em#}
-{#                        construção)</p>#}
-{#                    <ul>#}
-{#                        <li>Adicionou notas</li>#}
-{#                        <li>Mensagem do prof. CB</li>#}
-{#                        <li>Não haverá prova dia XXX</li>#}
-{#                    </ul>#}
-{#                </div>#}
             {% endcall %}
         {% endif %}
     </div>
@@ -154,12 +125,12 @@
 
 <!-- Javascript in the end of file -->
 {% block javascript %}
-    <script src="{{ static('js/srvice/json.js') }}"></script>
-    <script src="{{ static('js/srvice/commands.js') }}"></script>
-    <script src="{{ static('js/srvice/util.js') }}"></script>
-    <script src="{{ static('js/srvice/core.js') }}"></script>
-    <script src="{{ static('js/srvice/dialog.js') }}"></script>
-    <script src="{{ static('js/srvice/actions.js') }}"></script>
+    <script src="{{ static('js/bricks/json.js') }}"></script>
+    <script src="{{ static('js/bricks/commands.js') }}"></script>
+    <script src="{{ static('js/bricks/util.js') }}"></script>
+    <script src="{{ static('js/bricks/core.js') }}"></script>
+    <script src="{{ static('js/bricks/dialog.js') }}"></script>
+    <script src="{{ static('js/bricks/actions.js') }}"></script>
     <script src="{{ static('js/main.js') }}"></script>
     <script src="{{ static('js/plugins.js') }}"></script>
 {% endblock %}

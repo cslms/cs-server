@@ -17,7 +17,6 @@ class CodingIoFeedback(QuestionFeedback):
         )
     )
     json_feedback = models.JSONField(blank=True, null=True)
-
     feedback_status = property(lambda x: x.feedback.status)
     is_wrong_answer = delegate_to('feedback')
     is_presentation_error = delegate_to('feedback')
@@ -32,20 +31,25 @@ class CodingIoFeedback(QuestionFeedback):
         else:
             return None
 
-    def update_autograde(self):
+    def get_tests(self):
+        """
+        Return an iospec object with the tests for the current correction.
+        """
+
         if self.for_pre_test:
-            tests = self.question.get_expanded_pre_tests()
+            return self.question.get_expanded_pre_tests()
         else:
-            tests = self.question.get_expand_post_tests()
+            return self.question.get_expand_post_tests()
+
+    def get_autograde_value(self):
+        tests = self.get_tests()
         source = self.submission.source
         language_ref = self.submission.language.ejudge_ref()
-
         feedback = grade_code(source, tests,
                               lang=language_ref,
                               timeout=self.question.timeout)
-        feedback.pprint()
-        self.json_feedback = feedback.to_json()
-        self.given_grade_pc = feedback.grade * 100
+
+        return feedback.grade * 100, {'json_feedback': feedback.to_json()}
 
     def render_message(self, **kwargs):
         return render(self.feedback)

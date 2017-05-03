@@ -2,8 +2,8 @@ import model_reference
 import rules
 from django.utils.translation import ugettext as _
 
-from bricks.components.tags import a
-from codeschool.components.navbar import navsection_page_admin, navsection, navbar
+from bricks.components.html5_tags import a
+from codeschool.components.navigation import navsection_page_admin, navsection, navbar
 
 
 def navsection_classroom_common(page, user):
@@ -24,7 +24,7 @@ def navsection_classroom_common(page, user):
 
     # Leave course
     if rules.test_rule('classrooms.can_leave', user, page):
-        links.append(a(_('Leave classroom'), srvice_bind='leave.api'))
+        links.append(a(_('Leave classroom'), bricks_bind='leave.api'))
 
     return navsection(_('Classrooms'), links, href='/classes/')
 

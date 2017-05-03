@@ -1,4 +1,4 @@
-import srvice
+import bricks
 from django import forms
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -42,7 +42,7 @@ class CodeExhibit(Activity):
         context['entries'] = self.entries.all()
         return context
 
-    @srvice.route(r'^get-form/$')
+    @bricks.route(r'^get-form/$')
     def route_submit_form(self, client):
         form = self.get_submit_form()
         context = {'form': form, 'language': self.language}

@@ -6,6 +6,20 @@ class SubmissionQuerySet(models.PolymorphicQuerySet):
         'given_grade', 'score', 'stars', 'final_grade'
     )
 
+    def recyclable(self, submission):
+        """
+        Return all submissions that share the same progress object and the same
+        hash.
+
+        These are candidates for submission recycling.
+        """
+
+        hash = submission.compute_hash()
+        progress = submission.progress
+        return self \
+            .filter(progress=progress, hash=hash) \
+            .order_by('created')
+
     def lexicographical_priority(self, value=None):
         """
         Normalize list of priorities.

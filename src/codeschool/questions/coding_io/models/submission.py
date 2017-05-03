@@ -43,6 +43,3 @@ class CodingIoSubmission(QuestionSubmission):
 
     objects = manager_instance(QuestionSubmission, CodingIoSubmissionQuerySet,
                                use_for_related_fields=True)
-
-    def compute_hash(self):
-        return md5hash(self.source + self.language.ref)
