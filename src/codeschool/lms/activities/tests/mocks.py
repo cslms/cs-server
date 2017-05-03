@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from django.db.models import QuerySet
 from mock import patch
 
-from codeschool.lms.activities.models import CommitMixin
+from codeschool.lms.activities.models.mixins import CommitMixin
 
 
 

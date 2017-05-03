@@ -4,10 +4,12 @@
 
 from django.utils.text import slugify
 from django.utils.translation import ugettext as __
+from django.utils.translation import ugettext_lazy as _
 from lazyutils import delegate_to
 from wagtail.wagtailcore import blocks
 
 from codeschool import models
+from codeschool import panels
 
 
 class Calendar(models.Model):
@@ -145,11 +147,6 @@ class LessonInfo(models.Orderable):
         panels.FieldPanel('title'),
         panels.FieldPanel('date'),
     ]
-
-
-from django.utils.translation import ugettext_lazy as _
-
-from codeschool import models, panels
 
 
 class TimeSlot(models.Model):

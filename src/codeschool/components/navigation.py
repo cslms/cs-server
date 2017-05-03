@@ -1,10 +1,8 @@
 from django.utils.translation import ugettext as _
 
-from bricks.components.html5_tags import a, link, span, script
-from bricks.components.text import html
-from bricks.helpers import join_classes
-from bricks.html5 import nav, a, p, ul, li, div, img
 from bricks.contrib import mdl
+from bricks.helpers import join_classes
+from bricks.html5 import nav, a, p, ul, li, div, img, link, span, script
 
 
 #

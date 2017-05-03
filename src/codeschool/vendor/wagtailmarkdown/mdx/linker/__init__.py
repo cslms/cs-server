@@ -34,7 +34,6 @@ class LinkerPattern(markdown.inlinepatterns.Pattern):
         c = mod.Linker()
 
         return c.run(m.group(3), opts)
-        return '[invalid link]'
 
 
 class LinkerExtension(markdown.Extension):
