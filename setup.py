@@ -39,7 +39,7 @@ setup(
     version=version,
     author='Fábio Macêdo Mendes',
     author_email='fabiomacedomendes@gmail.com',
-    url='',
+    url='https://github.com/cslms/cs-server/',
     description='An environment for teaching programming for 21st century '
                 'students.',
     long_description=long_description,
@@ -81,7 +81,7 @@ setup(
 
         # Django and extensions
         'django==1.10',
-        'django-bricks>=0.2.2',
+        'django-bricks>=0.2.3',
         'django-polymorphic',
         'django-model-utils',
         'django-model-reference',
