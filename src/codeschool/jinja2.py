@@ -20,7 +20,6 @@ from bricks.components.data_components import Mapping
 from bricks.helpers import render as _render, hyperlink
 
 
-jinja2_environment = None
 log = Logger('codeschool.settings')
 md = Markdown(extensions=['mdx_math'])
 
@@ -176,9 +175,9 @@ def environment(**options):
     Creates jinja2 environment during django initialization.
     """
 
-    global jinja2_environment
+    import codeschool
 
-    env = jinja2_environment = Environment(**options)
+    codeschool.jinja2.jinja2_environment = env = Environment(**options)
 
     # Globals
     env.globals.update(

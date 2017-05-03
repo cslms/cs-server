@@ -1,4 +1,5 @@
 # Namespace packages
+docker/**
 src/codeschool/models.py
 src/codeschool/panels.py
 src/codeschool/blocks.py
