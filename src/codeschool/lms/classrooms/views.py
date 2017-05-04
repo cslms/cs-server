@@ -2,7 +2,7 @@ import model_reference
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
-from .components import navbar_classroom, navbar_list
+from .bricks import navbar_classroom, navbar_list
 from .forms import EnrollForm
 from .models import Classroom
 from .rules import is_registered

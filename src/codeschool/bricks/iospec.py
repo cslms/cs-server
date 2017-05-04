@@ -6,7 +6,7 @@ from django.utils.translation import ugettext as _
 
 from bricks.components.html5_tags import span
 from bricks.html5 import div, br, code
-from codeschool.components.utils import with_class, tag_join
+from codeschool.bricks.utils import with_class, tag_join
 from iospec import In
 
 EMPTY = _('empty')

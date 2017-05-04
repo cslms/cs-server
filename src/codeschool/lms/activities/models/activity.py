@@ -15,7 +15,10 @@ logger = logging.getLogger('codeschool.lms.activities')
 ZERO = decimal.Decimal(0)
 
 
-class Activity(CommitMixin, models.RoutablePageExt, metaclass=ActivityMeta):
+class Activity(CommitMixin,
+               models.RoutableViewsPage,
+               models.DecoupledAdminPage,
+               metaclass=ActivityMeta):
     """
     Represents a gradable activity inside a course. Activities may not have an
     explicit grade, but yet may provide points to the students via the

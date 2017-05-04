@@ -13,7 +13,6 @@ from bricks.helpers import safe
 from .cards import card_container, simple_card
 from .iospec import iospec_to_html
 from .navigation import navbar, navsection, navsection_page_admin
-from .submissions import submission, submission_script
 
 
 def tag_view(func):
@@ -85,6 +84,7 @@ def cards_view():
 @tag_view
 def submissions_view():
     from codeschool.questions.coding_io.models import CodingIoSubmission
+    from codeschool.lms.activities.bricks import submission, submission_script
 
     sub1, sub2, sub3, sub4 = CodingIoSubmission.objects.order_by('-created')[:4]
 
@@ -93,7 +93,7 @@ def submissions_view():
         submission(sub2),
         submission(sub3),
         submission(sub4),
-        script(safe(submission_script)),
+        submission_script,
     ]
 
 

@@ -21,18 +21,12 @@ class ShortDescriptionPage(Page):
         )
     )
 
-    def full_clean(self, *args, **kwargs):
+    def full_clean(self):
         if self.short_description and not self.seo_title:
             self.seo_title = self.short_description
         if not self.short_description:
             self.short_description = self.seo_title or self.title
-        return super().full_clean(*args, **kwargs)
-
-    content_panels = Page.content_panels + [
-        _MultiFieldPanel([
-            _FieldPanel('short_description'),
-        ], heading=_('Options')),
-    ]
+        return super().full_clean()
 
 
 class ShortDescriptionMixin(Model):

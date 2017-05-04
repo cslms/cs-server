@@ -2,10 +2,11 @@ from functools import singledispatch
 
 from django.utils.translation import ugettext as _
 
+from bricks.components.html5_tags import h2, p, script
 from bricks.contrib import mdl
-from bricks.helpers import join_classes
+from bricks.helpers import join_classes, safe
 from bricks.html5 import h3, dl, dt, dd, span, div
-from codeschool.components.utils import with_class, title
+from codeschool.bricks import with_class, title, navbar
 from codeschool.lms.activities.models import Submission
 
 
@@ -40,7 +41,7 @@ def submission_title(sub):
 @singledispatch
 def submission_body(sub, hidden=True):
     class_ = join_classes('cs-submission__content', hidden and 'hidden')
-    grade = str(int(sub.final_grade_pc or 0)
+    grade = str(int(sub.feedback.final_grade_pc or 0)
                 if sub.has_feedback else _('Not given'))
 
     # Collect submission data
@@ -63,10 +64,8 @@ def submission_body(sub, hidden=True):
             div(class_='cs-submission__detail')[
                 h3(_('Details'), class_='banner'),
                 dl()[
-                    dt(_('Grade')),
-                    dd(grade),
-                    dt(_('Date of submission')),
-                    dd(str(sub.created)),
+                    dt(_('Grade')), dd(grade),
+                    dt(_('Date of submission')), dd(str(sub.created)),
                 ],
             ],
 
@@ -79,7 +78,35 @@ def submission_data(submission):
     return None
 
 
-submission_script = """
+def submission_list(submissions, progress):
+    """
+    List all submissions and display extra information from progress.
+    """
+
+    final_grade = str(int(progress.final_grade_pc))
+    num_submissions = str(progress.num_submissions)
+    return \
+        div(style='width: 100%')[
+            div()[
+                h2(_('Your grade')),
+                dl()[
+                    dt(_('Grade')), dd(final_grade + '%'),
+                    dt(_('Num submissions')), dd(num_submissions),
+                ]
+
+            ],
+            div()[
+                h2(_('List of submissions')),
+                p(_('(Click on an option to expand)')),
+                mdl.div(shadow=4)[
+                    [submission(sub) for sub in submissions],
+                ]
+            ],
+            submission_script,
+        ]
+
+
+submission_script = script(safe("""
 function expandSubmission(obj) {
     var expandable = $(obj).find('.cs-submission__content');
     if (expandable.length && expandable[0].classList.contains('hidden')) {
@@ -91,4 +118,14 @@ function expandSubmission(obj) {
         }, 200);
     }
 }
-"""
+"""))
+
+
+def activity_list_navbar(page, user):
+    return navbar(admin=True, admin_perms='activities.edit_activity',
+                  user=user, page=page)
+
+
+def activity_section_navbar(page, user):
+    return navbar(admin=True, admin_perms='activities.edit_activity',
+                  user=user, page=page)

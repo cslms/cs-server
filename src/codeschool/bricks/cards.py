@@ -45,7 +45,8 @@ def simple_card(title, text=None, href=None, icon='help', faded=False,
         ]
 
 
-def card_container(cards, title=None, description=None, class_=None, **kwargs):
+def card_container(cards, title=None, description=None, class_=None,
+                   empty=None, **kwargs):
     """
     A container for simple card elements.
 
@@ -70,12 +71,14 @@ def card_container(cards, title=None, description=None, class_=None, **kwargs):
     cls = join_classes('cs-card-container mdl-grid mdl-grid--no-spacing',
                        class_)
     return \
-        section(class_=cls)[
-            ifset(title, lhs_aside),
+        div(class_='bg-primary')[
+            section(class_=cls)[
+                ifset(title, lhs_aside),
 
-            article(class_='mdl-cell mdl-cell--%s-col' % ncols)[
-                div(class_='cs-card-aside__content mdl-grid')[
-                    cards,
-                ]
-            ],
+                article(class_='mdl-cell mdl-cell--%s-col' % ncols)[
+                    div(class_='cs-card-aside__content mdl-grid')[
+                        cards or empty,
+                    ]
+                ],
+            ]
         ]

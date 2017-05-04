@@ -128,7 +128,7 @@ class Progress(CommitMixin,
         # Check if it is the best submission
         grade = feedback.given_grade_pc
         if (self.best_submission is None or
-                    self.best_submission.given_grade_pc < grade):
+                    self.best_submission.feedback.given_grade_pc < grade):
             self.best_submission = submission
 
         # Update grades for activity considering past submissions

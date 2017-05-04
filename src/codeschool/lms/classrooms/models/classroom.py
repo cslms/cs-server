@@ -22,7 +22,7 @@ def random_subscription_passphase():
 
 class Classroom(models.TimeStampedModel,
                 models.DecoupledAdminPage,
-                models.RoutablePageExt):
+                models.RoutableViewsPage):
     """
     One specific occurrence of a course for a given teacher in a given period.
     """

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 
 import bricks.rpc
 from codeschool import models
-from codeschool.lms.activity_lists.score_map import ScoreTable
+from codeschool.lms.listings.score_map import ScoreTable
 
 
 class ScoreBoardMixin(models.RoutablePageMixin,

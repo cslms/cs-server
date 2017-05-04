@@ -1,5 +1,5 @@
 import pytest
-from codeschool.components import *
+from codeschool.bricks import *
 
 
 class TestCards:

@@ -1,6 +1,7 @@
 import os
 from collections import OrderedDict
 
+from django.template.response import TemplateResponse
 from django.views.generic import DetailView, View
 from rules.contrib.views import permission_required
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, \
@@ -55,9 +56,9 @@ def wrap_view_class_route(view, model, url, perms=None):
     return method
 
 
-class RoutablePage(RoutablePageMixin, Page):
+class RoutableViewsPage(RoutablePageMixin, Page):
     """
-    This rendition of RoutablePage makes it possible to define the views of all
+    This rendition of RoutableViewsPage makes it possible to define the views of all
     routes separately from the model.
 
     This architecture decouples two concerns that Wagtails puts into the same
@@ -118,7 +119,7 @@ class RoutablePage(RoutablePageMixin, Page):
 
         # Load views from all superclasses
         for superclass in cls.mro()[1:]:
-            if issubclass(superclass, RoutablePage):
+            if issubclass(superclass, RoutableViewsPage):
                 if superclass._meta.app_config:
                     superclass.__load_views()
 
@@ -185,6 +186,8 @@ class RoutablePage(RoutablePageMixin, Page):
             urlpattern, idx = method._routablepage_routes[-1]
             urlpattern.name = name or view.__name__
             cls.__external_routes().append((urlpattern, idx))
+            if url in [None, '', '^$', '/']:
+                cls._view_for_root_url = method
             return view
 
         return decorator
@@ -211,8 +214,8 @@ class RoutablePage(RoutablePageMixin, Page):
     def get_template(self, request, *args,
                      suffix=None, basename=None,
                      **kwargs):
-        template = super(RoutablePage, self).get_template(request, *args,
-                                                          **kwargs)
+        template = super(RoutableViewsPage, self).get_template(request, *args,
+                                                               **kwargs)
         templates = [template] if isinstance(template, str) else list(template)
         if templates[-1].endswith('.html'):
             templates.append(templates[-1][:-5] + '.jinja2')
@@ -233,3 +236,8 @@ class RoutablePage(RoutablePageMixin, Page):
             templates = [base + suffix + ext for (base, ext) in templates]
 
         return templates
+
+    def serve(self, request, *args, **kwargs):
+        if not args and not kwargs and hasattr(self, '_view_for_root_url'):
+            return self._view_for_root_url(request)
+        return super().serve(request, *args, **kwargs)

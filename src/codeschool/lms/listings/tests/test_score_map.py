@@ -1,6 +1,6 @@
 import pytest
 
-from codeschool.lms.activity_lists.score_map import \
+from codeschool.lms.listings.score_map import \
     ScoreMap, ScoreTable, ScoreTableMapCommon
 
 ScoreTableMapCommon._translate = lambda self, x: str(x)

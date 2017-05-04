@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from codeschool import models
 
 
-class ClassroomList(models.RoutablePageExt,
+class ClassroomList(models.RoutableViewsPage,
                     models.DecoupledAdminPage):
     """
     A list of classrooms.

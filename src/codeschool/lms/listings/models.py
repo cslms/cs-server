@@ -1,16 +1,16 @@
 import model_reference
-from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import mixins
-from codeschool import models, panels
-from codeschool.lms.activities import components
-from codeschool.lms.activity_lists.managers import ActivitySectionManager
-from codeschool.lms.activity_lists.mixins import ScoreBoardMixin
+from codeschool import models
+from .managers import ActivitySectionManager
+from .mixins import ScoreBoardMixin
 from .score_map import ScoreTable, ScoreMap
 
 
 class ActivityList(ScoreBoardMixin,
+                   models.DecoupledAdminPage,
+                   models.RoutableViewsPage,
                    mixins.ShortDescriptionPage,
                    models.Page):
     """
@@ -31,46 +31,6 @@ class ActivityList(ScoreBoardMixin,
     MARATHON_SECTIONS = [
         # 'graphs', 'lists', 'strings',
     ]
-
-    @classmethod
-    def create_subpage(cls, parent=None, **kwargs):
-        """
-        Create a new ActivityList using the given keyword arguments under the
-        given parent page. If no parent is chosen, uses the main Wagtail root
-        page.
-        """
-
-        kwargs.update(
-            title=_('Activities'),
-            short_description=kwargs.get('short_description',
-                                         _('List of activities.')),
-            slug='activities',
-        )
-        parent = parent or model_reference.load('root-page')
-        new = cls(**kwargs)
-        print('parent', parent)
-        parent.add_child(instance=new)
-        new.save()
-        return new
-
-    @classmethod
-    def from_template(cls, template, parent=None):
-        """
-        Creates a new instance from the given template.
-
-        Valid templates are:
-            programming-beginner
-                Basic sections in a beginner programming course.
-            programming-intermediate
-                Sections for a second course on programming course.
-            programming-marathon
-                Sections for a marathon based course.
-        """
-
-        with transaction.atomic():
-            new = cls.create_subpage(parent)
-            new.update_from_template(template)
-            return new
 
     def update_from_template(self, template):
         """
@@ -104,21 +64,10 @@ class ActivityList(ScoreBoardMixin,
             board.add_column(col)
         return board
 
-    # Serving pages
-    template = 'lms/activities/list.jinja2'
-
-    def get_context(self, request, *args, **kwargs):
-        return dict(
-            super().get_context(request, *args, **kwargs),
-            object_list=[obj.specific for obj in self.get_children()],
-            navbar=components.activity_list_navbar(self, request.user),
-        )
-
-    # Wagtail admin
-    subpage_types = ['ActivitySection']
-
 
 class ActivitySection(ScoreBoardMixin,
+                      models.DecoupledAdminPage,
+                      models.RoutableViewsPage,
                       mixins.ShortDescriptionPage,
                       models.Page):
     """
@@ -261,22 +210,6 @@ class ActivitySection(ScoreBoardMixin,
             scores[k] = sum(L)
         return scores
 
-    # Serving pages
-    template = 'lms/activities/section.jinja2'
-
-    def get_context(self, request, *args, **kwargs):
-        return dict(
-            super().get_context(request, *args, **kwargs),
-            object_list=[obj.specific for obj in self.get_children()],
-            navbar=components.activity_section_navbar(self, request.user),
-        )
-
-    # Wagtail Admin
-    parent_page_types = [ActivityList]
-    content_panels = mixins.ShortDescriptionPage.content_panels + [
-        panels.FieldPanel('material_icon')
-    ]
-
 
 @model_reference.factory('main-question-list')
 def make_main_activity_list():
@@ -295,3 +228,7 @@ def make_main_activity_list():
             slug='questions',
         )
         return parent_page.add_child(instance=activity_list)
+
+# Import views explicitly until it becomes an app
+from . import views
+views._loaded = True

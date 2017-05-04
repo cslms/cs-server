@@ -15,9 +15,7 @@ QUESTION_BODY_BLOCKS = [
 ]
 
 
-class Question(models.DecoupledAdminPage,
-               mixins.ShortDescriptionPage,
-               Activity):
+class Question(mixins.ShortDescriptionPage, Activity):
     """
     Base abstract class for all question types.
     """
@@ -59,19 +57,9 @@ class Question(models.DecoupledAdminPage,
         Returns the navbar for the given question.
         """
 
-        from .components import navbar_question
+        from .bricks import navbar_question
 
         return navbar_question(self, user)
-
-    # Serve pages
-    def get_context(self, request, *args, **kwargs):
-        context = dict(
-            super().get_context(request, *args, **kwargs),
-            question=self,
-            form_name='response-form',
-            navbar=self.get_navbar(request.user)
-        )
-        return context
 
     #
     # Ajax submissions for user responses

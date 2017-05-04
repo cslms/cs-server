@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext as _
 
 from bricks.components.html5_tags import a
-from codeschool.components.navigation import navbar, navsection, \
+from codeschool.bricks.navigation import navbar, navsection, \
     navsection_page_admin
 
 
