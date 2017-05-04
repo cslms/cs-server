@@ -12,15 +12,6 @@ class CodeQuestion(Question):
     implementation and some examples.
     """
 
-    function_name = models.CharField(
-        _('Function name'),
-        max_length=80,
-        default='func',
-        help_text=_(
-            'The name of the test object. (This is normally a function, but '
-            'we can also test classes, data structures, or anything)',
-        ),
-    )
     grader = models.TextField(
         _('Grader source code'),
         help_text=_(
@@ -34,6 +25,15 @@ class CodeQuestion(Question):
         _('Reference implementation'),
         help_text=_(
             'Reference implementation for the correct function.'
+        ),
+    )
+    function_name = models.CharField(
+        _('Function name'),
+        max_length=80,
+        default='func',
+        help_text=_(
+            'The name of the test object. (This is normally a function, but '
+            'we can also test classes, data structures, or anything)',
         ),
     )
     timeout = models.FloatField(

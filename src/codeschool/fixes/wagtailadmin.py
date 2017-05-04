@@ -8,14 +8,12 @@ WAGTAIL_ADMIN_CLASSES = {}
 
 
 class WagtailAdminMeta:
-
     def __init__(self, model=None, abstract=False):
         self.model = model
         self.abstract = abstract
 
 
 class WagtailAdminBase(type):
-
     def __new__(cls, name, bases, ns):
         meta = ns.pop('Meta', None)
         meta_ns = (
@@ -36,7 +34,6 @@ class WagtailAdminBase(type):
 
 
 class WagtailAdmin(metaclass=WagtailAdminBase):
-
     class Meta:
         abstract = True
 
@@ -44,17 +41,26 @@ class WagtailAdmin(metaclass=WagtailAdminBase):
     promote_panels = list(Page.promote_panels)
     settings_panels = list(Page.settings_panels)
 
+    def _content_panels(self):
+        return expand_panels(self, 'content_panels')
+
+    def _promote_panels(self):
+        return expand_panels(self, 'promote_panels')
+
+    def _settings_panels(self):
+        return expand_panels(self, 'settings_panels')
+
     @cached_property
     def content_tab(self):
-        return _('Content'), self.content_panels
+        return _('Content'), self._content_panels()
 
     @cached_property
     def promote_tab(self):
-        return _('Promote'), self.promote_panels
+        return _('Promote'), self._promote_panels()
 
     @cached_property
     def settings_tab(self):
-        return _('Settings'), self.settings_panels, {'classname': 'settings'}
+        return _('Settings'), self._settings_panels(), {'classname': 'settings'}
 
     @cached_property
     def tabs(self):
@@ -87,7 +93,6 @@ class WagtailAdmin(metaclass=WagtailAdminBase):
 
 
 class DecoupledAdminPage(Page):
-
     class Meta:
         abstract = True
 
@@ -98,3 +103,20 @@ class DecoupledAdminPage(Page):
             return admin().get_edit_handler()
         else:
             return super().get_edit_handler()
+
+
+def expand_panels(admin, attr):
+    """
+    Expand the list of panels finding any ellipsis object and substituting it
+    by the superclass panels.
+    """
+
+    panels = getattr(admin, attr)
+    if ... in panels:
+        panels = list(panels)
+        idx = panels.index(...)
+        super_class_panels = getattr(super(admin.__class__, admin), attr)
+        pre = panels[:idx]
+        post = panels[idx + 1:]
+        panels = pre + list(super_class_panels) + post
+    return panels
