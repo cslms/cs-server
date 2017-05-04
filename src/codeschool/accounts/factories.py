@@ -56,6 +56,8 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
     Non-user fields are passed to user profile.
 
     If update=True, update existing models instead of raising an error.
+
+    If commit=False, do not save data to database uses only instance.
     """
 
     user_fields = {field.name for field in models.User._meta.fields}
