@@ -11,10 +11,13 @@ def main_question_list(request):
     return page.serve(request)
 
 
+#
+# Activity sub-pages
+#
 @Activity.register_route(r'^submissions/$',
                          name='activity-list-submissions',
                          login_required=True)
-def list_submissions_view(request, page, *args, **kwargs):
+def list_submissions(request, page, *args, **kwargs):
     progress = page.progress_set.for_user(request.user)
     submissions = progress.submissions \
         .all() \
@@ -31,7 +34,7 @@ def list_submissions_view(request, page, *args, **kwargs):
 @Activity.register_route(r'^csv/$',
                          name='activity-progress-csv',
                          perms='activities.view_submission_stats')
-def submissions_as_csv_view(request, page, *args, **kwargs):
+def submissions_as_csv(request, page, *args, **kwargs):
     progress_manager = page.progress_class.objects
     csv = progress_manager.gradebook_csv(page)
     response = HttpResponse(csv, content_type='text/csv')

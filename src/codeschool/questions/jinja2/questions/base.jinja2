@@ -1,6 +1,8 @@
 {% extends "page.jinja2" %}
 {% if form_name is undefined %}{% set form_name='form' %}{% endif %}
-
+{% if navbar is not defined %}
+    {% set navbar = page.get_navbar(request.user) %}
+{% endif %}
 {% block content_head %}
     {#<div id="points-dashboard">
         <table>
