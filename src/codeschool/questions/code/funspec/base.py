@@ -357,7 +357,7 @@ def builtins():
     Return a dictionary of builtins.
     """
 
-    from codeschool.questions.coding_func.funspec import builtins
+    from codeschool.questions.code.funspec import builtins
     return vars(builtins)
 
 

@@ -52,6 +52,17 @@ def run(ctx, production=False):
         ctx.run('gunicorn codeschool.wsgi -b unix:///tmp/sock/webapp.sock '
                 '--reload -w 4')
 
+@task
+def db(ctx, run=False):
+    """
+    Executes the makemigrations and migrate commands.
+    """
+
+    ctx.run('python manage.py makemigrations', pty=True)
+    ctx.run('python manage.py migrate', pty=True)
+    if run:
+        run(ctx)
+
 
 #
 # Translations
