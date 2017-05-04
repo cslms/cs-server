@@ -67,7 +67,9 @@ setup(
         'python-markdown-math',
         'html5lib==0.999999999',
         'bleach==2.0.0',
-        'Faker',
+        # 'Faker',
+        'fake-factory<=0.7.2',  # we must check all codeschool deps for culprits
+                                # before replacing fake-factory by Faker
         'factory-boy',
         'mommys_boy',
         'celery[redis]',
