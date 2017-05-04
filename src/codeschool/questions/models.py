@@ -20,10 +20,6 @@ class Question(mixins.ShortDescriptionPage, Activity):
     Base abstract class for all question types.
     """
 
-    class Meta:
-        abstract = True
-        permissions = (("download_question", "Can download question files"),)
-
     body = models.StreamField(
         QUESTION_BODY_BLOCKS,
         blank=True,
@@ -35,6 +31,7 @@ class Question(mixins.ShortDescriptionPage, Activity):
             'ambiguous.'
         ),
     )
+
     comments = models.RichTextField(
         _('Comments'),
         blank=True,
@@ -51,6 +48,10 @@ class Question(mixins.ShortDescriptionPage, Activity):
             'blank and manually insert all question fields.'
         )
     )
+
+    class Meta:
+        abstract = True
+        permissions = (("download_question", "Can download question files"),)
 
     def get_navbar(self, user):
         """

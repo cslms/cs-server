@@ -166,7 +166,7 @@ class CodingIoQuestion(Question):
 
     def submit(self, request, language=None, **kwargs):
         # Cannot set language if question specifies a required lnaguage
-        if language and self.language:
+        if language and self.language and language != self.language:
             args = language, self.language
             raise ValueError('cannot set language: %r != %r' % args)
 

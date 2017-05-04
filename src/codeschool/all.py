@@ -38,7 +38,7 @@ if 'codeschool.questions.coding_io' in settings.INSTALLED_APPS:
     from .questions.coding_io.models import *
     coding_io = Deferred(CodingIoQuestion.objects.first)
 if 'codeschool.questions.coding_func' in settings.INSTALLED_APPS:
-    from .questions.coding_func.models import *
+    from .questions.code.models import *
     coding_func = Deferred(CodingFuncQuestion.objects.first)
 if 'codeschool.questions.free_text' in settings.INSTALLED_APPS:
     from .questions.free_text.models import *

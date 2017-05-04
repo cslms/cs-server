@@ -40,6 +40,7 @@ def extract_extra_meta_fields(meta):
 
 def update_extra_meta_fields(cls, fields):
     meta = cls._meta
+    fields = fields or {}
     for subclass in cls.__mro__:
         if hasattr(subclass, '_meta'):
             for attr, value in EXTRA_META_VARS.items():
