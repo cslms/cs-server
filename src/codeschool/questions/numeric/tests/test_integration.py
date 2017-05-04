@@ -3,24 +3,19 @@ import pytest
 from codeschool.questions.numeric.factories import make_numeric_question, \
     make_numeric_question_fuzzy
 
+pytestmark = pytest.mark.integration
 
 @pytest.fixture
 def question_42(db):
     return make_numeric_question()
 
-
-@pytest.mark.integration
 def test_make_numeric_question(db):
     make_numeric_question()
 
-
-@pytest.mark.integration
 def test_make_numeric_question_fuzzy(db):
     question = make_numeric_question_fuzzy()
     assert question.title == 'Pie'
 
-
-@pytest.mark.integration
 def test_correct_submission(rf, question_42, user):
     request = rf.get(question_42.url)
     request.user = user
@@ -28,8 +23,6 @@ def test_correct_submission(rf, question_42, user):
     feedback = submission.auto_feedback()
     assert feedback.is_correct
 
-
-@pytest.mark.integration
 def test_wrong_submission(rf, question_42, user):
     request = rf.get(question_42.url)
     request.user = user
