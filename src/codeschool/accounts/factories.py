@@ -65,14 +65,15 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
     # Create user
     user = models.User(username=username, email=email, **user_kwargs)
     user.set_password(password)
-    try:
-        user.save(commit=commit)
-    except IntegrityError:
-        if not update:
-            raise
-        old = models.User.objects.get(username=username)
-        user.id = old.id
-        user.save()
+    if commit:
+        try:
+            user.save()
+        except IntegrityError:
+            if not update:
+                raise
+            old = models.User.objects.get(username=username)
+            user.id = old.id
+            user.save()
 
     # Normalize arguments
     if 'gender' in profile_kwargs:
@@ -85,7 +86,8 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
         profile.id = Profile.objects.get(user=user).id
     except Profile.DoesNotExist:
         pass
-    profile.save()
+    if commit:
+        profile.save()
 
     return user
 
