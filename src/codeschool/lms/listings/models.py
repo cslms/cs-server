@@ -41,7 +41,7 @@ class ActivityList(ScoreBoardMixin,
             'programming-beginner': self.BEGINNER_SECTIONS,
             'programming-intermediate': self.INTERMEDIATE_SECTIONS,
             'programming-marathon': self.MARATHON_SECTIONS,
-        }.get(template, None)
+        }.get(template)
 
         if sections is None:
             raise ValueError('invalid template name: %r' % template)

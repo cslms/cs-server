@@ -34,7 +34,7 @@ def with_class(obj, *classes):
         return obj
 
     elif isinstance(obj, Mapping):
-        class_ = obj.get('class_', None)
+        class_ = obj.get('class_')
         obj['class_'] = join_classes(classes, class_)
         return obj
 
