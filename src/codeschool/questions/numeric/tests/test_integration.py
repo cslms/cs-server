@@ -5,9 +5,11 @@ from codeschool.questions.numeric.factories import make_numeric_question, \
 
 pytestmark = pytest.mark.integration
 
+
 @pytest.fixture
 def question_42(db):
     return make_numeric_question()
+
 
 def test_make_numeric_question(db):
     make_numeric_question()
