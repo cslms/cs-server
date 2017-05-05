@@ -42,8 +42,8 @@ def run(ctx, production=False):
     if not production:
         ctx.run('python manage.py runserver', pty=True)
     else:
-        ctx.run('python3 manage.py makemigrations')
-        ctx.run('python3 manage.py migrate')
+        ctx.run('python3 manage.py makemigrations --no-input')
+        ctx.run('python3 manage.py migrate --no-input')
         ctx.run('python3 manage.py clean_orphan_obj_perms')
         ctx.run('python3 manage.py check_permissions')
         ctx.run('python3 manage.py check_permissions')
