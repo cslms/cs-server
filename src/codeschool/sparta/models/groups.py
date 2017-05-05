@@ -121,7 +121,6 @@ def organize_groups(users, group_size):
             A dictionary from users to their respective grades.
         group_size (int):
             The desired group size.
-
     Examples:
 
         >>> users = {'john': 10, 'paul': 9, 'george': 8, 'ringo': 6}

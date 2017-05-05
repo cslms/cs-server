@@ -18,9 +18,9 @@ class SpartaActivity(Activity):
     def populate_from_csv(self, csv_data):
         """
         Parse CSV data and populate the user grades.
-        
+
         Args:
-            csv_data (str): 
+            csv_data (str):
                 A CSV file with two columns. The first column must be username
                 and the second column is a grade in [0..100]
         """
@@ -38,3 +38,4 @@ class UserGrade(models.Model):
 
     class Meta:
         unique_together = [('activity', 'user')]
+
