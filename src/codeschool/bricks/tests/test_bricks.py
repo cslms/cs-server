@@ -18,18 +18,6 @@ class TestCards:
         assert 'Title' in html
         assert '<p>My card.</p>' in html
 
-    def test_simple_card_dispatch(self):
-        class Foo:
-            pass
-
-        @simple_card.register(Foo)
-        def _(foo, **kwargs):
-            return simple_card('Foo', 'Foo is bar.')
-
-        html = str(simple_card(Foo()))
-        assert '>Foo</h1>' in html
-        assert '<p>Foo is bar.</p>' in html
-
     def test_card_container_with_title(self, cards):
         container = card_container(cards, title='title')
         html = container.pretty()

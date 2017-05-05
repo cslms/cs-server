@@ -51,6 +51,7 @@ class Activity(CommitMixin,
             'The author\'s name, if not the same user as the question owner.'
         ),
     )
+    # Do we need this? Can we use wagtail's live attribute?
     visible = models.BooleanField(
         _('Invisible'),
         default=bool_to_true,

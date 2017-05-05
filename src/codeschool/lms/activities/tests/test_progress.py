@@ -2,9 +2,7 @@ from mock import Mock, patch
 
 from codeschool.lms.activities.models import Submission
 from codeschool.lms.activities.tests.fixtures import Fixtures, DbFixtures
-from codeschool.lms.activities.tests.mocks import queryset_mock, submit_for, \
-    disable_commit
-from codeschool.lms.activities.tests.mockset import mock_manager
+from codeschool.lms.activities.tests.mocks import queryset_mock, submit_for
 
 
 class TestSubmission(Fixtures):
