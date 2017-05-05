@@ -1,4 +1,4 @@
-from enum import IntEnum, auto
+from enum import IntEnum
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -8,10 +8,10 @@ from codeschool.questions.models import Question, QuestionProgress, \
 
 
 class Type(IntEnum):
-    PHYSICAL = auto()
-    CODE = auto()
-    RICHTEXT = auto()
-    FILE = auto()
+    PHYSICAL = 0
+    CODE = 1
+    RICHTEXT = 2
+    FILE = 3
 
 
 class FreeFormQuestion(Question):
