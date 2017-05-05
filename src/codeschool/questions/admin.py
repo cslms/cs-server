@@ -1,11 +1,11 @@
 from django.utils.text import ugettext_lazy as _
 
 from codeschool import panels
-from codeschool.fixes.wagtailadmin import WagtailAdmin
+from codeschool.admin import ShortDecriptionAdmin
 from . import models
 
 
-class QuestionAdmin(WagtailAdmin):
+class QuestionAdmin(ShortDecriptionAdmin):
     class Meta:
         model = models.Question
         abstract = True
