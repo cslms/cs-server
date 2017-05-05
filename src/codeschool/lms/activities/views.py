@@ -1,5 +1,5 @@
 import model_reference
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 
 from codeschool.lms.activities.bricks import submission_list
@@ -9,6 +9,23 @@ from .models import Activity
 def main_question_list(request):
     page = model_reference.load('main-question-list')
     return page.serve(request)
+
+
+#
+# Detail page
+#
+@Activity.register_route(r'^$',
+                         name='question-statistics',
+                         login_required=True)
+def index(request, page, *args, **kwargs):
+    perm = 'activities.edit_activity'
+    if not page.visible and \
+                    not request.user.has_perms(perm, page):
+        raise Http404
+
+    context = page.get_context(request)
+    template = page.get_template(request)
+    return render(request, template, context)
 
 
 #
