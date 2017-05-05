@@ -42,6 +42,9 @@ class FreeFormQuestion(Question):
         ),
     )
 
+    class Meta:
+        autograde = False
+
 
 class FreeFormProgress(QuestionProgress):
     """
@@ -62,3 +65,4 @@ class FreeFormFeedback(QuestionFeedback):
     """
     Feedback object for free form questions.
     """
+

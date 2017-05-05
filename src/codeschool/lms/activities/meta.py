@@ -2,7 +2,7 @@ from wagtail.wagtailcore.models import PageBase
 
 EXTRA_META_VARS = {
     'instant_feedback': True,
-    'automatic_grading': True,
+    'autograde': True,
     'progress_class': None,
     'submission_class': None,
     'feedback_class': None,
