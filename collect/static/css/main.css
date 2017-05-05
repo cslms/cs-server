@@ -12399,6 +12399,12 @@ dialog.wide,
   h3 {
     page-break-after: avoid; } }
 
+.layout-wfull {
+  width: 100%; }
+
+.layout-hfull {
+  height: 100%; }
+
 .bg-primary {
   background-color: #4d8bc0;
   color: #fff; }
