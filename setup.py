@@ -102,7 +102,7 @@ setup(
         'werkzeug',
 
         # Wagtail
-        'wagtail~=1.9',
+        'wagtail~=1.10',
         'wagtail-model-tools>=0.1.4',
 
         # Jinja support
