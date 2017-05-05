@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 import bricks.rpc
+from bricks.html5 import p, div, h2
 from codeschool import blocks
 from codeschool import mixins
 from codeschool import models
@@ -70,6 +71,15 @@ class Question(mixins.ShortDescriptionPage, Activity):
         Render a user-facing message from the supplied submission.
         """
 
+        if not self._meta.autograde:
+            return \
+                div()[
+                    h2('Congratulations!'),
+                    p(_('Submission sent! Please wait while someone will '
+                        'grade it!')),
+                ]
+
+        # Check options for autograde questions
         if submission.recycled and submission.has_feedback:
             feedback = submission.feedback
             return feedback.render_message()
@@ -77,7 +87,7 @@ class Question(mixins.ShortDescriptionPage, Activity):
             feedback = submission.auto_feedback()
             return feedback.render_message()
         else:
-            return 'Your submission is on the correction queue!'
+            return _('Your submission is on the correction queue!')
 
     def serve_ajax_submission(self, client, **kwargs):
         """
