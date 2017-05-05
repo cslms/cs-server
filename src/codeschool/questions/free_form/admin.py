@@ -8,15 +8,13 @@ from . import models
 class CodeQuestionAdmin(QuestionAdmin):
 
     class Meta:
-        model = models.CodeQuestion
+        model = models.FreeFormQuestion
 
     content_panels = [
             ...,
 
             panels.MultiFieldPanel([
-                panels.FieldPanel('grader'),
-                panels.FieldPanel('reference'),
-                panels.FieldPanel('function_name'),
-                panels.FieldPanel('timeout'),
+                panels.FieldPanel('type'),
+                panels.FieldPanel('filter'),
             ], heading=_('Options')),
         ]

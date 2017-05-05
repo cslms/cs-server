@@ -5,9 +5,10 @@ from codeschool.bricks import simple_card
 
 def empty_card():
     return simple_card(
-        icon='do_not_disturb',
+        _('Empty'),
         text=_('No section found'),
-        title=_('Empty'),
+        icon='do_not_disturb',
+        faded=True,
     )
 
 

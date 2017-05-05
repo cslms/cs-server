@@ -61,7 +61,16 @@ def db(ctx, run=False):
     ctx.run('python manage.py makemigrations', pty=True)
     ctx.run('python manage.py migrate', pty=True)
     if run:
-        run(ctx)
+        ctx.run('python manage.py runserver', pty=True)
+
+
+@task
+def shell(ctx, run=False):
+    """
+    Executes shell.
+    """
+
+    ctx.run('ipython -ic "from codeschool.all import *"', pty=True)
 
 
 #
