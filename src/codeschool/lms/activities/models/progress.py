@@ -104,6 +104,7 @@ class Progress(CommitMixin,
         submission = submission_class(progress=self, **payload)
         submission.ip_address = get_ip(request)
         submission.hash = submission.compute_hash()
+        submission.full_clean()
 
         # Then check if any submission is equal to some past submission and
         # then recycle it

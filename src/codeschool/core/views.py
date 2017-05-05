@@ -4,9 +4,9 @@ import model_reference
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 
-from codeschool import config_options, global_data_store
 from codeschool import models
 from codeschool import settings
+from codeschool.core import config_options, global_data_store
 from codeschool.accounts.models import Profile
 from codeschool.core.debug_info import DebugInfo
 from codeschool.core.forms import ConfigForm, NewUserForm, SysProfileForm, \

@@ -1,7 +1,21 @@
-from django.utils.translation import ugettext_lazy as _
+import os
+
+import tempfile
+import traceback
+
+try:
+    from django.utils.translation import ugettext_lazy as _
+except ImportError:
+    _ = lambda x: x
 
 NAME_ERROR_MESSAGE = _('the code must define a {} object')
 WRONG_ANSWER_MESSAGE = _('Wrong answer')
+
+
+class FetchObjectError(Exception):
+    """
+    Error raised when object cannot be fetched from program.
+    """
 
 
 def code_errors(grader, test_code, reference_code, name='func'):
@@ -29,9 +43,15 @@ def code_errors(grader, test_code, reference_code, name='func'):
         A string describing an error or None if the codes executed successfully.
     """
 
-    test = fetch_named_object(test_code, name)
-    reference = fetch_named_object(reference_code, name)
-    grader = fetch_named_object(grader, 'grader')
+    try:
+        test = fetch_named_object(test_code, name, 'code.py')
+        reference = fetch_named_object(reference_code, name, 'reference.py')
+        grader = fetch_named_object(grader, 'grader', 'grader.py')
+    except FetchObjectError as ex:
+        raised = ex.args[0]
+        return 'RuntimeError (%s): %s' % (raised.__class__.__name__, raised)
+
+    print(test, reference, grader)
 
     try:
         grader(test, reference)
@@ -41,14 +61,31 @@ def code_errors(grader, test_code, reference_code, name='func'):
         return '%s: %s' % (ex.__class__.__name__, ex)
 
 
-def fetch_named_object(code, name):
+def fetch_named_object(source, obj_name, file_name='default.py'):
     """
     Execute code and return given object.
     """
 
     ns = {}
-    exec(code, ns)
+
+    tmp_dir = tempfile.mkdtemp()
     try:
-        return ns[name]
+        tmp_file = os.path.join(tmp_dir, file_name)
+
+        with open(tmp_file, 'w', encoding='utf8') as F:
+            F.write(source)
+
+        try:
+            code = compile(source, tmp_file, 'exec', dont_inherit=True)
+            exec(code, ns)
+        except Exception as ex:
+            raise FetchObjectError(traceback.format_exc())
+    finally:
+        for f in os.listdir(tmp_dir):
+            os.unlink(os.path.join(tmp_dir, f))
+        os.rmdir(tmp_dir)
+
+    try:
+        return ns[obj_name]
     except KeyError:
-        return 'NameError: ' + NAME_ERROR_MESSAGE.format(name)
+        raise FetchObjectError(NameError('object %r is not defined' % obj_name))

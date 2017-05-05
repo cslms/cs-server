@@ -25,12 +25,38 @@ class WagtailAdminBase(type):
 
     def __init__(cls, name, bases, ns):
         super().__init__(name, bases, ns)
+        cls._expand_all_panels()
 
         # Register model
         if cls._meta.model is None and not cls._meta.abstract:
             raise TypeError('must define a model for concrete class')
         elif cls._meta.model:
             WAGTAIL_ADMIN_CLASSES[cls._meta.model] = cls
+
+    def _expand_all_panels(cls):
+        for attr in dir(cls):
+            if attr.endswith('_panels'):
+                value = expand_panel(cls, attr)
+                setattr(cls, attr, value)
+
+
+def expand_panel(cls, attr):
+    """
+    Expand the list of panels finding any ellipsis object and substituting it
+    by the superclass panels.
+    """
+
+    panels = getattr(cls, attr)
+    if ... in panels:
+        panels = list(panels)
+        idx = panels.index(...)
+        base = super(cls, cls)
+        super_panels = getattr(base, attr)
+        pre = panels[:idx]
+        post = panels[idx + 1:]
+        panels = pre + list(super_panels) + post
+    return panels
+
 
 
 class WagtailAdmin(metaclass=WagtailAdminBase):
@@ -41,26 +67,17 @@ class WagtailAdmin(metaclass=WagtailAdminBase):
     promote_panels = list(Page.promote_panels)
     settings_panels = list(Page.settings_panels)
 
-    def _content_panels(self):
-        return expand_panels(self, 'content_panels')
-
-    def _promote_panels(self):
-        return expand_panels(self, 'promote_panels')
-
-    def _settings_panels(self):
-        return expand_panels(self, 'settings_panels')
-
     @cached_property
     def content_tab(self):
-        return _('Content'), self._content_panels()
+        return _('Content'), self.content_panels
 
     @cached_property
     def promote_tab(self):
-        return _('Promote'), self._promote_panels()
+        return _('Promote'), self.promote_panels
 
     @cached_property
     def settings_tab(self):
-        return _('Settings'), self._settings_panels(), {'classname': 'settings'}
+        return _('Settings'), self.settings_panels, {'classname': 'settings'}
 
     @cached_property
     def tabs(self):
@@ -104,19 +121,3 @@ class DecoupledAdminPage(Page):
         else:
             return super().get_edit_handler()
 
-
-def expand_panels(admin, attr):
-    """
-    Expand the list of panels finding any ellipsis object and substituting it
-    by the superclass panels.
-    """
-
-    panels = getattr(admin, attr)
-    if ... in panels:
-        panels = list(panels)
-        idx = panels.index(...)
-        super_class_panels = getattr(super(admin.__class__, admin), attr)
-        pre = panels[:idx]
-        post = panels[idx + 1:]
-        panels = pre + list(super_class_panels) + post
-    return panels

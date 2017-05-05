@@ -180,7 +180,9 @@ class Activity(CommitMixin,
         dictionary with only those arguments that should be passed to the
         .submit() function.
         """
-        return {}
+
+        data_fields = self.submission_class.data_fields()
+        return {k: v for (k, v) in payload.items() if k in data_fields}
 
     def submit_with_user_payload(self, request, payload):
         """

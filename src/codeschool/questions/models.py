@@ -70,7 +70,7 @@ class Question(mixins.ShortDescriptionPage, Activity):
         Render a user-facing message from the supplied submission.
         """
 
-        if submission.recycled and submission.feedback:
+        if submission.recycled and submission.has_feedback:
             feedback = submission.feedback
             return feedback.render_message()
         elif self._meta.instant_feedback:
