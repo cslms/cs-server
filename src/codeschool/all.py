@@ -46,3 +46,7 @@ if 'codeschool.questions.free_text' in settings.INSTALLED_APPS:
 if 'codeschool.questions.numeric' in settings.INSTALLED_APPS:
     from .questions.numeric.models import *
     numeric = Deferred(NumericQuestion.objects.first)
+if 'codeschool.sparta' in settings.INSTALLED_APPS:
+    from .sparta.models import *
+    sparta = Deferred(SpartaActivity.objects.first)
+    sparta_group = Deferred(lambda: sparta.groups.first())

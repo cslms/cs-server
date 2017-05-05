@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import SpartaActivity, SpartaGroup, SpartaMembership
 
-# Register your models here.
+
+admin.site.register(SpartaActivity)
+admin.site.register(SpartaGroup)
+admin.site.register(SpartaMembership)
+
