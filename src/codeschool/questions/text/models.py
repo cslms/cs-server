@@ -6,6 +6,7 @@ from codeschool import panels
 from codeschool.questions.models import Question, QuestionFeedback, \
     QuestionSubmission, QuestionProgress
 from unidecode import unidecode
+from re import match
 
 class TextQuestion(Question):
     """
@@ -94,7 +95,9 @@ class TextFeedback(QuestionFeedback):
         value = self.submission.value
         correct = self.question.correct_answer
 
+        matched_regex = match(correct, value)
+
         correct = unidecode(correct).lower()
         value = unidecode(value).lower()
 
-        return 100 if value == correct else 0, {}
+        return 100 if value == correct or matched_regex else 0, {}
