@@ -6,6 +6,8 @@
 # These steps are only necessary in development. Production should initialize
 # the redis server explicitly.
 #
+import os
+
 from codeschool import settings
 
 
