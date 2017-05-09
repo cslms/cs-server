@@ -8,10 +8,10 @@ def make_text_questions(parent=None):
         title='The Answer',
         body=[
             ('markdown',
-             'What is The Answer to the Ultimate Question of Life, The '
+             'What is bigger than the answer to the Ultimate Question of Life, The '
              'Universe, and Everything?'),
         ],
-        correct_answer='joÃo',
+        correct_answer='Quarenta e três',
     )
     parent = parent or model_reference.load('root-page')
     parent.add_child(instance=question)
