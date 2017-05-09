@@ -55,3 +55,17 @@ def test_incorrect_lowercase_submition_text_question(rf, question_first, user):
     submission = question_first.submit(request, value='quarenta e um')
     feedback = submission.auto_feedback()
     assert not feedback.is_correct
+
+def test_correct_accentuated_submition_text_question(rf, question_first, user):
+    request = rf.get(question_first.url)
+    request.user = user
+    submission = question_first.submit(request, value='quarenta e tres')
+    feedback = submission.auto_feedback()
+    assert feedback.is_correct
+
+def test_incorrect_accentuated_submition_text_question(rf, question_first, user):
+    request = rf.get(question_first.url)
+    request.user = user
+    submission = question_first.submit(request, value='trinta e tres')
+    feedback = submission.auto_feedback()
+    assert not feedback.is_correct
