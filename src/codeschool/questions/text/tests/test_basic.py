@@ -19,7 +19,7 @@ def test_correct_submission_text_question(rf, question_first, user):
     request = rf.get(question_first.url)
     request.user = user
     submission = question_first.submit(request, value='joão')
-    feedback = submission.autograde()
+    feedback = submission.auto_feedback()
     assert feedback.is_correct
 
 
@@ -27,7 +27,7 @@ def test_incorrect_submission_text_question(rf, question_first, user):
     request = rf.get(question_first.url)
     request.user = user
     submission = question_first.submit(request, value='alo')
-    feedback = submission.autograde()
+    feedback = submission.auto_feedback()
     assert not feedback.is_correct
 
 

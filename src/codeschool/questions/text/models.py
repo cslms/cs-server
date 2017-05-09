@@ -90,14 +90,11 @@ class TextFeedback(QuestionFeedback):
     interval.
     """
 
-    def autograde(self):
+    def get_autograde_value(self):
         value = self.submission.value
         correct = self.question.correct_answer
 
         correct = unidecode(correct).lower()
         value = unidecode(value).lower()
 
-        if value == correct:
-            self.given_grade_pc = 100
-        else:
-            self.given_grade_pc = 0
+        return 100 if value == correct else 0, {}
