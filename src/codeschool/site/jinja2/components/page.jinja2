@@ -2,10 +2,8 @@
 {% macro cs_head(user, cls=None) %}
     {% if user is undefined %}
         {% set fabletter = '?' %}
-        {% set profile = '' %}
     {% else %}
         {% set fabletter = user.username[0] %}
-        {% set profile = user.username %}
     {% endif %}
 
     <div class="cs-head{% if cls %} {{ cls }}{% endif %}">
@@ -26,7 +24,7 @@
             <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
                 for="cs-head--dropdown-trigger">
                 <li class="mdl-menu__item">
-                    <a href="/auth/{{ profile }}">{{ _('Profile') }}</a>
+                    <a href="/profile/">{{ _('Profile') }}</a>
                 </li>
                 <li class="mdl-menu__item">
                     <a href="/auth/logout/">{{ _('Logout') }}</a>

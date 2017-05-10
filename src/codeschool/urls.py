@@ -25,7 +25,7 @@ from codeschool.core.views import index_view
 # Basic URLS
 urlpatterns = [
     url(r'^admin/', include('wagtail.wagtailadmin.urls')),
-    url(r'^$', index_view),
+    url(r'^$', index_view, name='index'),
     url(r'^profile/$', profile_view, name='profile-view'),
     url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
 ]
