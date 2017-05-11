@@ -3,13 +3,72 @@ import pytest
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db.models import QuerySet
+from lazyutils import delegate_to
 from mock import patch, Mock
-from codeschool.lms.activities.models import Activity, Submission, Feedback, \
-    Progress
-from codeschool.lms.activities.tests.fixtures import Fixtures, DbFixtures
+from codeschool.accounts.factories import UserFactory
+from codeschool.lms.activities.models import Activity, Submission, \
+    Progress, Feedback
 from codeschool.lms.activities.tests.mocks import wagtail_page, submit_for, \
     queryset_mock
 from codeschool.lms.activities.validators import grade_validator
+
+
+class Fixtures:
+    activity_class = Activity
+    submission_payload = {}
+
+    @pytest.fixture
+    def activity(self):
+        cls = self.activity_class
+        with wagtail_page(cls):
+            result = cls(title='Test', id=1)
+        result.specific = result
+        return result
+
+    @pytest.yield_fixture
+    def progress(self, activity, user):
+        cls = self.progress_class
+        if cls._meta.abstract:
+            pytest.skip('Progress class is abstract')
+
+        with patch.object(cls, 'user', user):
+            progress = cls(activity_page=activity, id=1)
+            yield progress
+
+    # Mocked fixtures
+    user = pytest.fixture(lambda self: Mock(id=2, username='user'))
+
+    # Properties
+    progress_class = delegate_to('activity_class')
+    submission_class = delegate_to('activity_class')
+    feedback_class = delegate_to('activity_class')
+
+
+class DbFixtures(Fixtures):
+    @pytest.fixture
+    def activity(self):
+        result = self.activity_class(title='Test', id=1)
+        result.specific = result
+        return result
+
+    @pytest.fixture
+    def progress(self, activity, user):
+        cls = self.progress_class
+        if cls._meta.abstract:
+            pytest.skip('Progress class is abstract')
+        return cls(activity_page=activity, user=user, id=1)
+
+    @pytest.fixture
+    def progress_db(self, progress):
+        progress.user.save()
+        progress.activity.save()
+        progress.save()
+        return progress
+
+    @pytest.fixture
+    def user(self):
+        return UserFactory.build()
+
 
 class TestActivity(Fixtures):
     """
@@ -63,11 +122,12 @@ class TestActivity(Fixtures):
     # Test happy stories: user submissions
     def test_submit_payload(self, activity, user, progress):
         request = Mock(user=user)
-        for_user = lambda user: progress
+
+        def for_user(user): return progress
         cls = self.activity_class
 
         with patch.object(cls, 'progress_set', Mock(for_user=for_user)), \
-             submit_for(cls):
+                submit_for(cls):
             sub = activity.submit(request, **self.submission_payload)
 
         assert isinstance(sub, Submission)
@@ -79,7 +139,8 @@ class TestActivity(Fixtures):
             payload = dict(self.submission_payload, probably_invalid_arg=42)
             activity.submit_with_user_payload(request, payload)
 
-        assert submit.call_args == mock.call(request, **self.submission_payload)
+        assert submit.call_args == mock.call(
+            request, **self.submission_payload)
 
     def test_submissions_property_yields_a_queryset(self, activity):
         if self.submission_class._meta.abstract:
@@ -95,6 +156,7 @@ class TestActivity(Fixtures):
         activity.clean()
         assert activity.author_name == 'John Smith <foo@bar.com>'
 
+
 class TestSubmission(Fixtures):
     def test_submission_class_implement_hash(self):
         cls = self.submission_class
@@ -106,7 +168,8 @@ class TestProgress(Fixtures):
     def test_progress_submission_method(self, activity, progress):
         request = Mock()
         with queryset_mock(), submit_for(self.activity_class):
-            sub = submission = progress.submit(request, self.submission_payload)
+            sub = submission = progress.submit(
+                request, self.submission_payload)
 
         assert isinstance(sub, Submission)
         assert sub.progress_id == progress.id
@@ -123,6 +186,7 @@ class DbTestProgress(DbFixtures):
 
         assert sub1.id == sub2.id
         assert sub2.num_recycles == 1
+
 
 def test_grade_validador():
     grade_validator(0)
