@@ -8,10 +8,30 @@ from codeschool.core import get_programming_language
 from codeschool.lms.activities.models import Feedback
 from codeschool.questions.coding_io import factories
 from codeschool.questions.coding_io.models.question import expand_tests
+from codeschool.questions.coding_io.ejudge import expand_from_code
+from iospec import parse, Out, In, StandardTestCase
+
 
 pytestmark = pytest.mark.integration
 example = factories.question_from_example
 source = factories.source_from_example
+
+
+def test_expand_from_code_keep_simple_cases():
+    src = "print(input('x:'))"
+    iospec = (
+        'x: <foo>\n'
+        'foo\n'
+        '\n'
+        '@input $name\n'
+        '\n'
+        'x: <bar>\n'
+        'bar'
+    )
+    iospec = parse(iospec)
+    expanded = expand_from_code(src, iospec, lang='python')
+    expected = StandardTestCase([Out('x: '), In('foo'), Out('foo')])
+    assert expanded[0] == expected
 
 
 @pytest.mark.skip

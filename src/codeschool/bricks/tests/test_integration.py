@@ -3,14 +3,22 @@ from codeschool.bricks import simple_card, card_container
 
 pytestmark = pytest.mark.integration
 
+
 class TestCards:
     """
     Tests all card components.
     """
+
     @pytest.fixture
     def cards(self):
         return [simple_card('text1', 'title1'),
                 simple_card('text2', 'title2'), ]
+
+    def test_simple_card(self):
+        card = simple_card('Title', 'My card.')
+        html = str(card)
+        assert 'Title' in html
+        assert '<p>My card.</p>' in html
 
     def test_card_container_with_title(self, cards):
         container = card_container(cards, title='title')
@@ -26,9 +34,3 @@ class TestCards:
         print(html)
         assert '<aside' not in html
         assert 'mdl-cell--12-col' in html
-
-    def test_simple_card(self):
-        card = simple_card('Title', 'My card.')
-        html = str(card)
-        assert 'Title' in html
-        assert '<p>My card.</p>' in html
