@@ -6,7 +6,6 @@ from mock import patch
 from codeschool.lms.activities.models.mixins import CommitMixin
 
 
-
 @contextmanager
 def disable_commit():
     """
@@ -54,7 +53,8 @@ def submit_for(cls):
         with patch.object(cls.submission_class.objects,
                           'recyclable',
                           lambda x: []):
-            yield patcher
+            with patch.object(cls.submission_class, 'full_clean'):
+                yield patcher
 
 
 @contextmanager

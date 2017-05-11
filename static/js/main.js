@@ -29,13 +29,13 @@ var $styles = $(function () {
     componentHandler.upgradeDom();
 
     // Apply material style to all form elements
-    if (apply_styles) {
-        var buttons = $('button, input[type=button], input[type=reset], input[type=submit], .button');
-        buttons.addClass('mdl-button mdl-js-button mdl-js-ripple-effect');
-        buttons.filter('.primary, [raised]').addClass('mdl-shadow--4dp mdl-button--raised');
-        buttons.filter(':not(.flat)').addClass('mdl-button--raised');
-        elements = elements.add(buttons);
-    }
+    // if (apply_styles) {
+    //    var buttons = $('button, input[type=button], input[type=reset], input[type=submit], .button');
+    //    buttons.addClass('mdl-button mdl-js-button mdl-js-ripple-effect');
+    //    buttons.filter('.primary, [raised]').addClass('mdl-shadow--4dp mdl-button--raised');
+    //    buttons.filter(':not(.flat)').addClass('mdl-button--raised');
+    //    elements = elements.add(buttons);
+    //}
 
     // Make open=False for main dialog
     $('#dialog, dialog').each(function (i, el) {

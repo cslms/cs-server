@@ -1,5 +1,5 @@
 import model_reference
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 
 from codeschool.lms.activities.bricks import submission_list
@@ -11,13 +11,30 @@ def main_question_list(request):
     return page.serve(request)
 
 
+def default_checks(request, page):
+    # Move to rules and add some logic to do that in the register_route method.
+    user = request.user
+    #if not user.has_perms('activities.view_activities', page):
+    #    raise Http404
+
+
+#
+# Detail page
+#
+@Activity.register_route(r'^$', login_required=True)
+def index(request, page, *args, **kwargs):
+    default_checks(request, page)
+    context = page.get_context(request)
+    template = page.get_template(request)
+    return render(request, template, context)
+
+
 #
 # Activity sub-pages
 #
-@Activity.register_route(r'^submissions/$',
-                         name='activity-list-submissions',
-                         login_required=True)
+@Activity.register_route(r'^submissions/$', login_required=True)
 def list_submissions(request, page, *args, **kwargs):
+    default_checks(request, page)
     progress = page.progress_set.for_user(request.user)
     submissions = progress.submissions \
         .all() \
@@ -31,10 +48,9 @@ def list_submissions(request, page, *args, **kwargs):
     return render(request, 'page.jinja2', ctx)
 
 
-@Activity.register_route(r'^csv/$',
-                         name='activity-progress-csv',
-                         perms='activities.view_submission_stats')
+@Activity.register_route(r'^csv/$', perms='activities.view_submission_stats')
 def submissions_as_csv(request, page, *args, **kwargs):
+    default_checks(request, page)
     progress_manager = page.progress_class.objects
     csv = progress_manager.gradebook_csv(page)
     response = HttpResponse(csv, content_type='text/csv')

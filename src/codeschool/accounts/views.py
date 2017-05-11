@@ -1,12 +1,14 @@
 from django import http
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 from userena import views
 from userena.forms import AuthenticationForm
 
-from codeschool.accounts.forms import SignupForm, SignupOptionalForm
 from codeschool.models import User
+from . import bricks
+from .forms import SignupForm, SignupOptionalForm
 
 
 class LoginView(TemplateView):
@@ -85,5 +87,13 @@ class LoginView(TemplateView):
 
 @login_required
 def profile_view(request):
-    username = request.user.username
-    return redirect('auth:profile-detail', username=username)
+    user = request.user
+    profile = user.profile
+    name = profile.get_full_name_or_username()
+
+    context = dict(
+        content_title=_('Profile: {name}').format(name=name),
+        content_body=bricks.profile(profile),
+        navbar=bricks.navbar(user),
+    )
+    return render(request, 'base.jinja2', context)

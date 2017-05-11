@@ -15,6 +15,10 @@ logger = logging.getLogger('codeschool.lms.activities')
 ZERO = decimal.Decimal(0)
 
 
+def bool_to_true():
+    return True
+
+
 class Activity(CommitMixin,
                models.RoutableViewsPage,
                models.DecoupledAdminPage,
@@ -47,9 +51,10 @@ class Activity(CommitMixin,
             'The author\'s name, if not the same user as the question owner.'
         ),
     )
+    # Do we need this? Can we use wagtail's live attribute?
     visible = models.BooleanField(
         _('Invisible'),
-        default=bool,
+        default=bool_to_true,
         help_text=_(
             'Makes activity invisible to users.'
         ),
@@ -84,7 +89,8 @@ class Activity(CommitMixin,
         help_text=_(
             'Activities can be automatically disabled when Codeshool '
             'encounters an error. This usually produces a message saved on '
-            'the .disabled_message attribute.'
+            'the .disabled_message attribute. '
+            'This field is not controlled directly by users.'
         )
     )
     disabled_message = models.TextField(
@@ -180,7 +186,9 @@ class Activity(CommitMixin,
         dictionary with only those arguments that should be passed to the
         .submit() function.
         """
-        return {}
+
+        data_fields = self.submission_class.data_fields()
+        return {k: v for (k, v) in payload.items() if k in data_fields}
 
     def submit_with_user_payload(self, request, payload):
         """

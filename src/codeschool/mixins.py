@@ -21,12 +21,12 @@ class ShortDescriptionPage(Page):
         )
     )
 
-    def full_clean(self):
+    def full_clean(self, *args, **kwargs):
         if self.short_description and not self.seo_title:
             self.seo_title = self.short_description
         if not self.short_description:
             self.short_description = self.seo_title or self.title
-        return super().full_clean()
+        return super().full_clean(*args, **kwargs)
 
 
 class ShortDescriptionMixin(Model):

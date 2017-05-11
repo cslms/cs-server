@@ -18,7 +18,6 @@ matrix:
 install:
   - pip install tox codecov
 
-# Run tests
 script:
   tox
 

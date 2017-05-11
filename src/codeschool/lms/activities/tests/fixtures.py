@@ -5,7 +5,6 @@ from mock import patch, Mock
 from codeschool.accounts.factories import UserFactory
 from codeschool.lms.activities.models import Activity
 from codeschool.lms.activities.tests.mocks import wagtail_page
-from codeschool.lms.activities.tests.mockset import Db
 
 
 class Fixtures:
