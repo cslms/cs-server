@@ -3,13 +3,10 @@ from django.core.exceptions import ValidationError
 from markio import parse_markio
 from codeschool.questions.coding_io.ejudge import expand_from_code
 from iospec import parse, Out, In, StandardTestCase
-
 from codeschool.core import get_programming_language
 from codeschool.lms.activities.models import Feedback
 from codeschool.questions.coding_io import factories
 from codeschool.questions.coding_io.models.question import expand_tests
-from codeschool.questions.coding_io.ejudge import expand_from_code
-from iospec import parse, Out, In, StandardTestCase
 
 
 pytestmark = pytest.mark.integration
@@ -194,11 +191,13 @@ def test_do_not_validate_bad_pre_tests_source(db):
         question.full_clean()
     assert 'pre_tests_source' in ex.value.args[0]
 
+
 def test_validate_multiple_answer_keys(db):
     question = example('simple')
     question.answers.create(language=get_programming_language('c'),
                             source=source('hello.c'))
     question.full_clean_all()
+
 
 def test_expand_from_code_keep_simple_cases():
     src = "print(input('x:'))"
@@ -215,6 +214,7 @@ def test_expand_from_code_keep_simple_cases():
     expanded = expand_from_code(src, iospec, lang='python')
     expected = StandardTestCase([Out('x: '), In('foo'), Out('foo')])
     assert expanded[0] == expected
+
 
 def test_do_not_validate_negative_timeout(db):
     question = example('simple')

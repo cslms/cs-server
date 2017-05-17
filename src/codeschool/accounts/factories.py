@@ -57,7 +57,7 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
 
     If update=True, update existing models instead of raising an error.
 
-    If commit=False, do not save data to database uses only instance.
+    If commit=commit_val, do not save data to database uses only instance.
     """
 
     user_fields = {field.name for field in models.User._meta.fields}
@@ -94,10 +94,11 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
     return user
 
 
-def make_yoda_teacher():
+def make_yoda_teacher(commit_val=False):
     curr_date = dt.datetime.now().date()
     return make_user(
         update=True,
+        commit=commit_val,
         is_teacher=True,
         username='yoda',
         first_name='Yoda',
@@ -109,9 +110,10 @@ def make_yoda_teacher():
     )
 
 
-def make_girafales_teacher():
+def make_girafales_teacher(commit_val=False):
     return make_user(
         update=True,
+        commit=commit_val,
         is_teacher=True,
         username='girafales123',
         first_name='Inocêncio',
@@ -124,9 +126,10 @@ def make_girafales_teacher():
     )
 
 
-def make_helena_teacher():
+def make_helena_teacher(commit_val=False):
     return make_user(
         update=True,
+        commit=commit_val,
         is_teacher=True,
         username='helena',
         first_name='Helena',
@@ -138,9 +141,10 @@ def make_helena_teacher():
     )
 
 
-def make_miyagi_teacher():
+def make_miyagi_teacher(commit_val=False):
     return make_user(
         update=True,
+        commit=commit_val,
         is_teacher=True,
         username='prof.miyagi',
         first_name='Keisuke',
@@ -152,9 +156,10 @@ def make_miyagi_teacher():
     )
 
 
-def make_joe_user():
+def make_joe_user(commit_val=False):
     return make_user(
         update=True,
+        commit=commit_val,
         username='joe',
         first_name='Joe',
         last_name='Smith',
@@ -165,7 +170,7 @@ def make_joe_user():
     )
 
 
-def make_random_student():
+def make_random_student(commit_val=False):
     gender = random.choice(['male', 'female'])
     if gender == 'male':
         name = fake.first_name_male()
@@ -178,6 +183,7 @@ def make_random_student():
             last_name=fake.last_name(),
             password=fake.password(),
             email=fake.email(),
+            commit=commit_val,
             gender=gender,
             date_of_birth=birthday(),
         )
@@ -185,9 +191,10 @@ def make_random_student():
         pass
 
 
-def make_maurice_moss():
+def make_maurice_moss(commit_val=False):
     return make_user(
         update=True,
+        commit=commit_val,
         username='admin',
         first_name='Maurice',
         last_name='Moss',
@@ -202,9 +209,10 @@ def make_maurice_moss():
     )
 
 
-def make_mr_robot():
+def make_mr_robot(commit_val=False):
     return make_user(
         update=True,
+        commit=commit_val,
         username='mr_robot',
         first_name='<script>alert("you\'ve been pwnd!")</script>',
         last_name='<script>alert("you\'ve been pwnd!")</script>',
