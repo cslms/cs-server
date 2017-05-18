@@ -1,6 +1,6 @@
 import pytest
 
-from codeschool.accounts.factories import *
+from codeschool.accounts.factories import FullUserFactory
 
 pytestmark = pytest.mark.integration
 

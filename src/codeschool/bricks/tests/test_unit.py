@@ -1,5 +1,4 @@
 import pytest
-from codeschool.bricks import *
 
 class TestNavbar:
     """

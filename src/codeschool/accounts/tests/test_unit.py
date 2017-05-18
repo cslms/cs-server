@@ -1,7 +1,5 @@
 import pytest
 
-from codeschool.accounts.factories import *
-
 def _test_basic_urls(user, client):
     context = {'username': user.username}
     urls = [

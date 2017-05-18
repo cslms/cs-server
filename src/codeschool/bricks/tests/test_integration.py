@@ -1,5 +1,5 @@
 import pytest
-from codeschool.bricks import *
+from codeschool.bricks import simple_card, card_container
 
 pytestmark = pytest.mark.integration
 
