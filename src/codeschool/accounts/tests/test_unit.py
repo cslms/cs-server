@@ -1,13 +1,18 @@
 import pytest
 
-from codeschool.accounts.factories import *
+def _test_basic_urls(user, client):
+    context = {'username': user.username}
+    urls = [
+        '/auth/{username}',
+        '/auth/{username}/edit',
+        '/auth/{username}/password',
+    ]
+    client.check_url(urls, context, html5=True)
 
 
-@pytest.mark.django_db
-def test_user_profile_is_created_automatically():
-    user = FullUserFactory.create()
-    assert user.profile is not None
-
+def _test_login_with_valid_user(driver, user_with_password, password):
+    user = user_with_password
+    driver.open('/')
 
 @pytest.mark.skip('wait for urlchecker')
 @pytest.mark.django_db

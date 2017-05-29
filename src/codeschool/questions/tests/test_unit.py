@@ -1,7 +1,7 @@
 import pytest
 from mock import Mock
 
-from codeschool.lms.activities.tests.test_activity import TestActivity
+from codeschool.lms.activities.tests.test_unit import TestActivity
 from codeschool.questions.models import Question
 
 
