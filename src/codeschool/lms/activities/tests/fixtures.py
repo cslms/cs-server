@@ -8,6 +8,14 @@ from codeschool.lms.activities.tests.mocks import wagtail_page
 
 
 class Fixtures:
+    """
+    Expose an "activity" and a "progress" fixtures that do not access the
+    database upon creation.
+
+    Users of this class must define an activity_class class attribute with
+    the class that should be tested.
+    """
+
     activity_class = Activity
     submission_payload = {}
 
@@ -22,6 +30,7 @@ class Fixtures:
     @pytest.yield_fixture
     def progress(self, activity, user):
         cls = self.progress_class
+
         if cls._meta.abstract:
             pytest.skip('Progress class is abstract')
 
@@ -39,6 +48,11 @@ class Fixtures:
 
 
 class DbFixtures(Fixtures):
+    """
+    Same as Fixtures, but allows access to the database. This allow us to
+    recycle the same test suite for unit tests and integration tests.
+    """
+
     @pytest.fixture
     def activity(self):
         result = self.activity_class(title='Test', id=1)
@@ -62,3 +76,6 @@ class DbFixtures(Fixtures):
     @pytest.fixture
     def user(self):
         return UserFactory.build()
+
+import rest_framework.serializers as s
+s.ModelSerializer

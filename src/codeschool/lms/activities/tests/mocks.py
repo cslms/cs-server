@@ -64,11 +64,13 @@ def queryset_mock(data=(), cls=QuerySet):
     of consulting the database.
     """
 
-    forbidden = {'__module__', '__name__', '__dict__', '__doc__', '__weakref__'}
+    forbidden = {'__module__', '__name__',
+                 '__dict__', '__doc__', '__weakref__'}
 
     # We abuse the "class" sugar and make it return the namespace dictionary
     # instead of creating a regular type
     class Namespace:
+
         def __new__(cls, name, bases, ns):
             return ns
 

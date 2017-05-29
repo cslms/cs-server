@@ -7,6 +7,7 @@ from codeschool import models
 
 
 class ActivitySectionQuerySet(models.PageQuerySet):
+
     def create_from_parent(self, parent=None, **kwargs):
         """
         Create a new ActivityList using the given keyword arguments under the

@@ -44,4 +44,3 @@ class TestNavigationComponents:
     """
     Test the cs-head and cs-foot components.
     """
-

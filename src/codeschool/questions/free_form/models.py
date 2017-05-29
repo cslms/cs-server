@@ -65,4 +65,3 @@ class FreeFormFeedback(QuestionFeedback):
     """
     Feedback object for free form questions.
     """
-

@@ -176,7 +176,8 @@ class Activity(CommitMixin,
 
         # Dispatch to the progress object
         user = request.user
-        logger.info('%r, submission from user %r' % (self.title, user.username))
+        logger.info('%r, submission from user %r' %
+                    (self.title, user.username))
         progress = self.progress_set.for_user(user)
         return progress.submit(request, kwargs, commit=_commit)
 

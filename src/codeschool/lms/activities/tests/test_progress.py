@@ -6,6 +6,7 @@ from codeschool.lms.activities.tests.mocks import queryset_mock, submit_for
 
 
 class TestSubmission(Fixtures):
+
     def test_submission_class_implement_hash(self):
         cls = self.submission_class
         if cls is not Submission:
@@ -13,10 +14,12 @@ class TestSubmission(Fixtures):
 
 
 class TestProgress(Fixtures):
+
     def test_progress_submission_method(self, activity, progress):
         request = Mock()
         with queryset_mock(), submit_for(self.activity_class):
-            sub = submission = progress.submit(request, self.submission_payload)
+            sub = submission = progress.submit(
+                request, self.submission_payload)
 
         assert isinstance(sub, Submission)
         assert sub.progress_id == progress.id
@@ -24,6 +27,7 @@ class TestProgress(Fixtures):
 
 
 class DbTestProgress(DbFixtures):
+
     def test_recycle_consecutive_submissions(self, db, progress, user):
         request = Mock(user=user)
 

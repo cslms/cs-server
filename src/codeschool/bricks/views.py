@@ -86,7 +86,8 @@ def submissions_view():
     from codeschool.questions.coding_io.models import CodingIoSubmission
     from codeschool.lms.activities.bricks import submission, submission_script
 
-    sub1, sub2, sub3, sub4 = CodingIoSubmission.objects.order_by('-created')[:4]
+    sub1, sub2, sub3, sub4 = CodingIoSubmission.objects.order_by(
+        '-created')[:4]
 
     return div()[
         submission(sub1, hidden=False),

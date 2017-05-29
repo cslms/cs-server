@@ -25,7 +25,7 @@ from django.contrib.auth.models import *
 
 # Example deferred objects
 python = Deferred(ProgrammingLanguage.objects.get, ref='python')
-user = Deferred(lambda: User.objects.all()[1])
+user = Deferred(lambda: User.objects.first())
 
 # Optional components -- LMS
 if 'codeschool.lms.courses' in settings.INSTALLED_APPS:

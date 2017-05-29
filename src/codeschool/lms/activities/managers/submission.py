@@ -6,6 +6,7 @@ DEFAULT_LEXICOGRAPHICAL_PRIORITY = (
 
 
 class SubmissionQuerySet(models.PolymorphicQuerySet):
+
     def recyclable(self, submission):
         """
         Return all submissions that share the same progress object and the same

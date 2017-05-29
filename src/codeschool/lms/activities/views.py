@@ -14,7 +14,7 @@ def main_question_list(request):
 def default_checks(request, page):
     # Move to rules and add some logic to do that in the register_route method.
     user = request.user
-    #if not user.has_perms('activities.view_activities', page):
+    # if not user.has_perms('activities.view_activities', page):
     #    raise Http404
 
 

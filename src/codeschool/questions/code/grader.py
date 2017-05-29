@@ -88,4 +88,5 @@ def fetch_named_object(source, obj_name, file_name='default.py'):
     try:
         return ns[obj_name]
     except KeyError:
-        raise FetchObjectError(NameError('object %r is not defined' % obj_name))
+        raise FetchObjectError(
+            NameError('object %r is not defined' % obj_name))

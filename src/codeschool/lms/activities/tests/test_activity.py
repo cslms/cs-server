@@ -47,8 +47,7 @@ class TestActivity(Fixtures):
         with pytest.raises(RuntimeError):
             activity.submit(request=Mock())
 
-    def test_cannot_submit_if_submission_class_is_not_defined(self,
-                                                              activity):
+    def test_cannot_submit_if_submission_class_is_not_defined(self, activity):
         activity.submission_class = None
 
         with pytest.raises(ImproperlyConfigured):
@@ -68,7 +67,7 @@ class TestActivity(Fixtures):
         cls = self.activity_class
 
         with patch.object(cls, 'progress_set', Mock(for_user=for_user)), \
-             submit_for(cls):
+                submit_for(cls):
             sub = activity.submit(request, **self.submission_payload)
 
         assert isinstance(sub, Submission)
@@ -80,7 +79,8 @@ class TestActivity(Fixtures):
             payload = dict(self.submission_payload, probably_invalid_arg=42)
             activity.submit_with_user_payload(request, payload)
 
-        assert submit.call_args == mock.call(request, **self.submission_payload)
+        assert submit.call_args == mock.call(
+            request, **self.submission_payload)
 
     def test_submissions_property_yields_a_queryset(self, activity):
         if self.submission_class._meta.abstract:
