@@ -3,7 +3,7 @@ from plagiarism.tasks import interactive_find_suspects
 from plagiarism.text import dedent as _dedent
 
 from codeschool import models
-from .models import *
+from .models import CodingIoQuestion, CodingIoSubmission
 
 
 def get_page(query, model=models.Page):
