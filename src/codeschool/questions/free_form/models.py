@@ -22,7 +22,6 @@ class FreeFormQuestion(Question):
     etc and a human has to analyse and grade it manually.
     """
 
-    Type = Type
     type = models.IntegerField(
         _('Text type'),
         choices=[
@@ -65,4 +64,3 @@ class FreeFormFeedback(QuestionFeedback):
     """
     Feedback object for free form questions.
     """
-
