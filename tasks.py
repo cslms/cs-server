@@ -1,7 +1,6 @@
 import os
 import sys
 
-from python_boilerplate.tasks import *
 from python_boilerplate.tasks import django
 from python_boilerplate.tasks import js
 
