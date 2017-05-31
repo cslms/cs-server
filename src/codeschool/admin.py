@@ -1,6 +1,5 @@
 # flake8: noqa
-
-from django.contrib.admin import *
+from django.contrib.admin import site
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import mixins as _mixins
