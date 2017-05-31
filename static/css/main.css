@@ -19389,6 +19389,11 @@ dialog.wide,
   width: 700px;
   min-height: 70vh; }
 
+.cs-sparta__members-list a {
+  color: #eee;
+  transition: color 150ms ease;
+  font-size: 17px; }
+
 @media print {
   *,
   *:before,
