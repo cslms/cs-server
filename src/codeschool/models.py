@@ -7,10 +7,14 @@ from django.db.models.fields.related_descriptors import \
     ReverseManyToOneDescriptor
 from lazyutils import lazy
 
-from .fields import *
+from .fields import StreamField, RichTextField, ParentalKey, CodeschoolDescriptionField, \
+                    JSONField, CodeschoolNameField, CodeschoolSlugField
 
 from django.utils.translation import ugettext_lazy as _
-from django.db.models import *
+from django.db.models import CharField, BooleanField, IntegerField, TextField, OneToOneField, \
+                            ForeignKey, DecimalField, CASCADE, DateTimeField, FloatField, FileField, \
+                            Model, UUIDField, Manager, PositiveIntegerField, SET_NULL, SmallIntegerField, \
+                            DateField, DO_NOTHING, PROTECT, ManyToManyField, URLField
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User, Group, Permission
 
@@ -29,7 +33,7 @@ from model_utils.managers import QueryManager, InheritanceManager, QuerySet, Inh
 
 from .fixes.wagtailroutes import RoutableViewsPage
 from .fixes.wagtailadmin import DecoupledAdminPage
-from .managers import *
+from .managers import models
 from .mixins import AbsoluteUrlMixin
 
 #
