@@ -7,7 +7,8 @@ from . import mdl
 
 
 def simple_card(title=None, text=None, href=None, icon='help', faded=False,
-                onclick=None, id=None, class_=None, empty=False):
+                onclick=None, id=None, class_=None, empty=False, double=False,
+                center=True):
     """
     Returns HTML for a cs-card block.
 
@@ -38,7 +39,9 @@ def simple_card(title=None, text=None, href=None, icon='help', faded=False,
         icon = icon or 'do_not_disturb',
 
     class_ = js_class('cs-card mdl-shadow--4dp', 'mdl-cell',
+                      double and 'mdl-cell--12-col',
                       faded and 'cs-card--faded',
+                      None if center else 'cs-card--left',
                       class_)
     icon = mdl.icon(class_='cs-card__icon')[icon]
     icon = a_or_span(href=href, onclick=onclick, class_='cs-card__link')[icon]
