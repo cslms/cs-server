@@ -1,2 +1,2 @@
-from .activity import SpartaActivity
+from .activity import SpartaActivity, UserGrade
 from .groups import SpartaGroup, SpartaMembership

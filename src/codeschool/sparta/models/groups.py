@@ -154,6 +154,7 @@ def organize_groups(users, group_size):
         # 1 => grouped_users = [[]]
         # 1 => grouped_users = [[1, 2]]
 
+
 def group_users(users_groups, users):
     users_copy = users
     for group in users_groups:
@@ -164,6 +165,7 @@ def group_users(users_groups, users):
         users_copy = new_users_dict
     return users_copy
 
+
 def get_max_grade_user(users):
     new_users_dict = users
     for user, grade in users.items():
@@ -171,6 +173,7 @@ def get_max_grade_user(users):
             del new_users_dict[user]
             return (user, new_users_dict)
     return
+
 
 def get_min_grade_user(users):
     new_users_dict = users
