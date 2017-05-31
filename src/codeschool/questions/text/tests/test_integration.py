@@ -3,6 +3,7 @@ import pytest
 from codeschool.questions.text.factories import make_text_questions, \
     make_text_questions_fuzzy, make_regex_text_questions
 
+pytestmark = pytest.mark.integration
 
 @pytest.fixture
 def question_first(db):
