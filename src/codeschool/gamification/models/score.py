@@ -36,7 +36,7 @@ class _GivenXpManager(models.Manager):
             handler.points = value
             handler.save(update_fields=['points'])
 
-GivenXpManager = _GivenXpManager.from_queryset(GivenXpQuerySet)
+given_xp_manager = given_xp_manager.from_queryset(GivenXpQuerySet)
 
 
 class GivenXp(models.Model):
@@ -51,7 +51,7 @@ class GivenXp(models.Model):
     points = models.IntegerField(default=0)
     token = models.CharField(max_length=100)
     index = models.IntegerField(blank=True, null=True)
-    objects = GivenXpManager()
+    objects = given_xp_manager()
     _leaderboard_expire_time = time() - 1  # begin at expired state
 
     @classmethod
