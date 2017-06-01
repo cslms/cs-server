@@ -21,7 +21,7 @@ class LinkerPattern(markdown.inlinepatterns.Pattern):
         markdown.inlinepatterns.Pattern.__init__(self, re, md)
         self.linktypes = linktypes
 
-    def handleMatch(self, m):
+    def handle_match(self, m):
         linktypes = self.linktypes
         opts = []
         if m.group(3) is not None and len(m.group(4)):
@@ -42,7 +42,7 @@ class LinkerExtension(markdown.Extension):
         markdown.Extension.__init__(self)
         self.linktypes = linktypes
 
-    def extendMarkdown(self, md, md_globals):
+    def extend_markdown(self, md, md_globals):
         md.inlinePatterns['linker'] = LinkerPattern(LINKER_RE, md,
                                                     self.linktypes)
 
