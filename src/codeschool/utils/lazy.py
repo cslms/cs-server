@@ -4,7 +4,7 @@
 from lazyutils import *
 
 
-class delegate_to_or_none(delegate_to):
+class DelegateToOrNone(delegate_to):
     """
     Like delegate_to(), but return None if delegate is None.
     """
