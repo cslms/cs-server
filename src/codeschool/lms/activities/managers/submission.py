@@ -122,6 +122,6 @@ class SubmissionQuerySet(models.PolymorphicQuerySet):
         return self.filter(given_grade=100).count() >= 1
 
 
-SubmissionManager = models.PolymorphicManager.from_queryset(
-    SubmissionQuerySet, 'SubmissionManager'
+submission_manager = models.PolymorphicManager.from_queryset(
+    SubmissionQuerySet, 'submission_manager'
 )

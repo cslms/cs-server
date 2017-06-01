@@ -8,7 +8,7 @@ from codeschool.errors import InvalidSubmissionError, GradingError
 from codeschool.utils.misc import update_state
 from codeschool.utils.string import md5hash
 from .mixins import FromProgressAttributesMixin, CommitMixin
-from ..managers.submission import SubmissionManager
+from ..managers.submission import submission_manager
 from ..signals import submission_graded_signal
 
 logger = logging.getLogger('codeschool.lms.activities')
@@ -35,7 +35,7 @@ class Submission(CommitMixin,
 
     # Properties
     has_feedback = property(lambda self: hasattr(self, 'feedback'))
-    objects = SubmissionManager()
+    objects = submission_manager()
 
     # Delegated properties
     @property
