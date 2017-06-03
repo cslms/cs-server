@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 import csv
 from codeschool import models
@@ -17,48 +18,36 @@ class SpartaActivity(Activity):
         verbose_name = _('Sparta Activity')
         verbose_name_plural = _('Sparta Activities')
 
-    def populate_from_csv(self, csv_data):
+    def populate_from_csv(self, csv_data, commit=True):
         """
-        Parse CSV data and populate the user grades.
+        Populate DB with user grades.
         
         Args:
             csv_data (str): 
                 A CSV file with two columns. The first column must be username
                 and the second column is a grade in [0..100]
+            commit: 
+                If false, do not save results on the database.
         """
 
-        csv_file = io.StringIO(csv_data)
-        reader = csv.reader(csv_file, delimiter=';', quotechar='"')
-        for row in reader:
-            user_name = row[0]
-            if not self.user_grade:
-                user = models.User.objects.get(username=user_name)
-                self.user_grade = UserGrade()
-                self.user_grade.user = user
+        if self.id is None:
+            raise ValueError('SpartaActivity must have an id')
 
-            self.user_grade.grade = row[1]
-            self.user_grade.save()
+        data = read_csv_file(csv_data)
+        names = [name for name, value in data]
+        users = User.objects.filter(username__in=names)
+        usernames_map = dict(data)
+        user_grades = []
 
+        for user in users:
+            value = usernames_map[user.username]
+            user_grade = UserGrade(user=user, grade=value, activity=self)
+            user_grades.append(user_grade)
 
-def read_csv_file(csv_data):
-    """
-    Read a csv file and validate some details.
-    Args:
-        csv_data (str):
-         A CSV file with two columns. The first column must be username
-         and the second column is a grade in [0..100]
-
-    Returns: A array contains the name and grade of all users.
-
-    """
-    users_grade = []
-    csv_file = io.StringIO(csv_data)
-    reader = csv.reader(csv_file, delimiter=';', quotechar='"')
-    for row in reader:
-        if isinstance(row[0], str) and \
-           isinstance(row[1], Number) and \
-           0 <= row[1] <= 100:
-            users_grade.append(row)
+        if commit:
+            return UserGrade.objects.bulk_create(user_grades, batch_size=100)
+        else:
+            return user_grades
 
 
 class UserGrade(models.Model):
@@ -73,3 +62,30 @@ class UserGrade(models.Model):
 
     class Meta:
         unique_together = [('activity', 'user')]
+
+
+def read_csv_file(csv_data):
+    """
+    Read a csv file and validate some details.
+    Args:
+        csv_data (str):
+         A CSV file with two columns. The first column must be username
+         and the second column is a grade in [0..100]
+
+    Returns: A array contains the name and grade of all users.
+
+    """
+    users_grade = []
+    names = set()
+
+    csv_file = io.StringIO(csv_data)
+    reader = csv.reader(csv_file, delimiter=';', quotechar='"')
+
+    for name, value in reader:
+        value = float(value)
+        if name in names:
+            continue
+        value = max(0.0, min(value, 100.0))
+        users_grade.append((name, value))
+        names.add(name)
+    return users_grade
