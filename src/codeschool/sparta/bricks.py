@@ -31,3 +31,11 @@ def layout():
                 'Avaliar membros', href='#')
     ]
     return card_container(cards, title='Membros', description=b)
+
+def activities_layout():
+    cards = [
+        simple_card('Atividade 1', double=True),
+        simple_card('Atividade 2', double=True),
+        simple_card('Atividade 3', double=True),
+    ]
+    return card_container(cards)
