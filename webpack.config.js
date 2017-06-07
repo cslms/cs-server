@@ -48,7 +48,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin("css/[name].css")
+        new ExtractTextPlugin("[name].css")
     ],
     resolve: {
         extensions: ['.js', '.ts', '.vue'],
