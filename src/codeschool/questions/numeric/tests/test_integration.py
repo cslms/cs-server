@@ -3,6 +3,7 @@ import pytest
 from codeschool.questions.numeric.factories import make_numeric_question, \
     make_numeric_question_fuzzy
 
+
 pytestmark = pytest.mark.integration
 
 

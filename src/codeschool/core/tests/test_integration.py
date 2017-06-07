@@ -37,8 +37,9 @@ def hello_world_question(root):
     return make_hello_world_question(root)
 
 
-def test_hello_world_submissions(hello_world_question, joe_user):
+def test_hello_world_submissions(hello_world_question):
     from codeschool.questions.coding_io.factories import make_hello_world_submissions
+    joe_user = make_joe_user(commit_val=True)
     sub1, sub2 = make_hello_world_submissions(hello_world_question, joe_user)
 
 
