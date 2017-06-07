@@ -1,7 +1,7 @@
 #
 # Lazy evaluation
 #
-from lazyutils import *
+from lazyutils import delegate_to
 
 
 class delegate_to_or_none(delegate_to):
