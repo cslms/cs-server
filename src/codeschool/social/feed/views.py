@@ -28,7 +28,7 @@ def timeline_view(request):
 def feed_view(request):
     context = {
         'posts': Post.objects.filter(user=request.user).order_by('-created'),
-        'post_id': request.GET.get('post-id', None)
+        'post_id': request.GET.get('post-id')
     }
     if request.method == 'POST':
         form = PostForm(request.POST)
