@@ -15,7 +15,7 @@ class ActivityMeta(PageBase):
     """
 
     def __new__(metaclass, name, bases, namespace):
-        meta = namespace.get('Meta', None)
+        meta = namespace.get('Meta')
         extra_fields, meta = extract_extra_meta_fields(meta)
         if 'Meta' in namespace:
             namespace['Meta'] = meta

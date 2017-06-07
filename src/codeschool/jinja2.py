@@ -117,7 +117,7 @@ def breadcrumbs(ctx, page=None):
     """
 
     if is_undefined(page):
-        page = ctx.get('page', None)
+        page = ctx.get('page')
     if hasattr(page, 'breadcrumbs'):
         return page.breadcrumbs()
     elif page is None:
