@@ -20,6 +20,7 @@ from wagtail.wagtailcore import urls as wagtail_urls
 
 from codeschool import settings
 from codeschool.accounts.views import profile_view
+from codeschool.api import router
 from codeschool.core.views import index_view
 
 # Basic URLS
@@ -70,7 +71,27 @@ if 'codeschool.cli' in settings.INSTALLED_APPS:
         url(r'^cli/jsonrpc/', include(jsonrpc_api.urls)),
     ]
 
-# Wagtail endpoint (these must come last)
+# Django serves static urls for the dev server.
+# Production relies on Nginx.
+if os.environ.get('DJANGO_SERVE_STATIC', False) or settings.DEBUG:
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    urlpatterns += staticfiles_urlpatterns()
+
+# REST framework urls:
+# We have to put those urls in the end of the file since each app must import
+# the router and include its viewsets
+if settings.CODESCHOOL_REST_API:
+    import codeschool.lms.activities.api
+
+    codeschool.lms.activities.api.register(router)
+
+    urlpatterns += [
+        url(r'^api/', include(router.urls)),
+        url(r'^api/auth/', include('rest_framework.urls', namespace='rest-auth')),
+    ]
+
+# Wagtail endpoint (these must be last)
 urlpatterns += [
     wagtail_urls.urlpatterns[0],
     url(r'^((?:[\w\-\.]+/)*)$',
@@ -78,10 +99,3 @@ urlpatterns += [
     url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:bricks|json|api)/?)$',
         wagtail_urls.views.serve, name='wagtail-api-serve'),
 ]
-
-# Django serves static urls for the dev server.
-# Production relies on Nginx.
-if os.environ.get('DJANGO_SERVE_STATIC', False) or settings.DEBUG:
-    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
-    urlpatterns += staticfiles_urlpatterns()

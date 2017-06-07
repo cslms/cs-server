@@ -3,7 +3,7 @@
 
     &__main {
         padding: 20px;
-        background: #666 url('../img/bg/gray_noise.png') repeat;
+        background: #666 url('../../img/bg/gray_noise.png') repeat;
         color: #ddd;
 
         > div {
@@ -22,7 +22,7 @@
 
     &__copyright {
         @include block-padding;
-        background: $color-dark-gray url('../img/bg/dark_noise.png') repeat;
+        background: $color-dark-gray url('../../img/bg/dark_noise.png') repeat;
 
         p {
             margin: $small-spacing;

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
+from django.http import HttpResponse
 
 from codeschool.bricks import card_container
-from codeschool.lms.activities.bricks import activity_list_navbar
-from codeschool.lms.listings.bricks import empty_card, card
+from .bricks import empty_card, card, activity_list_navbar
 from .models import ActivityList, ActivitySection
 
 
@@ -43,3 +43,10 @@ def section_view(request, page):
         'navbar': activity_list_navbar(page, request.user),
     }
     return render(request, 'base.jinja2', ctx)
+
+
+@ActivitySection.register_route('^grades.csv/$', login_required=True)
+def section_view(request, page):
+    response = HttpResponse('foo,bar,baz\n1,2,3')
+    response['content_type'] = 'text/csv; charset=utf-8'
+    return response
