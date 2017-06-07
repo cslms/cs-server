@@ -127,57 +127,32 @@ def organize_groups(users, group_size):
         >>> organize_groups(users, 2)
         [['john', 'ringo'], ['paul', 'george']]
     """
-    assert isinstance(group_size, int)
-
     users_quantity = len(users)
 
-    # Cannot create group if group_size is greater than users quantity
-    assert group_size <= users_quantity
+    if group_size > users_quantity:
+        return [mapping.copy()]
 
-    possible_groups_quantity = users_quantity // group_size
+    n_groups = users_quantity // group_size
     remaining_users = users_quantity % group_size
 
     # from collections import OrderedDict
     # Put the grades as the keys of dict
     # users_with_grade_as_key = {grade: user for user, grade in users.items()}
-    # sorted_users = OrderedDict(sorted(users_with_grade_as_key.items()))
 
     # Initialize possible groups as empty lists
-    grouped_users = []
-    for n in range(possible_groups_quantity):
-        grouped_users.append([])
+    groups = [{} for _ in range(n_groups)]
 
-    new_remaing_users = users # 5
-    while len(new_remaing_users) > remaining_users:
-        new_remaing_users = group_users(grouped_users, new_remaing_users)
-        # 1 => grouped_users = [[]]
-        # 1 => grouped_users = [[1, 2]]
+    sorted_users = sorted(mapping.items(), key = lambda x: x[1])
+    from itertools import cycle
 
+    for idx in cycle([0, -1]):
+        if len(sorted_users) < n_groups:
+            break
 
-def group_users(users_groups, users):
-    users_copy = users
-    for group in users_groups:
-        max_grade_user, users_dict = get_max_grade_user(users_copy)
-        min_grade_user, new_users_dict = get_max_grade_user(users_dict)
-        group.append(max_grade_user)
-        group.append(min_grade_user)
-        users_copy = new_users_dict
-    return users_copy
+        for i in range(n_groups):
+            name, grade = sorted_users.pop(idx)
+            groups[i][name] = grade
 
-
-def get_max_grade_user(users):
-    new_users_dict = users
-    for user, grade in users.items():
-        if grade is max(users.values()):
-            del new_users_dict[user]
-            return (user, new_users_dict)
-    return
-
-
-def get_min_grade_user(users):
-    new_users_dict = users
-    for user, grade in users.items():
-        if grade is min(users.values()):
-            del new_users_dict[user]
-            return (user, new_users_dict)
-    return
+    for i, user in enumerate(sorted_users):
+        groups
+    return groups
