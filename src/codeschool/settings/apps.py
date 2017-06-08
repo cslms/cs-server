@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     # 'codeschool.gamification',
     # 'codeschool.social.feed',
     # 'codeschool.social.friends',
+    'codeschool.questions.text',
     'codeschool.cli',
 
     # These are always required
