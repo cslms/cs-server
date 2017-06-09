@@ -40,3 +40,16 @@ class TestActivity:
         assert len(objs) == 2
         grade1, grade2 = objs
         assert grade1.grade == 1.0
+
+    def test_create_post_grade_csv(self, activity: SpartaActivity):
+        csv_data_should_be = 'a;1\nb;4;\nc;5\n'
+        users_grade = [
+            UserGrade(user=Mock(id=1), grade=1, activity=activity),
+            UserGrade(user=Mock(id=2), grade=2, post_grade=4, activity=activity),
+            UserGrade(user=Mock(id=3), grade=3, post_grade=5, activity=activity)
+        ]
+
+        with patch.object(User.objects, 'all', lambda self: users_grade):
+            csv = activity.create_post_grade_csv()
+
+        assert csv == csv_data_should_be

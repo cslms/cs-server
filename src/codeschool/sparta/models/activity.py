@@ -21,12 +21,12 @@ class SpartaActivity(Activity):
     def populate_from_csv(self, csv_data, commit=True):
         """
         Populate DB with user grades.
-        
+
         Args:
-            csv_data (str): 
+            csv_data (str):
                 A CSV file with two columns. The first column must be username
                 and the second column is a grade in [0..100]
-            commit: 
+            commit:
                 If false, do not save results on the database.
         """
 
@@ -49,6 +49,28 @@ class SpartaActivity(Activity):
         else:
             return user_grades
 
+    def create_post_grade_csv(self):
+        """
+        Create string list with user post_grades.
+
+        Returns:
+            String with user post_grades
+        """
+
+        lines = str
+
+        for user_grade in self.user_grades.all():
+            line_user_grade = user.username
+            if user_grade.post_grade == None:
+                line_user_grade += (';', user_grade.grade)
+            else:
+                line_user_grade += (';', user_grade.post_grade)
+
+            lines += line_user_grade
+            lines += '\n'
+
+        return lines
+
 
 class UserGrade(models.Model):
     """
@@ -57,7 +79,12 @@ class UserGrade(models.Model):
     grade = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
-    activity = models.ForeignKey(SpartaActivity, related_name='user_grade')
+    post_grade = models.FloatField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
+    activity = models.ForeignKey(SpartaActivity, related_name='user_grades')
     user = models.ForeignKey(models.User)
 
     class Meta:
