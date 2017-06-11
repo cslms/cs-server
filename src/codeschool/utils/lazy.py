@@ -1,10 +1,11 @@
 #
 # Lazy evaluation
 #
-from lazyutils import *
+from lazyutils import lazy, lazy_classattribute, lazy_shared, alias  # noqa
+from lazyutils import delegate_ro, delegate_to, readonly  # noqa
 
 
-class delegate_to_or_none(delegate_to):
+class delegate_to_or_none(delegate_to):  # noqa: N801
     """
     Like delegate_to(), but return None if delegate is None.
     """

@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.fields.related_descriptors import \
     ReverseManyToOneDescriptor
 from lazyutils import lazy
+from codeschool.models import Model
 
 
 def apply_manager_extensions(*args):
@@ -79,16 +80,16 @@ def _ext_methods(cls, manager_name, remove_extensions=False):
     all_exts = [x for x in dir(cls) if x.startswith(prefix)]
     for ext in all_exts:
         func = getattr(cls, ext)
-        argspec = inspect.getargspec(func)
-        funcname = ext[prefix_size:]
-        func.__name__ = funcname
+        argspec = inspect.getfullargspec(func)
+        func_name = ext[prefix_size:]
+        func.__name__ = func_name
         if remove_extensions:
             type(cls).__delattr__(cls, ext)
         if argspec.args[0] in ['qs', 'queryset']:
-            queryset_exts[funcname] = func
-            manager_exts[funcname] = _manager_from_qs(funcname, func)
+            queryset_exts[func_name] = func
+            manager_exts[func_name] = _manager_from_qs(func_name, func)
         elif argspec.args[0] in ['mgm', 'manager']:
-            manager_exts[funcname] = func
+            manager_exts[func_name] = func
         else:
             raise ImproperlyConfigured(
                 'Manager extension methods must start with either with a '

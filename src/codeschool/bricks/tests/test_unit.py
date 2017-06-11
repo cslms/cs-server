@@ -1,5 +1,6 @@
 import pytest
 
+
 class TestNavbar:
     """
     Test the navbar components.

@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.types.rules import Rules
-from .mixins import CommitMixin
+from codeschool.mixins import CommitMixin
 from .utils import AuxiliaryClassIntrospection
 from ..managers.activity import ActivityManager
 from ..meta import ActivityMeta

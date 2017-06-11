@@ -1,5 +1,6 @@
 import pytest
 
+
 def _test_basic_urls(user, client):
     context = {'username': user.username}
     urls = [
@@ -13,6 +14,7 @@ def _test_basic_urls(user, client):
 def _test_login_with_valid_user(driver, user_with_password, password):
     user = user_with_password
     driver.open('/')
+
 
 @pytest.mark.skip('wait for urlchecker')
 @pytest.mark.django_db

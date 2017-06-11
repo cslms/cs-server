@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.utils.request import get_ip
-from .mixins import CommitMixin
+from codeschool.mixins import CommitMixin
 from ..managers.progress import ProgressManager
 
 logger = logging.getLogger('codeschool.lms.activities')
