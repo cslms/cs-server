@@ -4,8 +4,8 @@ from lazyutils import lazy
 
 from bricks.html5 import p
 from codeschool import models
-from .mixins import FromProgressAttributesMixin
 from codeschool.mixins import CommitMixin
+from .mixins import FromProgressAttributesMixin
 from ..validators import grade_validator
 
 
