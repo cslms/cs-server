@@ -120,6 +120,7 @@ setup(
             'pytest-factoryboy',
             'sulfur>=0.1.3',
             'django-mock-queries',
+            'sphinx_rtd_theme',
         ]
     },
 
