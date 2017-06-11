@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import codeschool.lms.activities.models.mixins
+import codeschool.mixins
 import codeschool.questions.models
 import codeschool.vendor.wagtailmarkdown.blocks
 from django.db import migrations, models
@@ -63,7 +64,7 @@ class Migration(migrations.Migration):
                 'permissions': (('download_question', 'Can download question files'),),
                 'abstract': False,
             },
-            bases=(codeschool.lms.activities.models.mixins.CommitMixin,
+            bases=(codeschool.mixins.CommitMixin,
                    wagtail.contrib.wagtailroutablepage.models.RoutablePageMixin, 'wagtailcore.page'),
         ),
         migrations.CreateModel(

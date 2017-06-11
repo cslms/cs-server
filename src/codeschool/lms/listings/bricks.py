@@ -25,12 +25,12 @@ def card(section):
 def activity_list_navbar(page, user):
     if user.is_superuser:
         sections = [navsection(_('Resources'), [
-            a(_('Student grades')  , href='grades.csv'),
+            a(_('Student grades'), href='grades.csv'),
         ])]
     else:
         sections = []
 
-    return navbar(sections=sections, admin=True, \
+    return navbar(sections=sections, admin=True,
                   admin_perms='activities.edit_activity',
                   user=user, page=page)
 

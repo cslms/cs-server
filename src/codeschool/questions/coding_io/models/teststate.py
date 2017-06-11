@@ -3,7 +3,7 @@ import uuid as uuid
 from codeschool import models
 
 
-class TestState(models.Model):
+class TestState(models.TimeStampedModel):
     """
     Register iospec expansions for a given question.
     """
@@ -14,7 +14,6 @@ class TestState(models.Model):
     question = models.ForeignKey('CodingIoQuestion')
     hash = models.models.CharField(max_length=32)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    created = models.DateTimeField(auto_now_add=True)
     pre_tests_source = models.TextField(blank=True)
     post_tests_source = models.TextField(blank=True)
     pre_tests_source_expansion = models.TextField(blank=True)

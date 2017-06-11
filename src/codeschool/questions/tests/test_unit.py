@@ -1,11 +1,15 @@
 import pytest
 from mock import Mock
 
-from codeschool.lms.activities.tests.test_unit import TestActivity
+from codeschool.tests import ActivityTests
 from codeschool.questions.models import Question
 
 
-class TestQuestions(TestActivity):
+class TestQuestions(ActivityTests):
+    """
+    Test abstract questions.
+    """
+
     activity_class = Question
 
     @pytest.fixture

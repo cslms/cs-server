@@ -38,12 +38,12 @@ RUN apt-get update \
     # Python deps available in apt-get
             python3-markdown \
             python3-html5lib \
-            python3-bleach \
-            python3-rcssmin \
-            python3-rjsmin \
-            python3-lxml \
-            python3-rcssmin \
-            python3-rjsmin \
+            python3-bleach   \
+            python3-rcssmin  \
+            python3-rjsmin   \
+            python3-lxml     \
+            python3-rcssmin  \
+            python3-rjsmin   \
     \
     # Extra deps
             python3-pillow \

@@ -52,8 +52,9 @@ def base_page_location_kwargs():
 
 @pytest.fixture
 def sulfur_wait():
-    """The value that will be passed to the implicit wait parameter in
-    selenium."""
+    """
+    The value that will be passed to the implicit wait parameter in selenium.
+    """
 
     return 1
 

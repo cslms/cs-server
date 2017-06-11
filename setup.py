@@ -1,11 +1,3 @@
-# -*- coding: utf8 -*-
-#
-# This file were created by Python Boilerplate. Use boilerplate to start simple
-# usable and best-practices compliant Python projects.
-#
-# Learn more about it at: http://github.com/fabiommendes/boilerplate/
-#
-
 import os
 from setuptools import setup, find_packages
 
@@ -67,9 +59,7 @@ setup(
         'python-markdown-math',
         'html5lib==0.999999999',
         'bleach==2.0.0',
-        # 'Faker',
-        'fake-factory<=0.7.2',  # we must check all codeschool deps for culprits
-                                # before replacing fake-factory by Faker
+        'fake-factory<=0.7.2', # => Faker?
         'factory-boy',
         'mommys_boy',
         'celery[redis]',

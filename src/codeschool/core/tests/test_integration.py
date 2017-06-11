@@ -17,6 +17,7 @@ pytestmark = pytest.mark.integration
 joe_user = model_fixture(make_joe_user)
 yoda_teacher = model_fixture(make_yoda_teacher)
 
+
 @pytest.fixture
 def python():
     return models.programming_language('python')
@@ -25,6 +26,7 @@ def python():
 @pytest.fixture
 def clang():
     return models.programming_language('c')
+
 
 @pytest.fixture
 def root(db):
@@ -54,6 +56,7 @@ def test_create_teachers(db):
 
 def test_create_students(db):
     students = make_students(5)
+
 
 def test_create_basic_coding_io_questions(db):
     parent = get_wagtail_root_page()
@@ -132,6 +135,7 @@ if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
         from codeschool.lms.courses.factories import make_cs101_course
 
         course = make_cs101_course(yoda_teacher)
+
 
 def test_create_standard_activities(db):
     make_basic_activities()

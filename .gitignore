@@ -1,5 +1,6 @@
 # Cached builds
 __pycache__/
+static_src/elm/elm-stuff/
 .cache/
 .idea/
 *.pyc
@@ -11,7 +12,7 @@ __pycache__/
 *.sqlite3
 *.rdb
 *.egg-info/
-.cache/
+.benchmarks/
 .tox/
 .sass-cache/
 .coverage
@@ -39,6 +40,7 @@ db/*.*
 security/*
 docker/volumes/redis/dump.rdb
 docker/db/db.sqlite3
-collect/media/*
-log/
-backup/
+collect/media/
+
+# A pycharm bug keeps re-creating this file!
+src/__init__.py
