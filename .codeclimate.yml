@@ -20,19 +20,17 @@ engines:
         enabled: false
   csslint:
     enabled: true
-    checks:
-      important:
-        enabled: false
   eslint:
     enabled: true
 ratings:
   paths:
   - "src/codeschool/**.py"
 exclude_paths:
-  - src/codeschool/**/migrations/
+  - "src/codeschool/**/migrations/"
   - "__init__.py"
-  - node_modules/**/*
-  - static/**/*
-  - docker/**/*
-  - collect/**/*
-  - docs/**/*
+  - "node_modules/**/*"
+  - "static/**/*"
+  - "docker/**/*"
+  - "collect/**/*"
+  - "docs/**/*"
+  - "static_src/**/elm-stuff/**/*"
