@@ -20,8 +20,10 @@ from wagtail.wagtailcore import urls as wagtail_urls
 
 from codeschool import settings
 from codeschool.accounts.views import profile_view
-from codeschool.api import router
+from codeschool.api import router, import_api_modules
 from codeschool.core.views import index_view
+
+import_api_modules()
 
 # Basic URLS
 urlpatterns = [
@@ -29,6 +31,8 @@ urlpatterns = [
     url(r'^$', index_view, name='index'),
     url(r'^profile/$', profile_view, name='profile-view'),
     url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),
+    url(r'^api/', include(router.urls)),
 ]
 
 # Optional debug views
@@ -77,19 +81,6 @@ if os.environ.get('DJANGO_SERVE_STATIC', False) or settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
     urlpatterns += staticfiles_urlpatterns()
-
-# REST framework urls:
-# We have to put those urls in the end of the file since each app must import
-# the router and include its viewsets
-if settings.CODESCHOOL_REST_API:
-    import codeschool.lms.activities.api
-
-    codeschool.lms.activities.api.register(router)
-
-    urlpatterns += [
-        url(r'^api/', include(router.urls)),
-        url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),
-    ]
 
 # Wagtail endpoint (these must be last)
 urlpatterns += [

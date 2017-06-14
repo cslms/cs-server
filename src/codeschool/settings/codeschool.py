@@ -20,7 +20,3 @@ CODESCHOOL_DEBUG_VIEWS = True
 
 #: Enable a global "Questions" page
 CODESCHOOL_GLOBAL_QUESTIONS = True
-
-
-#: Enable REST api
-CODESCHOOL_REST_API = True
