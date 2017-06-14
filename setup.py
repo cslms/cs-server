@@ -51,6 +51,7 @@ setup(
     packages=find_packages('src'),
     install_requires=[
         # Non-django dependencies
+        'editdistance',
         'lazyutils>=0.3.1',
         'pygeneric',
         'mistune',

@@ -88,7 +88,7 @@ if settings.CODESCHOOL_REST_API:
 
     urlpatterns += [
         url(r'^api/', include(router.urls)),
-        url(r'^api/auth/', include('rest_framework.urls', namespace='rest-auth')),
+        url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),
     ]
 
 # Wagtail endpoint (these must be last)
