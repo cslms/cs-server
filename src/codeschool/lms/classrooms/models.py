@@ -18,10 +18,25 @@ class Classroom(models.TimeStampedModel):
     One specific occurrence of a course for a given teacher in a given period.
     """
 
+    name = models.CharField(
+        _('name'),
+        max_length=64,
+        help_text=_(
+            'Classroom name'
+        ),
+    )
+    slug = models.CodeschoolSlugField(
+        primary_key=True,
+    )
     discipline = models.ForeignKey(
         'academic.Discipline',
         blank=True, null=True,
-        on_delete=models.DO_NOTHING
+        on_delete=models.SET_NULL,
+    )
+    course = models.ForeignKey(
+        'academic.Course',
+        blank=True, null=True,
+        on_delete=models.SET_NULL,
     )
     teacher = models.ForeignKey(
         models.User,
@@ -30,11 +45,13 @@ class Classroom(models.TimeStampedModel):
     )
     students = models.ManyToManyField(
         models.User,
+        verbose_name=_('user'),
         related_name='classrooms_as_student',
         blank=True,
     )
     staff = models.ManyToManyField(
         models.User,
+        verbose_name=_('staff'),
         related_name='classrooms_as_staff',
         blank=True,
     )
@@ -72,13 +89,8 @@ class Classroom(models.TimeStampedModel):
         ),
         blank=True,
     )
-    short_description = models.CharField(max_length=140)
-    description = models.RichTextField()
-    template = models.CharField(max_length=20, choices=[
-        ('programming-beginner', _('A beginner programming course')),
-        ('programming-intermediate', _('An intermediate programming course')),
-        ('programming-marathon', _('A marathon-level programming course')),
-    ], blank=True)
+    short_description = models.CodeschoolShortDescriptionField()
+    description = models.CodeschoolDescriptionField()
 
     objects = ClassroomManager()
 
