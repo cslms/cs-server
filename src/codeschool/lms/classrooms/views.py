@@ -1,13 +1,30 @@
 import model_reference
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets
 
+from . import serializers
 from .bricks import navbar_classroom, navbar_list
 from .forms import EnrollForm
 from .models import Classroom
 from .rules import is_registered
 
 
+#
+# API Views
+#
+class ClassroomViewSet(viewsets.ModelViewSet):
+    """
+    List of classrooms.
+    """
+
+    queryset = Classroom.objects.all()
+    serializer_class = serializers.ClassroomSerializer
+
+
+#
+# Regular views
+#
 @login_required
 def list_of_classrooms(request):
     root = model_reference.load('classroom-root')
