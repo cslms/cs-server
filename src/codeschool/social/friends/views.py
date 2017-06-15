@@ -1,32 +1,42 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from friendship import models
+from rest_framework import viewsets
 
-from codeschool.social.friends import get_all_friends, get_possible_friends, \
-    request_friendship
-from codeschool.models import User
+from . import serializers
 
 
-@login_required
-def friends_view(request):
-    context = {
-        'friends': get_all_friends(request.user),
-    }
-    if request.method == 'POST':
-        print(request.POST)
+class FriendshipRequestViewSet(viewsets.ModelViewSet):
+    """
+    Represents a request for friendship.
 
-    return render(request, 'social/friends.jinja2', context)
+    Friendship is not yet neither accepted nor rejected.
+    """
+
+    queryset = models.FriendshipRequest.objects.all()
+    serializer_class = serializers.FriendshipRequestSerializer
 
 
-@login_required
-def add_friends_view(request):
-    context = {
-        'possible_friends': get_possible_friends(request.user),
-    }
-    if request.method == 'POST':
-        items = request.POST.items()
-        marked_users = {k[5:] for k, v in items if k.startswith('user-')}
-        users = User.objects.filter(username__in=marked_users)
-        for user in users:
-            request_friendship(request.user, user)
-        return redirect('social:friends')
-    return render(request, 'social/friends-add.jinja2', context)
+class FriendViewSet(viewsets.ModelViewSet):
+    """
+    Represents a symmetric friendship relation.
+    """
+
+    queryset = models.Friend.objects.all()
+    serializer_class = serializers.FriendSerializer
+
+
+class FollowerViewSet(viewsets.ModelViewSet):
+    """
+    Allow users to follow each other.
+    """
+
+    queryset = models.Follow.objects.all()
+    serializer_class = serializers.FollowSerializer
+
+
+class FolloweeViewSet(viewsets.ModelViewSet):
+    """
+    Allow users to follow each other.
+    """
+
+    queryset = models.Follow.objects.all()
+    serializer_class = serializers.FollowSerializer
