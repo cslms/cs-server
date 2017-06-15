@@ -12,7 +12,7 @@ from .rules import is_registered
 def list_of_classrooms(request):
     root = model_reference.load('classroom-root')
     context = {
-        'classroom_list': Classroom.objects.enrolled(request.user),
+        'classroom_list': Classroom.objects.user_enrolled(request.user),
         'navbar': navbar_list(root, request.user),
     }
     return render(request, 'classrooms/list.jinja2', context)
@@ -40,7 +40,7 @@ def classroom_detail(request, slug):
 @login_required
 def enroll_in_classroom(request):
     context = {
-        'classroom_list': Classroom.objects.can_enroll(request.user),
+        'classroom_list': Classroom.objects.user_can_enroll(request.user),
         'navbar': navbar_list(None, request.user),
     }
     return render(request, 'classrooms/enroll.jinja2', context)

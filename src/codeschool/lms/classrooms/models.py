@@ -82,17 +82,22 @@ class Classroom(models.TimeStampedModel):
 
     objects = ClassroomManager()
 
-    def save(self, *args, **kwargs):
-        self.teacher = self.teacher or self.owner
-        super().save(*args, **kwargs)
-
-    def enroll_student(self, student):
+    def register_student(self, user):
         """
         Register a new student in the course.
         """
 
-        if student == self.teacher:
+        if user == self.teacher:
             raise ValidationError(_('Teacher cannot enroll as student.'))
-        elif student in self.staff.all():
+        elif user in self.staff.all():
             raise ValidationError(_('Staff member cannot enroll as student.'))
-        self.students.add(student)
+        self.students.add(user)
+
+    def register_staff(self, user):
+        """
+        Register a new user as staff.
+        """
+
+        if user == self.teacher:
+            raise ValidationError(_('Teacher cannot enroll as staff.'))
+        self.students.add(user)
