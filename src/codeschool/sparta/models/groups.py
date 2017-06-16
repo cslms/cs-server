@@ -3,6 +3,7 @@ from django.db import IntegrityError
 
 from codeschool import models
 from codeschool.utils.phrases import phrase
+from itertools import cycle
 
 
 class SpartaGroup(models.TimeStampedModel):
@@ -108,7 +109,7 @@ ROLE_MAPPING = {
 }
 
 
-def organize_groups(users, group_size):
+def organize_groups(mapping, group_size):
     """
     Receives a mapping from users to grades and return a list of groups
     with the approximate ``group_size``.
@@ -125,9 +126,9 @@ def organize_groups(users, group_size):
 
         >>> users = {'john': 10, 'paul': 9, 'george': 8, 'ringo': 6}
         >>> organize_groups(users, 2)
-        [['john', 'ringo'], ['paul', 'george']]
+        [{'john': 10,'ringo': 6}, {'paul': 8, 'george': 8}]
     """
-    users_quantity = len(users)
+    users_quantity = len(mapping)
 
     if group_size > users_quantity:
         return [mapping.copy()]
@@ -135,15 +136,10 @@ def organize_groups(users, group_size):
     n_groups = users_quantity // group_size
     remaining_users = users_quantity % group_size
 
-    # from collections import OrderedDict
-    # Put the grades as the keys of dict
-    # users_with_grade_as_key = {grade: user for user, grade in users.items()}
-
     # Initialize possible groups as empty lists
     groups = [{} for _ in range(n_groups)]
 
-    sorted_users = sorted(mapping.items(), key = lambda x: x[1])
-    from itertools import cycle
+    sorted_users = sorted(mapping.items(), key=lambda x: x[1])
 
     for idx in cycle([0, -1]):
         if len(sorted_users) < n_groups:
@@ -153,6 +149,12 @@ def organize_groups(users, group_size):
             name, grade = sorted_users.pop(idx)
             groups[i][name] = grade
 
+    j = 0
     for i, user in enumerate(sorted_users):
-        groups
+        name = user[0]
+        grade = user[1]
+        if j == n_groups:
+            j = 0
+        groups[j][name] = grade
+        j += 1
     return groups
