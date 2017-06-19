@@ -5,8 +5,8 @@ from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool.types.rules import Rules
 from codeschool.mixins import CommitMixin
+from codeschool.types.rules import Rules
 from .utils import AuxiliaryClassIntrospection
 from ..managers.activity import ActivityManager
 from ..meta import ActivityMeta
@@ -33,15 +33,6 @@ class Activity(CommitMixin,
 
     Each concrete activity is represented by a different subclass.
     """
-
-    class Meta:
-        abstract = True
-        verbose_name = _('activity')
-        verbose_name_plural = _('activities')
-        permissions = [
-            ('interact', 'Interact'),
-            ('view_submissions', 'View submissions'),
-        ]
 
     author_name = models.CharField(
         _('Author\'s name'),
@@ -106,6 +97,15 @@ class Activity(CommitMixin,
 
     objects = ActivityManager()
     rules = Rules()
+
+    class Meta:
+        abstract = True
+        verbose_name = _('activity')
+        verbose_name_plural = _('activities')
+        permissions = [
+            ('interact', 'Interact'),
+            ('view_submissions', 'View submissions'),
+        ]
 
     # These properties dynamically define the progress/submission/feedback
     # classes associated with the current class.

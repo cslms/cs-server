@@ -1,3 +1,18 @@
+"""
+Random Phrases
+--------------
+
+The phrases module is used in several places in Codeschool in which we want to
+generate human-friendly random strings. Phrases are usually of the form
+"adjective" + "subjective". We try to use mostly characters from Science and
+Science fiction movies.
+
+The main entry point is the :func:`phrase` function, that simply returns a
+random phrase. If you want to learn more, read the source :)
+
+.. autofunction :: phrase
+"""
+
 import random
 
 from codeschool.factories import fake

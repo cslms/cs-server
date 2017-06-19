@@ -74,16 +74,17 @@ class ActivitySection(ScoreBoardMixin,
     List of activities.
     """
 
-    class Meta:
-        verbose_name = _('section')
-        verbose_name_plural = _('sections')
-        app_label = 'activities'
-
     material_icon = models.CharField(
         _('Optional icon'),
         max_length=20,
         default='help',
     )
+
+    class Meta:
+        verbose_name = _('section')
+        verbose_name_plural = _('sections')
+        app_label = 'activities'
+
     objects = ActivitySectionManager()
 
     @property
@@ -210,6 +211,56 @@ class ActivitySection(ScoreBoardMixin,
             scores[k] = sum(L)
         return scores
 
+    def grades_csv(self):
+        """
+        Return a string with CSV data for the grades of all student
+        submissions inside the given section.
+        """
+
+        return self.grades_dataframe().to_csv()
+
+    def grades_dataframe(self):
+        """
+        Return a dataframe with the grades for all func
+        """
+
+        from codeschool.lms.activities.models import Progress
+        import pandas as pd
+
+        children = self.get_children()
+        children_id = children.values_list('id', flat=True)
+        cols = ('user__username', 'user__email',
+                'user__first_name', 'user__last_name',
+                'activity_page__title', 'given_grade_pc')
+        responses = Progress.objects \
+            .filter(activity_page__in=children_id) \
+            .values_list(*cols)
+        responses = list(responses)
+
+        # User data
+        users_data = sorted({row[0:4] for row in responses})
+        users = pd.DataFrame(
+            users_data,
+            columns=['username', 'email', 'first_name', 'last_name'],
+        )
+        users.index = users.pop('username')
+
+        # Question data
+        df = pd.DataFrame(responses, columns=cols)
+        groups = df.groupby('activity_page__title')
+        by_question = {
+            name: group[['user__username', 'given_grade_pc']]
+            for name, group in groups}
+
+        # Agreggate question data
+        result = users.copy()
+        for name, df in by_question.items():
+            col = df['given_grade_pc']
+            col.index = df['user__username']
+            result[name] = col
+
+        return result
+
 
 @model_reference.factory('main-question-list')
 def make_main_activity_list():
@@ -229,6 +280,8 @@ def make_main_activity_list():
         )
         return parent_page.add_child(instance=activity_list)
 
+
 # Import views explicitly until it becomes an app
 from . import views
+
 views._loaded = True
