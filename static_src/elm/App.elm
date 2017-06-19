@@ -1,12 +1,12 @@
 module Main exposing (..)
 
 import Codeschool.Navbar as Navbar exposing (..)
+import Codeschool.Page as Page exposing (contentHeader)
 import Codeschool.User as User exposing (User)
-import Dialog
+import Codeschool.Wagtail as Wagtail exposing (StreamField)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Markdown
 import Maybe
 import String
 
@@ -15,57 +15,69 @@ import String
 
 
 type alias Model =
-    { question : Question
-    , user : User
-    , response : Response
-    , showModal : Bool
-    , showNavbar : Bool
+    { user : User
+    , showEnrolledClassrooms : Bool
+    , classrooms :
+        { enrolled : List Classroom
+        , other : List Classroom
+        }
     }
-
-
-type alias Response =
-    { value : Maybe Float
-    , feedback : Feedback
-    }
-
-
-type Feedback
-    = Error String
-    | Waiting
-    | Empty
-
-
-type alias Question =
-    { title : String
-    , shortDescription : String
-    , longDescription : List DescriptionItem
-    }
-
-
-{-| Type of each node of a Stream field and its corresponding contents
--}
-type DescriptionItem
-    = Markdown String
-    | Html String
-    | Ignored
 
 
 model : Model
 model =
     { user = User.fake
-    , question = emptyQuestion
-    , response = { value = Nothing, feedback = Empty }
-    , showModal = False
-    , showNavbar = True
+    , showEnrolledClassrooms = True
+    , classrooms =
+        { enrolled = []
+        , other = []
+        }
     }
 
 
-emptyQuestion : Question
-emptyQuestion =
-    { title = "The Answer"
-    , shortDescription = "Life the universe and everything"
-    , longDescription = [ Markdown "What is the answer?" ]
+modelFake : Model
+modelFake =
+    let
+        cls =
+            model.classrooms
+    in
+    { model | classrooms = { cls | enrolled = [ classroomFake ] } }
+
+
+{-| Represents a classroom state
+-}
+type alias Classroom =
+    { name : String
+    , slug : String
+    , shortDescription : String
+    , longDescription : StreamField
+    , teacher : User
+    , students : List User
+    , staff : List User
+    , weeklyLessons : Bool
+    , acceptSubscriptions : Bool
     }
+
+
+{-| Creates an empty classroom
+-}
+classroom : Classroom
+classroom =
+    { name = ""
+    , slug = ""
+    , shortDescription = ""
+    , longDescription = []
+    , teacher = User.empty
+    , students = []
+    , staff = []
+    , weeklyLessons = False
+    , acceptSubscriptions = True
+    }
+
+
+classroomFake : Classroom
+classroomFake =
+    { classroom | name = "Elm", slug = "elm", shortDescription = "A course on the Elm language" }
 
 
 
@@ -73,52 +85,15 @@ emptyQuestion =
 
 
 type Msg
-    = SetResponse String
-    | SubmitResponse
-    | CloseModal
-    | NavbarMsg
-
-
-
--- Boilerplate: Msg clause for internal Mdl messages.
-
-
-feedback : Maybe Float -> Feedback
-feedback value =
-    case value of
-        Nothing ->
-            Error "Empty string!"
-
-        _ ->
-            Waiting
+    = SelectClassroom Int
+    | SelectEnrolledClassroomsList Bool
 
 
 update : Msg -> Model -> Model
-update msg ({ response } as model) =
+update msg model =
     case msg of
-        SetResponse value ->
-            let
-                number =
-                    if String.isEmpty value then
-                        Nothing
-                    else
-                        case String.toFloat value of
-                            Ok num ->
-                                Just num
-
-                            Err _ ->
-                                Nothing
-            in
-            { model | response = { response | value = number } }
-
-        SubmitResponse ->
-            { model
-                | response = { response | feedback = feedback response.value }
-                , showModal = True
-            }
-
-        CloseModal ->
-            { model | showModal = False }
+        SelectEnrolledClassroomsList enrolled ->
+            { model | showEnrolledClassrooms = enrolled }
 
         _ ->
             model
@@ -128,188 +103,90 @@ update msg ({ response } as model) =
 -- VIEW
 
 
-showDialog : String -> String -> Html Msg
-showDialog title msg =
-    Dialog.render
-        { styles = [ ( "class", "cs-dialog" ) ]
-        , title = title
-        , content = [ p [] [ text msg ] ]
-        , actionBar =
-            [ button [ class "mdl-button", onClick CloseModal ] [ text "Close" ]
-            ]
-        }
-        Dialog.visible
-
-
-showFeedbackDialog : Feedback -> Html Msg
-showFeedbackDialog feedback =
-    case feedback of
-        Error msg ->
-            showDialog "Error" msg
-
-        Waiting ->
-            showDialog "Waiting..." "Please wait while codeschool grade your submission"
-
-        _ ->
-            showDialog "" ""
-
-
 view : Model -> Html Msg
-view ({ question, user, response, showModal } as model) =
+view ({ classrooms, user } as model) =
     let
-        modal =
-            if showModal then
-                [ showFeedbackDialog response.feedback ]
-            else
-                []
-
         head_ =
-            [ header
+            [ Page.header
             , div
                 [ id "cs-body"
                 , class "mdl-grid mdl-grid mdl-grid--no-spacing"
                 , style [ ( "width", "100%" ) ]
                 ]
                 [ div [ id "content-area", class "cs-stripes-layout" ]
-                    [ Navbar.render model.showNavbar, contents question ]
+                    [ main_ model ]
                 ]
             ]
     in
     div [ class "cs-base-page", attribute "unresolved" "unresolved" ]
-        (head_ ++ modal ++ [ footer ])
+        (head_ ++ [ Page.footer ])
 
 
-header : Html Msg
-header =
-    div [ class "cs-head mdl-cell mdl-cell--12-col" ]
-        [ div [ class "cs-logo" ]
-            [ img [ class "cs-logo__img", src "/static/img/logo.svg" ]
-                []
-            ]
-        , nav [ class "cs-head__nav" ]
-            [ div [ class "cs-head__links" ]
-                [ a [ href "/questions/" ]
-                    [ text "Questions" ]
-                ]
-            , span [ class "cs-head__fab mdl-button mdl-js-button mdl-button--fab mdl-button--colored fab-button", id "cs-head--dropdown-trigger" ]
-                [ span [ class "dropdown-trigger" ]
-                    [ text "a" ]
-                ]
-            , ul [ class "mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect", for "cs-head--dropdown-trigger" ]
-                [ li [ class "mdl-menu__item" ]
-                    [ a [ href "/profile/" ]
-                        [ text "Profile" ]
-                    ]
-                , li [ class "mdl-menu__item" ]
-                    [ a [ href "/auth/logout/" ]
-                        [ text "Logout" ]
-                    ]
-                ]
-            ]
-        ]
-
-
-footer : Html Msg
-footer =
-    div [ class "cs-foot mdl-cell mdl-cell--12-col" ]
-        [ div [ class "cs-foot__copyright" ]
-            [ p []
-                [ text "Copyright 2016 -"
-                , a
-                    [ href "http://github.com/fabiommendes/codeschool" ]
-                    [ text "Codeschool" ]
-                ]
-            , p []
-                [ text "Site gerenciado por Fábio M. Mendes na UnB/Gama." ]
-            ]
-        ]
-
-
-{-| Displays the content header title and subtitle.
--}
-contentHeader : String -> String -> Html Msg
-contentHeader title subtitle =
-    div []
-        [ h1 []
-            [ text title ]
-        , p []
-            [ text
-                (if String.isEmpty subtitle then
-                    title
-                 else
-                    subtitle
-                )
-            ]
-        ]
-
-
-longDescription : List DescriptionItem -> Html Msg
-longDescription data =
-    let
-        description : DescriptionItem -> Html Msg
-        description item =
-            case item of
-                Markdown md ->
-                    Markdown.toHtml [ class "cs-markdown" ] md
-
-                Html x ->
-                    div [] [ text x ]
-
-                Ignored ->
-                    span [] []
-    in
-    div []
-        [ h2 [ class "cs-banner" ]
-            [ text "Description" ]
-        , article [ class "question-stem" ] <|
-            List.map description data
-        ]
-
-
-numericInput : Html Msg
-numericInput =
-    section []
-        [ h2 [ class "cs-banner" ] [ text "Response" ]
-        , div []
-            [ label []
-                [ text "Answer:"
-                , input
-                    [ step "any"
-                    , type_ "number"
-                    , placeholder "type your answer here"
-                    , onInput SetResponse
-                    ]
-                    []
-                ]
-            ]
-        , div [ class "toolbar highlight", style [ ( "text-align", "right" ), ( "margin-top", "20px" ) ] ]
-            [ button
-                [ class "mdl-button mdl-js-button mdl-button--raised"
-                , attribute "form" "form"
-                , onClick SubmitResponse
-                ]
-                [ text "Enviar" ]
-            ]
-        ]
-
-
-contents : Question -> Html Msg
-contents question =
-    main_ [ class "cs-stripes-layout__main" ]
+main_ : Model -> Html Msg
+main_ model =
+    Html.main_ [ class "cs-stripes-layout__main" ]
         [ div [ class "cs-stripes-layout__content" ]
-            [ contentHeader question.title question.shortDescription
-            , div []
-                [ longDescription question.longDescription
-                , numericInput
-                ]
+            [ contentHeader "List of courses" "This lists shows all courses available to you in the codeschool application"
+            , div [] [ mainTabs model ]
             ]
+        ]
+
+
+{-| Render tabs with course lists
+-}
+mainTabs : Model -> Html Msg
+mainTabs model =
+    let
+        selectedTab =
+            if model.showEnrolledClassrooms then
+                renderEnrolledCourses model.classrooms.enrolled
+            else
+                renderOtherCourses model.classrooms.other
+    in
+    div [ class "mdl-tabs mdl-js-tabs mdl-js-ripple-effect" ]
+        [ div [ class "mdl-tabs__tab-bar" ]
+            [ a [ class "mdl-tabs__tab is-active", onClick (SelectEnrolledClassroomsList True) ]
+                [ text "Enrolled" ]
+            , a [ class "mdl-tabs__tab", onClick (SelectEnrolledClassroomsList False) ]
+                [ text "Other" ]
+            ]
+        , selectedTab
+        ]
+
+
+renderClassromList : String -> List Classroom -> Html msg
+renderClassromList err classrooms =
+    if List.isEmpty classrooms then
+        div [ class "mdl-tabs__panel" ]
+            [ div [] [ text err ]
+            ]
+    else
+        ul [ class "cs-course-list" ] <|
+            List.map (\x -> li [] [ renderClassromItem x ]) <|
+                classrooms
+
+
+renderEnrolledCourses : List Classroom -> Html msg
+renderEnrolledCourses classrooms =
+    renderClassromList "You are not enrolled in any courses!" classrooms
+
+
+renderOtherCourses : List Classroom -> Html msg
+renderOtherCourses classrooms =
+    renderClassromList "No courses available!" classrooms
+
+
+renderClassromItem : Classroom -> Html msg
+renderClassromItem classroom =
+    div [ class "cs-course-list__item mdl-shadow--4dp" ]
+        [ h1 [] [ text classroom.name ]
         ]
 
 
 main : Program Never Model Msg
 main =
     Html.beginnerProgram
-        { model = model
+        { model = modelFake
         , view = view
         , update = update
         }
