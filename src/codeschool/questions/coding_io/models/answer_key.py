@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from codeschool import models, panels
 from codeschool.core.models import ProgrammingLanguage
 from codeschool.questions.coding_io.models import CodingIoQuestion
-from codeschool.utils.string import md5hash
 
 
 class AnswerKey(models.Model):
@@ -15,16 +14,6 @@ class AnswerKey(models.Model):
     Represents an answer to some question given in some specific computer
     language plus the placeholder text that should be displayed.
     """
-
-    NULL_SOURCE_HASH = md5hash('')
-
-    class ValidationError(Exception):
-        pass
-
-    class Meta:
-        verbose_name = _('answer key')
-        verbose_name_plural = _('answer keys')
-        unique_together = [('question', 'language')]
 
     question = models.ParentalKey(
         CodingIoQuestion,
@@ -53,11 +42,6 @@ class AnswerKey(models.Model):
             'per-language boilerplate and leave this field blank.'
         ),
     )
-    source_hash = models.CharField(
-        max_length=32,
-        default=NULL_SOURCE_HASH,
-        help_text=_('Hash computed from the reference source'),
-    )
     error_message = models.TextField(
         _('error message'),
         blank=True,
@@ -76,10 +60,6 @@ class AnswerKey(models.Model):
         except:
             title = '<untitled>'
         return '%s (%s)' % (title, self.language)
-
-    def save(self, *args, **kwargs):
-        self.source_hash = md5hash(self.source)
-        super().save(*args, **kwargs)
 
     def clean(self):
         try:
@@ -120,13 +100,6 @@ class AnswerKey(models.Model):
         except AttributeError:
             self.error_message = escape(message)
 
-    def has_changed_source(self):
-        """
-        Return True if source is not consistent with its hash.
-        """
-
-        return self.source_hash != md5hash(self.source)
-
     def single_reference(self):
         """
         Return True if it is the only answer key in the set that defines a
@@ -147,6 +120,11 @@ class AnswerKey(models.Model):
         panels.FieldPanel('source'),
         panels.FieldPanel('placeholder'),
     ]
+
+    class Meta:
+        verbose_name = _('answer key')
+        verbose_name_plural = _('answer keys')
+        unique_together = [('question', 'language')]
 
 
 def check_syntax(source, lang):
