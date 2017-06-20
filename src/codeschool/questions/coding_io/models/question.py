@@ -21,6 +21,25 @@ from .. import validators
 logger = logging.getLogger('codeschool.questions.coding_io')
 
 
+class Placeholder(models.Model):
+
+    placeholder = models.TextField(
+        _('placeholder source code'),
+        blank=True,
+        help_text=_(
+            'This optional field controls which code should be placed in '
+            'the source code editor when a question is opened. This is '
+            'useful to put boilerplate or even a full program that the '
+            'student should modify. It is possible to configure a global '
+            'per-language boilerplate and leave this field blank.'
+        ),
+    )
+
+    class Meta:
+        verbose_name = _('placeholder')
+        verbose_name_plural = _('placeholders')
+
+
 @register_parent_prefetch
 class CodingIoQuestion(Question):
     """

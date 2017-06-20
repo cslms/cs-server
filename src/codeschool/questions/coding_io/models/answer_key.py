@@ -31,16 +31,10 @@ class AnswerKey(models.Model):
             'language.'
         ),
     )
-    placeholder = models.TextField(
-        _('placeholder source code'),
-        blank=True,
-        help_text=_(
-            'This optional field controls which code should be placed in '
-            'the source code editor when a question is opened. This is '
-            'useful to put boilerplate or even a full program that the '
-            'student should modify. It is possible to configure a global '
-            'per-language boilerplate and leave this field blank.'
-        ),
+    validated = models.BooleanField(
+        _('is validated?'),
+        default=False,
+        help_text=_('Verify if the answer key source is validated')
     )
     error_message = models.TextField(
         _('error message'),
@@ -118,7 +112,6 @@ class AnswerKey(models.Model):
     panels = [
         panels.FieldPanel('language'),
         panels.FieldPanel('source'),
-        panels.FieldPanel('placeholder'),
     ]
 
     class Meta:
