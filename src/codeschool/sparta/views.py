@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from bricks.contrib.mdl import button, div
-from bricks.html5 import ul, li, a, i, select, option
+from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
 from .bricks import navbar, layout, activities_layout
 
@@ -24,29 +24,41 @@ def activities(request):
 def rating(request):
 
     ctx = {
-        'content_title':'Membros',
+        'content_title':'Avaliação dos Membros',
         'content_body': ul(class_="demo-list-icon mdl-list")[
-        li(class_="mdl-list__item")[
-            i(class_="material-icons mdl-list__item-icon")['person'],
-            (a('Goku', href='#')),
-            a(class_="mdl-list__item-secondary-action")(href='#')[i(class_="material-icons")['star']],
-            select(class_="mdl-select__input")[
-                option('1'),
-                option('2'),
-                option('3'),
-                option('4'),
+        table(class_="mdl-data-table mdl-js-data-table mdl-shadow--2dp")[
+          thead()[
+            tr()[
+              th(class_="mdl-data-table__cell--non-numeric")['Aluno'],
+              th()['Avaliações'],
+              th()['Nota'],
+              th()['Avaliado?'],
             ]
+          ],
+          tbody()[
+            tr()[
+              td(class_="mdl-data-table__cell--non-numeric")['Goku da Silva Mendes'],
+              td()['3 Aluno(s)'],
+              td()['10'],
+              td()[
+                i(class_="material-icons")['done'],
+                ]
+            ],
+            tr()[
+              td(class_="mdl-data-table__cell--non-numeric")['Ronaldo Andrade Souza'],
+              td()['0 Aluno(s)'],
+              td()['0'],
+              td()['-'],
+            ],
+            tr()[
+              td(class_="mdl-data-table__cell--non-numeric")['Florentina de Jesus'],
+              td()['0 Aluno(s)'],
+              td()['0'],
+              td()['-'],
+            ],
+
+          ]
         ],
-        li(class_="mdl-list__item")[
-            i(class_="material-icons mdl-list__item-icon")['person'],
-            (a('Ronaldo', href='#')),
-            a(class_="mdl-list__item-secondary-action")(href='#')[i(class_="material-icons")['star']]
-        ],
-        li(class_="mdl-list__item")[
-            i(class_="material-icons mdl-list__item-icon")['person'],
-            (a('Florentina', href='#')),
-            a(class_="mdl-list__item-secondary-action")(href='#')[i(class_="material-icons")['star']]
-        ]
     ]
     }
     return render(request, 'sparta/rating.jinja2', ctx)
