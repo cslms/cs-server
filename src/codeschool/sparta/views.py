@@ -27,12 +27,13 @@ def rating(request):
         'content_title':'Avaliação dos Membros',
         'content_body': ul(class_="demo-list-icon mdl-list")[
         table(class_="mdl-data-table mdl-js-data-table mdl-shadow--2dp")[
+        div(class_="mdl-tooltip", for_="tt1")['Já Avaliado'],
           thead()[
             tr()[
               th(class_="mdl-data-table__cell--non-numeric")['Aluno'],
               th()['Avaliações'],
               th()['Nota'],
-              th()['Avaliado?'],
+              th()['Avaliar'],
             ]
           ],
           tbody()[
@@ -40,24 +41,27 @@ def rating(request):
               td(class_="mdl-data-table__cell--non-numeric")['Goku da Silva Mendes'],
               td()['3 Aluno(s)'],
               td()['10'],
-              td()[
-                i(class_="material-icons")['done'],
-                ]
+             td()[
+               i(class_="material-icons", id='tt1')['done'],
+               ],
             ],
             tr()[
               td(class_="mdl-data-table__cell--non-numeric")['Ronaldo Andrade Souza'],
               td()['0 Aluno(s)'],
               td()['0'],
-              td()['-'],
+              td()[
+                i(class_="material-icons")['mode_edit'],
+                ]
             ],
             tr()[
               td(class_="mdl-data-table__cell--non-numeric")['Florentina de Jesus'],
               td()['0 Aluno(s)'],
               td()['0'],
-              td()['-'],
+              td()[
+                i(class_="material-icons")['mode_edit'],
+                ]
             ],
-
-          ]
+          ],
         ],
     ]
     }
