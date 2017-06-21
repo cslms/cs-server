@@ -17,6 +17,7 @@ def activities(request):
 
     ctx = {
         'content_title':'Atividades',
-        'content_body':activities_layout(),
+        'content_body':
+            activities_layout(),
     }
     return render(request, 'sparta/activities.jinja2', ctx)

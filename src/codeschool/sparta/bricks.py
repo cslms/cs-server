@@ -1,6 +1,7 @@
 from codeschool.bricks import navbar as _navbar, navsection, navsection_page_admin
 from bricks.html5 import a, div, h1, h2, ul, li, button
 from codeschool.bricks import card_container, simple_card, with_class
+from simple_search import search_filter
 # import members_list from back end
 
 def navbar():
@@ -33,9 +34,13 @@ def layout():
     return card_container(cards, title='Membros', description=b)
 
 def activities_layout():
-    cards = [
-        simple_card('Atividade 1', double=True),
-        simple_card('Atividade 2', double=True),
-        simple_card('Atividade 3', double=True),
-    ]
+
+    # TODO: Import from backend
+    from types import SimpleNamespace
+    Activity = SimpleNamespace
+    activities_list = [Activity(name="Atividade 1"), Activity(name="Atividade 2"), Activity(name="Atividade 3", url="dfsdf")]
+
+    # activities_list = activity_filter()
+
+    cards = [ simple_card(activity.name, double=True, center=False) for activity in activities_list ]
     return card_container(cards)
