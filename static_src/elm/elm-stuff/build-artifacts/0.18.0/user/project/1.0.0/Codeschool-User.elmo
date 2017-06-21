@@ -1,3 +1,11 @@
+var _user$project$Codeschool_User$fake = {
+	name: 'Albert Einstein',
+	email: 'emc2@hotmail.com',
+	username: 'aeinstein',
+	profile: {
+		url: _elm_lang$core$Maybe$Just('https://eistein.blogspot.com/')
+	}
+};
 var _user$project$Codeschool_User$empty = {
 	name: '?',
 	email: '',

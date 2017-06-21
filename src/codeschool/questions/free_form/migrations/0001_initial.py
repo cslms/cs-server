@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import codeschool.lms.activities.models.activity
 import codeschool.lms.activities.models.mixins
+import codeschool.mixins
 import codeschool.questions.free_form.models
 import codeschool.questions.models
 import codeschool.vendor.wagtailmarkdown.blocks
@@ -81,7 +82,7 @@ class Migration(migrations.Migration):
                 ('filter', models.CharField(
                     blank=True, help_text='Filters the response by some criteria.', max_length=30, verbose_name='filter')),
             ],
-            bases=(codeschool.lms.activities.models.mixins.CommitMixin,
+            bases=(codeschool.mixins.CommitMixin,
                    wagtail.contrib.wagtailroutablepage.models.RoutablePageMixin, 'wagtailcore.page'),
         ),
         migrations.CreateModel(

@@ -12,8 +12,8 @@ import * as dialogPolyfill from 'dialog-polyfill/dialog-polyfill';
 
 // Javascript libs
 import * as jQuery from 'jquery';
-var $ = jQuery;
-import * as Vue from 'vue';
+global.$ = jQuery;
+global.jQuery = jQuery;
 
 
 /*

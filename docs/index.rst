@@ -11,6 +11,7 @@ Welcome to codeschool's documentation!
 
    Installation instructions <install.rst>
    API documentation <apidoc.rst>
+   Coding style <style-code.rst>
    License <license.rst>
 
 Indices and tables

@@ -3,6 +3,7 @@ module Codeschool.User
         ( Profile
         , User
         , empty
+        , fake
         )
 
 {-| User and profiles
@@ -15,10 +16,9 @@ module Codeschool.User
 
 # Constructors
 
-@docs empty
+@docs empty, fake
 
 -}
-
 
 -- MODELS
 
@@ -45,3 +45,16 @@ type alias Profile =
 empty : User
 empty =
     { name = "?", email = "", username = "?", profile = { url = Nothing } }
+
+
+{-| A fake user that can be useful in testing.
+-}
+fake : User
+fake =
+    { name = "Albert Einstein"
+    , email = "emc2@hotmail.com"
+    , username = "aeinstein"
+    , profile =
+        { url = Just "https://eistein.blogspot.com/"
+        }
+    }

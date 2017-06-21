@@ -1,11 +1,3 @@
-# -*- coding: utf8 -*-
-#
-# This file were created by Python Boilerplate. Use boilerplate to start simple
-# usable and best-practices compliant Python projects.
-#
-# Learn more about it at: http://github.com/fabiommendes/boilerplate/
-#
-
 import os
 from setuptools import setup, find_packages
 
@@ -59,6 +51,7 @@ setup(
     packages=find_packages('src'),
     install_requires=[
         # Non-django dependencies
+        'editdistance',
         'lazyutils>=0.3.1',
         'pygeneric',
         'mistune',
@@ -67,9 +60,7 @@ setup(
         'python-markdown-math',
         'html5lib==0.999999999',
         'bleach==2.0.0',
-        # 'Faker',
-        'fake-factory<=0.7.2',  # we must check all codeschool deps for culprits
-                                # before replacing fake-factory by Faker
+        'fake-factory<=0.7.2', # => Faker?
         'factory-boy',
         'mommys_boy',
         'celery[redis]',
@@ -83,7 +74,8 @@ setup(
 
         # Django and extensions
         'django==1.10',
-        'django-bricks>=0.2.3',
+        'django-friendship>=1.5.0,<1.6',
+        'django-bricks>=0.2.3,<0.3',
         'django-polymorphic',
         'django-model-utils',
         'django-model-reference',
@@ -130,6 +122,7 @@ setup(
             'pytest-factoryboy',
             'sulfur>=0.1.3',
             'django-mock-queries',
+            'sphinx_rtd_theme',
         ]
     },
 

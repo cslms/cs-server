@@ -348,15 +348,6 @@ class CodingIoQuestion(Question):
 
         print('scheduling full code validation... (we are now executing on the'
               'foreground).')
-        self.mark_invalid_code_fields()
-
-    def mark_invalid_code_fields(self):
-        """
-        Performs a full code validation with .full_clean_code() and marks all
-        errors found in the question.
-        """
-
-        return
 
     def validate_tests(self):
         """

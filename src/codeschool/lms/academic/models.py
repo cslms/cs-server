@@ -3,14 +3,20 @@ from codeschool import models
 
 class DescriptiveModel(models.TimeStampedModel):
     """
-    Base class for many different models.
+    Abstract Base Class for models with slug/name/description fields.
+
+    Slug is used as a primary key.
     """
+
+    slug = models.CodeschoolSlugField(primary_key=True)
     name = models.CodeschoolNameField()
-    slug = models.CodeschoolSlugField()
     description = models.CodeschoolDescriptionField(blank=True)
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.slug)
 
 
 class Faculty(DescriptiveModel):
