@@ -7,7 +7,7 @@ from iospec import parse, Out, In, StandardTestCase
 from codeschool.core import get_programming_language
 from codeschool.lms.activities.models import Feedback
 from codeschool.questions.coding_io import factories
-from codeschool.questions.coding_io.models.question import expand_tests
+from codeschool.questions.coding_io.models.question import ExpandTests
 
 pytestmark = pytest.mark.integration
 example = factories.question_from_example
@@ -122,7 +122,7 @@ def test_stop_execution_of_submission_after_timeout_hello(db, user,
 # Test expansions
 def test_tests_expansion_fibonacci(db):
     question = example('fibonacci')
-    tests = expand_tests(question, question.pre_tests)
+    tests = ExpandTests.expand_tests(question, question.pre_tests)
     assert tests.is_simple
     assert tests.is_standard_test_case
 
