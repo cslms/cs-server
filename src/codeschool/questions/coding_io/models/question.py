@@ -45,6 +45,7 @@ class Placeholder(models.Model):
 
 @register_parent_prefetch
 class CodingIoQuestion(Question):
+
     """
     CodeIo questions evaluate source code and judge them by checking if the
     inputs and corresponding outputs match an expected pattern.
@@ -338,7 +339,7 @@ class CodingIoQuestion(Question):
         super().full_clean(*args, **kwargs)
 
     def full_clean_expansions(self):
-     	self.get_current_test_state(update=True)
+        self.get_current_test_state(update=True)
 
     def full_clean_answer_keys(self):
         """
@@ -510,13 +511,14 @@ class CodingIoQuestion(Question):
         return self._actions.regrade_post(self)
 
     def action_expand_tests(self, client, *args, **kwargs):
-       return self._actions.action_expand_tests(self, client, args, kwargs)
+        return self._actions.action_expand_tests(self, client, args, kwargs)
 
     def action_grade_with_post_tests(self, client, *args, **kwargs):
         return self._actions.action_grade_with_post_tests(self, client, args, kwargs)
 
 
 class ExpandTests(object):
+
     """
     Expand tests from program and check it
     """
@@ -559,7 +561,8 @@ class ExpandTests(object):
         answer_key = question.answers.get(language=language)
 
         if not answer_key.source:
-            raise ValueError('cannot expand from %s: no program set' % language)
+            raise ValueError(
+                'cannot expand from %s: no program set' % language)
 
         source = answer_key.source
 
@@ -596,7 +599,8 @@ class ExpandTests(object):
         # language. Collect tuples of (expansion, language)
         languages = [answer.language for answer in answers]
         first, *tail = [
-            (ExpandTests.expand_tests_from_program(question, tests, language), language)
+            (ExpandTests.expand_tests_from_program(
+                question, tests, language), language)
             for language in languages]
 
         # All expansions should be equal.
