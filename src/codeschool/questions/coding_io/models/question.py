@@ -199,14 +199,6 @@ class CodingIoQuestion(Question):
         fake_post['post_tests_source'] = self.post_tests_source
         return fake_post
 
-    # Expanding and controlling the tests state
-    def has_test_state_changed(self):
-        """
-        Return True if test state has changed.
-        """
-
-        return self.test_state_hash == compute_test_state_hash(self)
-
     def get_current_test_state(self, update=False):
         """
         Return a current TestState object synchronized with the current
@@ -216,10 +208,7 @@ class CodingIoQuestion(Question):
         recreation of the test state.
         """
 
-        if update:
-            hash = compute_test_state_hash(self)
-        else:
-            hash = self.test_state_hash
+        hash = self.test_state_hash
 
         try:
             return TestState.objects.get(question=self, hash=hash)
@@ -317,8 +306,6 @@ class CodingIoQuestion(Question):
 
     # Saving & validation
     def save(self, *args, **kwargs):
-        self.test_state_hash = compute_test_state_hash(self)
-
         if not self.author_name and self.owner:
             name = self.owner.get_full_name() or self.owner.username
             email = self.owner.email
@@ -328,10 +315,6 @@ class CodingIoQuestion(Question):
 
     def clean(self):
         super().clean()
-
-        if self.has_test_state_changed() or self.has_code_changed():
-            logger.debug('%r: recomputing tests' % self.title)
-            self.schedule_validation()
 
     def full_clean(self, *args, **kwargs):
         if self.__answers:
@@ -506,16 +489,6 @@ class CodingIoQuestion(Question):
 
         return self.answers.exclude(source='')
 
-    def has_code_changed(self):
-        """
-        True if some answer source for a valid code has changed.
-        """
-
-        keys = self.answers_with_code()
-        for key in keys:
-            if key.has_changed_source():
-                return True
-        return False
 
     def run_post_grading(self, **kwargs):
         """
@@ -605,17 +578,6 @@ class CodingIoQuestion(Question):
     def action_grade_with_post_tests(self, client, *args, **kwargs):
         self.regrade_post()
         client.dialog('<p>Successful operation!</p>')
-
-
-def compute_test_state_hash(question):
-    source_hashes = question.answers.values_list('source_hash', flat=True)
-    return md5hash_seq([
-        question.pre_tests_source,
-        question.post_tests_source,
-        '%x%x%f' % (question.num_pre_tests, question.num_post_tests,
-                    question.timeout),
-        '\n'.join(source_hashes),
-    ])
 
 
 #
