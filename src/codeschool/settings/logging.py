@@ -1,9 +1,16 @@
 import os
 from codeschool.settings import DEBUG
 
+cd = os.path.dirname
+base = cd(cd(cd(cd(__file__))))
+LOGDIR = os.path.join(base, 'log')
+LOGFILE_INFO = os.path.join(LOGDIR, 'info.log')
+LOGFILE_WARNINGS = os.path.join(LOGDIR, 'warnings.log')
+DEFAULT_HANDLERS = ['file', 'file-info', 'console']
+
 # Force existence of a log/ directory
-if not os.path.exists('log'):
-    os.mkdir('log')
+if not os.path.exists(LOGDIR):
+    os.mkdir(LOGDIR)
 
 LOGGING = {
     'version': 1,
@@ -22,11 +29,17 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
+        'file-info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'simple',
+            'filename': LOGFILE_INFO,
+        },
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'formatter': 'verbose',
-            'filename': 'log/cs.log',
+            'filename': LOGFILE_WARNINGS,
         },
 
     },
@@ -36,19 +49,22 @@ LOGGING = {
             'propagate': True,
         },
         'codeschool': {
-            'handlers': ['console'],
+            'handlers': DEFAULT_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,
         },
         'boxed': {
-            'handlers': ['file', 'console'],
+            'handlers': DEFAULT_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,
         },
         'ejudge': {
-            'handlers': ['file', 'console'],
+            'handlers': DEFAULT_HANDLERS,
             'level': 'DEBUG',
             'propagate': True,
         },
     },
 }
+
+
+del cd, base, os

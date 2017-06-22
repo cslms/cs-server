@@ -23,7 +23,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('core', '0002_initial_formats'),
-        ('wagtailcore', '0032_add_bulk_delete_page_permission'),
         ('activities', '0001_initial'),
     ]
 

@@ -5,17 +5,24 @@ from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool.components.navbar import NavSection
-from codeschool.lms.activities.managers.activity import ActivityManager
-from codeschool.lms.activities.meta import ActivityMeta
-from codeschool.lms.activities.models.utils import AuxiliaryClassIntrospection
 from codeschool.types.rules import Rules
+from codeschool.mixins import CommitMixin
+from .utils import AuxiliaryClassIntrospection
+from ..managers.activity import ActivityManager
+from ..meta import ActivityMeta
 
 logger = logging.getLogger('codeschool.lms.activities')
 ZERO = decimal.Decimal(0)
 
 
-class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
+def bool_to_true():
+    return True
+
+
+class Activity(CommitMixin,
+               models.RoutableViewsPage,
+               models.DecoupledAdminPage,
+               metaclass=ActivityMeta):
     """
     Represents a gradable activity inside a course. Activities may not have an
     explicit grade, but yet may provide points to the students via the
@@ -44,9 +51,10 @@ class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
             'The author\'s name, if not the same user as the question owner.'
         ),
     )
+    # Do we need this? Can we use wagtail's live attribute?
     visible = models.BooleanField(
         _('Invisible'),
-        default=bool,
+        default=bool_to_true,
         help_text=_(
             'Makes activity invisible to users.'
         ),
@@ -81,7 +89,8 @@ class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
         help_text=_(
             'Activities can be automatically disabled when Codeshool '
             'encounters an error. This usually produces a message saved on '
-            'the .disabled_message attribute.'
+            'the .disabled_message attribute. '
+            'This field is not controlled directly by users.'
         )
     )
     disabled_message = models.TextField(
@@ -121,31 +130,41 @@ class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
         if self.disabled:
             raise ValidationError(self.disabled_message)
 
-    def submit(self, request, user=None, **kwargs):
+    def disable(self, error_message=_('Internal error'), commit=True):
+        """
+        Disable activity.
+
+        Args:
+            message:
+                An error message explaining why activity was disabled.
+        """
+
+        self.disabled = True
+        self.disabled_message = error_message
+        self.commit(commit, update_fields=['disabled', 'disabled_message'])
+
+    def submit(self, request, _commit=True, **kwargs):
         """
         Create a new Submission object for the given question and saves it on
         the database.
 
         Args:
             request:
-                The request object for the current submission.
-            recycle:
-                If true, recycle submission objects with the same content as the
-                current submission. If a submission exists with the same content
-                as the current submission, it simply returns the previous
-                submission.
-                If recycled, sets the submission.recycled to True.
-            user:
-                The user who submitted the response. If not given, uses the user
-                in the request object.
+                The request object for the current submission. The user is
+                obtained from the request object.
+
+        This code loads the :cls:`Progress` object for the given user and
+        calls it :meth:`Progress.submit`` passing all named arguments to it.
+
+        Subclasses should personalize the submit() method of the Progress object
+        instead of the one in this class.
         """
 
-        if hasattr(request, 'username'):
-            raise ValueError
+        assert hasattr(request, 'user'), 'request do not have a user attr'
 
         # Test if activity is active
-        if self.closed:
-            raise ValueError('activity is closed to new submissions')
+        if self.closed or self.disabled:
+            raise RuntimeError('activity is closed to new submissions')
 
         # Fetch submission class
         submission_class = self.submission_class
@@ -155,32 +174,30 @@ class Activity(models.ExtRoutablePage, metaclass=ActivityMeta):
                 'appropriate submission class.' % self.__class__.__name__
             )
 
-        # Add progress information to the given submission kwargs
-        if user is None:
-            user = request.user
+        # Dispatch to the progress object
+        user = request.user
         logger.info('%r, submission from user %r' %
                     (self.title, user.username))
         progress = self.progress_set.for_user(user)
-        return progress.submit(request, **kwargs)
+        return progress.submit(request, kwargs, commit=_commit)
 
-    def nav_sections(self, request):
+    def filter_user_submission_payload(self, request, payload):
         """
-        Return a list of navigation sections for the given request.
-        """
-
-        sections = []
-        default = self.nav_section_for_activity(request)
-        if default.links:
-            sections.append(default)
-        return sections
-
-    def nav_section_for_activity(self, request):
-        """
-        Return links pertinent to the activity.
-
-        Returns:
-            A NavSection instance.
+        Filter a dictionary of arguments supplied by an user and return a
+        dictionary with only those arguments that should be passed to the
+        .submit() function.
         """
 
-        nav = NavSection(self.section_title, self.get_absolute_url())
-        return nav
+        data_fields = self.submission_class.data_fields()
+        return {k: v for (k, v) in payload.items() if k in data_fields}
+
+    def submit_with_user_payload(self, request, payload):
+        """
+        Return a submission from a dictionary of user provided kwargs.
+
+        It first process the keyword arguments and pass them to the .submit()
+        method.
+        """
+
+        payload = self.filter_user_submission_payload(request, payload)
+        return self.submit(request, **payload)

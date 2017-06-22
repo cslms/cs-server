@@ -1,0 +1,52 @@
+{% extends 'page.jinja2' %}
+
+
+{% block content_body %}
+    <div class="cs-attendance cs-attendance--{% if is_teacher %}teacher{% else %}student{% endif %}">
+        <h2 class="cs-banner">{{ _('Virtual attendance check') }}</h2>
+        {% if is_teacher %}
+            <p>
+                {% trans %}
+                    Please tell the passphrase phrase to your students. They
+                    should type it on a form in order to confirm attendance.
+                {% endtrans %}
+            </p>
+            <div class="cs-attendance__passphrase">
+                <a bricks-bind="refresh-phrase.api/"><i class="cs-attendance__refresh material-icons">refresh</i></a>
+                <p>{{ passphrase|upper }}</p>
+            </div>
+
+            <h2 class="cs-banner">{{ _('List of students') }}</h2>
+            <table>
+                {% if not students %}
+                    <p>{{ _('No students found!') }}</p>
+                {% else %}
+                    {% for student in students %}
+                    {% endfor %}
+                {% endif %}
+            </table>
+        {% elif is_expired %}
+            <div class="cs-attendance__formbox">
+                <h2>{{ _('Sorry :(') }}</h2>
+                <p>{{ _('The attendance list is closed now.') }}</p>
+            </div>
+        {% else %}
+            <div class="cs-attendance__formbox">
+                <p>
+                    {% trans expire=page.minutes_left() %}
+                        Please type the secret phrase the teacher announced
+                        during classroom on the field bellow in the next
+                        {{ expire }} minutes.
+                        This should prove that your are attending the class.
+                    {% endtrans %}
+                </p>
+
+                <form bricks-bind="check.api/">
+                    {{ csrf_input }}
+                    {{ form.as_p() }}
+                    <input type="submit">
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,27 +1,43 @@
 import logging
-from difflib import Differ
 
-import srvice
 from annoying.functions import get_config
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+from django.utils.translation import ugettext_lazy as _
 
+import bricks.rpc
 from codeschool import models
-from codeschool.components.navbar import NavSection
 from codeschool.core import get_programming_language
 from codeschool.core.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
 from codeschool.questions.models import Question
-from codeschool.utils import md5hash_seq
+from codeschool.utils.string import md5hash_seq
 from iospec import parse as parse_iospec, IoSpec
 from .submission import CodingIoSubmission
 from .. import ejudge
 from .. import validators
 
-differ = Differ()
 logger = logging.getLogger('codeschool.questions.coding_io')
+
+
+class Placeholder(models.Model):
+
+    placeholder = models.TextField(
+        _('placeholder source code'),
+        blank=True,
+        help_text=_(
+            'This optional field controls which code should be placed in '
+            'the source code editor when a question is opened. This is '
+            'useful to put boilerplate or even a full program that the '
+            'student should modify. It is possible to configure a global '
+            'per-language boilerplate and leave this field blank.'
+        ),
+    )
+
+    class Meta:
+        verbose_name = _('placeholder')
+        verbose_name_plural = _('placeholders')
 
 
 @register_parent_prefetch
@@ -167,19 +183,21 @@ class CodingIoQuestion(Question):
 
     submission_class = CodingIoSubmission
 
+    def submit(self, request, language=None, **kwargs):
+        # Cannot set language if question specifies a required lnaguage
+        if language and self.language and language != self.language:
+            args = language, self.language
+            raise ValueError('cannot set language: %r != %r' % args)
+
+        language = self.language or language
+        language = get_programming_language(language)
+        return super().submit(request, language=language, **kwargs)
+
     def load_post_file_data(self, file_data):
         fake_post = super().load_post_file_data(file_data)
         fake_post['pre_tests_source'] = self.pre_tests_source
         fake_post['post_tests_source'] = self.post_tests_source
         return fake_post
-
-    # Expanding and controlling the tests state
-    def has_test_state_changed(self):
-        """
-        Return True if test state has changed.
-        """
-
-        return self.test_state_hash == compute_test_state_hash(self)
 
     def get_current_test_state(self, update=False):
         """
@@ -190,10 +208,7 @@ class CodingIoQuestion(Question):
         recreation of the test state.
         """
 
-        if update:
-            hash = compute_test_state_hash(self)
-        else:
-            hash = self.test_state_hash
+        hash = self.test_state_hash
 
         try:
             return TestState.objects.get(question=self, hash=hash)
@@ -291,8 +306,6 @@ class CodingIoQuestion(Question):
 
     # Saving & validation
     def save(self, *args, **kwargs):
-        self.test_state_hash = compute_test_state_hash(self)
-
         if not self.author_name and self.owner:
             name = self.owner.get_full_name() or self.owner.username
             email = self.owner.email
@@ -302,10 +315,6 @@ class CodingIoQuestion(Question):
 
     def clean(self):
         super().clean()
-
-        if self.has_test_state_changed() or self.has_code_changed():
-            logger.debug('%r: recomputing tests' % self.title)
-            self.schedule_validation()
 
     def full_clean(self, *args, **kwargs):
         if self.__answers:
@@ -341,21 +350,6 @@ class CodingIoQuestion(Question):
 
         print('scheduling full code validation... (we are now executing on the'
               'foreground).')
-        self.mark_invalid_code_fields()
-
-    def mark_invalid_code_fields(self):
-        """
-        Performs a full code validation with .full_clean_code() and marks all
-        errors found in the question.
-        """
-
-        return
-        try:
-            self.full_clean(force_expansions=True)
-        except ValidationError as ex:
-            print(ex)
-            print(dir(ex))
-            raise
 
     def validate_tests(self):
         """
@@ -484,8 +478,8 @@ class CodingIoQuestion(Question):
             return qs.get().source
         return ''
 
-    def get_submission_kwargs(self, request, kwargs):
-        return dict(language=kwargs['language'], source=kwargs['source'])
+    def filter_user_submission_payload(self, request, payload):
+        return dict(language=payload['language'], source=payload['source'])
 
     # Access answer key queryset
     def answers_with_code(self):
@@ -495,27 +489,6 @@ class CodingIoQuestion(Question):
 
         return self.answers.exclude(source='')
 
-    def has_code_changed(self):
-        """
-        True if some answer source for a valid code has changed.
-        """
-
-        keys = self.answers_with_code()
-        for key in keys:
-            if key.has_changed_source():
-                return True
-        return False
-
-    # Actions
-    def submit(self, user_or_request, language=None, **kwargs):
-        if language and self.language:
-            if language != self.language:
-                args = language, self.language
-                raise ValueError('cannot set language: %r != %r' % args)
-        if self.language:
-            language = self.language
-        language = get_programming_language(language)
-        return super().submit(user_or_request, language=language, **kwargs)
 
     def run_post_grading(self, **kwargs):
         """
@@ -526,21 +499,6 @@ class CodingIoQuestion(Question):
             response.run_post_grading(tests=self.post_tests_expanded, **kwargs)
         self.closed = True
         self.save()
-
-    def nav_section_for_activity(self, request):
-        url = self.get_absolute_url
-        section = NavSection(
-            __('Question'), url(), title=__('Back to question')
-        )
-        if self.rules.test(request.user, 'activities.edit_activity'):
-            section.add_link(
-                __('Edit'), self.get_admin_url(), title=__('Edit question')
-            )
-        section.add_link(
-            __('Submissions'), url('submissions'),
-            title=__('View your submissions')
-        )
-        return section
 
     # Serving pages and routing
     template = 'questions/coding_io/detail.jinja2'
@@ -571,7 +529,7 @@ class CodingIoQuestion(Question):
     def serve_ajax_submission(self, client, source=None, language=None,
                               **kwargs):
         """
-        Handles student responses via AJAX and a srvice program.
+        Handles student responses via AJAX and a bricks program.
         """
 
         # User must choose language
@@ -592,7 +550,7 @@ class CodingIoQuestion(Question):
             source=source,
         )
 
-    @srvice.route(r'^placeholder/$')
+    @bricks.rpc.route(r'^placeholder/$')
     def route_placeholder(self, request, language):
         """
         Return the placeholder code for some language.
@@ -620,17 +578,6 @@ class CodingIoQuestion(Question):
     def action_grade_with_post_tests(self, client, *args, **kwargs):
         self.regrade_post()
         client.dialog('<p>Successful operation!</p>')
-
-
-def compute_test_state_hash(question):
-    source_hashes = question.answers.values_list('source_hash', flat=True)
-    return md5hash_seq([
-        question.pre_tests_source,
-        question.post_tests_source,
-        '%x%x%f' % (question.num_pre_tests, question.num_post_tests,
-                    question.timeout),
-        '\n'.join(source_hashes),
-    ])
 
 
 #

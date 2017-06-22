@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 import codeschool.lms.activities.models.mixins
-import codeschool.lms.activities.models.validators
+import codeschool.lms.activities.validators
 import decimal
 from django.conf import settings
 from django.db import migrations, models
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('contenttypes', '0002_remove_content_type_name'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('wagtailcore', '0032_add_bulk_delete_page_permission'),
+        ('wagtailcore', '0028_merge'),
     ]
 
     operations = [
@@ -69,9 +69,9 @@ class Migration(migrations.Migration):
                 ('manual_grading', models.BooleanField(default=True,
                                                        help_text='True if feedback was created manually by a human.')),
                 ('given_grade_pc', models.DecimalField(blank=True, decimal_places=3, help_text='This grade is given by the auto-grader and represents the grade for the response before accounting for any bonuses or penalties.',
-                                                       max_digits=6, null=True, validators=[codeschool.lms.activities.models.validators.grade_validator], verbose_name='percentage of maximum grade')),
+                                                       max_digits=6, null=True, validators=[codeschool.lms.activities.validators.grade_validator], verbose_name='percentage of maximum grade')),
                 ('final_grade_pc', models.DecimalField(blank=True, decimal_places=3, help_text="Similar to given_grade, but can account for additional factors such as delay penalties or for any other reason the teacher may want to override the student's grade.",
-                                                       max_digits=6, null=True, validators=[codeschool.lms.activities.models.validators.grade_validator], verbose_name='final grade')),
+                                                       max_digits=6, null=True, validators=[codeschool.lms.activities.validators.grade_validator], verbose_name='final grade')),
                 ('is_correct', models.BooleanField(default=False)),
                 ('grader_user', models.ForeignKey(blank=True, help_text='User that performed the manual grading.',
                                                   null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
             bases=(
-                codeschool.lms.activities.models.mixins.HasProgressMixin, models.Model),
+                codeschool.lms.activities.models.mixins.FromProgressAttributesMixin, models.Model),
         ),
         migrations.CreateModel(
             name='Progress',
@@ -139,7 +139,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'submission',
                 'verbose_name_plural': 'submissions',
             },
-            bases=(codeschool.lms.activities.models.mixins.HasProgressMixin,
+            bases=(codeschool.lms.activities.models.mixins.FromProgressAttributesMixin,
                    wagtail_model_tools.models.mixins.CopyMixin, models.Model),
         ),
         migrations.AddField(

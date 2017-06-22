@@ -2,23 +2,42 @@
 Frequently asked questions
 ==========================
 
-Usage
-=====
+Users FAQ
+=========
 
-Why is this file empty?
------------------------
+What is Codeschool?
+-------------------
 
-Because it was created automatically by python-boilerplate__ and the package
-author is too busy coding and did not provide a proper FAQ section ;-)
+Codeschool is a Learning Management System focused on programming classes.
 
-..: http://github.com/fabiommendes/python-boilerplate/
 
-Concepts
-========
 
-Why do we want an automatic boilerplate?
+
+Developers FAQ
+==============
+
+In which language Codeschool is written?
 ----------------------------------------
 
-Because time is precious and we don't want to waste it in repetitive tasks. Copy
-and paste can go a long way creating a new project, but is tedious and error
-prone. Python boilerplate makes it easy, simple, and beautiful.
+Codeschool is written in Python and uses Django for the backend. The frontend
+is a mix between Elm and Javascript. Check our tech stack:
+
+* Base: Python 3 + Django_ + Wagtail_
+* API: `Django REST Framework`_
+* DB: Agnostic. The default configuration uses Sqlite for its simplicity
+* Cache: Redis_
+* Frontent: Elm_ + `Material Design Lite`_ + `Ace.js`_
+* Frontend pipeline: Webpack_ + ES6
+* CSS: Sass_ with BEM_ and `inverted triangle`_ methodology
+
+.. _Django: https://djangoproject.org/
+.. _Django REST Framework: http://www.django-rest-framework.org/
+.. _Wagtail: https://wagtail.io/
+.. _Redis: https://redis.io/
+.. _Elm: https://elm-lang.org/
+.. _Material Design Lite: https://getmdl.io/
+.. _Ace.js: https://ace.c9.io/
+.. _Webpack: https://webpack.js.org/
+.. _Sass: https://sass-lang.com/
+.. _BEM: https://getbem.com/
+.. _inverted triangle: http://itcss.io/

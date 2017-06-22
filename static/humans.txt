@@ -12,8 +12,8 @@
 # TECHNOLOGY COLOPHON
 
     CSS3, SCSS, HTML5
-    Django, wagtail, srvice
-    jQuery, Modernizr, Normalize.css, Polymer
+    Django, wagtail, bricks
+    webpack, Vue, Elm, jQuery
 
     This is an open source project. Go to our github page and contribute!
 

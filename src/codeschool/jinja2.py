@@ -17,10 +17,9 @@ from wagtail.wagtailcore.templatetags.wagtailcore_tags import richtext
 from markdown import Markdown
 
 from bricks.components.data_components import Mapping
-from bricks.helpers import render, hyperlink
+from bricks.helpers import render as _render, hyperlink
 
 
-jinja2_environment = None
 log = Logger('codeschool.settings')
 md = Markdown(extensions=['mdx_math'])
 
@@ -118,7 +117,7 @@ def breadcrumbs(ctx, page=None):
     """
 
     if is_undefined(page):
-        page = ctx.get('page', None)
+        page = ctx.get('page')
     if hasattr(page, 'breadcrumbs'):
         return page.breadcrumbs()
     elif page is None:
@@ -139,6 +138,16 @@ def dl(ctx, object, *args, **kwargs):
 
     component = Mapping(object, *args, **kwargs)
     return Markup(component.render(ctx['request']))
+
+
+@contextfilter
+def render(ctx, object):
+    """
+    Renders object with the bricks.render() function passing the correct
+    request object.
+    """
+
+    return _render(object, request=ctx['request'])
 
 
 @contextfunction
@@ -166,9 +175,9 @@ def environment(**options):
     Creates jinja2 environment during django initialization.
     """
 
-    global jinja2_environment
+    import codeschool
 
-    env = jinja2_environment = Environment(**options)
+    codeschool.jinja2.jinja2_environment = env = Environment(**options)
 
     # Globals
     env.globals.update(
@@ -189,6 +198,7 @@ def environment(**options):
         breadcrumbs=breadcrumbs,
         hyperlink=hyperlink,
         richtext=richtext,
+        render=render,
     )
 
     # Finalizer

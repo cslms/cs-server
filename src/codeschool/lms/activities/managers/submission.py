@@ -1,10 +1,25 @@
 from codeschool import models
 
+DEFAULT_LEXICOGRAPHICAL_PRIORITY = (
+    'given_grade', 'score', 'stars', 'final_grade'
+)
+
 
 class SubmissionQuerySet(models.PolymorphicQuerySet):
-    _default_lexicographical_priority = (
-        'given_grade', 'score', 'stars', 'final_grade'
-    )
+
+    def recyclable(self, submission):
+        """
+        Return all submissions that share the same progress object and the same
+        hash.
+
+        These are candidates for submission recycling.
+        """
+
+        hash = submission.compute_hash()
+        progress = submission.progress
+        return self \
+            .filter(progress=progress, hash=hash) \
+            .order_by('created')
 
     def lexicographical_priority(self, value=None):
         """
@@ -13,7 +28,7 @@ class SubmissionQuerySet(models.PolymorphicQuerySet):
         if isinstance(value, str):
             return value,
         elif value is None:
-            return self._default_lexicographical_priority
+            return DEFAULT_LEXICOGRAPHICAL_PRIORITY
         else:
             return iter(value)
 

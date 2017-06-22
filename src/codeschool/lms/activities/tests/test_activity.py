@@ -1,11 +1,18 @@
 import pytest
+from django.core.exceptions import ValidationError
 
-from codeschool import get_wagtail_root
-from codeschool.lms.activities.models import Activity
+from codeschool.lms.activities.validators import grade_validator
 
 
-@pytest.fixture
-def activity(db):
-    page = Activity(title='Test')
-    get_wagtail_root().add_child(instance=page)
-    return page
+class TestValidators:
+    """
+    Test generic validators
+    """
+
+    def test_grade_validador(self):
+        grade_validator(0)
+        grade_validator(50)
+        grade_validator(100)
+
+        with pytest.raises(ValidationError):
+            grade_validator(150)

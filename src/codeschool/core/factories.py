@@ -21,11 +21,11 @@ def make_example_questions(parent):
     # Numeric questions
     if 'codeschool.questions.numeric' in settings.INSTALLED_APPS:
         from codeschool.questions.numeric.factories import \
-            make_numeric_question, make_numeric_question_fuzzy
+            make_numeric_question_42, make_numeric_question_pi
 
         questions.extend([
-            make_numeric_question(basic),
-            make_numeric_question_fuzzy(basic),
+            make_numeric_question_42(basic),
+            make_numeric_question_pi(basic),
         ])
 
     # Coding Io questions

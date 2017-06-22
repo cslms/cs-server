@@ -49,13 +49,15 @@ def birthday(age=None):
     return dt.date(year, 1, 1) + dt.timedelta(days=day)
 
 
-def make_user(username, email, password, update=False, **kwargs):
+def make_user(username, email, password, update=False, commit=True, **kwargs):
     """
     Creates a user and sets its password.
 
     Non-user fields are passed to user profile.
 
     If update=True, update existing models instead of raising an error.
+
+    If commit=False, do not save data to database uses only instance.
     """
 
     user_fields = {field.name for field in models.User._meta.fields}
@@ -65,14 +67,15 @@ def make_user(username, email, password, update=False, **kwargs):
     # Create user
     user = models.User(username=username, email=email, **user_kwargs)
     user.set_password(password)
-    try:
-        user.save()
-    except IntegrityError:
-        if not update:
-            raise
-        old = models.User.objects.get(username=username)
-        user.id = old.id
-        user.save()
+    if commit:
+        try:
+            user.save()
+        except IntegrityError:
+            if not update:
+                raise
+            old = models.User.objects.get(username=username)
+            user.id = old.id
+            user.save()
 
     # Normalize arguments
     if 'gender' in profile_kwargs:
@@ -85,7 +88,8 @@ def make_user(username, email, password, update=False, **kwargs):
         profile.id = Profile.objects.get(user=user).id
     except Profile.DoesNotExist:
         pass
-    profile.save()
+    if commit:
+        profile.save()
 
     return user
 

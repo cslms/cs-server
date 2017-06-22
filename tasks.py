@@ -10,6 +10,72 @@ ns.add_collection(django)
 sys.path += ['src']
 
 
+#
+# Convenience
+#
+@task
+def develop(ctx):
+    """
+    Prepares environment for development.
+    """
+
+    # Install [dev]
+    print('Installing Python dev dependencies...')
+    ctx.run('pip install .[dev] -r requirements.txt')
+
+    # Js configurations
+    js.install()
+    print()
+    js.build()
+
+    # Run manage.py commands
+    # django_manage('makemigrations')
+    # django_manage('migrate')
+    # createsuperuser(ctx)
+
+
+@task
+def run(ctx, production=False,  port='8000'):
+    """
+    Runs the development server.
+    """
+    if not production:
+        ctx.run('python3 manage.py runserver %s' % port, pty=True)
+    else:
+        ctx.run('python3 manage.py makemigrations --no-input')
+        ctx.run('python3 manage.py migrate --no-input')
+        ctx.run('python3 manage.py clean_orphan_obj_perms')
+        ctx.run('python3 manage.py check_permissions')
+        ctx.run('python3 manage.py clean_expired')
+        ctx.run('python3 manage.py fixtree')
+        ctx.run('gunicorn codeschool.wsgi -b unix:///tmp/sock/webapp.sock '
+                '--reload -w 4')
+
+
+@task
+def db(ctx, run=False):
+    """
+    Executes the makemigrations and migrate commands.
+    """
+
+    ctx.run('python manage.py makemigrations', pty=True)
+    ctx.run('python manage.py migrate', pty=True)
+    if run:
+        ctx.run('python manage.py runserver', pty=True)
+
+
+@task
+def shell(ctx, run=False):
+    """
+    Executes shell.
+    """
+
+    ctx.run('ipython -ic "from codeschool.all import *"', pty=True)
+
+
+#
+# Translations
+#
 @task
 def makemessages(ctx):
     """
@@ -42,32 +108,15 @@ def compilemessages(ctx):
     ctx.run(' '.join(cmd), echo=True, pty=True)
 
 
-@task
-def develop(ctx):
-    """
-    Prepares environment for development.
-    """
-
-    # Install [dev]
-    print('Installing Python dev dependencies...')
-    ctx.run('pip install .[dev] -r requirements.txt')
-
-    # Js configurations
-    js.install()
-    print()
-    js.build()
-
-    # Run manage.py commands
-    # django_manage('makemigrations')
-    # django_manage('migrate')
-    # createsuperuser(ctx)
-
-
+#
+# Docker
+#
 @task
 def docker_build(ctx, rebuild_static=False):
     if rebuild_static:
         ctx.run('tar czpf static.tar.gz collect/static/')
-    ctx.run('docker build -t codeschool:deploy .', pty=True)
+    ctx.run('docker build -f docker/Dockerfile.production '
+            '-t cslms/codeschool .', pty=True)
 
 
 @task
@@ -104,6 +153,9 @@ def docker_run(ctx, deploy=False, shell=False):
         run(cmd.format(port=8080, **kwargs))
 
 
+#
+# Redis
+#
 def is_redis_running(port=None):
     """
     Check if redis is running in the given port.

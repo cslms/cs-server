@@ -10,7 +10,7 @@
 
     {% block form_body %}
         <form method="POST" id="{{ form_name|default('form') }}"
-              {% block form_options %}srvice-bind="./submit-response.api/"{% endblock %}>
+              {% block form_options %}bricks-bind="./submit-response.api/"{% endblock %}>
             {{ csrf_input }}
             {% if context %}
                 <input type="hidden" name="response_context"
@@ -22,8 +22,8 @@
             {% endblock %}
         </form>
 
-        <div class="toolbar highlight">
-            <button class="mdl-button mdl-js-button"
+        <div class="toolbar highlight" style="text-align: right; margin-top: 20px">
+            <button class="mdl-button mdl-js-button mdl-button--raised"
                     form="{{ form_name|default('form') }}">
                 {{ _('Send') }}
             </button>

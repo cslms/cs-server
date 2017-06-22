@@ -1,0 +1,19 @@
+{% extends "questions/debug.jinja2" %}
+
+
+{% block debug_content %}
+    {{ super() }}
+
+    <h3>{{ _('Actions') }}</h3>
+    {% if page.actions %}
+        {% for action in page.actions %}
+            <p>
+                <button onclick="bricks('../action/', '{{ action }}')">
+                    {{ action|replace('_', ' ')|capitalize }}
+                </button>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>{{ _('No actions registered for page!') }}</p>
+    {% endif %}
+{% endblock %}

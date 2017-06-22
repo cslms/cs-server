@@ -27,12 +27,37 @@ class WagtailAdminBase(type):
 
     def __init__(cls, name, bases, ns):
         super().__init__(name, bases, ns)
+        cls._expand_all_panels()
 
         # Register model
         if cls._meta.model is None and not cls._meta.abstract:
             raise TypeError('must define a model for concrete class')
         elif cls._meta.model:
             WAGTAIL_ADMIN_CLASSES[cls._meta.model] = cls
+
+    def _expand_all_panels(cls):
+        for attr in dir(cls):
+            if attr.endswith('_panels'):
+                value = expand_panel(cls, attr)
+                setattr(cls, attr, value)
+
+
+def expand_panel(cls, attr):
+    """
+    Expand the list of panels finding any ellipsis object and substituting it
+    by the superclass panels.
+    """
+
+    panels = getattr(cls, attr)
+    if ... in panels:
+        panels = list(panels)
+        idx = panels.index(...)
+        base = super(cls, cls)
+        super_panels = getattr(base, attr)
+        pre = panels[:idx]
+        post = panels[idx + 1:]
+        panels = pre + list(super_panels) + post
+    return panels
 
 
 class WagtailAdmin(metaclass=WagtailAdminBase):

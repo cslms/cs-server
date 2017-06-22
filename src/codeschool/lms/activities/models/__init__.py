@@ -1,8 +1,8 @@
-from .mixins import *
 from .activity import Activity
-from .activity_list import ActivityList, ActivitySection
 from .feedback import Feedback
-from .progress import Progress, ProgressManager
-from codeschool.lms.activities.managers.progress import ProgressQuerySet, \
-    ProgressManager
+from .progress import Progress
 from .submission import Submission
+
+# These should be in a separate app. We keep these models here for now in order
+# to avoid breakage on production
+from codeschool.lms.listings.models import ActivityList, ActivitySection
