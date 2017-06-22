@@ -580,10 +580,6 @@ class CodingIoQuestion(Question):
         client.dialog('<p>Successful operation!</p>')
 
 
-#
-# Utility functions
-#
-
 class ExpandTests(object):
     """
     Expand tests from program and check it
