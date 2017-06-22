@@ -228,8 +228,8 @@ class CodingIoQuestion(Question):
             post_tests = self.post_tests
 
             def expand(x):
-                result = expand_tests(self, x)
-                check_expansions_with_all_programs(self, result)
+                result = ExpandTests.expand_tests(self, x)
+                ExpandTests.check_expansions_with_all_programs(self, result)
                 return result
 
             pre_source = expand(pre_tests).source()
@@ -446,7 +446,7 @@ class CodingIoQuestion(Question):
                 ex_post = post_list[0]
             else:
                 def validate(L, field):
-                    first, *tail = L
+                    first, tail = L
                     for i, elem in enumerate(tail, 1):
                         if first == elem:
                             continue
@@ -621,89 +621,95 @@ def compute_test_state_hash(question):
 #
 # Utility functions
 #
-def expand_tests(question, tests: IoSpec) -> IoSpec:
+
+class ExpandTests(object):
     """
-    Expand tests and return a new expanded IoSpec object.
-    """
-
-    if tests.is_simple:
-        return tests.copy()
-
-    # Check if result is usable after a simple expansion
-    tests = tests.copy()
-    tests.expand_inputs()
-    if tests.is_simple:
-        return tests
-
-    # Further expansion requires a reference program to automatically
-    # compute all the inputs and outputs
-    qs = question.answers_with_code()
-    if qs:
-        language = qs.first().language
-    else:
-        raise ValidationError(_(
-            'No program was provided to expand the given test cases.'
-        ))
-
-    return expand_tests_from_program(question, tests, language)
-
-
-def expand_tests_from_program(question, tests: IoSpec, language=None):
-    """
-    Uses source code from source code reference in the provided language
-    to expand tests.
+    Expand tests from program and check it
     """
 
-    language = get_programming_language(language)
-    answer_key = question.answers.get(language=language)
+    @staticmethod
+    def expand_tests(self, question, tests: IoSpec) -> IoSpec:
+        """
+        Expand tests and return a new expanded IoSpec object.
+        """
 
-    if not answer_key.source:
-        raise ValueError('cannot expand from %s: no program set' % language)
+        if tests.is_simple:
+            return tests.copy()
 
-    source = answer_key.source
-    language_ref = language.ejudge_ref()
-
-    if tests.is_simple:
-        return tests.copy()
-
-    if tests.is_standard_test_case:
+        # Check if result is usable after a simple expansion
         tests = tests.copy()
         tests.expand_inputs()
-
         if tests.is_simple:
             return tests
 
-    return question.run_code(source, tests, language)
+        # Further expansion requires a reference program to automatically
+        # compute all the inputs and outputs
+        qs = question.answers_with_code()
+        if qs:
+            language = qs.first().language
+        else:
+            raise ValidationError(_(
+                'No program was provided to expand the given test cases.'
+            ))
 
+        return self.expand_tests_from_program(question, tests, language)
 
-def check_expansions_with_all_programs(question, tests: IoSpec):
-    """
-    Test if source code was expanded in expectancy of what the iospec tests
-    provides.
+    @staticmethod
+    def expand_tests_from_program(self, question, tests: IoSpec, language=None):
+        """
+        Uses source code from source code reference in the provided language
+        to expand tests.
+        """
 
-    Remember to expand all commands from the given iospec otherwise each
-    program may be run with a different set of inputs.
-    """
+        language = get_programming_language(language)
+        answer_key = question.answers.get(language=language)
 
-    answers = list(question.answers_with_code())
+        if not answer_key.source:
+            raise ValueError('cannot expand from %s: no program set' % language)
 
-    # We can get away with providing no checker program if the tests are
-    # simple.
-    if not answers and tests.is_expanded:
-        return
+        source = answer_key.source
 
-    # Other cases require more work: first we expand for each possible
-    # language. Collect tuples of (expansion, language)
-    languages = [answer.language for answer in answers]
-    first, *tail = [
-        (expand_tests_from_program(question, tests, language), language)
-        for language in languages]
+        if tests.is_simple:
+            return tests.copy()
 
-    # All expansions should be equal.
-    for expansion in tail:
-        if expansion[0] != first[0]:
-            raise RuntimeError('different expansions yielded different ')
+        if tests.is_standard_test_case:
+            tests = tests.copy()
+            tests.expand_inputs()
 
-    question.check_with_code(answers[0].source, tests, answers[0].language,
-                             question.timeout)
-    return first[0]
+            if tests.is_simple:
+                return tests
+
+        return question.run_code(source, tests, language)
+
+    @staticmethod
+    def check_expansions_with_all_programs(self, question, tests: IoSpec):
+        """
+        Test if source code was expanded in expectancy of what the iospec tests
+        provides.
+
+        Remember to expand all commands from the given iospec otherwise each
+        program may be run with a different set of inputs.
+        """
+
+        answers = list(question.answers_with_code())
+
+        # We can get away with providing no checker program if the tests are
+        # simple.
+        if not answers and tests.is_expanded:
+            return
+
+        # Other cases require more work: first we expand for each possible
+        # language. Collect tuples of (expansion, language)
+        languages = [answer.language for answer in answers]
+        first, *tail = [
+            (self.expand_tests_from_program(question, tests, language), language)
+            for language in languages]
+
+        # All expansions should be equal.
+        for expansion in tail:
+            if expansion[0] != first[0]:
+                raise RuntimeError('different expansions yielded different ')
+
+        question.check_with_code(answers[0].source, tests, answers[0].language,
+                                 question.timeout)
+        return first[0]
