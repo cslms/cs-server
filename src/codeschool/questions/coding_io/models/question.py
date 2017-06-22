@@ -16,6 +16,8 @@ from iospec import parse as parse_iospec, IoSpec
 from .submission import CodingIoSubmission
 from .. import ejudge
 from .. import validators
+from lazyutils import lazy, delegate_to
+from .data_access import DataAccess
 
 logger = logging.getLogger('codeschool.questions.coding_io')
 
@@ -453,32 +455,19 @@ class CodingIoQuestion(Question):
             self.post_tests_expanded_source = ex_post.source()
 
     # Data access
-    def get_placeholder(self, language=None):
-        """
-        Return the placeholder text for the given language.
-        """
 
-        key = self.answers.get(language or self.language, None)
-        if key is None:
-            return self.default_placeholder
-        return key.placeholder
+    @lazy
+    def _data_access(self):
+        return DataAccess
+
+    def get_placeholder(self, language=None):
+        return self._data_access.get_placeholder(self, language)
 
     def get_reference_source(self, language=None):
-        """
-        Return the reference source code for the given language or None, if no
-        reference is found.
-        """
-
-        if language is None:
-            language = self.language
-        qs = self.answers.all().filter(
-            language=get_programming_language(language))
-        if qs:
-            return qs.get().source
-        return ''
+        return self._data_access.get_reference_source(self, language)
 
     def filter_user_submission_payload(self, request, payload):
-        return dict(language=payload['language'], source=payload['source'])
+        return self._data_access.filter_user_submission_payload(self, request, payload)
 
     # Access answer key queryset
     def answers_with_code(self):
@@ -487,7 +476,6 @@ class CodingIoQuestion(Question):
         """
 
         return self.answers.exclude(source='')
-
 
     def run_post_grading(self, **kwargs):
         """
