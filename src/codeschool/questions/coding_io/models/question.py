@@ -12,7 +12,6 @@ from codeschool.core.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
 from codeschool.questions.models import Question
-from codeschool.utils.string import md5hash_seq
 from iospec import parse as parse_iospec, IoSpec
 from .submission import CodingIoSubmission
 from .. import ejudge
@@ -585,8 +584,8 @@ class ExpandTests(object):
     Expand tests from program and check it
     """
 
-    @staticmethod
-    def expand_tests(self, question, tests: IoSpec) -> IoSpec:
+    @classmethod
+    def expand_tests(question, tests: IoSpec) -> IoSpec:
         """
         Expand tests and return a new expanded IoSpec object.
         """
@@ -610,10 +609,10 @@ class ExpandTests(object):
                 'No program was provided to expand the given test cases.'
             ))
 
-        return self.expand_tests_from_program(question, tests, language)
+        return ExpandTests.expand_tests_from_program(question, tests, language)
 
-    @staticmethod
-    def expand_tests_from_program(self, question, tests: IoSpec, language=None):
+    @classmethod
+    def expand_tests_from_program(question, tests: IoSpec, language=None):
         """
         Uses source code from source code reference in the provided language
         to expand tests.
@@ -639,8 +638,8 @@ class ExpandTests(object):
 
         return question.run_code(source, tests, language)
 
-    @staticmethod
-    def check_expansions_with_all_programs(self, question, tests: IoSpec):
+    @classmethod
+    def check_expansions_with_all_programs(question, tests: IoSpec):
         """
         Test if source code was expanded in expectancy of what the iospec tests
         provides.
@@ -660,7 +659,7 @@ class ExpandTests(object):
         # language. Collect tuples of (expansion, language)
         languages = [answer.language for answer in answers]
         first, *tail = [
-            (self.expand_tests_from_program(question, tests, language), language)
+            (ExpandTests.expand_tests_from_program(question, tests, language), language)
             for language in languages]
 
         # All expansions should be equal.
