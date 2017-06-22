@@ -19,6 +19,7 @@ from .. import validators
 from lazyutils import lazy, delegate_to
 from .data_access import DataAccess
 from .validation import Validation
+from .actions import Actions
 
 logger = logging.getLogger('codeschool.questions.coding_io')
 
@@ -501,23 +502,18 @@ class CodingIoQuestion(Question):
     #
     # Actions
     #
-    def regrade_post(self):
-        """
-        Regrade all submissions using the post tests.
-        """
+    @lazy
+    def _actions(self):
+        return Actions
 
-        self.responses.regrade_with(self.post_tests_expanded)
+    def regrade_post(self):
+        return self._actions.regrade_post(self)
 
     def action_expand_tests(self, client, *args, **kwargs):
-        self._expand_tests()
-        pre = escape(self.pre_tests_expanded_source)
-        post = escape(self.post_tests_expanded_source)
-        client.dialog('<h2>Pre-tests</h2><pre>%s</pre>'
-                      '<h2>Post-test</h2><pre>%s</pre>' % (pre, post))
+       return self._actions.action_expand_tests(self, client, args, kwargs)
 
     def action_grade_with_post_tests(self, client, *args, **kwargs):
-        self.regrade_post()
-        client.dialog('<p>Successful operation!</p>')
+        return self._actions.action_grade_with_post_tests(self, client, args, kwargs)
 
 
 class ExpandTests(object):
