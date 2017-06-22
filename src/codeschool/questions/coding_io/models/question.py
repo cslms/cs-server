@@ -319,26 +319,42 @@ class CodingIoQuestion(Question):
     def _validation(self):
         return Validation
 
-    def clean(self):
-        return self._validation.clean(self)
-
-    def full_clean(self, *args, **kwargs):
-        return self._validation.full_clean(self, *args, **kwargs)
-
-    def full_clean_expansions(self):
-        return self._validation.full_clean_expansions(self)
-
-    def full_clean_answer_keys(self):
-        return self._validation.full_clean_answer_keys(self)
-
-    def full_clean_all(self, *args, **kwargs):
-        return self._validation.full_clean_all(self, *args, **kwargs)
-
     def schedule_validation(self):
         return self._validation.schedule_validation(self)
 
     def validate_tests(self):
         return self._validation.validate_tests(self)
+
+    def _expand_from_answer_keys(self):
+        return self._validation._expand_from_answer_keys(self)
+
+    def clean(self):
+        super().clean()
+
+    def full_clean(coding_io, *args, **kwargs):
+        if coding_io.__answers:
+            coding_io.answers = coding_io.__answers
+        super().full_clean(*args, **kwargs)
+
+    def full_clean_expansions(self):
+     	self.get_current_test_state(update=True)
+
+    def full_clean_answer_keys(self):
+        """
+        Performs a full_clean() validation step on all answer key objects.
+        """
+
+        for key in self.answers.all():
+            try:
+                key.question = self
+                key.full_clean()
+            except ValidationError as ex:
+                raise validators.invalid_related_answer_key_error(key, ex)
+
+    def full_clean_all(self, *args, **kwargs):
+        self.full_clean(*args, **kwargs)
+        self.full_clean_answer_keys()
+        self.full_clean_expansions()
 
     def _expand_from_answer_keys(self):
         # If the source requires expansion, we have to check all answer keys

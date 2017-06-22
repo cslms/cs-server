@@ -1,36 +1,8 @@
 
-class Validation:
+class Validation():
     """
     This class is responsible for validation
     """
-
-    def clean(self):
-        super().clean()
-
-    def full_clean(self, *args, **kwargs):
-        if self.__answers:
-            self.answers = self.__answers
-        super().full_clean(*args, **kwargs)
-
-    def full_clean_expansions(self):
-        self.get_current_test_state(update=True)
-
-    def full_clean_answer_keys(self):
-        """
-        Performs a full_clean() validation step on all answer key objects.
-        """
-
-        for key in self.answers.all():
-            try:
-                key.question = self
-                key.full_clean()
-            except ValidationError as ex:
-                raise validators.invalid_related_answer_key_error(key, ex)
-
-    def full_clean_all(self, *args, **kwargs):
-        self.full_clean(*args, **kwargs)
-        self.full_clean_answer_keys()
-        self.full_clean_expansions()
 
     def schedule_validation(self):
         """
