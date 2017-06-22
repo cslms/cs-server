@@ -18,6 +18,7 @@ from .. import ejudge
 from .. import validators
 from lazyutils import lazy, delegate_to
 from .data_access import DataAccess
+from .validation import Validation
 
 logger = logging.getLogger('codeschool.questions.coding_io')
 
@@ -314,96 +315,30 @@ class CodingIoQuestion(Question):
 
         super().save(*args, **kwargs)
 
+    @lazy
+    def _validation(self):
+        return Validation
+
     def clean(self):
-        super().clean()
+        return self._validation.clean(self)
 
     def full_clean(self, *args, **kwargs):
-        if self.__answers:
-            self.answers = self.__answers
-        super().full_clean(*args, **kwargs)
+        return self._validation.full_clean(self, *args, **kwargs)
 
     def full_clean_expansions(self):
-        self.get_current_test_state(update=True)
+        return self._validation.full_clean_expansions(self)
 
     def full_clean_answer_keys(self):
-        """
-        Performs a full_clean() validation step on all answer key objects.
-        """
-
-        for key in self.answers.all():
-            try:
-                key.question = self
-                key.full_clean()
-            except ValidationError as ex:
-                raise validators.invalid_related_answer_key_error(key, ex)
+        return self._validation.full_clean_answer_keys(self)
 
     def full_clean_all(self, *args, **kwargs):
-        self.full_clean(*args, **kwargs)
-        self.full_clean_answer_keys()
-        self.full_clean_expansions()
+        return self._validation.full_clean_all(self, *args, **kwargs)
 
     def schedule_validation(self):
-        """
-        Schedule full validation to be performed in the background.
-
-        This executes the full_clean_code() method
-        """
-
-        print('scheduling full code validation... (we are now executing on the'
-              'foreground).')
+        return self._validation.schedule_validation(self)
 
     def validate_tests(self):
-        """
-        Triggered when (pre|post)_test_source changes or on the first time the
-        .clean() method is called.
-        """
-
-        # Check if new source is valid
-        for attr in ['pre_tests_source', 'post_tests_source']:
-            try:
-                source = getattr(self, attr)
-                if source:
-                    iospec = parse_iospec(source)
-                else:
-                    iospec = None
-                setattr(self, attr[:-7], iospec)
-            except Exception as ex:
-                self.clear_tests()
-                raise ValidationError(
-                    {attr: _('invalid iospec syntax: %s' % ex)}
-                )
-
-        # Computes temporary expansions for all sources. A second step may be
-        # required in which we use the reference source in answer key to further
-        # expand iospec data structures
-        iospec = self.pre_tests.copy()
-        iospec.expand_inputs(self.number_of_pre_expansions)
-        self.pre_tests_expanded = iospec
-
-        if self.pre_tests_source and self.post_tests_source:
-            iospec = ejudge.combine_iospecs(self.pre_tests, self.post_tests)
-        elif self.post_tests_source:
-            iospec = self.post_tests.copy()
-        elif self.pre_tests_source:
-            iospec = self.pre_tests.copy()
-        else:
-            raise ValidationError(_(
-                'either pre_tests_source or post_tests_source must be given!'
-            ))
-        iospec.expand_inputs(self.number_of_post_expansions)
-        # assert len(iospec) >= self.number_of_expansions, iospec
-        self.post_tests_expanded = iospec
-
-        if self.pre_tests_expanded.is_expanded and \
-                self.post_tests_expanded.is_expanded:
-            self.pre_tests_expanded_source = self.pre_tests_expanded.source()
-            self.post_tests_expanded_source = self.post_tests_expanded.source()
-
-        else:
-            self._expand_from_answer_keys()
-
-        # Iospec is valid: save the hash
-        self.tests_state_hash = self.current_tests_hash
+        return self._validation.validate_tests(self)
 
     def _expand_from_answer_keys(self):
         # If the source requires expansion, we have to check all answer keys
@@ -453,6 +388,8 @@ class CodingIoQuestion(Question):
             self.pre_tests_expanded_source = ex_pre.source()
             self.post_tests_expanded = ex_pre
             self.post_tests_expanded_source = ex_post.source()
+
+        return self._validation._expand_from_answer_keys(self)
 
     # Data access
 
