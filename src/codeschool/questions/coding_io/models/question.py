@@ -585,7 +585,7 @@ class ExpandTests(object):
     """
 
     @classmethod
-    def expand_tests(question, tests: IoSpec) -> IoSpec:
+    def expand_tests(cls, question, tests: IoSpec) -> IoSpec:
         """
         Expand tests and return a new expanded IoSpec object.
         """
@@ -612,7 +612,7 @@ class ExpandTests(object):
         return ExpandTests.expand_tests_from_program(question, tests, language)
 
     @classmethod
-    def expand_tests_from_program(question, tests: IoSpec, language=None):
+    def expand_tests_from_program(cls, question, tests: IoSpec, language=None):
         """
         Uses source code from source code reference in the provided language
         to expand tests.
@@ -639,7 +639,7 @@ class ExpandTests(object):
         return question.run_code(source, tests, language)
 
     @classmethod
-    def check_expansions_with_all_programs(question, tests: IoSpec):
+    def check_expansions_with_all_programs(cls, question, tests: IoSpec):
         """
         Test if source code was expanded in expectancy of what the iospec tests
         provides.
