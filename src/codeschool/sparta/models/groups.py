@@ -21,7 +21,7 @@ class SpartaGroup(models.TimeStampedModel):
         max_length=140,
     )
     status = models.IntegerField(
-        default = STATUS_INACTIVE,
+        default=STATUS_INACTIVE,
         choices=[
             (STATUS_INACTIVE, _('inactive')),
             (STATUS_ACTIVE, _('active')),
@@ -66,7 +66,7 @@ class SpartaGroup(models.TimeStampedModel):
                 if n == max_iter - 1:
                     raise
 
-    def add_user(self, user, role):
+    def add_users(self, users, quantity_tutors):
         """
         Add new user to group.
 
@@ -76,9 +76,18 @@ class SpartaGroup(models.TimeStampedModel):
              role (str):
                 The user role on the group 'learner' or 'tutor'.
         """
+        # Irá atribuir a role tutor ao usuario com maior nota, adiciona-lo ao grupo e exclui-lo do dicionario
+        for _ in quantity_tutors:
+            user_grade_max = max(users, key=users.get)
+            role = ROLE_MAPPING[ROLE_TUTOR]
+            SpartaMembership.objects.create(group=self, user=user_grade_max, role=role)
+            users.pop(user_grade_max)
 
-        role = ROLE_MAPPING[role]
-        SpartaMembership.objects.create(group=self, user=user, role=role)
+        # Irá adicionar a role learner aos usuarios restantes, adiciona-los ao grupo e excluir do dicionario
+        for user in users:
+            role = ROLE_MAPPING[ROLE_LEARNER]
+            SpartaMembership.objects.create(group=self, user=user, role=role)
+            users.pop(user)
 
 
 class SpartaMembership(models.TimeStampedModel):
