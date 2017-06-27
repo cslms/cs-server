@@ -1,0 +1,220 @@
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$defaultOptions = {
+	size: _elm_lang$core$Maybe$Nothing,
+	vertical: false,
+	attributes: {ctor: '[]'}
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$applyModifier = F2(
+	function (modifier, options) {
+		var _p0 = modifier;
+		switch (_p0.ctor) {
+			case 'Size':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						size: _elm_lang$core$Maybe$Just(_p0._0)
+					});
+			case 'Vertical':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{vertical: true});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						attributes: A2(_elm_lang$core$Basics_ops['++'], options.attributes, _p0._0)
+					});
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$groupAttributes = function (modifiers) {
+	var options = A3(_elm_lang$core$List$foldl, _rundis$elm_bootstrap$Bootstrap_ButtonGroup$applyModifier, _rundis$elm_bootstrap$Bootstrap_ButtonGroup$defaultOptions, modifiers);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		{
+			ctor: '::',
+			_0: A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'group'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$classList(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'btn-group', _1: true},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'btn-group-vertical', _1: options.vertical},
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(_elm_lang$html$Html_Attributes$attribute, 'data-toggle', 'buttons'),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			function () {
+				var _p1 = A2(_elm_lang$core$Maybe$andThen, _rundis$elm_bootstrap$Bootstrap_Grid_Internal$screenSizeOption, options.size);
+				if (_p1.ctor === 'Just') {
+					return {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class(
+							A2(_elm_lang$core$Basics_ops['++'], 'btn-group-', _p1._0)),
+						_1: {ctor: '[]'}
+					};
+				} else {
+					return {ctor: '[]'};
+				}
+			}(),
+			options.attributes));
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$renderGroup = function (_p2) {
+	var _p3 = _p2;
+	return _p3._0;
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$toolbar = F2(
+	function (attributes, items) {
+		return A2(
+			_elm_lang$html$Html$div,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A2(_elm_lang$html$Html_Attributes$attribute, 'role', 'toolbar'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('btn-toolbar'),
+						_1: {ctor: '[]'}
+					}
+				},
+				attributes),
+			A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_ButtonGroup$renderGroup, items));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Options = F3(
+	function (a, b, c) {
+		return {size: a, vertical: b, attributes: c};
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Attrs = function (a) {
+	return {ctor: 'Attrs', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$attrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Attrs(attrs);
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Vertical = {ctor: 'Vertical'};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$vertical = _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Vertical;
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Size = function (a) {
+	return {ctor: 'Size', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$small = _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Size(_rundis$elm_bootstrap$Bootstrap_Grid_Internal$SM);
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$large = _rundis$elm_bootstrap$Bootstrap_ButtonGroup$Size(_rundis$elm_bootstrap$Bootstrap_Grid_Internal$LG);
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$GroupItem = function (a) {
+	return {ctor: 'GroupItem', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$buttonGroupItem = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$GroupItem(
+			A2(
+				_elm_lang$html$Html$div,
+				_rundis$elm_bootstrap$Bootstrap_ButtonGroup$groupAttributes(options),
+				A2(
+					_elm_lang$core$List$map,
+					function (_p4) {
+						var _p5 = _p4;
+						return _p5._0;
+					},
+					items)));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$buttonGroup = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$renderGroup(
+			A2(_rundis$elm_bootstrap$Bootstrap_ButtonGroup$buttonGroupItem, options, items));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$linkButtonGroupItem = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$GroupItem(
+			A2(
+				_elm_lang$html$Html$div,
+				_rundis$elm_bootstrap$Bootstrap_ButtonGroup$groupAttributes(options),
+				A2(
+					_elm_lang$core$List$map,
+					function (_p6) {
+						var _p7 = _p6;
+						return _p7._0;
+					},
+					items)));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$linkButtonGroup = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$renderGroup(
+			A2(_rundis$elm_bootstrap$Bootstrap_ButtonGroup$linkButtonGroupItem, options, items));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$radioButtonGroupItem = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$GroupItem(
+			A2(
+				_elm_lang$html$Html$div,
+				_rundis$elm_bootstrap$Bootstrap_ButtonGroup$groupAttributes(options),
+				A2(
+					_elm_lang$core$List$map,
+					function (_p8) {
+						var _p9 = _p8;
+						return _p9._0;
+					},
+					items)));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$radioButtonGroup = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$renderGroup(
+			A2(_rundis$elm_bootstrap$Bootstrap_ButtonGroup$radioButtonGroupItem, options, items));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$checkboxButtonGroupItem = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$GroupItem(
+			A2(
+				_elm_lang$html$Html$div,
+				_rundis$elm_bootstrap$Bootstrap_ButtonGroup$groupAttributes(options),
+				A2(
+					_elm_lang$core$List$map,
+					function (_p10) {
+						var _p11 = _p10;
+						return _p11._0;
+					},
+					items)));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$checkboxButtonGroup = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$renderGroup(
+			A2(_rundis$elm_bootstrap$Bootstrap_ButtonGroup$checkboxButtonGroupItem, options, items));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$ButtonItem = function (a) {
+	return {ctor: 'ButtonItem', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$button = F2(
+	function (options, children) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$ButtonItem(
+			A2(_rundis$elm_bootstrap$Bootstrap_Button$button, options, children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$LinkButtonItem = function (a) {
+	return {ctor: 'LinkButtonItem', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$linkButton = F2(
+	function (options, children) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$LinkButtonItem(
+			A2(_rundis$elm_bootstrap$Bootstrap_Button$linkButton, options, children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$RadioButtonItem = function (a) {
+	return {ctor: 'RadioButtonItem', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$radioButton = F3(
+	function (checked, options, children) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$RadioButtonItem(
+			A3(_rundis$elm_bootstrap$Bootstrap_Button$radioButton, checked, options, children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$CheckboxButtonItem = function (a) {
+	return {ctor: 'CheckboxButtonItem', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_ButtonGroup$checkboxButton = F3(
+	function (checked, options, children) {
+		return _rundis$elm_bootstrap$Bootstrap_ButtonGroup$CheckboxButtonItem(
+			A3(_rundis$elm_bootstrap$Bootstrap_Button$checkboxButton, checked, options, children));
+	});

@@ -1,0 +1,121 @@
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$view = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._0.options;
+	return A2(
+		_elm_lang$html$Html$fieldset,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$classList(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'form-group', _1: _p2.isGroup},
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$disabled(_p2.disabled),
+					_1: {ctor: '[]'}
+				}
+			},
+			_p2.attributes),
+		A3(
+			_elm_lang$core$Basics$flip,
+			_elm_lang$core$List$append,
+			_p1._0.children,
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				{ctor: '[]'},
+				A2(
+					_elm_lang$core$Maybe$map,
+					function (e) {
+						return {
+							ctor: '::',
+							_0: e,
+							_1: {ctor: '[]'}
+						};
+					},
+					_p1._0.legend))));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$ConfigRec = F3(
+	function (a, b, c) {
+		return {options: a, legend: b, children: c};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$Options = F3(
+	function (a, b, c) {
+		return {isGroup: a, disabled: b, attributes: c};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$Config = function (a) {
+	return {ctor: 'Config', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$config = _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$Config(
+	{
+		options: {
+			isGroup: false,
+			disabled: false,
+			attributes: {ctor: '[]'}
+		},
+		legend: _elm_lang$core$Maybe$Nothing,
+		children: {ctor: '[]'}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$mapConfig = F2(
+	function (mapper, _p3) {
+		var _p4 = _p3;
+		return _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$Config(
+			mapper(_p4._0));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$legend = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$mapConfig(
+			function (conf) {
+				return _elm_lang$core$Native_Utils.update(
+					conf,
+					{
+						legend: _elm_lang$core$Maybe$Just(
+							A2(_elm_lang$html$Html$legend, attributes, children))
+					});
+			});
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$children = function (children) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$mapConfig(
+		function (conf) {
+			return _elm_lang$core$Native_Utils.update(
+				conf,
+				{children: children});
+		});
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$mapOptions = F2(
+	function (mapper, _p5) {
+		var _p6 = _p5;
+		return _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p6._0,
+				{
+					options: mapper(_p6._0.options)
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$asGroup = _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$mapOptions(
+	function (opts) {
+		return _elm_lang$core$Native_Utils.update(
+			opts,
+			{isGroup: true});
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$disabled = function (isDisabled) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$mapOptions(
+		function (opts) {
+			return _elm_lang$core$Native_Utils.update(
+				opts,
+				{disabled: isDisabled});
+		});
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$attrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_Fieldset$mapOptions(
+		function (opts) {
+			return _elm_lang$core$Native_Utils.update(
+				opts,
+				{
+					attributes: A2(_elm_lang$core$Basics_ops['++'], opts.attributes, attrs)
+				});
+		});
+};

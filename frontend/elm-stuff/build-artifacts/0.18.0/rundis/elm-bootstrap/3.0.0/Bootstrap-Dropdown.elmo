@@ -1,0 +1,371 @@
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$applyModifier = F2(
+	function (option, options) {
+		var _p0 = option;
+		switch (_p0.ctor) {
+			case 'AlignMenuRight':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{hasMenuRight: true});
+			case 'Dropup':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{isDropUp: true});
+			case 'Attrs':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{attributes: _p0._0});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{menuAttrs: _p0._0});
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$defaultOptions = {
+	hasMenuRight: false,
+	isDropUp: false,
+	attributes: {ctor: '[]'},
+	menuAttrs: {ctor: '[]'}
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$toConfig = function (options) {
+	return A3(_elm_lang$core$List$foldl, _rundis$elm_bootstrap$Bootstrap_Dropdown$applyModifier, _rundis$elm_bootstrap$Bootstrap_Dropdown$defaultOptions, options);
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$SplitToggleConfig = F3(
+	function (a, b, c) {
+		return {options: a, togglerOptions: b, children: c};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$Options = F4(
+	function (a, b, c, d) {
+		return {isDropUp: a, hasMenuRight: b, attributes: c, menuAttrs: d};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$State = function (a) {
+	return {ctor: 'State', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$Closed = {ctor: 'Closed'};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$initialState = _rundis$elm_bootstrap$Bootstrap_Dropdown$State(_rundis$elm_bootstrap$Bootstrap_Dropdown$Closed);
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$dropdown = F2(
+	function (_p2, _p1) {
+		var _p3 = _p2;
+		var _p4 = _p1;
+		var config = _rundis$elm_bootstrap$Bootstrap_Dropdown$toConfig(_p4.options);
+		var _p5 = _p4.toggleButton;
+		var buttonFn = _p5._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$classList(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'btn-group', _1: true},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'show',
+									_1: !_elm_lang$core$Native_Utils.eq(_p3._0, _rundis$elm_bootstrap$Bootstrap_Dropdown$Closed)
+								},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'dropup', _1: config.isDropUp},
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				},
+				config.attributes),
+			{
+				ctor: '::',
+				_0: A2(buttonFn, _p4.toggleMsg, _p3),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$classList(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'dropdown-menu', _1: true},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'dropdown-menu-right', _1: config.hasMenuRight},
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							},
+							config.menuAttrs),
+						A2(
+							_elm_lang$core$List$map,
+							function (_p6) {
+								var _p7 = _p6;
+								return _p7._0;
+							},
+							_p4.items)),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$splitDropdown = F2(
+	function (_p9, _p8) {
+		var _p10 = _p9;
+		var _p11 = _p8;
+		var config = _rundis$elm_bootstrap$Bootstrap_Dropdown$toConfig(_p11.options);
+		var _p12 = _p11.toggleButton;
+		var buttonsFn = _p12._0;
+		return A2(
+			_elm_lang$html$Html$div,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$classList(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'btn-group', _1: true},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'show',
+									_1: !_elm_lang$core$Native_Utils.eq(_p10._0, _rundis$elm_bootstrap$Bootstrap_Dropdown$Closed)
+								},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'dropup', _1: config.isDropUp},
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				},
+				config.attributes),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(buttonsFn, _p11.toggleMsg, _p10),
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$classList(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'dropdown-menu', _1: true},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'dropdown-menu-right', _1: config.hasMenuRight},
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							},
+							config.menuAttrs),
+						A2(
+							_elm_lang$core$List$map,
+							function (_p13) {
+								var _p14 = _p13;
+								return _p14._0;
+							},
+							_p11.items)),
+					_1: {ctor: '[]'}
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$ListenClicks = {ctor: 'ListenClicks'};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$subscriptions = F2(
+	function (_p15, toMsg) {
+		var _p16 = _p15;
+		var _p17 = _p16._0;
+		switch (_p17.ctor) {
+			case 'Open':
+				return _elm_lang$animation_frame$AnimationFrame$times(
+					function (_p18) {
+						return toMsg(
+							_rundis$elm_bootstrap$Bootstrap_Dropdown$State(_rundis$elm_bootstrap$Bootstrap_Dropdown$ListenClicks));
+					});
+			case 'ListenClicks':
+				return _elm_lang$mouse$Mouse$clicks(
+					function (_p19) {
+						return toMsg(
+							_rundis$elm_bootstrap$Bootstrap_Dropdown$State(_rundis$elm_bootstrap$Bootstrap_Dropdown$Closed));
+					});
+			default:
+				return _elm_lang$core$Platform_Sub$none;
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$Open = {ctor: 'Open'};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$toggleOpen = F2(
+	function (toMsg, _p20) {
+		var _p21 = _p20;
+		return toMsg(
+			_rundis$elm_bootstrap$Bootstrap_Dropdown$State(
+				function () {
+					var _p22 = _p21._0;
+					switch (_p22.ctor) {
+						case 'Open':
+							return _rundis$elm_bootstrap$Bootstrap_Dropdown$Closed;
+						case 'ListenClicks':
+							return _rundis$elm_bootstrap$Bootstrap_Dropdown$Closed;
+						default:
+							return _rundis$elm_bootstrap$Bootstrap_Dropdown$Open;
+					}
+				}()));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$togglePrivate = F4(
+	function (buttonOptions, children, toggleMsg, state) {
+		return A2(
+			_elm_lang$html$Html$button,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_rundis$elm_bootstrap$Bootstrap_Internal_Button$buttonAttributes(buttonOptions),
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('dropdown-toggle'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('button'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								A2(_rundis$elm_bootstrap$Bootstrap_Dropdown$toggleOpen, toggleMsg, state)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			children);
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$splitToggleButtonPrivate = F3(
+	function (_p23, toggleMsg, state) {
+		var _p24 = _p23;
+		return {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$button,
+				_rundis$elm_bootstrap$Bootstrap_Internal_Button$buttonAttributes(_p24.options),
+				_p24.children),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_rundis$elm_bootstrap$Bootstrap_Internal_Button$buttonAttributes(_p24.togglerOptions),
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('dropdown-toggle'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('dropdown-toggle-split'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('button'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											A2(_rundis$elm_bootstrap$Bootstrap_Dropdown$toggleOpen, toggleMsg, state)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}),
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$Attrs = function (a) {
+	return {ctor: 'Attrs', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$attrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_Dropdown$Attrs(attrs);
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$MenuAttrs = function (a) {
+	return {ctor: 'MenuAttrs', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$menuAttrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_Dropdown$MenuAttrs(attrs);
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$AlignMenuRight = {ctor: 'AlignMenuRight'};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$alignMenuRight = _rundis$elm_bootstrap$Bootstrap_Dropdown$AlignMenuRight;
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$Dropup = {ctor: 'Dropup'};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$dropUp = _rundis$elm_bootstrap$Bootstrap_Dropdown$Dropup;
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$DropdownItem = function (a) {
+	return {ctor: 'DropdownItem', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$anchorItem = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Dropdown$DropdownItem(
+			A2(
+				_elm_lang$html$Html$a,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('dropdown-item'),
+						_1: {ctor: '[]'}
+					},
+					attributes),
+				children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$buttonItem = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Dropdown$DropdownItem(
+			A2(
+				_elm_lang$html$Html$button,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('button'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('dropdown-item'),
+							_1: {ctor: '[]'}
+						}
+					},
+					attributes),
+				children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$divider = _rundis$elm_bootstrap$Bootstrap_Dropdown$DropdownItem(
+	A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('dropdown-divider'),
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'}));
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$header = function (children) {
+	return _rundis$elm_bootstrap$Bootstrap_Dropdown$DropdownItem(
+		A2(
+			_elm_lang$html$Html$h6,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('dropdown-header'),
+				_1: {ctor: '[]'}
+			},
+			children));
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$DropdownToggle = function (a) {
+	return {ctor: 'DropdownToggle', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$toggle = F2(
+	function (buttonOptions, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Dropdown$DropdownToggle(
+			A2(_rundis$elm_bootstrap$Bootstrap_Dropdown$togglePrivate, buttonOptions, children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$SplitDropdownToggle = function (a) {
+	return {ctor: 'SplitDropdownToggle', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Dropdown$splitToggle = function (config) {
+	return _rundis$elm_bootstrap$Bootstrap_Dropdown$SplitDropdownToggle(
+		_rundis$elm_bootstrap$Bootstrap_Dropdown$splitToggleButtonPrivate(config));
+};

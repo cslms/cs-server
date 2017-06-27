@@ -1,0 +1,25 @@
+var _rtfeldman$elm_css_util$Css_Helpers$toCssIdentifier = function (identifier) {
+	return A4(
+		_elm_lang$core$Regex$replace,
+		_elm_lang$core$Regex$All,
+		_elm_lang$core$Regex$regex('[^a-zA-Z0-9_-]'),
+		function (_p0) {
+			return '';
+		},
+		A4(
+			_elm_lang$core$Regex$replace,
+			_elm_lang$core$Regex$All,
+			_elm_lang$core$Regex$regex('\\s+'),
+			function (_p1) {
+				return '-';
+			},
+			_elm_lang$core$String$trim(
+				_elm_lang$core$Basics$toString(identifier))));
+};
+var _rtfeldman$elm_css_util$Css_Helpers$identifierToString = F2(
+	function (name, identifier) {
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			_rtfeldman$elm_css_util$Css_Helpers$toCssIdentifier(name),
+			_rtfeldman$elm_css_util$Css_Helpers$toCssIdentifier(identifier));
+	});

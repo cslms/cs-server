@@ -6,8 +6,3 @@
 # These steps are only necessary in development. Production should initialize
 # the celery workers explicitly.
 #
-
-from codeschool import settings
-
-if settings.DEBUG:
-    print('TODO: Starting celery worker')

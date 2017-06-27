@@ -1,0 +1,71 @@
+var _fabiommendes$elm_forms$App$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{ctor: '[]'});
+};
+var _fabiommendes$elm_forms$App$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'width', _1: '500px'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto auto'},
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h2,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Form'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _fabiommendes$elm_forms$Forms_Form$view(model),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _fabiommendes$elm_forms$App$update = F2(
+	function (msg, form) {
+		return {
+			ctor: '_Tuple2',
+			_0: A2(_fabiommendes$elm_forms$Forms_Form$update, msg, form),
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
+	});
+var _fabiommendes$elm_forms$App$json = '{\n    \"action\": null,\n    \"fields\": [\n        {\n            \"id\": \"username\",\n            \"value\": \"\",\n            \"label\": \"E-mail\",\n            \"type\": \"email\",\n            \"required\": true,\n            \"validators\": [],\n            \"errors\": [],\n            \"default\": null,\n            \"helpText\": null,\n            \"placeholder\": \"Enter your e-mail\"\n        },\n        {\n            \"id\": \"password\",\n            \"value\": \"\",\n            \"label\": \"Password\",\n            \"type\": \"password\",\n            \"required\": true,\n            \"validators\": [],\n            \"errors\": [],\n            \"default\": null,\n            \"helpText\": null,\n            \"placeholder\": \"Enter your password\"\n        }\n    ]\n}\n';
+var _fabiommendes$elm_forms$App$main = function () {
+	var model = function () {
+		var _p0 = _fabiommendes$elm_forms$Forms_JsonDecode$decodeString(_fabiommendes$elm_forms$App$json);
+		if (_p0.ctor === 'Ok') {
+			return A2(_elm_lang$core$Debug$log, 'decode', _p0._0);
+		} else {
+			return A4(
+				_elm_lang$core$Debug$log,
+				_p0._0,
+				_fabiommendes$elm_forms$Forms_Form$form,
+				{ctor: '[]'},
+				{ctor: '[]'});
+		}
+	}();
+	return _elm_lang$html$Html$programWithFlags(
+		{
+			view: _fabiommendes$elm_forms$App$view,
+			init: function (flags) {
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			},
+			update: _fabiommendes$elm_forms$App$update,
+			subscriptions: _fabiommendes$elm_forms$App$subscriptions
+		});
+}()(_elm_lang$core$Json_Decode$value);

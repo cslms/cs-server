@@ -1,0 +1,114 @@
+var _cslms$cs_server$Forms_JsonEncode$jsonFormtoValue = function (form) {
+	var validator = function (val) {
+		var fullobject = F2(
+			function (err, tail) {
+				var head = {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'validator',
+						_1: _elm_lang$core$Json_Encode$string(
+							_cslms$cs_server$Forms_Types$validatorRef(val))
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'msg',
+							_1: _elm_lang$core$Json_Encode$string(err)
+						},
+						_1: {ctor: '[]'}
+					}
+				};
+				return _elm_lang$core$Json_Encode$object(
+					A2(_elm_lang$core$Basics_ops['++'], head, tail));
+			});
+		var simpleobject = function (err) {
+			return A2(
+				fullobject,
+				err,
+				{ctor: '[]'});
+		};
+		var valueobject = F2(
+			function (err, x) {
+				return A2(
+					fullobject,
+					err,
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'value', _1: x},
+						_1: {ctor: '[]'}
+					});
+			});
+		var _p0 = val;
+		switch (_p0.ctor) {
+			case 'Decimal':
+				return A2(
+					fullobject,
+					_p0._2,
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'places',
+							_1: _elm_lang$core$Json_Encode$int(_p0._0)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'size',
+								_1: _elm_lang$core$Json_Encode$int(_p0._1)
+							},
+							_1: {ctor: '[]'}
+						}
+					});
+			case 'FileExtension':
+				return A2(
+					valueobject,
+					_p0._1,
+					_elm_lang$core$Json_Encode$list(
+						A2(_elm_lang$core$List$map, _elm_lang$core$Json_Encode$string, _p0._0)));
+			case 'RegexMatch':
+				return A2(
+					valueobject,
+					_p0._1,
+					_elm_lang$core$Json_Encode$string(_p0._0));
+			case 'MinLength':
+				return A2(
+					valueobject,
+					_p0._1,
+					_elm_lang$core$Json_Encode$int(_p0._0));
+			case 'MaxLength':
+				return A2(
+					valueobject,
+					_p0._1,
+					_elm_lang$core$Json_Encode$int(_p0._0));
+			case 'MinValue':
+				return A2(
+					valueobject,
+					_p0._1,
+					_elm_lang$core$Json_Encode$float(_p0._0));
+			case 'MaxValue':
+				return A2(
+					valueobject,
+					_p0._1,
+					_elm_lang$core$Json_Encode$float(_p0._0));
+			case 'NotEmpty':
+				return simpleobject(_p0._0);
+			case 'IsNumeric':
+				return simpleobject(_p0._0);
+			case 'IsEmail':
+				return simpleobject(_p0._0);
+			default:
+				return simpleobject(_p0._0);
+		}
+	};
+	var error = function (err) {
+		var _p1 = err;
+		if (_p1.ctor === 'Valid') {
+			return _elm_lang$core$Json_Encode$list(
+				{ctor: '[]'});
+		} else {
+			return _elm_lang$core$Json_Encode$list(
+				A2(

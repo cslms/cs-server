@@ -1,0 +1,130 @@
+.cs-logo {
+    background-color: #eee;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    &__img {
+        width: 70px;
+        margin-left: 15px;
+        margin-bottom: 10px;
+        margin-top: 5px;
+    }
+    
+    &__img:before {
+        background: url(/static/img/logo.svg);
+    }
+}
+
+.cs-head {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    //border-bottom: 1px solid #666;
+    box-shadow:  0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: black;
+    }
+
+    &__nav {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: none;
+        flex-flow: column;
+
+        > paper-menu-button {
+            display: none;
+        }
+    }
+
+    &__links {
+        display: block;
+        margin-left: 35px;
+        padding: 10px 0;
+        font: 1.4em 'Amatic SC', cursive;
+        font-weight: bold;
+    }
+}
+
+/* Tablets */
+@media only screen and (min-width: $breakpoint-medium-screen) {
+    .cs-head {
+        flex-flow: row;
+        padding: 20px;
+
+        &__nav {
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+            flex-flow: row;
+        }
+
+        &__fab {
+            display: block;
+            margin-left: 35px;
+            border-radius: 50%;
+            background-color: $color-green !important;
+            color: white;
+
+            .dropdown-trigger {
+                font: 1.7em 'Amatic SC', cursive;
+                font-weight: bold;
+                color: white;
+            }
+        }
+
+        &__fab:hover {
+            background-color: lighten($color-green, 5) !important;
+        }
+
+        &__links {
+            border-bottom: 0;
+            margin: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        &__links > * {
+            font-size: 1.35em;
+            margin-left: 35px;
+        }
+    }
+
+    .cs-logo {
+        background-color: white;
+        padding: 0;
+        margin: 0;
+
+        &__img {
+            min-width: 120px;
+        }
+    }
+}
+
+/* Destktop */
+@media only screen and (min-width: $breakpoint-large-screen) {
+    .cs-head {
+        padding: 20px 40px;
+
+        &__links > * {
+            font-size: 1.5em;
+        }
+    }
+
+    .cs-logo__img {
+        min-width: 150px;
+    }
+
+}

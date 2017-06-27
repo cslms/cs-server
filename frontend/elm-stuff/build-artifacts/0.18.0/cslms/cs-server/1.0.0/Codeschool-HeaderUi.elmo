@@ -1,0 +1,185 @@
+var _cslms$cs_server$Codeschool_HeaderUi$mdlMenuItem = function (children) {
+	return A2(
+		_elm_lang$html$Html$li,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('mdl-list__item'),
+			_1: {ctor: '[]'}
+		},
+		children);
+};
+var _cslms$cs_server$Codeschool_HeaderUi$update = F2(
+	function (msg_, model) {
+		var _p0 = msg_;
+		var menu = A2(_gdotdesign$elm_ui$Ui_DropdownMenu$update, _p0._0, model.userDropdown);
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{userDropdown: menu}),
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
+	});
+var _cslms$cs_server$Codeschool_HeaderUi$init = {
+	userDropdown: _gdotdesign$elm_ui$Ui_DropdownMenu$init(
+		{ctor: '_Tuple0'})
+};
+var _cslms$cs_server$Codeschool_HeaderUi$Model = function (a) {
+	return {userDropdown: a};
+};
+var _cslms$cs_server$Codeschool_HeaderUi$Dropdown = function (a) {
+	return {ctor: 'Dropdown', _0: a};
+};
+var _cslms$cs_server$Codeschool_HeaderUi$viewFabButton = function (model) {
+	var config = {
+		items: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$ul,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('mdl-list'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _cslms$cs_server$Codeschool_HeaderUi$mdlMenuItem(
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('foo'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _cslms$cs_server$Codeschool_HeaderUi$mdlMenuItem(
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('bar'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		element: A2(
+			_elm_lang$html$Html$span,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('cs-head__fab mdl-button mdl-js-button mdl-button--fab mdl-button--colored fab-button'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$id('cs-head--dropdown-trigger'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$span,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('dropdown-trigger'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$i,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('material-icons'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('person_outline'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}),
+		address: _cslms$cs_server$Codeschool_HeaderUi$Dropdown
+	};
+	return A2(_gdotdesign$elm_ui$Ui_DropdownMenu$view, config, model.userDropdown);
+};
+var _cslms$cs_server$Codeschool_HeaderUi$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('cs-head mdl-cell mdl-cell--12-col'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('cs-logo'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('cs-logo__img'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$nav,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('cs-head__nav'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('cs-head__links'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$a,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$href('/questions/'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Questions'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _cslms$cs_server$Codeschool_HeaderUi$viewFabButton(model),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _cslms$cs_server$Codeschool_HeaderUi$subscriptions = function (model) {
+	return A2(
+		_elm_lang$core$Platform_Sub$map,
+		_cslms$cs_server$Codeschool_HeaderUi$Dropdown,
+		_gdotdesign$elm_ui$Ui_DropdownMenu$subscriptions(model.userDropdown));
+};

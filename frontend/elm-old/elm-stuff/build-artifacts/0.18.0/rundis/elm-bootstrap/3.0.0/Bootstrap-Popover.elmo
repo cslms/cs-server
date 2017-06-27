@@ -1,0 +1,522 @@
+var _rundis$elm_bootstrap$Bootstrap_Popover$calculatePos = F2(
+	function (pos, _p0) {
+		var _p1 = _p0;
+		var _p5 = _p1.rect;
+		var _p4 = _p1.offsetWidth;
+		var _p3 = _p1.offsetHeight;
+		var _p2 = pos;
+		switch (_p2.ctor) {
+			case 'Left':
+				return {left: 0 - _p4, top: (_p5.height / 2) - (_p3 / 2)};
+			case 'Right':
+				return {left: _p5.width, top: (_p5.height / 2) - (_p3 / 2)};
+			case 'Top':
+				return {left: (_p5.width / 2) - (_p4 / 2), top: 0 - _p3};
+			default:
+				return {left: (_p5.width / 2) - (_p4 / 2), top: _p5.height};
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$isPopover = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function ($class) {
+		return A2(_elm_lang$core$String$contains, 'popover', $class) ? _elm_lang$core$Json_Decode$succeed(true) : _elm_lang$core$Json_Decode$succeed(false);
+	},
+	_debois$elm_dom$DOM$className);
+var _rundis$elm_bootstrap$Bootstrap_Popover$popper = F2(
+	function (path, decoder) {
+		return _elm_lang$core$Json_Decode$oneOf(
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Json_Decode$andThen,
+					function (res) {
+						return res ? A2(
+							_elm_lang$core$Json_Decode$at,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								path,
+								{
+									ctor: '::',
+									_0: 'nextSibling',
+									_1: {ctor: '[]'}
+								}),
+							decoder) : _elm_lang$core$Json_Decode$fail('');
+					},
+					A2(
+						_elm_lang$core$Json_Decode$at,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							path,
+							{
+								ctor: '::',
+								_0: 'nextSibling',
+								_1: {ctor: '[]'}
+							}),
+						_rundis$elm_bootstrap$Bootstrap_Popover$isPopover)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Json_Decode$andThen,
+						function (_p6) {
+							return A2(
+								_rundis$elm_bootstrap$Bootstrap_Popover$popper,
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									path,
+									{
+										ctor: '::',
+										_0: 'parentElement',
+										_1: {ctor: '[]'}
+									}),
+								decoder);
+						},
+						A2(
+							_elm_lang$core$Json_Decode$at,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								path,
+								{
+									ctor: '::',
+									_0: 'parentElement',
+									_1: {ctor: '[]'}
+								}),
+							_debois$elm_dom$DOM$className)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Json_Decode$fail('No popover found'),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$isTrigger = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	function ($class) {
+		return A2(_elm_lang$core$String$contains, 'popover-trigger', $class) ? _elm_lang$core$Json_Decode$succeed(true) : _elm_lang$core$Json_Decode$succeed(false);
+	},
+	_debois$elm_dom$DOM$className);
+var _rundis$elm_bootstrap$Bootstrap_Popover$trigger = function (path) {
+	return _elm_lang$core$Json_Decode$oneOf(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (res) {
+					return res ? A2(_elm_lang$core$Json_Decode$at, path, _debois$elm_dom$DOM$boundingClientRect) : _elm_lang$core$Json_Decode$fail('');
+				},
+				A2(_elm_lang$core$Json_Decode$at, path, _rundis$elm_bootstrap$Bootstrap_Popover$isTrigger)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Json_Decode$andThen,
+					function (_p7) {
+						return _rundis$elm_bootstrap$Bootstrap_Popover$trigger(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								path,
+								{
+									ctor: '::',
+									_0: 'parentElement',
+									_1: {ctor: '[]'}
+								}));
+					},
+					A2(
+						_elm_lang$core$Json_Decode$at,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							path,
+							{
+								ctor: '::',
+								_0: 'parentElement',
+								_1: {ctor: '[]'}
+							}),
+						_debois$elm_dom$DOM$className)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Json_Decode$fail('No trigger found'),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$positionClasses = function (position) {
+	var _p8 = position;
+	switch (_p8.ctor) {
+		case 'Left':
+			return {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-middle', _1: true},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-right', _1: true},
+					_1: {ctor: '[]'}
+				}
+			};
+		case 'Right':
+			return {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-middle', _1: true},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-left', _1: true},
+					_1: {ctor: '[]'}
+				}
+			};
+		case 'Top':
+			return {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-center', _1: true},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-bottom', _1: true},
+					_1: {ctor: '[]'}
+				}
+			};
+		default:
+			return {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-center', _1: true},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'bs-tether-element-attached-top', _1: true},
+					_1: {ctor: '[]'}
+				}
+			};
+	}
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$popoverView = F2(
+	function (_p10, _p9) {
+		var _p11 = _p10;
+		var _p19 = _p11._0.isActive;
+		var _p18 = _p11._0.domState;
+		var _p12 = _p9;
+		var _p17 = _p12._0;
+		var px = function (f) {
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(f),
+				'px');
+		};
+		var styles = _p19 ? function (pos) {
+			return {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'left',
+					_1: px(pos.left)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'top',
+						_1: px(pos.top)
+					},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'width',
+									_1: px(_p18.offsetWidth)
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			};
+		}(
+			A2(_rundis$elm_bootstrap$Bootstrap_Popover$calculatePos, _p17.direction, _p18)) : {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'left', _1: '-5000px'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'top', _1: '-5000px'},
+				_1: {ctor: '[]'}
+			}
+		};
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$classList(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'popover', _1: true},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'fade', _1: true},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'show', _1: _p19},
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						_rundis$elm_bootstrap$Bootstrap_Popover$positionClasses(_p17.direction))),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(styles),
+					_1: {ctor: '[]'}
+				}
+			},
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$map,
+						function (_p13) {
+							var _p14 = _p13;
+							return _p14._0;
+						},
+						_p17.title),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							function (_p15) {
+								var _p16 = _p15;
+								return _p16._0;
+							},
+							_p17.content),
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$view = F2(
+	function (state, _p20) {
+		var _p21 = _p20;
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _p21._0.triggerElement,
+				_1: {
+					ctor: '::',
+					_0: A2(_rundis$elm_bootstrap$Bootstrap_Popover$popoverView, state, _p21),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$DOMState = F3(
+	function (a, b, c) {
+		return {rect: a, offsetWidth: b, offsetHeight: c};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$stateDecoder = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_rundis$elm_bootstrap$Bootstrap_Popover$DOMState,
+	_rundis$elm_bootstrap$Bootstrap_Popover$trigger(
+		{
+			ctor: '::',
+			_0: 'target',
+			_1: {ctor: '[]'}
+		}),
+	A2(
+		_rundis$elm_bootstrap$Bootstrap_Popover$popper,
+		{
+			ctor: '::',
+			_0: 'target',
+			_1: {ctor: '[]'}
+		},
+		_debois$elm_dom$DOM$offsetWidth),
+	A2(
+		_rundis$elm_bootstrap$Bootstrap_Popover$popper,
+		{
+			ctor: '::',
+			_0: 'target',
+			_1: {ctor: '[]'}
+		},
+		_debois$elm_dom$DOM$offsetHeight));
+var _rundis$elm_bootstrap$Bootstrap_Popover$Pos = F2(
+	function (a, b) {
+		return {left: a, top: b};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$Config = function (a) {
+	return {ctor: 'Config', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$State = function (a) {
+	return {ctor: 'State', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$initialState = _rundis$elm_bootstrap$Bootstrap_Popover$State(
+	{
+		isActive: false,
+		domState: {
+			rect: {left: 0, top: 0, width: 0, height: 0},
+			offsetWidth: 0,
+			offsetHeight: 0
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$forceClose = F2(
+	function (_p22, toMsg) {
+		var _p23 = _p22;
+		return _elm_lang$core$Json_Decode$succeed(
+			toMsg(
+				_rundis$elm_bootstrap$Bootstrap_Popover$State(
+					_elm_lang$core$Native_Utils.update(
+						_p23._0,
+						{isActive: false}))));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$toggleState = F2(
+	function (_p24, toMsg) {
+		var _p25 = _p24;
+		return A2(
+			_elm_lang$core$Json_Decode$andThen,
+			function (v) {
+				return _elm_lang$core$Json_Decode$succeed(
+					toMsg(
+						(!_p25._0.isActive) ? _rundis$elm_bootstrap$Bootstrap_Popover$State(
+							{isActive: true, domState: v}) : _rundis$elm_bootstrap$Bootstrap_Popover$State(
+							_elm_lang$core$Native_Utils.update(
+								_p25._0,
+								{isActive: false}))));
+			},
+			_rundis$elm_bootstrap$Bootstrap_Popover$stateDecoder);
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$onClick = F2(
+	function (state, toMsg) {
+		return {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('popover-trigger'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html_Events$on,
+					'click',
+					A2(_rundis$elm_bootstrap$Bootstrap_Popover$toggleState, state, toMsg)),
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$onHover = F2(
+	function (state, toMsg) {
+		return {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('popover-trigger'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html_Events$on,
+					'mouseenter',
+					A2(_rundis$elm_bootstrap$Bootstrap_Popover$toggleState, state, toMsg)),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html_Events$on,
+						'mouseleave',
+						A2(_rundis$elm_bootstrap$Bootstrap_Popover$forceClose, state, toMsg)),
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$Left = {ctor: 'Left'};
+var _rundis$elm_bootstrap$Bootstrap_Popover$left = function (_p26) {
+	var _p27 = _p26;
+	return _rundis$elm_bootstrap$Bootstrap_Popover$Config(
+		_elm_lang$core$Native_Utils.update(
+			_p27._0,
+			{direction: _rundis$elm_bootstrap$Bootstrap_Popover$Left}));
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$Bottom = {ctor: 'Bottom'};
+var _rundis$elm_bootstrap$Bootstrap_Popover$bottom = function (_p28) {
+	var _p29 = _p28;
+	return _rundis$elm_bootstrap$Bootstrap_Popover$Config(
+		_elm_lang$core$Native_Utils.update(
+			_p29._0,
+			{direction: _rundis$elm_bootstrap$Bootstrap_Popover$Bottom}));
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$Right = {ctor: 'Right'};
+var _rundis$elm_bootstrap$Bootstrap_Popover$right = function (_p30) {
+	var _p31 = _p30;
+	return _rundis$elm_bootstrap$Bootstrap_Popover$Config(
+		_elm_lang$core$Native_Utils.update(
+			_p31._0,
+			{direction: _rundis$elm_bootstrap$Bootstrap_Popover$Right}));
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$Top = {ctor: 'Top'};
+var _rundis$elm_bootstrap$Bootstrap_Popover$config = function (triggerElement) {
+	return _rundis$elm_bootstrap$Bootstrap_Popover$Config(
+		{triggerElement: triggerElement, direction: _rundis$elm_bootstrap$Bootstrap_Popover$Top, title: _elm_lang$core$Maybe$Nothing, content: _elm_lang$core$Maybe$Nothing});
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$top = function (_p32) {
+	var _p33 = _p32;
+	return _rundis$elm_bootstrap$Bootstrap_Popover$Config(
+		_elm_lang$core$Native_Utils.update(
+			_p33._0,
+			{direction: _rundis$elm_bootstrap$Bootstrap_Popover$Top}));
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$Title = function (a) {
+	return {ctor: 'Title', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate = F4(
+	function (elemFn, attributes, children, _p34) {
+		var _p35 = _p34;
+		return _rundis$elm_bootstrap$Bootstrap_Popover$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p35._0,
+				{
+					title: _elm_lang$core$Maybe$Just(
+						_rundis$elm_bootstrap$Bootstrap_Popover$Title(
+							A2(
+								elemFn,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('popover-title'),
+									_1: attributes
+								},
+								children)))
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Popover$title = _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate(_elm_lang$html$Html$div);
+var _rundis$elm_bootstrap$Bootstrap_Popover$titleH1 = _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate(_elm_lang$html$Html$h1);
+var _rundis$elm_bootstrap$Bootstrap_Popover$titleH2 = _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate(_elm_lang$html$Html$h2);
+var _rundis$elm_bootstrap$Bootstrap_Popover$titleH3 = _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate(_elm_lang$html$Html$h3);
+var _rundis$elm_bootstrap$Bootstrap_Popover$titleH4 = _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate(_elm_lang$html$Html$h4);
+var _rundis$elm_bootstrap$Bootstrap_Popover$titleH5 = _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate(_elm_lang$html$Html$h5);
+var _rundis$elm_bootstrap$Bootstrap_Popover$titleH6 = _rundis$elm_bootstrap$Bootstrap_Popover$titlePrivate(_elm_lang$html$Html$h6);
+var _rundis$elm_bootstrap$Bootstrap_Popover$Content = function (a) {
+	return {ctor: 'Content', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Popover$content = F3(
+	function (attributes, children, _p36) {
+		var _p37 = _p36;
+		return _rundis$elm_bootstrap$Bootstrap_Popover$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p37._0,
+				{
+					content: _elm_lang$core$Maybe$Just(
+						_rundis$elm_bootstrap$Bootstrap_Popover$Content(
+							A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('popover-content'),
+									_1: attributes
+								},
+								children)))
+				}));
+	});

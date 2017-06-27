@@ -1,0 +1,162 @@
+var _fabiommendes$elm_forms$Forms_JsonDecode$validation = function () {
+	var convert = function (raw) {
+		var _p0 = raw;
+		if (_p0.ctor === 'Just') {
+			return _elm_lang$core$Json_Decode$succeed(
+				_fabiommendes$elm_forms$Forms_Validation$Errors(_p0._0));
+		} else {
+			return _elm_lang$core$Json_Decode$succeed(_fabiommendes$elm_forms$Forms_Validation$Valid);
+		}
+	};
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		convert,
+		_elm_lang$core$Json_Decode$nullable(
+			_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string)));
+}();
+var _fabiommendes$elm_forms$Forms_JsonDecode$validator = function () {
+	var convert = function (x) {
+		var dic = _elm_lang$core$Dict$fromList(x);
+		var name = _fabiommendes$elm_forms$Forms_Value$toString(
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				_fabiommendes$elm_forms$Forms_Value$String(''),
+				A2(_elm_lang$core$Dict$get, 'validator', dic)));
+		var msg = _fabiommendes$elm_forms$Forms_Value$toString(
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				_fabiommendes$elm_forms$Forms_Value$String('Error'),
+				A2(_elm_lang$core$Dict$get, 'msg', dic)));
+		var opts = _elm_lang$core$Dict$toList(
+			A2(
+				_elm_lang$core$Dict$remove,
+				'msg',
+				A2(_elm_lang$core$Dict$remove, 'validator', dic)));
+		var optsList = A2(
+			_elm_lang$core$List$map,
+			function (_p1) {
+				var _p2 = _p1;
+				return {
+					ctor: '_Tuple2',
+					_0: _p2._0,
+					_1: _fabiommendes$elm_forms$Forms_Value$toString(_p2._1)
+				};
+			},
+			opts);
+		var val = _fabiommendes$elm_forms$Forms_Validation$fromInfo(
+			{ctor: '_Tuple3', _0: name, _1: msg, _2: opts});
+		var _p3 = val;
+		if (_p3.ctor === 'Ok') {
+			return _elm_lang$core$Json_Decode$succeed(_p3._0);
+		} else {
+			return _elm_lang$core$Json_Decode$fail(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'invalid validator: ',
+					_elm_lang$core$Basics$toString(x)));
+		}
+	};
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		convert,
+		_elm_lang$core$Json_Decode$keyValuePairs(_fabiommendes$elm_forms$Forms_Value$jsonDecoder));
+}();
+var _fabiommendes$elm_forms$Forms_JsonDecode$fieldType = function () {
+	var convert = function (raw) {
+		var _p4 = _fabiommendes$elm_forms$Forms_Field$stringToType(raw);
+		if (_p4.ctor === 'Just') {
+			return _elm_lang$core$Json_Decode$succeed(_p4._0);
+		} else {
+			return _elm_lang$core$Json_Decode$fail(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'invalid FieldType: \'',
+					A2(_elm_lang$core$Basics_ops['++'], raw, '\'.')));
+		}
+	};
+	return A2(_elm_lang$core$Json_Decode$andThen, convert, _elm_lang$core$Json_Decode$string);
+}();
+var _fabiommendes$elm_forms$Forms_JsonDecode$field = function () {
+	var _p5 = _fabiommendes$elm_forms$Forms_Field$charField('');
+	var label = _p5.label;
+	var required = _p5.required;
+	var requiredMessage = _p5.requiredMessage;
+	var which = _p5.which;
+	var validators = _p5.validators;
+	var errors = _p5.errors;
+	var $default = _p5.$default;
+	var helpText = _p5.helpText;
+	var placeholder = _p5.placeholder;
+	return A4(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+		'placeholder',
+		_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string),
+		placeholder,
+		A4(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+			'helpText',
+			_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string),
+			helpText,
+			A4(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+				'default',
+				_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string),
+				$default,
+				A4(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+					'errors',
+					_fabiommendes$elm_forms$Forms_JsonDecode$validation,
+					errors,
+					A4(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+						'validators',
+						_elm_lang$core$Json_Decode$list(_fabiommendes$elm_forms$Forms_JsonDecode$validator),
+						validators,
+						A4(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+							'requiredMessage',
+							_elm_lang$core$Json_Decode$string,
+							requiredMessage,
+							A4(
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+								'required',
+								_elm_lang$core$Json_Decode$bool,
+								required,
+								A4(
+									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+									'type',
+									_fabiommendes$elm_forms$Forms_JsonDecode$fieldType,
+									which,
+									A4(
+										_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+										'label',
+										_elm_lang$core$Json_Decode$string,
+										label,
+										A4(
+											_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+											'value',
+											_elm_lang$core$Json_Decode$string,
+											'',
+											A3(
+												_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+												'id',
+												_elm_lang$core$Json_Decode$string,
+												_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_fabiommendes$elm_forms$Forms_Field$Field))))))))))));
+}();
+var _fabiommendes$elm_forms$Forms_JsonDecode$form = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_fabiommendes$elm_forms$Forms_Form$Form,
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'action',
+		_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string)),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'fields',
+		_elm_lang$core$Json_Decode$list(_fabiommendes$elm_forms$Forms_JsonDecode$field)));
+var _fabiommendes$elm_forms$Forms_JsonDecode$decodeValue = function (json) {
+	return A2(_elm_lang$core$Json_Decode$decodeValue, _fabiommendes$elm_forms$Forms_JsonDecode$form, json);
+};
+var _fabiommendes$elm_forms$Forms_JsonDecode$decodeString = function (json) {
+	return A2(_elm_lang$core$Json_Decode$decodeString, _fabiommendes$elm_forms$Forms_JsonDecode$form, json);
+};

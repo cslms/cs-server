@@ -1,0 +1,46 @@
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$Submit = {ctor: 'Submit'};
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$Password = {ctor: 'Password'};
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$Username = {ctor: 'Username'};
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$login = function (which) {
+	var _p0 = function () {
+		var _p1 = which;
+		if (_p1.ctor === 'ByEmail') {
+			return {ctor: '_Tuple2', _0: _fabiommendes$elm_forms$Forms_Field$emailField, _1: 'E-mail'};
+		} else {
+			return {ctor: '_Tuple2', _0: _fabiommendes$elm_forms$Forms_Field$charField, _1: 'Username'};
+		}
+	}();
+	var userField = _p0._0;
+	var userLabel = _p0._1;
+	return A2(
+		_fabiommendes$elm_forms$Forms_Form$form,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_fabiommendes$elm_forms$Forms_Field$placeholder,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Enter your ',
+					_elm_lang$core$String$toLower(userLabel)),
+				A2(
+					_fabiommendes$elm_forms$Forms_Field$label,
+					userLabel,
+					userField(_fabiommendes$elm_forms$Forms_Contrib_LoginForm$Username))),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_fabiommendes$elm_forms$Forms_Field$placeholder,
+					'Enter your password',
+					A2(
+						_fabiommendes$elm_forms$Forms_Field$label,
+						'Password',
+						_fabiommendes$elm_forms$Forms_Field$passwordField(_fabiommendes$elm_forms$Forms_Contrib_LoginForm$Password))),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$ByEmail = {ctor: 'ByEmail'};
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$loginByEmail = _fabiommendes$elm_forms$Forms_Contrib_LoginForm$login(_fabiommendes$elm_forms$Forms_Contrib_LoginForm$ByEmail);
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$ByUsername = {ctor: 'ByUsername'};
+var _fabiommendes$elm_forms$Forms_Contrib_LoginForm$loginByUsername = _fabiommendes$elm_forms$Forms_Contrib_LoginForm$login(_fabiommendes$elm_forms$Forms_Contrib_LoginForm$ByUsername);

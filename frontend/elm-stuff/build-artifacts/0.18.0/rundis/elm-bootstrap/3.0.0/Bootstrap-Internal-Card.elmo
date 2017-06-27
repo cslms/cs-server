@@ -1,0 +1,291 @@
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$toRGBString = function (color) {
+	var _p0 = _elm_lang$core$Color$toRgb(color);
+	var red = _p0.red;
+	var green = _p0.green;
+	var blue = _p0.blue;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'RGB(',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(red),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				',',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(green),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						',',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(blue),
+							')'))))));
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$roleOption = function (role) {
+	var _p1 = role;
+	switch (_p1.ctor) {
+		case 'Primary':
+			return 'primary';
+		case 'Success':
+			return 'success';
+		case 'Info':
+			return 'info';
+		case 'Warning':
+			return 'warning';
+		default:
+			return 'danger';
+	}
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$applyModifier = F2(
+	function (option, options) {
+		var _p2 = option;
+		switch (_p2.ctor) {
+			case 'Aligned':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						aligned: _elm_lang$core$Maybe$Just(_p2._0)
+					});
+			case 'Coloring':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						coloring: _elm_lang$core$Maybe$Just(_p2._0)
+					});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						attributes: A2(_elm_lang$core$Basics_ops['++'], options.attributes, _p2._0)
+					});
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$defaultOptions = {
+	aligned: _elm_lang$core$Maybe$Nothing,
+	coloring: _elm_lang$core$Maybe$Nothing,
+	attributes: {ctor: '[]'}
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$cardAttributes = function (modifiers) {
+	var options = A3(_elm_lang$core$List$foldl, _rundis$elm_bootstrap$Bootstrap_Internal_Card$applyModifier, _rundis$elm_bootstrap$Bootstrap_Internal_Card$defaultOptions, modifiers);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('card'),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			function () {
+				var _p3 = options.coloring;
+				if (_p3.ctor === 'Just') {
+					switch (_p3._0.ctor) {
+						case 'Roled':
+							return {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'card-inverse card-',
+										_rundis$elm_bootstrap$Bootstrap_Internal_Card$roleOption(_p3._0._0))),
+								_1: {ctor: '[]'}
+							};
+						case 'Outlined':
+							return {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'card-outline-',
+										_rundis$elm_bootstrap$Bootstrap_Internal_Card$roleOption(_p3._0._0))),
+								_1: {ctor: '[]'}
+							};
+						default:
+							var _p4 = _p3._0._0;
+							return {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('card-inverse'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$style(
+										{
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'background-color',
+												_1: _rundis$elm_bootstrap$Bootstrap_Internal_Card$toRGBString(_p4)
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'border-color',
+													_1: _rundis$elm_bootstrap$Bootstrap_Internal_Card$toRGBString(_p4)
+												},
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {ctor: '[]'}
+								}
+							};
+					}
+				} else {
+					return {ctor: '[]'};
+				}
+			}(),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				function () {
+					var _p5 = options.aligned;
+					if (_p5.ctor === 'Just') {
+						return {
+							ctor: '::',
+							_0: _rundis$elm_bootstrap$Bootstrap_Internal_Text$textAlignClass(_p5._0),
+							_1: {ctor: '[]'}
+						};
+					} else {
+						return {ctor: '[]'};
+					}
+				}(),
+				options.attributes)));
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$applyBlockModifier = F2(
+	function (option, options) {
+		var _p6 = option;
+		if (_p6.ctor === 'AlignedBlock') {
+			return _elm_lang$core$Native_Utils.update(
+				options,
+				{
+					aligned: _elm_lang$core$Maybe$Just(_p6._0)
+				});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				options,
+				{
+					attributes: A2(_elm_lang$core$Basics_ops['++'], options.attributes, _p6._0)
+				});
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$defaultBlockOptions = {
+	aligned: _elm_lang$core$Maybe$Nothing,
+	attributes: {ctor: '[]'}
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$blockAttributes = function (modifiers) {
+	var options = A3(_elm_lang$core$List$foldl, _rundis$elm_bootstrap$Bootstrap_Internal_Card$applyBlockModifier, _rundis$elm_bootstrap$Bootstrap_Internal_Card$defaultBlockOptions, modifiers);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('card-block'),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			function () {
+				var _p7 = options.aligned;
+				if (_p7.ctor === 'Just') {
+					return {
+						ctor: '::',
+						_0: _rundis$elm_bootstrap$Bootstrap_Internal_Text$textAlignClass(_p7._0),
+						_1: {ctor: '[]'}
+					};
+				} else {
+					return {ctor: '[]'};
+				}
+			}(),
+			options.attributes));
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$renderBlock = function (block) {
+	var _p8 = block;
+	if (_p8.ctor === 'CardBlock') {
+		return _p8._0;
+	} else {
+		return _p8._0;
+	}
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$renderBlocks = function (blocks) {
+	return A2(
+		_elm_lang$core$List$map,
+		function (block) {
+			var _p9 = block;
+			if (_p9.ctor === 'CardBlock') {
+				return _p9._0;
+			} else {
+				return _p9._0;
+			}
+		},
+		blocks);
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$CardOptions = F3(
+	function (a, b, c) {
+		return {aligned: a, coloring: b, attributes: c};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockOptions = F2(
+	function (a, b) {
+		return {aligned: a, attributes: b};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Attrs = function (a) {
+	return {ctor: 'Attrs', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring = function (a) {
+	return {ctor: 'Coloring', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Aligned = function (a) {
+	return {ctor: 'Aligned', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Inverted = function (a) {
+	return {ctor: 'Inverted', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Outlined = function (a) {
+	return {ctor: 'Outlined', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Roled = function (a) {
+	return {ctor: 'Roled', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Danger = {ctor: 'Danger'};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Warning = {ctor: 'Warning'};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Info = {ctor: 'Info'};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Success = {ctor: 'Success'};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$Primary = {ctor: 'Primary'};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockAttrs = function (a) {
+	return {ctor: 'BlockAttrs', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$AlignedBlock = function (a) {
+	return {ctor: 'AlignedBlock', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$ListGroup = function (a) {
+	return {ctor: 'ListGroup', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$listGroup = function (items) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_Card$ListGroup(
+		A2(
+			_elm_lang$html$Html$ul,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('list-group list-group-flush'),
+				_1: {ctor: '[]'}
+			},
+			A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$renderItem, items)));
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$CardBlock = function (a) {
+	return {ctor: 'CardBlock', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$block = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_Internal_Card$CardBlock(
+			A2(
+				_elm_lang$html$Html$div,
+				_rundis$elm_bootstrap$Bootstrap_Internal_Card$blockAttributes(options),
+				A2(
+					_elm_lang$core$List$map,
+					function (_p10) {
+						var _p11 = _p10;
+						return _p11._0;
+					},
+					items)));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockItem = function (a) {
+	return {ctor: 'BlockItem', _0: a};
+};

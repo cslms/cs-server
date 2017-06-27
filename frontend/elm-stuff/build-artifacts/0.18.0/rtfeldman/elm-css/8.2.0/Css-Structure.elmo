@@ -1,0 +1,725 @@
+var _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations = function (declarations) {
+	dropEmptyDeclarations:
+	while (true) {
+		var _p0 = declarations;
+		if (_p0.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			switch (_p0._0.ctor) {
+				case 'StyleBlockDeclaration':
+					var _p1 = _p0._1;
+					if (_elm_lang$core$List$isEmpty(_p0._0._0._2)) {
+						var _v1 = _p1;
+						declarations = _v1;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p1)
+						};
+					}
+				case 'MediaRule':
+					var _p4 = _p0._1;
+					if (A2(
+						_elm_lang$core$List$all,
+						function (_p2) {
+							var _p3 = _p2;
+							return _elm_lang$core$List$isEmpty(_p3._2);
+						},
+						_p0._0._1)) {
+						var _v3 = _p4;
+						declarations = _v3;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p4)
+						};
+					}
+				case 'SupportsRule':
+					var _p5 = _p0._1;
+					if (_elm_lang$core$List$isEmpty(_p0._0._1)) {
+						var _v4 = _p5;
+						declarations = _v4;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p5)
+						};
+					}
+				case 'DocumentRule':
+					return {
+						ctor: '::',
+						_0: _p0._0,
+						_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p0._1)
+					};
+				case 'PageRule':
+					var _p6 = _p0._1;
+					if (_elm_lang$core$List$isEmpty(_p0._0._1)) {
+						var _v5 = _p6;
+						declarations = _v5;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p6)
+						};
+					}
+				case 'FontFace':
+					var _p7 = _p0._1;
+					if (_elm_lang$core$List$isEmpty(_p0._0._0)) {
+						var _v6 = _p7;
+						declarations = _v6;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p7)
+						};
+					}
+				case 'Keyframes':
+					var _p8 = _p0._1;
+					if (_elm_lang$core$List$isEmpty(_p0._0._1)) {
+						var _v7 = _p8;
+						declarations = _v7;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p8)
+						};
+					}
+				case 'Viewport':
+					var _p9 = _p0._1;
+					if (_elm_lang$core$List$isEmpty(_p0._0._0)) {
+						var _v8 = _p9;
+						declarations = _v8;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p9)
+						};
+					}
+				case 'CounterStyle':
+					var _p10 = _p0._1;
+					if (_elm_lang$core$List$isEmpty(_p0._0._0)) {
+						var _v9 = _p10;
+						declarations = _v9;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p10)
+						};
+					}
+				default:
+					var _p13 = _p0._1;
+					if (A2(
+						_elm_lang$core$List$all,
+						function (_p11) {
+							var _p12 = _p11;
+							return _elm_lang$core$List$isEmpty(_p12._1);
+						},
+						_p0._0._0)) {
+						var _v11 = _p13;
+						declarations = _v11;
+						continue dropEmptyDeclarations;
+					} else {
+						return {
+							ctor: '::',
+							_0: _p0._0,
+							_1: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p13)
+						};
+					}
+			}
+		}
+	}
+};
+var _rtfeldman$elm_css$Css_Structure$dropEmpty = function (_p14) {
+	var _p15 = _p14;
+	return {
+		charset: _p15.charset,
+		imports: _p15.imports,
+		namespaces: _p15.namespaces,
+		declarations: _rtfeldman$elm_css$Css_Structure$dropEmptyDeclarations(_p15.declarations)
+	};
+};
+var _rtfeldman$elm_css$Css_Structure$concatMapLast = F2(
+	function (update, list) {
+		var _p16 = list;
+		if (_p16.ctor === '[]') {
+			return list;
+		} else {
+			if (_p16._1.ctor === '[]') {
+				return update(_p16._0);
+			} else {
+				return {
+					ctor: '::',
+					_0: _p16._0,
+					_1: A2(_rtfeldman$elm_css$Css_Structure$concatMapLast, update, _p16._1)
+				};
+			}
+		}
+	});
+var _rtfeldman$elm_css$Css_Structure$mapLast = F2(
+	function (update, list) {
+		var _p17 = list;
+		if (_p17.ctor === '[]') {
+			return list;
+		} else {
+			if (_p17._1.ctor === '[]') {
+				return {
+					ctor: '::',
+					_0: update(_p17._0),
+					_1: {ctor: '[]'}
+				};
+			} else {
+				return {
+					ctor: '::',
+					_0: _p17._0,
+					_1: A2(_rtfeldman$elm_css$Css_Structure$mapLast, update, _p17._1)
+				};
+			}
+		}
+	});
+var _rtfeldman$elm_css$Css_Structure$Property = F3(
+	function (a, b, c) {
+		return {important: a, key: b, value: c};
+	});
+var _rtfeldman$elm_css$Css_Structure$Stylesheet = F4(
+	function (a, b, c, d) {
+		return {charset: a, imports: b, namespaces: c, declarations: d};
+	});
+var _rtfeldman$elm_css$Css_Structure$FontFeatureValues = function (a) {
+	return {ctor: 'FontFeatureValues', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$CounterStyle = function (a) {
+	return {ctor: 'CounterStyle', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$Viewport = function (a) {
+	return {ctor: 'Viewport', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$Keyframes = F2(
+	function (a, b) {
+		return {ctor: 'Keyframes', _0: a, _1: b};
+	});
+var _rtfeldman$elm_css$Css_Structure$FontFace = function (a) {
+	return {ctor: 'FontFace', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$PageRule = F2(
+	function (a, b) {
+		return {ctor: 'PageRule', _0: a, _1: b};
+	});
+var _rtfeldman$elm_css$Css_Structure$DocumentRule = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'DocumentRule', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _rtfeldman$elm_css$Css_Structure$SupportsRule = F2(
+	function (a, b) {
+		return {ctor: 'SupportsRule', _0: a, _1: b};
+	});
+var _rtfeldman$elm_css$Css_Structure$MediaRule = F2(
+	function (a, b) {
+		return {ctor: 'MediaRule', _0: a, _1: b};
+	});
+var _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration = function (a) {
+	return {ctor: 'StyleBlockDeclaration', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$concatMapLastStyleBlock = F2(
+	function (update, declarations) {
+		var _p18 = declarations;
+		_v15_12:
+		do {
+			if (_p18.ctor === '[]') {
+				return declarations;
+			} else {
+				if (_p18._1.ctor === '[]') {
+					switch (_p18._0.ctor) {
+						case 'StyleBlockDeclaration':
+							return A2(
+								_elm_lang$core$List$map,
+								_rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration,
+								update(_p18._0._0));
+						case 'MediaRule':
+							if (_p18._0._1.ctor === '::') {
+								if (_p18._0._1._1.ctor === '[]') {
+									return {
+										ctor: '::',
+										_0: A2(
+											_rtfeldman$elm_css$Css_Structure$MediaRule,
+											_p18._0._0,
+											update(_p18._0._1._0)),
+										_1: {ctor: '[]'}
+									};
+								} else {
+									var _p19 = A2(
+										_rtfeldman$elm_css$Css_Structure$concatMapLastStyleBlock,
+										update,
+										{
+											ctor: '::',
+											_0: A2(_rtfeldman$elm_css$Css_Structure$MediaRule, _p18._0._0, _p18._0._1._1),
+											_1: {ctor: '[]'}
+										});
+									if (((_p19.ctor === '::') && (_p19._0.ctor === 'MediaRule')) && (_p19._1.ctor === '[]')) {
+										return {
+											ctor: '::',
+											_0: A2(
+												_rtfeldman$elm_css$Css_Structure$MediaRule,
+												_p19._0._0,
+												{ctor: '::', _0: _p18._0._1._0, _1: _p19._0._1}),
+											_1: {ctor: '[]'}
+										};
+									} else {
+										return _p19;
+									}
+								}
+							} else {
+								break _v15_12;
+							}
+						case 'SupportsRule':
+							return {
+								ctor: '::',
+								_0: A2(
+									_rtfeldman$elm_css$Css_Structure$SupportsRule,
+									_p18._0._0,
+									A2(_rtfeldman$elm_css$Css_Structure$concatMapLastStyleBlock, update, _p18._0._1)),
+								_1: {ctor: '[]'}
+							};
+						case 'DocumentRule':
+							return A2(
+								_elm_lang$core$List$map,
+								A4(_rtfeldman$elm_css$Css_Structure$DocumentRule, _p18._0._0, _p18._0._1, _p18._0._2, _p18._0._3),
+								update(_p18._0._4));
+						case 'PageRule':
+							return declarations;
+						case 'FontFace':
+							return declarations;
+						case 'Keyframes':
+							return declarations;
+						case 'Viewport':
+							return declarations;
+						case 'CounterStyle':
+							return declarations;
+						default:
+							return declarations;
+					}
+				} else {
+					break _v15_12;
+				}
+			}
+		} while(false);
+		return {
+			ctor: '::',
+			_0: _p18._0,
+			_1: A2(_rtfeldman$elm_css$Css_Structure$concatMapLastStyleBlock, update, _p18._1)
+		};
+	});
+var _rtfeldman$elm_css$Css_Structure$StyleBlock = F3(
+	function (a, b, c) {
+		return {ctor: 'StyleBlock', _0: a, _1: b, _2: c};
+	});
+var _rtfeldman$elm_css$Css_Structure$withPropertyAppended = F2(
+	function (property, _p20) {
+		var _p21 = _p20;
+		return A3(
+			_rtfeldman$elm_css$Css_Structure$StyleBlock,
+			_p21._0,
+			_p21._1,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_p21._2,
+				{
+					ctor: '::',
+					_0: property,
+					_1: {ctor: '[]'}
+				}));
+	});
+var _rtfeldman$elm_css$Css_Structure$appendProperty = F2(
+	function (property, declarations) {
+		var _p22 = declarations;
+		if (_p22.ctor === '[]') {
+			return declarations;
+		} else {
+			if (_p22._1.ctor === '[]') {
+				switch (_p22._0.ctor) {
+					case 'StyleBlockDeclaration':
+						return {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
+								A2(_rtfeldman$elm_css$Css_Structure$withPropertyAppended, property, _p22._0._0)),
+							_1: {ctor: '[]'}
+						};
+					case 'MediaRule':
+						return {
+							ctor: '::',
+							_0: A2(
+								_rtfeldman$elm_css$Css_Structure$MediaRule,
+								_p22._0._0,
+								A2(
+									_rtfeldman$elm_css$Css_Structure$mapLast,
+									_rtfeldman$elm_css$Css_Structure$withPropertyAppended(property),
+									_p22._0._1)),
+							_1: {ctor: '[]'}
+						};
+					default:
+						return declarations;
+				}
+			} else {
+				return {
+					ctor: '::',
+					_0: _p22._0,
+					_1: A2(_rtfeldman$elm_css$Css_Structure$appendProperty, property, _p22._1)
+				};
+			}
+		}
+	});
+var _rtfeldman$elm_css$Css_Structure$appendToLastSelector = F2(
+	function (f, styleBlock) {
+		var _p23 = styleBlock;
+		if (_p23._1.ctor === '[]') {
+			var _p24 = _p23._0;
+			return {
+				ctor: '::',
+				_0: A3(
+					_rtfeldman$elm_css$Css_Structure$StyleBlock,
+					_p24,
+					{ctor: '[]'},
+					_p23._2),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_rtfeldman$elm_css$Css_Structure$StyleBlock,
+						f(_p24),
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			};
+		} else {
+			var _p26 = _p23._1;
+			var _p25 = _p23._0;
+			var newFirst = f(_p25);
+			var newRest = A2(_elm_lang$core$List$map, f, _p26);
+			return {
+				ctor: '::',
+				_0: A3(_rtfeldman$elm_css$Css_Structure$StyleBlock, _p25, _p26, _p23._2),
+				_1: {
+					ctor: '::',
+					_0: A3(
+						_rtfeldman$elm_css$Css_Structure$StyleBlock,
+						newFirst,
+						newRest,
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			};
+		}
+	});
+var _rtfeldman$elm_css$Css_Structure$MediaQuery = function (a) {
+	return {ctor: 'MediaQuery', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$Selector = F3(
+	function (a, b, c) {
+		return {ctor: 'Selector', _0: a, _1: b, _2: c};
+	});
+var _rtfeldman$elm_css$Css_Structure$applyPseudoElement = F2(
+	function (pseudo, _p27) {
+		var _p28 = _p27;
+		return A3(
+			_rtfeldman$elm_css$Css_Structure$Selector,
+			_p28._0,
+			_p28._1,
+			_elm_lang$core$Maybe$Just(pseudo));
+	});
+var _rtfeldman$elm_css$Css_Structure$appendPseudoElementToLastSelector = F2(
+	function (pseudo, styleBlock) {
+		return A2(
+			_rtfeldman$elm_css$Css_Structure$appendToLastSelector,
+			_rtfeldman$elm_css$Css_Structure$applyPseudoElement(pseudo),
+			styleBlock);
+	});
+var _rtfeldman$elm_css$Css_Structure$CustomSelector = F2(
+	function (a, b) {
+		return {ctor: 'CustomSelector', _0: a, _1: b};
+	});
+var _rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence = function (a) {
+	return {ctor: 'UniversalSelectorSequence', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$TypeSelectorSequence = F2(
+	function (a, b) {
+		return {ctor: 'TypeSelectorSequence', _0: a, _1: b};
+	});
+var _rtfeldman$elm_css$Css_Structure$appendRepeatable = F2(
+	function (selector, sequence) {
+		var _p29 = sequence;
+		switch (_p29.ctor) {
+			case 'TypeSelectorSequence':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$TypeSelectorSequence,
+					_p29._0,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_p29._1,
+						{
+							ctor: '::',
+							_0: selector,
+							_1: {ctor: '[]'}
+						}));
+			case 'UniversalSelectorSequence':
+				return _rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_p29._0,
+						{
+							ctor: '::',
+							_0: selector,
+							_1: {ctor: '[]'}
+						}));
+			default:
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$CustomSelector,
+					_p29._0,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_p29._1,
+						{
+							ctor: '::',
+							_0: selector,
+							_1: {ctor: '[]'}
+						}));
+		}
+	});
+var _rtfeldman$elm_css$Css_Structure$appendRepeatableWithCombinator = F2(
+	function (selector, list) {
+		var _p30 = list;
+		if (_p30.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			if ((_p30._0.ctor === '_Tuple2') && (_p30._1.ctor === '[]')) {
+				return {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: _p30._0._0,
+						_1: A2(_rtfeldman$elm_css$Css_Structure$appendRepeatable, selector, _p30._0._1)
+					},
+					_1: {ctor: '[]'}
+				};
+			} else {
+				return {
+					ctor: '::',
+					_0: _p30._0,
+					_1: A2(_rtfeldman$elm_css$Css_Structure$appendRepeatableWithCombinator, selector, _p30._1)
+				};
+			}
+		}
+	});
+var _rtfeldman$elm_css$Css_Structure$appendRepeatableSelector = F2(
+	function (repeatableSimpleSelector, selector) {
+		var _p31 = selector;
+		if (_p31._1.ctor === '[]') {
+			return A3(
+				_rtfeldman$elm_css$Css_Structure$Selector,
+				A2(_rtfeldman$elm_css$Css_Structure$appendRepeatable, repeatableSimpleSelector, _p31._0),
+				{ctor: '[]'},
+				_p31._2);
+		} else {
+			return A3(
+				_rtfeldman$elm_css$Css_Structure$Selector,
+				_p31._0,
+				A2(_rtfeldman$elm_css$Css_Structure$appendRepeatableWithCombinator, repeatableSimpleSelector, _p31._1),
+				_p31._2);
+		}
+	});
+var _rtfeldman$elm_css$Css_Structure$extendLastSelector = F2(
+	function (selector, declarations) {
+		var _p32 = declarations;
+		_v24_15:
+		do {
+			if (_p32.ctor === '[]') {
+				return declarations;
+			} else {
+				if (_p32._1.ctor === '[]') {
+					switch (_p32._0.ctor) {
+						case 'StyleBlockDeclaration':
+							if (_p32._0._0._1.ctor === '[]') {
+								return {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
+										A3(
+											_rtfeldman$elm_css$Css_Structure$StyleBlock,
+											A2(_rtfeldman$elm_css$Css_Structure$appendRepeatableSelector, selector, _p32._0._0._0),
+											{ctor: '[]'},
+											_p32._0._0._2)),
+									_1: {ctor: '[]'}
+								};
+							} else {
+								var newRest = A2(
+									_rtfeldman$elm_css$Css_Structure$mapLast,
+									_rtfeldman$elm_css$Css_Structure$appendRepeatableSelector(selector),
+									_p32._0._0._1);
+								return {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
+										A3(_rtfeldman$elm_css$Css_Structure$StyleBlock, _p32._0._0._0, newRest, _p32._0._0._2)),
+									_1: {ctor: '[]'}
+								};
+							}
+						case 'MediaRule':
+							if (_p32._0._1.ctor === '::') {
+								if (_p32._0._1._1.ctor === '[]') {
+									if (_p32._0._1._0._1.ctor === '[]') {
+										var newStyleBlock = A3(
+											_rtfeldman$elm_css$Css_Structure$StyleBlock,
+											A2(_rtfeldman$elm_css$Css_Structure$appendRepeatableSelector, selector, _p32._0._1._0._0),
+											{ctor: '[]'},
+											_p32._0._1._0._2);
+										return {
+											ctor: '::',
+											_0: A2(
+												_rtfeldman$elm_css$Css_Structure$MediaRule,
+												_p32._0._0,
+												{
+													ctor: '::',
+													_0: newStyleBlock,
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										};
+									} else {
+										var newRest = A2(
+											_rtfeldman$elm_css$Css_Structure$mapLast,
+											_rtfeldman$elm_css$Css_Structure$appendRepeatableSelector(selector),
+											_p32._0._1._0._1);
+										var newStyleBlock = A3(_rtfeldman$elm_css$Css_Structure$StyleBlock, _p32._0._1._0._0, newRest, _p32._0._1._0._2);
+										return {
+											ctor: '::',
+											_0: A2(
+												_rtfeldman$elm_css$Css_Structure$MediaRule,
+												_p32._0._0,
+												{
+													ctor: '::',
+													_0: newStyleBlock,
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										};
+									}
+								} else {
+									var _p33 = A2(
+										_rtfeldman$elm_css$Css_Structure$extendLastSelector,
+										selector,
+										{
+											ctor: '::',
+											_0: A2(_rtfeldman$elm_css$Css_Structure$MediaRule, _p32._0._0, _p32._0._1._1),
+											_1: {ctor: '[]'}
+										});
+									if (((_p33.ctor === '::') && (_p33._0.ctor === 'MediaRule')) && (_p33._1.ctor === '[]')) {
+										return {
+											ctor: '::',
+											_0: A2(
+												_rtfeldman$elm_css$Css_Structure$MediaRule,
+												_p33._0._0,
+												{ctor: '::', _0: _p32._0._1._0, _1: _p33._0._1}),
+											_1: {ctor: '[]'}
+										};
+									} else {
+										return _p33;
+									}
+								}
+							} else {
+								break _v24_15;
+							}
+						case 'SupportsRule':
+							return {
+								ctor: '::',
+								_0: A2(
+									_rtfeldman$elm_css$Css_Structure$SupportsRule,
+									_p32._0._0,
+									A2(_rtfeldman$elm_css$Css_Structure$extendLastSelector, selector, _p32._0._1)),
+								_1: {ctor: '[]'}
+							};
+						case 'DocumentRule':
+							if (_p32._0._4._1.ctor === '[]') {
+								var newStyleBlock = A3(
+									_rtfeldman$elm_css$Css_Structure$StyleBlock,
+									A2(_rtfeldman$elm_css$Css_Structure$appendRepeatableSelector, selector, _p32._0._4._0),
+									{ctor: '[]'},
+									_p32._0._4._2);
+								return {
+									ctor: '::',
+									_0: A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, _p32._0._0, _p32._0._1, _p32._0._2, _p32._0._3, newStyleBlock),
+									_1: {ctor: '[]'}
+								};
+							} else {
+								var newRest = A2(
+									_rtfeldman$elm_css$Css_Structure$mapLast,
+									_rtfeldman$elm_css$Css_Structure$appendRepeatableSelector(selector),
+									_p32._0._4._1);
+								var newStyleBlock = A3(_rtfeldman$elm_css$Css_Structure$StyleBlock, _p32._0._4._0, newRest, _p32._0._4._2);
+								return {
+									ctor: '::',
+									_0: A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, _p32._0._0, _p32._0._1, _p32._0._2, _p32._0._3, newStyleBlock),
+									_1: {ctor: '[]'}
+								};
+							}
+						case 'PageRule':
+							return declarations;
+						case 'FontFace':
+							return declarations;
+						case 'Keyframes':
+							return declarations;
+						case 'Viewport':
+							return declarations;
+						case 'CounterStyle':
+							return declarations;
+						default:
+							return declarations;
+					}
+				} else {
+					break _v24_15;
+				}
+			}
+		} while(false);
+		return {
+			ctor: '::',
+			_0: _p32._0,
+			_1: A2(_rtfeldman$elm_css$Css_Structure$extendLastSelector, selector, _p32._1)
+		};
+	});
+var _rtfeldman$elm_css$Css_Structure$appendRepeatableToLastSelector = F2(
+	function (selector, styleBlock) {
+		return A2(
+			_rtfeldman$elm_css$Css_Structure$appendToLastSelector,
+			_rtfeldman$elm_css$Css_Structure$appendRepeatableSelector(selector),
+			styleBlock);
+	});
+var _rtfeldman$elm_css$Css_Structure$PseudoClassSelector = function (a) {
+	return {ctor: 'PseudoClassSelector', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$IdSelector = function (a) {
+	return {ctor: 'IdSelector', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$ClassSelector = function (a) {
+	return {ctor: 'ClassSelector', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$TypeSelector = function (a) {
+	return {ctor: 'TypeSelector', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$PseudoElement = function (a) {
+	return {ctor: 'PseudoElement', _0: a};
+};
+var _rtfeldman$elm_css$Css_Structure$Descendant = {ctor: 'Descendant'};
+var _rtfeldman$elm_css$Css_Structure$Child = {ctor: 'Child'};
+var _rtfeldman$elm_css$Css_Structure$GeneralSibling = {ctor: 'GeneralSibling'};
+var _rtfeldman$elm_css$Css_Structure$AdjacentSibling = {ctor: 'AdjacentSibling'};

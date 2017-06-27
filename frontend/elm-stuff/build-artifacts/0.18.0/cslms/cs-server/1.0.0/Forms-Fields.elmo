@@ -1,0 +1,361 @@
+var _cslms$cs_server$Forms_Fields$viewErrors = F2(
+	function (attrs, errors) {
+		var attrs_ = A2(
+			_elm_lang$core$Basics_ops['++'],
+			attrs,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('error'),
+				_1: {ctor: '[]'}
+			});
+		var viewError = function (x) {
+			return A2(
+				_elm_lang$html$Html$li,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(x),
+					_1: {ctor: '[]'}
+				});
+		};
+		return A2(
+			_elm_lang$html$Html$ul,
+			attrs_,
+			A2(_elm_lang$core$List$map, viewError, errors));
+	});
+var _cslms$cs_server$Forms_Fields$toTypeString = function (tt) {
+	return _elm_lang$core$String$toLower(
+		_elm_lang$core$Basics$toString(tt));
+};
+var _cslms$cs_server$Forms_Fields$viewInput = function (_p0) {
+	var _p1 = _p0;
+	var _p4 = _p1.inputType;
+	var _p3 = _p1;
+	var value = _elm_lang$core$String$isEmpty(_p3.value) ? _p3.$default : _elm_lang$core$Maybe$Just(_p3.value);
+	var attrs = A3(
+		_cslms$cs_server$Forms_Utils$fwrapAppend,
+		_elm_lang$html$Html_Attributes$value,
+		value,
+		A3(
+			_cslms$cs_server$Forms_Utils$fwrapAppend,
+			_elm_lang$html$Html_Attributes$placeholder,
+			_p3.placeholder,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onInput(
+					_cslms$cs_server$Forms_Types$UpdateField(_p1.id)),
+				_1: {ctor: '[]'}
+			}));
+	var _p2 = _p4;
+	if (_p2.ctor === 'TextArea') {
+		return A2(
+			_elm_lang$html$Html$textarea,
+			attrs,
+			{ctor: '[]'});
+	} else {
+		return A2(
+			_elm_lang$html$Html$input,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_(
+						_cslms$cs_server$Forms_Fields$toTypeString(_p4)),
+					_1: {ctor: '[]'}
+				},
+				attrs),
+			{ctor: '[]'});
+	}
+};
+var _cslms$cs_server$Forms_Fields$viewField = function (field) {
+	var errors = function () {
+		var _p5 = field.errors;
+		if (_p5.ctor === 'Valid') {
+			return {ctor: '[]'};
+		} else {
+			return {
+				ctor: '::',
+				_0: A2(
+					_cslms$cs_server$Forms_Fields$viewErrors,
+					{ctor: '[]'},
+					_p5._0),
+				_1: {ctor: '[]'}
+			};
+		}
+	}();
+	var input = _cslms$cs_server$Forms_Fields$viewInput(field);
+	var children = A3(
+		_cslms$cs_server$Forms_Utils$fwrapAppend,
+		function (x) {
+			return A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(x),
+					_1: {ctor: '[]'}
+				});
+		},
+		field.helpText,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(field.label),
+			_1: A2(
+				_elm_lang$core$Basics_ops['++'],
+				errors,
+				{
+					ctor: '::',
+					_0: input,
+					_1: {ctor: '[]'}
+				})
+		});
+	return A2(
+		_elm_lang$html$Html$label,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('form-field'),
+			_1: {ctor: '[]'}
+		},
+		children);
+};
+var _cslms$cs_server$Forms_Fields$validateField = function (field) {
+	var errors = A2(_cslms$cs_server$Forms_Validation$validateBatch, field.validators, field.value);
+	return _elm_lang$core$Native_Utils.update(
+		field,
+		{errors: errors});
+};
+var _cslms$cs_server$Forms_Fields$getFloatValue = function (_p6) {
+	var _p7 = _p6;
+	return _elm_lang$core$String$toFloat(_p7.value);
+};
+var _cslms$cs_server$Forms_Fields$getBoolValue = function (_p8) {
+	var _p9 = _p8;
+	var _p10 = _p9.value;
+	switch (_p10) {
+		case 'true':
+			return _elm_lang$core$Result$Ok(true);
+		case 'false':
+			return _elm_lang$core$Result$Ok(false);
+		default:
+			return _elm_lang$core$Result$Err('invalid boolean value');
+	}
+};
+var _cslms$cs_server$Forms_Fields$getValue = function (_p11) {
+	var _p12 = _p11;
+	return _p12.value;
+};
+var _cslms$cs_server$Forms_Fields$resetErrors = function (state) {
+	return _elm_lang$core$Native_Utils.update(
+		state,
+		{errors: _cslms$cs_server$Forms_Validation$Valid});
+};
+var _cslms$cs_server$Forms_Fields$addErrors = F2(
+	function (errors, state) {
+		var _p13 = errors;
+		if (_p13.ctor === '[]') {
+			return state;
+		} else {
+			var errors_ = function () {
+				var _p14 = state.errors;
+				if (_p14.ctor === 'Valid') {
+					return _cslms$cs_server$Forms_Validation$Errors(errors);
+				} else {
+					return _cslms$cs_server$Forms_Validation$Errors(
+						A2(_elm_lang$core$Basics_ops['++'], errors, _p14._0));
+				}
+			}();
+			return _elm_lang$core$Native_Utils.update(
+				state,
+				{errors: errors_});
+		}
+	});
+var _cslms$cs_server$Forms_Fields$addError = F2(
+	function (error, state) {
+		return A2(
+			_cslms$cs_server$Forms_Fields$addErrors,
+			{
+				ctor: '::',
+				_0: error,
+				_1: {ctor: '[]'}
+			},
+			state);
+	});
+var _cslms$cs_server$Forms_Fields$setValue = F2(
+	function (value, state) {
+		return _elm_lang$core$Native_Utils.update(
+			state,
+			{value: value});
+	});
+var _cslms$cs_server$Forms_Fields$updateField = F2(
+	function (msg, field) {
+		var _p15 = msg;
+		switch (_p15.ctor) {
+			case 'UpdateField':
+				return _elm_lang$core$Native_Utils.eq(_p15._0, field.id) ? A2(_cslms$cs_server$Forms_Fields$setValue, _p15._1, field) : field;
+			case 'RequestValidation':
+				return _elm_lang$core$Native_Utils.eq(_p15._0, field.id) ? _cslms$cs_server$Forms_Fields$validateField(field) : field;
+			default:
+				return field;
+		}
+	});
+var _cslms$cs_server$Forms_Fields$validator = F2(
+	function (validator, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				validators: A2(
+					_elm_lang$core$Basics_ops['++'],
+					field.validators,
+					{
+						ctor: '::',
+						_0: validator,
+						_1: {ctor: '[]'}
+					})
+			});
+	});
+var _cslms$cs_server$Forms_Fields$fieldType = F2(
+	function (tt, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{inputType: tt});
+	});
+var _cslms$cs_server$Forms_Fields$label = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{label: text});
+	});
+var _cslms$cs_server$Forms_Fields$default = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				$default: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _cslms$cs_server$Forms_Fields$placeholder = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				placeholder: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _cslms$cs_server$Forms_Fields$required = F2(
+	function (required, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{required: required});
+	});
+var _cslms$cs_server$Forms_Fields$helpText = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				helpText: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _cslms$cs_server$Forms_Fields$defaultConfig = function (id) {
+	return {
+		id: id,
+		value: '',
+		label: 'Input',
+		inputType: _cslms$cs_server$Forms_Types$Text,
+		helpText: _elm_lang$core$Maybe$Nothing,
+		required: false,
+		placeholder: _elm_lang$core$Maybe$Nothing,
+		$default: _elm_lang$core$Maybe$Nothing,
+		validators: {ctor: '[]'},
+		errors: _cslms$cs_server$Forms_Validation$Valid
+	};
+};
+var _cslms$cs_server$Forms_Fields$charField = function (id) {
+	var cfg = _cslms$cs_server$Forms_Fields$defaultConfig(id);
+	return _elm_lang$core$Native_Utils.update(
+		cfg,
+		{inputType: _cslms$cs_server$Forms_Types$Text});
+};
+var _cslms$cs_server$Forms_Fields$textField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$TextArea,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$passwordField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Password,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$searchField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Search,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$booleanField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Checkbox,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$emailField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Email,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$urlField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Url,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$floatField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Number,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$integerField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Number,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$dateField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Date,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$monthField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Month,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$weekField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Week,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$timeField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Time,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$datetimeField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Datetime,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};
+var _cslms$cs_server$Forms_Fields$colorField = function (id) {
+	return A2(
+		_cslms$cs_server$Forms_Fields$fieldType,
+		_cslms$cs_server$Forms_Types$Color,
+		_cslms$cs_server$Forms_Fields$charField(id));
+};

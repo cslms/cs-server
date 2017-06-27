@@ -1,0 +1,83 @@
+var _user$project$Bricks_Serializer$tupleDecoder2 = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (a_) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (b_) {
+					return _elm_lang$core$Json_Decode$succeed(
+						{ctor: '_Tuple2', _0: a_, _1: b_});
+				},
+				A2(_elm_lang$core$Json_Decode$index, 1, _p1._1));
+		},
+		A2(_elm_lang$core$Json_Decode$index, 0, _p1._0));
+};
+var _user$project$Bricks_Serializer$attrToAttribute = function (_p2) {
+	var _p3 = _p2;
+	var _p5 = _p3._1;
+	var _p4 = _p3._0;
+	if (_p4 === 'id') {
+		return _elm_lang$html$Html_Attributes$id(_p5);
+	} else {
+		return A2(_elm_lang$html$Html_Attributes$attribute, _p4, _p5);
+	}
+};
+var _user$project$Bricks_Serializer$tagToHtml = function (tag) {
+	var _p6 = tag;
+	if (_p6 === 'a') {
+		return _elm_lang$html$Html$a;
+	} else {
+		return _elm_lang$html$Html$div;
+	}
+};
+var _user$project$Bricks_Serializer$children = function (brick) {
+	var _p7 = brick.children;
+	return _p7._0;
+};
+var _user$project$Bricks_Serializer$render = function (brick) {
+	var attrs_ = A2(_elm_lang$core$List$map, _user$project$Bricks_Serializer$attrToAttribute, brick.attrs);
+	var childrenList = _user$project$Bricks_Serializer$children(brick);
+	var elem = _user$project$Bricks_Serializer$tagToHtml(brick.tag);
+	return A2(
+		elem,
+		{ctor: '[]'},
+		A2(_elm_lang$core$List$map, _user$project$Bricks_Serializer$render, childrenList));
+};
+var _user$project$Bricks_Serializer$Brick = F3(
+	function (a, b, c) {
+		return {tag: a, attrs: b, children: c};
+	});
+var _user$project$Bricks_Serializer$Children = function (a) {
+	return {ctor: 'Children', _0: a};
+};
+var _user$project$Bricks_Serializer$brick = F3(
+	function (tag, attrs, children) {
+		return {
+			tag: tag,
+			attrs: attrs,
+			children: _user$project$Bricks_Serializer$Children(children)
+		};
+	});
+var _user$project$Bricks_Serializer$childrenDecoder = A2(
+	_elm_lang$core$Json_Decode$map,
+	_user$project$Bricks_Serializer$Children,
+	_elm_lang$core$Json_Decode$list(
+		_elm_lang$core$Json_Decode$lazy(
+			function (_p8) {
+				return _user$project$Bricks_Serializer$brickDecoder;
+			})));
+var _user$project$Bricks_Serializer$brickDecoder = A4(
+	_elm_lang$core$Json_Decode$map3,
+	_user$project$Bricks_Serializer$Brick,
+	A2(_elm_lang$core$Json_Decode$field, 'tag', _elm_lang$core$Json_Decode$string),
+	A2(
+		_elm_lang$core$Json_Decode$field,
+		'attrs',
+		_elm_lang$core$Json_Decode$list(
+			_user$project$Bricks_Serializer$tupleDecoder2(
+				{ctor: '_Tuple2', _0: _elm_lang$core$Json_Decode$string, _1: _elm_lang$core$Json_Decode$string}))),
+	A2(_elm_lang$core$Json_Decode$field, 'children', _user$project$Bricks_Serializer$childrenDecoder));
+var _user$project$Bricks_Serializer$fromJson = function (data) {
+	return A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Bricks_Serializer$brickDecoder, data);
+};

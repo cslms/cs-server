@@ -1,0 +1,185 @@
+var _cslms$cs_server$App$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{ctor: '[]'});
+};
+var _cslms$cs_server$App$update = F2(
+	function (msg_, form) {
+		var _p0 = msg_;
+		if (_p0.ctor === 'Form') {
+			var data = A2(_cslms$cs_server$Forms_Form$updateForm, _p0._0, form.userForm);
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					form,
+					{userForm: data}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return {ctor: '_Tuple2', _0: form, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _cslms$cs_server$App$formstr = '\n{\n    \"action\": \"/foo/bar\",\n    \"fields\": [\n        {\n            \"id\": \"name\",\n            \"value\": \"name\",\n            \"label\": \"Name\",\n            \"helpText\" : \"Username or password\",\n            \"inputType\": \"text\"\n        },\n        {\n            \"id\": \"password\",\n            \"value\": \"password\",\n            \"label\": \"Password\",\n            \"inputType\": \"password\"\n        }\n    ]\n}\n';
+var _cslms$cs_server$App$Model = F2(
+	function (a, b) {
+		return {userForm: a, loginForm: b};
+	});
+var _cslms$cs_server$App$Float = {ctor: 'Float'};
+var _cslms$cs_server$App$FullText = {ctor: 'FullText'};
+var _cslms$cs_server$App$Password = {ctor: 'Password'};
+var _cslms$cs_server$App$Email = {ctor: 'Email'};
+var _cslms$cs_server$App$loginForm = A2(
+	_cslms$cs_server$Forms_Form$form,
+	{
+		ctor: '::',
+		_0: _cslms$cs_server$Forms_Form$action('/api/form/1'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_cslms$cs_server$Forms_Fields$helpText,
+			'Do something new',
+			A2(
+				_cslms$cs_server$Forms_Fields$default,
+				'user',
+				A2(
+					_cslms$cs_server$Forms_Fields$label,
+					'Username or e-mail',
+					_cslms$cs_server$Forms_Fields$charField(_cslms$cs_server$App$Email)))),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_cslms$cs_server$Forms_Fields$validator,
+				A2(_cslms$cs_server$Forms_Validation$maxValue, 10, 'Value must be smaller than 10'),
+				A2(
+					_cslms$cs_server$Forms_Fields$placeholder,
+					'some number',
+					A2(
+						_cslms$cs_server$Forms_Fields$label,
+						'Number',
+						_cslms$cs_server$Forms_Fields$floatField(_cslms$cs_server$App$Float)))),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_cslms$cs_server$Forms_Fields$placeholder,
+					'1234',
+					A2(
+						_cslms$cs_server$Forms_Fields$label,
+						'Password',
+						_cslms$cs_server$Forms_Fields$passwordField(_cslms$cs_server$App$Password))),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_cslms$cs_server$Forms_Fields$placeholder,
+						'enter your code here',
+						A2(
+							_cslms$cs_server$Forms_Fields$label,
+							'Code',
+							_cslms$cs_server$Forms_Fields$textField(_cslms$cs_server$App$FullText))),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	});
+var _cslms$cs_server$App$init = {
+	ctor: '_Tuple2',
+	_0: {userForm: _cslms$cs_server$App$loginForm, loginForm: _cslms$cs_server$Forms_Examples$loginByEmail},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _cslms$cs_server$App$JsonFormMsg = function (a) {
+	return {ctor: 'JsonFormMsg', _0: a};
+};
+var _cslms$cs_server$App$LoginForm = function (a) {
+	return {ctor: 'LoginForm', _0: a};
+};
+var _cslms$cs_server$App$Form = function (a) {
+	return {ctor: 'Form', _0: a};
+};
+var _cslms$cs_server$App$view = function (model) {
+	var head = {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h2,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('First form'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$map,
+				_cslms$cs_server$App$Form,
+				_cslms$cs_server$Forms_Form$viewForm(model.userForm)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h2,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Second form'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$map,
+						_cslms$cs_server$App$LoginForm,
+						_cslms$cs_server$Forms_Form$viewForm(model.loginForm)),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+	var tail = function () {
+		var _p1 = _cslms$cs_server$Forms_JsonDecode$fromJson(_cslms$cs_server$App$formstr);
+		if (_p1.ctor === 'Ok') {
+			return {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$map,
+					_cslms$cs_server$App$JsonFormMsg,
+					A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _cslms$cs_server$Forms_Form$viewForm(_p1._0),
+							_1: {ctor: '[]'}
+						})),
+				_1: {ctor: '[]'}
+			};
+		} else {
+			return {ctor: '[]'};
+		}
+	}();
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'width', _1: '500px'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'margin', _1: 'auto auto'},
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$Basics_ops['++'], head, tail));
+};
+var _cslms$cs_server$App$main = _elm_lang$html$Html$programWithFlags(
+	{
+		view: _cslms$cs_server$App$view,
+		init: function (flags) {
+			return _cslms$cs_server$App$init;
+		},
+		update: _cslms$cs_server$App$update,
+		subscriptions: _cslms$cs_server$App$subscriptions
+	})(_elm_lang$core$Json_Decode$string);
+var _cslms$cs_server$App$NoOp = {ctor: 'NoOp'};

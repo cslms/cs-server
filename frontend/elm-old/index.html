@@ -1,0 +1,35 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>a title</title>
+<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700|Roboto|Roboto+Mono" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+  crossorigin="anonymous">
+<!--link rel="stylesheet" href="https://bootswatch.com/paper/bootstrap.min.css" crossorigin="anonymous"-->
+<link rel="stylesheet" type="text/css" href="dist/css/bootstrap-material-design.css">
+<link rel="stylesheet" type="text/css" href="dist/css/ripples.min.css">
+
+
+<link href=/static/main.css rel=stylesheet>
+<script src="/static/main.js"></script>
+
+<body></body>
+<script src="/_compile/App.elm"></script>
+<!-- this will fail in production -->
+<!--script src="/elm-bundle.js"></script> <!-- this will fail in development -->
+
+<script>
+  var app
+  var flags = {}
+
+  try {
+    app = Elm.App.fullscreen(flags)
+    /* app.ports is now available */
+  } catch (e) {
+    runElmProgram();
+  }
+
+</script>

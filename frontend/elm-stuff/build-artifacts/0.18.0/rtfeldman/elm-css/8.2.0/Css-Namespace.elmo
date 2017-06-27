@@ -1,0 +1,208 @@
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToProperty = F2(
+	function (name, property) {
+		var _p0 = property.key;
+		if (_p0 === 'animation-name') {
+			return _elm_lang$core$Native_Utils.update(
+				property,
+				{
+					value: A2(_elm_lang$core$Basics_ops['++'], name, property.value)
+				});
+		} else {
+			return property;
+		}
+	});
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToRepeatable = F2(
+	function (name, selector) {
+		var _p1 = selector;
+		switch (_p1.ctor) {
+			case 'ClassSelector':
+				return _rtfeldman$elm_css$Css_Structure$ClassSelector(
+					A2(_elm_lang$core$Basics_ops['++'], name, _p1._0));
+			case 'IdSelector':
+				return _rtfeldman$elm_css$Css_Structure$IdSelector(_p1._0);
+			default:
+				return _rtfeldman$elm_css$Css_Structure$PseudoClassSelector(_p1._0);
+		}
+	});
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToSequence = F2(
+	function (name, sequence) {
+		var _p2 = sequence;
+		switch (_p2.ctor) {
+			case 'TypeSelectorSequence':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$TypeSelectorSequence,
+					_p2._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToRepeatable(name),
+						_p2._1));
+			case 'UniversalSelectorSequence':
+				return _rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToRepeatable(name),
+						_p2._0));
+			default:
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$CustomSelector,
+					_p2._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToRepeatable(name),
+						_p2._1));
+		}
+	});
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToSelector = F2(
+	function (name, _p3) {
+		var _p4 = _p3;
+		var apply = _rtfeldman$elm_css$Css_Namespace$applyNamespaceToSequence(name);
+		return A3(
+			_rtfeldman$elm_css$Css_Structure$Selector,
+			apply(_p4._0),
+			A2(
+				_elm_lang$core$List$map,
+				function (_p5) {
+					var _p6 = _p5;
+					return {
+						ctor: '_Tuple2',
+						_0: _p6._0,
+						_1: apply(_p6._1)
+					};
+				},
+				_p4._1),
+			_p4._2);
+	});
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToMixin = F2(
+	function (name, mixin) {
+		var _p7 = mixin;
+		switch (_p7.ctor) {
+			case 'AppendProperty':
+				return _rtfeldman$elm_css$Css_Preprocess$AppendProperty(
+					A2(_rtfeldman$elm_css$Css_Namespace$applyNamespaceToProperty, name, _p7._0));
+			case 'ExtendSelector':
+				return A2(
+					_rtfeldman$elm_css$Css_Preprocess$ExtendSelector,
+					A2(_rtfeldman$elm_css$Css_Namespace$applyNamespaceToRepeatable, name, _p7._0),
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToMixin(name),
+						_p7._1));
+			case 'NestSnippet':
+				return A2(
+					_rtfeldman$elm_css$Css_Preprocess$NestSnippet,
+					_p7._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToSnippet(name),
+						_p7._1));
+			case 'WithPseudoElement':
+				return A2(
+					_rtfeldman$elm_css$Css_Preprocess$WithPseudoElement,
+					_p7._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToMixin(name),
+						_p7._1));
+			case 'WithMedia':
+				return A2(
+					_rtfeldman$elm_css$Css_Preprocess$WithMedia,
+					_p7._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToMixin(name),
+						_p7._1));
+			default:
+				return _rtfeldman$elm_css$Css_Preprocess$ApplyMixins(
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToMixin(name),
+						_p7._0));
+		}
+	});
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToSnippet = F2(
+	function (name, _p8) {
+		var _p9 = _p8;
+		return _rtfeldman$elm_css$Css_Preprocess$Snippet(
+			A2(
+				_elm_lang$core$List$map,
+				_rtfeldman$elm_css$Css_Namespace$applyNamespaceToDeclaration(name),
+				_p9._0));
+	});
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToDeclaration = F2(
+	function (name, declaration) {
+		var _p10 = declaration;
+		switch (_p10.ctor) {
+			case 'StyleBlockDeclaration':
+				return _rtfeldman$elm_css$Css_Preprocess$StyleBlockDeclaration(
+					A2(_rtfeldman$elm_css$Css_Namespace$applyNamespaceToStyleBlock, name, _p10._0));
+			case 'MediaRule':
+				return A2(
+					_rtfeldman$elm_css$Css_Preprocess$MediaRule,
+					_p10._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Namespace$applyNamespaceToStyleBlock(name),
+						_p10._1));
+			case 'SupportsRule':
+				return A2(
+					_rtfeldman$elm_css$Css_Preprocess$SupportsRule,
+					_p10._0,
+					function (declarations) {
+						return {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css_Preprocess$Snippet(declarations),
+							_1: {ctor: '[]'}
+						};
+					}(
+						A2(
+							_elm_lang$core$List$map,
+							_rtfeldman$elm_css$Css_Namespace$applyNamespaceToDeclaration(name),
+							A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, _p10._1))));
+			case 'DocumentRule':
+				return A5(
+					_rtfeldman$elm_css$Css_Preprocess$DocumentRule,
+					_p10._0,
+					_p10._1,
+					_p10._2,
+					_p10._3,
+					A2(_rtfeldman$elm_css$Css_Namespace$applyNamespaceToStyleBlock, name, _p10._4));
+			case 'PageRule':
+				return declaration;
+			case 'FontFace':
+				return declaration;
+			case 'Keyframes':
+				return A2(
+					_rtfeldman$elm_css$Css_Preprocess$Keyframes,
+					A2(_elm_lang$core$Basics_ops['++'], name, _p10._0),
+					_p10._1);
+			case 'Viewport':
+				return declaration;
+			case 'CounterStyle':
+				return declaration;
+			default:
+				return declaration;
+		}
+	});
+var _rtfeldman$elm_css$Css_Namespace$applyNamespaceToStyleBlock = F2(
+	function (name, _p11) {
+		var _p12 = _p11;
+		return A3(
+			_rtfeldman$elm_css$Css_Preprocess$StyleBlock,
+			A2(_rtfeldman$elm_css$Css_Namespace$applyNamespaceToSelector, name, _p12._0),
+			A2(
+				_elm_lang$core$List$map,
+				_rtfeldman$elm_css$Css_Namespace$applyNamespaceToSelector(name),
+				_p12._1),
+			A2(
+				_elm_lang$core$List$map,
+				_rtfeldman$elm_css$Css_Namespace$applyNamespaceToMixin(name),
+				_p12._2));
+	});
+var _rtfeldman$elm_css$Css_Namespace$namespace = F2(
+	function (rawIdentifier, snippets) {
+		return A2(
+			_elm_lang$core$List$map,
+			_rtfeldman$elm_css$Css_Namespace$applyNamespaceToSnippet(
+				_rtfeldman$elm_css_util$Css_Helpers$toCssIdentifier(rawIdentifier)),
+			snippets);
+	});

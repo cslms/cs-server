@@ -1,0 +1,67 @@
+var _cslms$cs_server$Main$numericCmp = F3(
+	function (v, op, num) {
+		var _p0 = v;
+		switch (_p0.ctor) {
+			case 'Int':
+				return A2(
+					op,
+					_elm_lang$core$Basics$toFloat(_p0._0),
+					num);
+			case 'Float':
+				return A2(op, _p0._0, num);
+			default:
+				return false;
+		}
+	});
+var _cslms$cs_server$Main$isEmpty = function (v) {
+	var _p1 = v;
+	switch (_p1.ctor) {
+		case 'Str':
+			return _elm_lang$core$String$isEmpty(_p1._0);
+		case 'Empty':
+			return true;
+		default:
+			return false;
+	}
+};
+var _cslms$cs_server$Main$toFloat = function (v) {
+	var _p2 = v;
+	switch (_p2.ctor) {
+		case 'Float':
+			return _elm_lang$core$Result$Ok(_p2._0);
+		case 'Int':
+			return _elm_lang$core$Result$Ok(
+				_elm_lang$core$Basics$toFloat(_p2._0));
+		default:
+			return _elm_lang$core$Result$Err('value is not numeric');
+	}
+};
+var _cslms$cs_server$Main$toString = function (v) {
+	var _p3 = v;
+	switch (_p3.ctor) {
+		case 'Empty':
+			return '';
+		case 'Str':
+			return _p3._0;
+		case 'Float':
+			return _elm_lang$core$Basics$toString(_p3._0);
+		case 'Int':
+			return _elm_lang$core$Basics$toString(_p3._0);
+		default:
+			return _elm_lang$core$Basics$toString(
+				A2(_elm_lang$core$List$map, _cslms$cs_server$Main$toString, _p3._0));
+	}
+};
+var _cslms$cs_server$Main$List = function (a) {
+	return {ctor: 'List', _0: a};
+};
+var _cslms$cs_server$Main$Float = function (a) {
+	return {ctor: 'Float', _0: a};
+};
+var _cslms$cs_server$Main$Int = function (a) {
+	return {ctor: 'Int', _0: a};
+};
+var _cslms$cs_server$Main$Str = function (a) {
+	return {ctor: 'Str', _0: a};
+};
+var _cslms$cs_server$Main$Empty = {ctor: 'Empty'};

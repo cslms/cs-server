@@ -1,0 +1,235 @@
+var _fabiommendes$elm_forms$Forms_JsonEncode_ops = _fabiommendes$elm_forms$Forms_JsonEncode_ops || {};
+_fabiommendes$elm_forms$Forms_JsonEncode_ops['?'] = F2(
+	function (enc, x) {
+		var _p0 = x;
+		if (_p0.ctor === 'Nothing') {
+			return _elm_lang$core$Json_Encode$null;
+		} else {
+			return enc(_p0._0);
+		}
+	});
+var _fabiommendes$elm_forms$Forms_JsonEncode$jsonFormtoValue = function (form) {
+	var validator = function (val) {
+		var fullobject = F2(
+			function (err, tail) {
+				var _p1 = _fabiommendes$elm_forms$Forms_Validation$validatorInfo(val);
+				var ref = _p1._0;
+				var head = {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'validator',
+						_1: _elm_lang$core$Json_Encode$string(ref)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'msg',
+							_1: _elm_lang$core$Json_Encode$string(err)
+						},
+						_1: {ctor: '[]'}
+					}
+				};
+				return _elm_lang$core$Json_Encode$object(
+					A2(_elm_lang$core$Basics_ops['++'], head, tail));
+			});
+		var simpleobject = function (err) {
+			return A2(
+				fullobject,
+				err,
+				{ctor: '[]'});
+		};
+		var valueobject = F2(
+			function (err, value) {
+				return A2(
+					fullobject,
+					err,
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'value', _1: value},
+						_1: {ctor: '[]'}
+					});
+			});
+		var _p2 = val;
+		switch (_p2.ctor) {
+			case 'MinLength':
+				return A2(
+					valueobject,
+					_p2._0,
+					_elm_lang$core$Json_Encode$int(_p2._1.value));
+			case 'MaxLength':
+				return A2(
+					valueobject,
+					_p2._0,
+					_elm_lang$core$Json_Encode$int(_p2._1.value));
+			case 'MinValue':
+				return A2(
+					valueobject,
+					_p2._0,
+					_elm_lang$core$Json_Encode$float(_p2._1.value));
+			default:
+				return A2(
+					valueobject,
+					_p2._0,
+					_elm_lang$core$Json_Encode$float(_p2._1.value));
+		}
+	};
+	var error = function (err) {
+		var _p3 = err;
+		if (_p3.ctor === 'Valid') {
+			return _elm_lang$core$Json_Encode$list(
+				{ctor: '[]'});
+		} else {
+			return _elm_lang$core$Json_Encode$list(
+				A2(_elm_lang$core$List$map, _elm_lang$core$Json_Encode$string, _p3._0));
+		}
+	};
+	var field = function (f) {
+		return _elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'id',
+					_1: _elm_lang$core$Json_Encode$string(
+						_elm_lang$core$String$toLower(f.id))
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'value',
+						_1: _elm_lang$core$Json_Encode$string(f.value)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'label',
+							_1: _elm_lang$core$Json_Encode$string(f.label)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'type',
+								_1: _elm_lang$core$Json_Encode$string(
+									_elm_lang$core$String$toLower(
+										_elm_lang$core$Basics$toString(f.which)))
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'required',
+									_1: _elm_lang$core$Json_Encode$bool(f.required)
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'requiredMessage',
+										_1: _elm_lang$core$Json_Encode$string(f.requiredMessage)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'validators',
+											_1: _elm_lang$core$Json_Encode$list(
+												A2(_elm_lang$core$List$map, validator, f.validators))
+										},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'errors',
+												_1: error(f.errors)
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'default',
+													_1: A2(_fabiommendes$elm_forms$Forms_JsonEncode_ops['?'], _elm_lang$core$Json_Encode$string, f.$default)
+												},
+												_1: {
+													ctor: '::',
+													_0: {
+														ctor: '_Tuple2',
+														_0: 'helpText',
+														_1: A2(_fabiommendes$elm_forms$Forms_JsonEncode_ops['?'], _elm_lang$core$Json_Encode$string, f.helpText)
+													},
+													_1: {
+														ctor: '::',
+														_0: {
+															ctor: '_Tuple2',
+															_0: 'placeholder',
+															_1: A2(_fabiommendes$elm_forms$Forms_JsonEncode_ops['?'], _elm_lang$core$Json_Encode$string, f.placeholder)
+														},
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+	};
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'action',
+				_1: A2(_fabiommendes$elm_forms$Forms_JsonEncode_ops['?'], _elm_lang$core$Json_Encode$string, form.action)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'fields',
+					_1: _elm_lang$core$Json_Encode$list(
+						A2(_elm_lang$core$List$map, field, form.fields))
+				},
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _fabiommendes$elm_forms$Forms_JsonEncode$toJsonField = function (field) {
+	return {
+		id: _elm_lang$core$Basics$toString(field.id),
+		value: field.value,
+		label: field.label,
+		which: field.which,
+		$default: field.$default,
+		helpText: field.helpText,
+		placeholder: field.placeholder,
+		required: field.required,
+		requiredMessage: field.requiredMessage,
+		validators: field.validators,
+		errors: field.errors
+	};
+};
+var _fabiommendes$elm_forms$Forms_JsonEncode$toJsonForm = function (form) {
+	return {
+		action: form.action,
+		fields: A2(_elm_lang$core$List$map, _fabiommendes$elm_forms$Forms_JsonEncode$toJsonField, form.fields)
+	};
+};
+var _fabiommendes$elm_forms$Forms_JsonEncode$toValue = function (form) {
+	return _fabiommendes$elm_forms$Forms_JsonEncode$jsonFormtoValue(
+		_fabiommendes$elm_forms$Forms_JsonEncode$toJsonForm(form));
+};
+var _fabiommendes$elm_forms$Forms_JsonEncode$encode = F2(
+	function (n, form) {
+		return A2(
+			_elm_lang$core$Json_Encode$encode,
+			n,
+			_fabiommendes$elm_forms$Forms_JsonEncode$toValue(form));
+	});

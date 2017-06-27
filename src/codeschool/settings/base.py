@@ -131,6 +131,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 ANONYMOUS_USER_ID = 1
+AUTH_USER_MODEL = 'users.User'
 AUTH_PROFILE_MODULE = 'accounts.Profile'
 
 # Social authentication
@@ -151,7 +152,8 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_TWITTER_KEY = 'JrIVXbXZguPeUsnqcjtbQEWXH'
 SOCIAL_AUTH_TWITTER_SECRET = 'vMZjdO7DsUV8mVo46smQK2SHyhCxnXyc24gxH6J6cH08anWqHA'
 
-# Userena support
+# Accounts and users
+
 
 USERENA_ACTIVATION_REQUIRED = False
 USERENA_SIGNIN_AFTER_SIGNUP = True

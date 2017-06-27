@@ -3,7 +3,7 @@ import logging
 import ejudge
 from annoying.functions import get_config
 
-from codeschool.core.models import ProgrammingLanguage
+from codeschool.core.files.models import ProgrammingLanguage
 
 
 def ejudge_kwargs(lang, timeout):

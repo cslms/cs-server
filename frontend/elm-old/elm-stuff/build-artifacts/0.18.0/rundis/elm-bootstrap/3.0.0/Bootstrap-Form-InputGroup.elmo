@@ -1,0 +1,164 @@
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$sizeAttribute = function (size) {
+	return A2(
+		_elm_lang$core$Maybe$map,
+		function (s) {
+			return _elm_lang$html$Html_Attributes$class(
+				A2(_elm_lang$core$Basics_ops['++'], 'input-group-', s));
+		},
+		_rundis$elm_bootstrap$Bootstrap_Grid_Internal$screenSizeOption(size));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$view = function (_p0) {
+	var _p1 = _p0;
+	var _p7 = _p1._0;
+	var _p2 = _p7.input;
+	var input = _p2._0;
+	return A2(
+		_elm_lang$html$Html$div,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('input-group'),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				A2(
+					_elm_lang$core$List$filterMap,
+					_elm_lang$core$Basics$identity,
+					{
+						ctor: '::',
+						_0: A2(_elm_lang$core$Maybe$andThen, _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$sizeAttribute, _p7.size),
+						_1: {ctor: '[]'}
+					}),
+				_p7.attributes)),
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$map,
+				function (_p3) {
+					var _p4 = _p3;
+					return _p4._0;
+				},
+				_p7.predecessors),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: input,
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$List$map,
+					function (_p5) {
+						var _p6 = _p5;
+						return _p6._0;
+					},
+					_p7.successors))));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Config = function (a) {
+	return {ctor: 'Config', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$config = function (input) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Config(
+		{
+			input: input,
+			predecessors: {ctor: '[]'},
+			successors: {ctor: '[]'},
+			size: _elm_lang$core$Maybe$Nothing,
+			attributes: {ctor: '[]'}
+		});
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$predecessors = F2(
+	function (addons, _p8) {
+		var _p9 = _p8;
+		return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p9._0,
+				{predecessors: addons}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$successors = F2(
+	function (addons, _p10) {
+		var _p11 = _p10;
+		return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p11._0,
+				{successors: addons}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$large = function (_p12) {
+	var _p13 = _p12;
+	return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Config(
+		_elm_lang$core$Native_Utils.update(
+			_p13._0,
+			{
+				size: _elm_lang$core$Maybe$Just(_rundis$elm_bootstrap$Bootstrap_Grid_Internal$LG)
+			}));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$small = function (_p14) {
+	var _p15 = _p14;
+	return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Config(
+		_elm_lang$core$Native_Utils.update(
+			_p15._0,
+			{
+				size: _elm_lang$core$Maybe$Just(_rundis$elm_bootstrap$Bootstrap_Grid_Internal$SM)
+			}));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$attrs = F2(
+	function (attributes, _p16) {
+		var _p17 = _p16;
+		return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p17._0,
+				{attributes: attributes}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Input = function (a) {
+	return {ctor: 'Input', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input = F2(
+	function (inputFn, options) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Input(
+			inputFn(options));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$text = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$text);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$password = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$password);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$datetimeLocal = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$datetimeLocal);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$date = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$date);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$month = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$month);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$time = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$time);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$week = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$week);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$number = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$number);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$email = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$email);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$url = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$url);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$search = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$search);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$tel = _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$input(_rundis$elm_bootstrap$Bootstrap_Form_Input$tel);
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Addon = function (a) {
+	return {ctor: 'Addon', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$span = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Addon(
+			A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('input-group-addon'),
+					_1: attributes
+				},
+				children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$button = F2(
+	function (options, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_InputGroup$Addon(
+			A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('input-group-btn'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(_rundis$elm_bootstrap$Bootstrap_Button$button, options, children),
+					_1: {ctor: '[]'}
+				}));
+	});

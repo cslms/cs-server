@@ -1,0 +1,151 @@
+var _rundis$elm_bootstrap$Bootstrap_Badge$roleOption = function (role) {
+	var _p0 = role;
+	switch (_p0.ctor) {
+		case 'Default':
+			return 'badge-default';
+		case 'Primary':
+			return 'badge-primary';
+		case 'Success':
+			return 'badge-success';
+		case 'Info':
+			return 'badge-info';
+		case 'Warning':
+			return 'badge-warning';
+		default:
+			return 'badge-danger';
+	}
+};
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgeClass = function (option) {
+	return _elm_lang$html$Html_Attributes$class(
+		function () {
+			var _p1 = option;
+			if (_p1.ctor === 'Pill') {
+				return 'badge-pill';
+			} else {
+				return _rundis$elm_bootstrap$Bootstrap_Badge$roleOption(_p1._0);
+			}
+		}());
+};
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgeAttributes = function (options) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('badge'),
+		_1: A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_Badge$badgeClass, options)
+	};
+};
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal = F3(
+	function (options, attributes, children) {
+		return A2(
+			_elm_lang$html$Html$span,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_rundis$elm_bootstrap$Bootstrap_Badge$badgeAttributes(options),
+				attributes),
+			children);
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$Danger = {ctor: 'Danger'};
+var _rundis$elm_bootstrap$Bootstrap_Badge$Warning = {ctor: 'Warning'};
+var _rundis$elm_bootstrap$Bootstrap_Badge$Info = {ctor: 'Info'};
+var _rundis$elm_bootstrap$Bootstrap_Badge$Success = {ctor: 'Success'};
+var _rundis$elm_bootstrap$Bootstrap_Badge$Primary = {ctor: 'Primary'};
+var _rundis$elm_bootstrap$Bootstrap_Badge$Default = {ctor: 'Default'};
+var _rundis$elm_bootstrap$Bootstrap_Badge$Pill = {ctor: 'Pill'};
+var _rundis$elm_bootstrap$Bootstrap_Badge$Roled = function (a) {
+	return {ctor: 'Roled', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Badge$badge = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Default),
+		_1: {ctor: '[]'}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgePrimary = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Primary),
+		_1: {ctor: '[]'}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgeSuccess = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Success),
+		_1: {ctor: '[]'}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgeInfo = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Info),
+		_1: {ctor: '[]'}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgeWarning = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Warning),
+		_1: {ctor: '[]'}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$badgeDanger = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Danger),
+		_1: {ctor: '[]'}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$pill = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Default),
+		_1: {
+			ctor: '::',
+			_0: _rundis$elm_bootstrap$Bootstrap_Badge$Pill,
+			_1: {ctor: '[]'}
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$pillPrimary = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Primary),
+		_1: {
+			ctor: '::',
+			_0: _rundis$elm_bootstrap$Bootstrap_Badge$Pill,
+			_1: {ctor: '[]'}
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$pillSuccess = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Success),
+		_1: {
+			ctor: '::',
+			_0: _rundis$elm_bootstrap$Bootstrap_Badge$Pill,
+			_1: {ctor: '[]'}
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$pillInfo = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Info),
+		_1: {
+			ctor: '::',
+			_0: _rundis$elm_bootstrap$Bootstrap_Badge$Pill,
+			_1: {ctor: '[]'}
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$pillWarning = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Warning),
+		_1: {
+			ctor: '::',
+			_0: _rundis$elm_bootstrap$Bootstrap_Badge$Pill,
+			_1: {ctor: '[]'}
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Badge$pillDanger = _rundis$elm_bootstrap$Bootstrap_Badge$badgeInternal(
+	{
+		ctor: '::',
+		_0: _rundis$elm_bootstrap$Bootstrap_Badge$Roled(_rundis$elm_bootstrap$Bootstrap_Badge$Danger),
+		_1: {
+			ctor: '::',
+			_0: _rundis$elm_bootstrap$Bootstrap_Badge$Pill,
+			_1: {ctor: '[]'}
+		}
+	});

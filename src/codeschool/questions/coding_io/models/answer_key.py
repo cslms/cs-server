@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models, panels
-from codeschool.core.models import ProgrammingLanguage
+from codeschool.core.files.models import ProgrammingLanguage
 from codeschool.questions.coding_io.models import CodingIoQuestion
 from codeschool.utils.string import md5hash
 

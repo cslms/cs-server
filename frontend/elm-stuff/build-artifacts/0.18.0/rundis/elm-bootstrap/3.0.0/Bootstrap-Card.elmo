@@ -1,0 +1,367 @@
+var _rundis$elm_bootstrap$Bootstrap_Card$title = F3(
+	function (elemFn, attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockItem(
+			A2(
+				elemFn,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('card-title'),
+					_1: attributes
+				},
+				children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$titleH6 = _rundis$elm_bootstrap$Bootstrap_Card$title(_elm_lang$html$Html$h6);
+var _rundis$elm_bootstrap$Bootstrap_Card$titleH5 = _rundis$elm_bootstrap$Bootstrap_Card$title(_elm_lang$html$Html$h5);
+var _rundis$elm_bootstrap$Bootstrap_Card$titleH4 = _rundis$elm_bootstrap$Bootstrap_Card$title(_elm_lang$html$Html$h4);
+var _rundis$elm_bootstrap$Bootstrap_Card$titleH3 = _rundis$elm_bootstrap$Bootstrap_Card$title(_elm_lang$html$Html$h3);
+var _rundis$elm_bootstrap$Bootstrap_Card$titleH2 = _rundis$elm_bootstrap$Bootstrap_Card$title(_elm_lang$html$Html$h2);
+var _rundis$elm_bootstrap$Bootstrap_Card$titleH1 = _rundis$elm_bootstrap$Bootstrap_Card$title(_elm_lang$html$Html$h1);
+var _rundis$elm_bootstrap$Bootstrap_Card$blockQuote = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockItem(
+			A2(
+				_elm_lang$html$Html$blockquote,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('card-blockquote'),
+						_1: {ctor: '[]'}
+					},
+					attributes),
+				children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$custom = function (element) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockItem(element);
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$text = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockItem(
+			A2(
+				_elm_lang$html$Html$p,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('card-text'),
+						_1: {ctor: '[]'}
+					},
+					attributes),
+				children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$link = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockItem(
+			A2(
+				_elm_lang$html$Html$a,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('card-link'),
+						_1: {ctor: '[]'}
+					},
+					attributes),
+				children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$blockAttrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_Card$BlockAttrs(attrs);
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$blockAlign = function (align) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_Card$AlignedBlock(align);
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$view = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$html$Html$div,
+		_rundis$elm_bootstrap$Bootstrap_Internal_Card$cardAttributes(_p1._0.options),
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$map,
+						function (_p2) {
+							var _p3 = _p2;
+							return _p3._0;
+						},
+						_p1._0.header),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							function (_p4) {
+								var _p5 = _p4;
+								return _p5._0;
+							},
+							_p1._0.imgTop),
+						_1: {ctor: '[]'}
+					}
+				}),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_rundis$elm_bootstrap$Bootstrap_Internal_Card$renderBlocks(_p1._0.blocks),
+				A2(
+					_elm_lang$core$List$filterMap,
+					_elm_lang$core$Basics$identity,
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							function (_p6) {
+								var _p7 = _p6;
+								return _p7._0;
+							},
+							_p1._0.footer),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$map,
+								function (_p8) {
+									var _p9 = _p8;
+									return _p9._0;
+								},
+								_p1._0.imgBottom),
+							_1: {ctor: '[]'}
+						}
+					}))));
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$group = function (cards) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('card-group'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_Card$view, cards));
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$deck = function (cards) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('card-deck'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_Card$view, cards));
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$columns = function (cards) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('card-columns'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_Card$view, cards));
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$keyedMulti = F2(
+	function (clazz, keyedCards) {
+		return A3(
+			_elm_lang$html$Html_Keyed$node,
+			'div',
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class(clazz),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$map,
+				function (_p10) {
+					var _p11 = _p10;
+					return {
+						ctor: '_Tuple2',
+						_0: _p11._0,
+						_1: _rundis$elm_bootstrap$Bootstrap_Card$view(_p11._1)
+					};
+				},
+				keyedCards));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$keyedGroup = _rundis$elm_bootstrap$Bootstrap_Card$keyedMulti('card-group');
+var _rundis$elm_bootstrap$Bootstrap_Card$keyedDeck = _rundis$elm_bootstrap$Bootstrap_Card$keyedMulti('card-deck');
+var _rundis$elm_bootstrap$Bootstrap_Card$keyedColumns = _rundis$elm_bootstrap$Bootstrap_Card$keyedMulti('card-columns');
+var _rundis$elm_bootstrap$Bootstrap_Card$attrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_Card$Attrs(attrs);
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$inverted = function (color) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+		_rundis$elm_bootstrap$Bootstrap_Internal_Card$Inverted(color));
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$outlineDanger = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Outlined(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Danger));
+var _rundis$elm_bootstrap$Bootstrap_Card$outlineWarning = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Outlined(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Warning));
+var _rundis$elm_bootstrap$Bootstrap_Card$outlineInfo = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Outlined(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Info));
+var _rundis$elm_bootstrap$Bootstrap_Card$outlineSuccess = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Outlined(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Success));
+var _rundis$elm_bootstrap$Bootstrap_Card$outlinePrimary = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Outlined(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Primary));
+var _rundis$elm_bootstrap$Bootstrap_Card$danger = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Danger));
+var _rundis$elm_bootstrap$Bootstrap_Card$warning = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Warning));
+var _rundis$elm_bootstrap$Bootstrap_Card$info = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Info));
+var _rundis$elm_bootstrap$Bootstrap_Card$success = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Success));
+var _rundis$elm_bootstrap$Bootstrap_Card$primary = _rundis$elm_bootstrap$Bootstrap_Internal_Card$Coloring(
+	_rundis$elm_bootstrap$Bootstrap_Internal_Card$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_Card$Primary));
+var _rundis$elm_bootstrap$Bootstrap_Card$align = function (align) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_Card$Aligned(align);
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$Config = function (a) {
+	return {ctor: 'Config', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$config = function (options) {
+	return _rundis$elm_bootstrap$Bootstrap_Card$Config(
+		{
+			options: options,
+			header: _elm_lang$core$Maybe$Nothing,
+			footer: _elm_lang$core$Maybe$Nothing,
+			imgTop: _elm_lang$core$Maybe$Nothing,
+			imgBottom: _elm_lang$core$Maybe$Nothing,
+			blocks: {ctor: '[]'}
+		});
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$block = F3(
+	function (options, items, _p12) {
+		var _p13 = _p12;
+		var _p14 = _p13._0;
+		return _rundis$elm_bootstrap$Bootstrap_Card$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p14,
+				{
+					blocks: A2(
+						_elm_lang$core$Basics_ops['++'],
+						_p14.blocks,
+						{
+							ctor: '::',
+							_0: A2(_rundis$elm_bootstrap$Bootstrap_Internal_Card$block, options, items),
+							_1: {ctor: '[]'}
+						})
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$listGroup = F2(
+	function (items, _p15) {
+		var _p16 = _p15;
+		var _p17 = _p16._0;
+		return _rundis$elm_bootstrap$Bootstrap_Card$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p17,
+				{
+					blocks: A2(
+						_elm_lang$core$Basics_ops['++'],
+						_p17.blocks,
+						{
+							ctor: '::',
+							_0: _rundis$elm_bootstrap$Bootstrap_Internal_Card$listGroup(items),
+							_1: {ctor: '[]'}
+						})
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$CardHeader = function (a) {
+	return {ctor: 'CardHeader', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate = F4(
+	function (elemFn, attributes, children, _p18) {
+		var _p19 = _p18;
+		return _rundis$elm_bootstrap$Bootstrap_Card$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p19._0,
+				{
+					header: _elm_lang$core$Maybe$Just(
+						_rundis$elm_bootstrap$Bootstrap_Card$CardHeader(
+							A2(
+								elemFn,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('card-header'),
+									_1: attributes
+								},
+								children)))
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$header = _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate(_elm_lang$html$Html$div);
+var _rundis$elm_bootstrap$Bootstrap_Card$headerH1 = _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate(_elm_lang$html$Html$h1);
+var _rundis$elm_bootstrap$Bootstrap_Card$headerH2 = _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate(_elm_lang$html$Html$h2);
+var _rundis$elm_bootstrap$Bootstrap_Card$headerH3 = _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate(_elm_lang$html$Html$h3);
+var _rundis$elm_bootstrap$Bootstrap_Card$headerH4 = _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate(_elm_lang$html$Html$h4);
+var _rundis$elm_bootstrap$Bootstrap_Card$headerH5 = _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate(_elm_lang$html$Html$h5);
+var _rundis$elm_bootstrap$Bootstrap_Card$headerH6 = _rundis$elm_bootstrap$Bootstrap_Card$headerPrivate(_elm_lang$html$Html$h6);
+var _rundis$elm_bootstrap$Bootstrap_Card$CardFooter = function (a) {
+	return {ctor: 'CardFooter', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$footer = F3(
+	function (attributes, children, _p20) {
+		var _p21 = _p20;
+		return _rundis$elm_bootstrap$Bootstrap_Card$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p21._0,
+				{
+					footer: _elm_lang$core$Maybe$Just(
+						_rundis$elm_bootstrap$Bootstrap_Card$CardFooter(
+							A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('card-footer'),
+									_1: attributes
+								},
+								children)))
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$CardImageTop = function (a) {
+	return {ctor: 'CardImageTop', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$imgTop = F3(
+	function (attributes, children, _p22) {
+		var _p23 = _p22;
+		return _rundis$elm_bootstrap$Bootstrap_Card$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p23._0,
+				{
+					imgTop: _elm_lang$core$Maybe$Just(
+						_rundis$elm_bootstrap$Bootstrap_Card$CardImageTop(
+							A2(
+								_elm_lang$html$Html$img,
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('card-img-top'),
+										_1: {ctor: '[]'}
+									},
+									attributes),
+								children)))
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Card$CardImageBottom = function (a) {
+	return {ctor: 'CardImageBottom', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Card$imgBottom = F3(
+	function (attributes, children, _p24) {
+		var _p25 = _p24;
+		return _rundis$elm_bootstrap$Bootstrap_Card$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p25._0,
+				{
+					imgBottom: _elm_lang$core$Maybe$Just(
+						_rundis$elm_bootstrap$Bootstrap_Card$CardImageBottom(
+							A2(
+								_elm_lang$html$Html$img,
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('card-img-bottom'),
+										_1: {ctor: '[]'}
+									},
+									attributes),
+								children)))
+				}));
+	});

@@ -1,0 +1,11 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="UTF-8"><link rel="shortcut icon" size="16x16, 32x32, 48x48, 64x64, 128x128, 256x256" href="/assets/favicon.ico"><title>???</title><script type="text/javascript">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-25827182-1', 'auto');
+ga('send', 'pageview');
+</script><link rel="stylesheet" href="/assets/highlight/styles/default.css?1495720958"><link rel="stylesheet" href="/assets/style.css?1495720958"><script src="/assets/highlight/highlight.pack.js?1495720958"></script><script src="/artifacts/Page-NotFound.js?1495720958"></script></head><body><script>
+Elm.Page.NotFound.fullscreen()
+</script></body></html>

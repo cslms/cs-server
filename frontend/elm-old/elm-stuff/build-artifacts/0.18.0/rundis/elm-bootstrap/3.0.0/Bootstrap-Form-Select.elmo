@@ -1,0 +1,171 @@
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$sizeAttribute = function (size) {
+	return A2(
+		_elm_lang$core$Maybe$map,
+		function (s) {
+			return _elm_lang$html$Html_Attributes$class(
+				A2(_elm_lang$core$Basics_ops['++'], 'form-control-', s));
+		},
+		_rundis$elm_bootstrap$Bootstrap_Grid_Internal$screenSizeOption(size));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$applyModifier = F2(
+	function (modifier, options) {
+		var _p0 = modifier;
+		switch (_p0.ctor) {
+			case 'Size':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						size: _elm_lang$core$Maybe$Just(_p0._0)
+					});
+			case 'Id':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						id: _elm_lang$core$Maybe$Just(_p0._0)
+					});
+			case 'Custom':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{custom: true});
+			case 'Disabled':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{disabled: _p0._0});
+			case 'OnChange':
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						onChange: _elm_lang$core$Maybe$Just(_p0._0)
+					});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					options,
+					{
+						attributes: A2(_elm_lang$core$Basics_ops['++'], options.attributes, _p0._0)
+					});
+		}
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$defaultOptions = {
+	id: _elm_lang$core$Maybe$Nothing,
+	size: _elm_lang$core$Maybe$Nothing,
+	custom: false,
+	disabled: false,
+	onChange: _elm_lang$core$Maybe$Nothing,
+	attributes: {ctor: '[]'}
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$customEventOnChange = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$toAttributes = function (modifiers) {
+	var options = A3(_elm_lang$core$List$foldl, _rundis$elm_bootstrap$Bootstrap_Form_Select$applyModifier, _rundis$elm_bootstrap$Bootstrap_Form_Select$defaultOptions, modifiers);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		{
+			ctor: '::',
+			_0: options.custom ? _elm_lang$html$Html_Attributes$class('custom-select form-control') : _elm_lang$html$Html_Attributes$class('form-control'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$disabled(options.disabled),
+				_1: {ctor: '[]'}
+			}
+		},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(_elm_lang$core$Maybe$map, _elm_lang$html$Html_Attributes$id, options.id),
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_lang$core$Maybe$andThen, _rundis$elm_bootstrap$Bootstrap_Form_Select$sizeAttribute, options.size),
+						_1: {
+							ctor: '::',
+							_0: A2(_elm_lang$core$Maybe$map, _rundis$elm_bootstrap$Bootstrap_Form_Select$customEventOnChange, options.onChange),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			options.attributes));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$view = function (_p1) {
+	var _p2 = _p1;
+	return A2(
+		_elm_lang$html$Html$select,
+		_rundis$elm_bootstrap$Bootstrap_Form_Select$toAttributes(_p2._0.options),
+		A2(
+			_elm_lang$core$List$map,
+			function (_p3) {
+				var _p4 = _p3;
+				return _p4._0;
+			},
+			_p2._0.items));
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Options = F6(
+	function (a, b, c, d, e, f) {
+		return {id: a, size: b, disabled: c, custom: d, onChange: e, attributes: f};
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Select = function (a) {
+	return {ctor: 'Select', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$create = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_Select$Select(
+			{options: options, items: items});
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$select = F2(
+	function (options, items) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_Select$view(
+			A2(_rundis$elm_bootstrap$Bootstrap_Form_Select$create, options, items));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Item = function (a) {
+	return {ctor: 'Item', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$item = F2(
+	function (attributes, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_Select$Item(
+			A2(_elm_lang$html$Html$option, attributes, children));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Attrs = function (a) {
+	return {ctor: 'Attrs', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$attrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_Select$Attrs(attrs);
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$OnChange = function (a) {
+	return {ctor: 'OnChange', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$onChange = function (toMsg) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_Select$OnChange(toMsg);
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Disabled = function (a) {
+	return {ctor: 'Disabled', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$disabled = function (disabled) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_Select$Disabled(disabled);
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Custom = {ctor: 'Custom'};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$custom = function (options) {
+	return function (_p5) {
+		return _rundis$elm_bootstrap$Bootstrap_Form_Select$view(
+			A2(
+				_rundis$elm_bootstrap$Bootstrap_Form_Select$create,
+				{ctor: '::', _0: _rundis$elm_bootstrap$Bootstrap_Form_Select$Custom, _1: options},
+				_p5));
+	};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Id = function (a) {
+	return {ctor: 'Id', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$id = function (id) {
+	return _rundis$elm_bootstrap$Bootstrap_Form_Select$Id(id);
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$Size = function (a) {
+	return {ctor: 'Size', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$small = _rundis$elm_bootstrap$Bootstrap_Form_Select$Size(_rundis$elm_bootstrap$Bootstrap_Grid_Internal$SM);
+var _rundis$elm_bootstrap$Bootstrap_Form_Select$large = _rundis$elm_bootstrap$Bootstrap_Form_Select$Size(_rundis$elm_bootstrap$Bootstrap_Grid_Internal$LG);

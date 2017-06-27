@@ -1,0 +1,25 @@
+var _rundis$elm_bootstrap$Bootstrap_Carousel_Slide$customContent = function (html) {
+	return _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Custom(
+		{html: html});
+};
+var _rundis$elm_bootstrap$Bootstrap_Carousel_Slide$image = F2(
+	function (attributes, src) {
+		return _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Image(
+			{attributes: attributes, src: src});
+	});
+var _rundis$elm_bootstrap$Bootstrap_Carousel_Slide$caption = F3(
+	function (attributes, children, _p0) {
+		var _p1 = _p0;
+		return _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p1._0,
+				{
+					caption: _elm_lang$core$Maybe$Just(
+						{attributes: attributes, children: children})
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Carousel_Slide$config = F2(
+	function (attributes, content) {
+		return _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Config(
+			{attributes: attributes, content: content, caption: _elm_lang$core$Maybe$Nothing});
+	});

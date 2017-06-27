@@ -1,0 +1,62 @@
+var _cslms$cs_server$Forms_Utils$just2 = F2(
+	function (x, y) {
+		var _p0 = x;
+		if (_p0.ctor === 'Just') {
+			return x;
+		} else {
+			return y;
+		}
+	});
+var _cslms$cs_server$Forms_Utils$just3 = F3(
+	function (x, y, z) {
+		return A2(
+			_cslms$cs_server$Forms_Utils$just2,
+			x,
+			A2(_cslms$cs_server$Forms_Utils$just2, y, z));
+	});
+var _cslms$cs_server$Forms_Utils$just4 = F4(
+	function (x, y, z, w) {
+		return A2(
+			_cslms$cs_server$Forms_Utils$just2,
+			x,
+			A3(_cslms$cs_server$Forms_Utils$just3, y, z, w));
+	});
+var _cslms$cs_server$Forms_Utils$fwrap = F2(
+	function (f, x) {
+		var _p1 = x;
+		if (_p1.ctor === 'Just') {
+			return {
+				ctor: '::',
+				_0: f(_p1._0),
+				_1: {ctor: '[]'}
+			};
+		} else {
+			return {ctor: '[]'};
+		}
+	});
+var _cslms$cs_server$Forms_Utils$fwrapAppend = F3(
+	function (f, x, lst) {
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			lst,
+			A2(_cslms$cs_server$Forms_Utils$fwrap, f, x));
+	});
+var _cslms$cs_server$Forms_Utils$wrap = function (x) {
+	var _p2 = x;
+	if (_p2.ctor === 'Nothing') {
+		return {ctor: '[]'};
+	} else {
+		return {
+			ctor: '::',
+			_0: _p2._0,
+			_1: {ctor: '[]'}
+		};
+	}
+};
+var _cslms$cs_server$Forms_Utils$wrapAppend = F2(
+	function (x, lst) {
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			lst,
+			_cslms$cs_server$Forms_Utils$wrap(x));
+	});

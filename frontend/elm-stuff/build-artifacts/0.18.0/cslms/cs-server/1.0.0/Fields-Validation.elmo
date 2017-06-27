@@ -1,0 +1,113 @@
+var _cslms$cs_server$Fields_Validation$validate = F2(
+	function (val, x) {
+		var validateNumericOp = F4(
+			function (x, op, y, err) {
+				var x_num = _elm_lang$core$String$toFloat(x);
+				var _p0 = x_num;
+				if (_p0.ctor === 'Ok') {
+					return A2(op, _p0._0, y) ? _cslms$cs_server$Forms_Types$Errors(
+						{
+							ctor: '::',
+							_0: err,
+							_1: {ctor: '[]'}
+						}) : _cslms$cs_server$Forms_Types$Valid;
+				} else {
+					return _cslms$cs_server$Forms_Types$Errors(
+						{
+							ctor: '::',
+							_0: err,
+							_1: {ctor: '[]'}
+						});
+				}
+			});
+		var _p1 = val;
+		switch (_p1.ctor) {
+			case 'IsNotEmpty':
+				return _elm_lang$core$String$isEmpty(x) ? _cslms$cs_server$Forms_Types$Valid : _cslms$cs_server$Forms_Types$Errors(
+					{
+						ctor: '::',
+						_0: _p1._0,
+						_1: {ctor: '[]'}
+					});
+			case 'IsNumeric':
+				var _p2 = _elm_lang$core$String$toFloat(x);
+				if (_p2.ctor === 'Ok') {
+					return _cslms$cs_server$Forms_Types$Valid;
+				} else {
+					return _cslms$cs_server$Forms_Types$Errors(
+						{
+							ctor: '::',
+							_0: _p1._0,
+							_1: {ctor: '[]'}
+						});
+				}
+			case 'MinLength':
+				return (_elm_lang$core$Native_Utils.cmp(
+					_elm_lang$core$String$length(x),
+					_p1._1) < 0) ? _cslms$cs_server$Forms_Types$Errors(
+					{
+						ctor: '::',
+						_0: _p1._0,
+						_1: {ctor: '[]'}
+					}) : _cslms$cs_server$Forms_Types$Valid;
+			case 'MaxLength':
+				return (_elm_lang$core$Native_Utils.cmp(
+					_elm_lang$core$String$length(x),
+					_p1._1) > 0) ? _cslms$cs_server$Forms_Types$Errors(
+					{
+						ctor: '::',
+						_0: _p1._0,
+						_1: {ctor: '[]'}
+					}) : _cslms$cs_server$Forms_Types$Valid;
+			case 'MinValue':
+				return A4(
+					validateNumericOp,
+					x,
+					F2(
+						function (x, y) {
+							return _elm_lang$core$Native_Utils.cmp(x, y) < 0;
+						}),
+					_p1._1,
+					_p1._0);
+			case 'MaxValue':
+				return A4(
+					validateNumericOp,
+					x,
+					F2(
+						function (x, y) {
+							return _elm_lang$core$Native_Utils.cmp(x, y) > 0;
+						}),
+					_p1._1,
+					_p1._0);
+			default:
+				return _cslms$cs_server$Forms_Types$Valid;
+		}
+	});
+var _cslms$cs_server$Fields_Validation$validateBatch = F2(
+	function (validators, data) {
+		var reducer = F2(
+			function (r1, r2) {
+				var _p3 = {ctor: '_Tuple2', _0: r1, _1: r2};
+				if (_p3._0.ctor === 'Valid') {
+					if (_p3._1.ctor === 'Valid') {
+						return _cslms$cs_server$Forms_Types$Valid;
+					} else {
+						return r2;
+					}
+				} else {
+					if (_p3._1.ctor === 'Valid') {
+						return r1;
+					} else {
+						return _cslms$cs_server$Forms_Types$Errors(
+							A2(_elm_lang$core$Basics_ops['++'], _p3._0._0, _p3._1._0));
+					}
+				}
+			});
+		var results = A2(
+			_elm_lang$core$List$map,
+			function (validator) {
+				return A2(_cslms$cs_server$Fields_Validation$validate, validator, data);
+			},
+			validators);
+		return A3(_elm_lang$core$List$foldr, reducer, _cslms$cs_server$Forms_Types$Valid, results);
+	});

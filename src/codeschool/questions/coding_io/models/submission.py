@@ -3,11 +3,9 @@ import json
 from codeschool import models
 from codeschool.questions.models import QuestionSubmission
 from codeschool.utils.managers import manager_instance, queryset_class
-from codeschool.utils.string import md5hash
 
 
 class CodingIoSubmissionQuerySet(queryset_class(QuestionSubmission)):
-
     def best_code_for_user(self, user, attrs=None, activity=None):
         """
         Return the code for the best submission for the given user.
@@ -39,7 +37,7 @@ class CodingIoSubmission(QuestionSubmission):
     """
 
     source = models.TextField(blank=True)
-    language = models.ForeignKey('core.ProgrammingLanguage')
+    language = models.ForeignKey('files.ProgrammingLanguage')
 
     objects = manager_instance(QuestionSubmission, CodingIoSubmissionQuerySet,
                                use_for_related_fields=True)

@@ -1,0 +1,128 @@
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$attrs = function (attrs) {
+	return _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Attrs(attrs);
+};
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$disabled = _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Disabled;
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$active = _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Active;
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$danger = _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Danger);
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$warning = _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Warning);
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$info = _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Info);
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$success = _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Roled(_rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Success);
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$button = F2(
+	function (options, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$CustomItem(
+			{
+				itemFn: _elm_lang$html$Html$button,
+				children: children,
+				options: {
+					ctor: '::',
+					_0: _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Action,
+					_1: A2(
+						_elm_lang$core$Basics_ops['++'],
+						options,
+						{
+							ctor: '::',
+							_0: _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Attrs(
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('button'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						})
+				}
+			});
+	});
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$anchor = F2(
+	function (options, children) {
+		var updOptions = A2(
+			_elm_lang$core$List$any,
+			F2(
+				function (x, y) {
+					return _elm_lang$core$Native_Utils.eq(x, y);
+				})(_rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Disabled),
+			options) ? A2(
+			_elm_lang$core$Basics_ops['++'],
+			options,
+			{
+				ctor: '::',
+				_0: _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Attrs(
+					{
+						ctor: '::',
+						_0: _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$preventClick,
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}) : options;
+		return _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$CustomItem(
+			{
+				itemFn: _elm_lang$html$Html$a,
+				children: children,
+				options: {ctor: '::', _0: _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Action, _1: updOptions}
+			});
+	});
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$keyedCustom = function (items) {
+	return A3(
+		_elm_lang$html$Html_Keyed$node,
+		'div',
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('list-group'),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			function (_p0) {
+				var _p1 = _p0;
+				return {
+					ctor: '_Tuple2',
+					_0: _p1._0,
+					_1: _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$renderCustomItem(_p1._1)
+				};
+			},
+			items));
+};
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$custom = function (items) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('list-group'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$renderCustomItem, items));
+};
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$li = F2(
+	function (options, children) {
+		return _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$Item(
+			{itemFn: _elm_lang$html$Html$li, children: children, options: options});
+	});
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$keyedUl = function (keyedItems) {
+	return A2(
+		_elm_lang$html$Html_Keyed$ul,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('list-group'),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			function (_p2) {
+				var _p3 = _p2;
+				return {
+					ctor: '_Tuple2',
+					_0: _p3._0,
+					_1: _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$renderItem(_p3._1)
+				};
+			},
+			keyedItems));
+};
+var _rundis$elm_bootstrap$Bootstrap_ListGroup$ul = function (items) {
+	return A2(
+		_elm_lang$html$Html$ul,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('list-group'),
+			_1: {ctor: '[]'}
+		},
+		A2(_elm_lang$core$List$map, _rundis$elm_bootstrap$Bootstrap_Internal_ListGroup$renderItem, items));
+};

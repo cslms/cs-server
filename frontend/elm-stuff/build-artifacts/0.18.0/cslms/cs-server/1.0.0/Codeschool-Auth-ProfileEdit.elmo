@@ -1,0 +1,338 @@
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput = F2(
+	function (name, error) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'padding', _1: '20px'},
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$label,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(name),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$input,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	});
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$deleteAccount = function (model) {
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h2,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Delete account'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Be cautions! This operation is irriversible.'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Please type the text \"I want to delete my account\" in the box bellow.'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'Screte box', _elm_lang$core$Maybe$Nothing),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('I understand. Confirm deletion'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$passwordForm = function (model) {
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h2,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Change password'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'Old password', _elm_lang$core$Maybe$Nothing),
+					_1: {
+						ctor: '::',
+						_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'New password', _elm_lang$core$Maybe$Nothing),
+						_1: {
+							ctor: '::',
+							_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'New password (again)', _elm_lang$core$Maybe$Nothing),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Send!'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		}
+	};
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$basicForm = function (model) {
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h2,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Basic Information'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'Full name', _elm_lang$core$Maybe$Nothing),
+					_1: {
+						ctor: '::',
+						_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'E-mail (required)', _elm_lang$core$Maybe$Nothing),
+						_1: {
+							ctor: '::',
+							_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'Username (required)', _elm_lang$core$Maybe$Nothing),
+							_1: {
+								ctor: '::',
+								_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'Gender', _elm_lang$core$Maybe$Nothing),
+								_1: {
+									ctor: '::',
+									_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'School Id', _elm_lang$core$Maybe$Nothing),
+									_1: {
+										ctor: '::',
+										_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'Phone', _elm_lang$core$Maybe$Nothing),
+										_1: {
+											ctor: '::',
+											_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'About Me', _elm_lang$core$Maybe$Nothing),
+											_1: {
+												ctor: '::',
+												_0: A2(_cslms$cs_server$Codeschool_Auth_ProfileEdit$formInput, 'Who can view my profile', _elm_lang$core$Maybe$Nothing),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		}
+	};
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$cell = F3(
+	function (cols, attrs, children) {
+		var colsClass = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'mdl-cell--',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(cols),
+				'--col'));
+		var attrs_ = A2(
+			_elm_lang$core$Basics_ops['++'],
+			attrs,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class(
+					A2(_elm_lang$core$Basics_ops['++'], 'mld-cell', colsClass)),
+				_1: {ctor: '[]'}
+			});
+		return A2(_elm_lang$html$Html$div, attrs_, children);
+	});
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$mainForm = function (model) {
+	return A3(
+		_cslms$cs_server$Codeschool_Auth_ProfileEdit$cell,
+		8,
+		{ctor: '[]'},
+		function () {
+			var _p0 = model.section;
+			switch (_p0.ctor) {
+				case 'BasicSection':
+					return _cslms$cs_server$Codeschool_Auth_ProfileEdit$basicForm(model);
+				case 'ChangePasswordSection':
+					return _cslms$cs_server$Codeschool_Auth_ProfileEdit$passwordForm(model);
+				case 'DangerSection':
+					return _cslms$cs_server$Codeschool_Auth_ProfileEdit$deleteAccount(model);
+				default:
+					return {ctor: '[]'};
+			}
+		}());
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{ctor: '[]'});
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$update = F2(
+	function (msg_, model) {
+		var _p1 = msg_;
+		if (_p1.ctor === 'ChangeSection') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{section: _p1._0}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$Model = function (a) {
+	return {section: a};
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$DangerSection = {ctor: 'DangerSection'};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$AccountsSection = {ctor: 'AccountsSection'};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$MessageSection = {ctor: 'MessageSection'};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$ChangePasswordSection = {ctor: 'ChangePasswordSection'};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$BasicSection = {ctor: 'BasicSection'};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$init = {section: _cslms$cs_server$Codeschool_Auth_ProfileEdit$BasicSection};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$ChangeSection = function (a) {
+	return {ctor: 'ChangeSection', _0: a};
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$navbar = function () {
+	var item = F2(
+		function (sec, x) {
+			return A2(
+				_elm_lang$html$Html$li,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						_cslms$cs_server$Codeschool_Auth_ProfileEdit$ChangeSection(sec)),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(x),
+					_1: {ctor: '[]'}
+				});
+		});
+	return A3(
+		_cslms$cs_server$Codeschool_Auth_ProfileEdit$cell,
+		4,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('mdl-shadow--4dp'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'padding', _1: '15px'},
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$ul,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(item, _cslms$cs_server$Codeschool_Auth_ProfileEdit$BasicSection, 'Basic information'),
+					_1: {
+						ctor: '::',
+						_0: A2(item, _cslms$cs_server$Codeschool_Auth_ProfileEdit$ChangePasswordSection, 'Change password'),
+						_1: {
+							ctor: '::',
+							_0: A2(item, _cslms$cs_server$Codeschool_Auth_ProfileEdit$AccountsSection, 'Accounts'),
+							_1: {
+								ctor: '::',
+								_0: A2(item, _cslms$cs_server$Codeschool_Auth_ProfileEdit$DangerSection, 'Danger!'),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+}();
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('mdl-grid'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _cslms$cs_server$Codeschool_Auth_ProfileEdit$navbar,
+			_1: {
+				ctor: '::',
+				_0: _cslms$cs_server$Codeschool_Auth_ProfileEdit$mainForm(model),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$NoOp = {ctor: 'NoOp'};
+var _cslms$cs_server$Codeschool_Auth_ProfileEdit$Profile = {ctor: 'Profile'};

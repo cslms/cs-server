@@ -15,38 +15,42 @@ Including another URLconf
 """
 import os
 
+from django.apps import apps
 from django.conf.urls import url, include
 from wagtail.wagtailcore import urls as wagtail_urls
 
-from codeschool import settings
-from codeschool.accounts.views import profile_view
-from codeschool.api import router, import_api_modules
-from codeschool.core.views import index_view
+from . import settings
+from .api import router, import_api_modules
+from .core.config.views import index_view
+from .core.users.views import start_view
 
 import_api_modules()
 
 # Basic URLS
 urlpatterns = [
-    url(r'^admin/', include('wagtail.wagtailadmin.urls')),
     url(r'^$', index_view, name='index'),
-    url(r'^profile/$', profile_view, name='profile-view'),
-    url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
+    url(r'^login/$', start_view, name='login'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),
     url(r'^api/', include(router.urls)),
+    url(r'^admin/', include('wagtail.wagtailadmin.urls')),
 ]
 
 # Optional debug views
 if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
     import django.contrib.admin
+    from .core.config.views import debug_page_view
 
     urlpatterns += [
-        url(r'^_admin/', django.contrib.admin.site.urls),
-        url(r'^_debug/', include('codeschool.core.urls')),
-        url(r'^_bricks/', include('codeschool.bricks.urls')),
+        url(r'^_admin/',
+            django.contrib.admin.site.urls),
+        url(r'^_debug/',
+            debug_page_view, name='config-debug-page'),
+        url(r'^_bricks/',
+            include('codeschool.bricks.urls', namespace='bricks')),
     ]
 
 # Optional "social" urls
-if 'codeschool.social' in settings.INSTALLED_APPS:
+if apps.is_installed('codeschool.social'):
     urlpatterns += [
         url(r'^social/', include('codeschool.social.urls', namespace='social')),
     ]
@@ -60,7 +64,7 @@ if settings.CODESCHOOL_GLOBAL_QUESTIONS:
     ]
 
 # Codeschool classrooms
-if 'codeschool.lms.classrooms' in settings.INSTALLED_APPS:
+if apps.is_installed('codeschool.lms.classrooms'):
     from codeschool.lms.classrooms import urls as classrooms_urls
 
     urlpatterns += [
@@ -68,7 +72,7 @@ if 'codeschool.lms.classrooms' in settings.INSTALLED_APPS:
     ]
 
 # Optional cli/clt interface
-if 'codeschool.cli' in settings.INSTALLED_APPS:
+if apps.is_installed('codeschool.cli'):
     from codeschool.cli import api as jsonrpc_api
 
     urlpatterns += [

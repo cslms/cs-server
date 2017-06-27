@@ -6,9 +6,7 @@
 # These steps are only necessary in development. Production should initialize
 # the redis server explicitly.
 #
-import os
-
-from codeschool import settings
+import sys
 
 
 def start_redis_and_connect(redis):
@@ -45,5 +43,5 @@ def redis_connect():
         start_redis_and_connect(redis)
 
 
-if settings.DEBUG:
+if 'runserver' in sys.argv:
     redis_connect()

@@ -1,0 +1,83 @@
+var _cslms$cs_server$Codeschool_PageLayout$update = F2(
+	function (msg_, model) {
+		var _p0 = msg_;
+		if (_p0.ctor === 'Header') {
+			var _p1 = A2(_cslms$cs_server$Codeschool_Header$update, _p0._0, model.header);
+			var header = _p1._0;
+			var cmd = _p1._1;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{header: header}),
+				_1: cmd
+			};
+		} else {
+			var _p2 = A2(_cslms$cs_server$Codeschool_Footer$update, _p0._0, model.footer);
+			var footer = _p2._0;
+			var cmd = _p2._1;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{footer: footer}),
+				_1: cmd
+			};
+		}
+	});
+var _cslms$cs_server$Codeschool_PageLayout$init = {header: _cslms$cs_server$Codeschool_Header$init, footer: _cslms$cs_server$Codeschool_Footer$init};
+var _cslms$cs_server$Codeschool_PageLayout$Model = F2(
+	function (a, b) {
+		return {header: a, footer: b};
+	});
+var _cslms$cs_server$Codeschool_PageLayout$Footer = function (a) {
+	return {ctor: 'Footer', _0: a};
+};
+var _cslms$cs_server$Codeschool_PageLayout$Header = function (a) {
+	return {ctor: 'Header', _0: a};
+};
+var _cslms$cs_server$Codeschool_PageLayout$view = F2(
+	function (model, main) {
+		var footer = A2(
+			_elm_lang$html$Html$map,
+			_cslms$cs_server$Codeschool_PageLayout$Footer,
+			_cslms$cs_server$Codeschool_Footer$view(model.footer));
+		var header = A2(
+			_elm_lang$html$Html$map,
+			_cslms$cs_server$Codeschool_PageLayout$Header,
+			_cslms$cs_server$Codeschool_Header$view(model.header));
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: header,
+				_1: {
+					ctor: '::',
+					_0: main,
+					_1: {
+						ctor: '::',
+						_0: footer,
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
+var _cslms$cs_server$Codeschool_PageLayout$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$core$Platform_Sub$map,
+				_cslms$cs_server$Codeschool_PageLayout$Header,
+				_cslms$cs_server$Codeschool_Header$subscriptions(model.header)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$core$Platform_Sub$map,
+					_cslms$cs_server$Codeschool_PageLayout$Footer,
+					_cslms$cs_server$Codeschool_Footer$subscriptions(model.footer)),
+				_1: {ctor: '[]'}
+			}
+		});
+};

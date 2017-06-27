@@ -1,0 +1,89 @@
+var _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$view = function (_p0) {
+	var _p1 = _p0;
+	var captionHtml = function () {
+		var _p2 = _p1._0.caption;
+		if (_p2.ctor === 'Nothing') {
+			return _elm_lang$html$Html$text('');
+		} else {
+			return A2(
+				_elm_lang$html$Html$div,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_p2._0.attributes,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('carousel-caption d-none d-md-block'),
+						_1: {ctor: '[]'}
+					}),
+				_p2._0.children);
+		}
+	}();
+	return A2(
+		_elm_lang$html$Html$div,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_p1._0.attributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('carousel-item'),
+				_1: {ctor: '[]'}
+			}),
+		function () {
+			var _p3 = _p1._0.content;
+			if (_p3.ctor === 'Image') {
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$img,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_p3._0.attributes,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('d-block img-fluid'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$src(_p3._0.src),
+									_1: {ctor: '[]'}
+								}
+							}),
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: captionHtml,
+						_1: {ctor: '[]'}
+					}
+				};
+			} else {
+				return {
+					ctor: '::',
+					_0: _p3._0.html,
+					_1: {
+						ctor: '::',
+						_0: captionHtml,
+						_1: {ctor: '[]'}
+					}
+				};
+			}
+		}());
+};
+var _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Config = function (a) {
+	return {ctor: 'Config', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$addAttributes = F2(
+	function (newAttributes, _p4) {
+		var _p5 = _p4;
+		var _p6 = _p5._0;
+		return _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Config(
+			_elm_lang$core$Native_Utils.update(
+				_p6,
+				{
+					attributes: A2(_elm_lang$core$Basics_ops['++'], _p6.attributes, newAttributes)
+				}));
+	});
+var _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Custom = function (a) {
+	return {ctor: 'Custom', _0: a};
+};
+var _rundis$elm_bootstrap$Bootstrap_Carousel_SlideInternal$Image = function (a) {
+	return {ctor: 'Image', _0: a};
+};

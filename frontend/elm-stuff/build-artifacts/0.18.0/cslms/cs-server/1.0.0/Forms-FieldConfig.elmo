@@ -1,0 +1,162 @@
+var _cslms$cs_server$Forms_FieldConfig$viewErrors = F2(
+	function (attrs, errors) {
+		var attrs_ = A2(
+			_elm_lang$core$Basics_ops['++'],
+			attrs,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('error'),
+				_1: {ctor: '[]'}
+			});
+		var viewError = function (x) {
+			return A2(
+				_elm_lang$html$Html$li,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(x),
+					_1: {ctor: '[]'}
+				});
+		};
+		return A2(
+			_elm_lang$html$Html$ul,
+			attrs_,
+			A2(_elm_lang$core$List$map, viewError, errors));
+	});
+var _cslms$cs_server$Forms_FieldConfig$addErrors = F2(
+	function (errors, state) {
+		return _elm_lang$core$Native_Utils.update(
+			state,
+			{
+				errors: A2(_elm_lang$core$Basics_ops['++'], state.errors, errors)
+			});
+	});
+var _cslms$cs_server$Forms_FieldConfig$addError = F2(
+	function (error, state) {
+		return A2(
+			_cslms$cs_server$Forms_FieldConfig$addErrors,
+			{
+				ctor: '::',
+				_0: error,
+				_1: {ctor: '[]'}
+			},
+			state);
+	});
+var _cslms$cs_server$Forms_FieldConfig$setData = F2(
+	function (data, state) {
+		return _elm_lang$core$Native_Utils.update(
+			state,
+			{
+				data: _elm_lang$core$Maybe$Just(data)
+			});
+	});
+var _cslms$cs_server$Forms_FieldConfig$asFloat = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1.data;
+	if (_p2.ctor === 'Nothing') {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		var data = _elm_lang$core$String$toFloat(_p2._0);
+		var _p3 = data;
+		if (_p3.ctor === 'Ok') {
+			return _elm_lang$core$Maybe$Just(_p3._0);
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	}
+};
+var _cslms$cs_server$Forms_FieldConfig$asBool = function (_p4) {
+	var _p5 = _p4;
+	var _p6 = _p5.data;
+	if (_p6.ctor === 'Nothing') {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		var _p7 = _p6._0;
+		return _elm_lang$core$Native_Utils.eq(_p7, 'true') ? _elm_lang$core$Maybe$Just(true) : (_elm_lang$core$Native_Utils.eq(_p7, 'false') ? _elm_lang$core$Maybe$Just(false) : _elm_lang$core$Maybe$Nothing);
+	}
+};
+var _cslms$cs_server$Forms_FieldConfig$asString = function (_p8) {
+	var _p9 = _p8;
+	return _p9.data;
+};
+var _cslms$cs_server$Forms_FieldConfig$init = function (cfg) {
+	var state = _cslms$cs_server$Forms_FieldState$state(cfg.id);
+	var _p10 = cfg.$default;
+	if (_p10.ctor === 'Just') {
+		return A2(_cslms$cs_server$Forms_FieldState$setData, _p10._0, state);
+	} else {
+		return state;
+	}
+};
+var _cslms$cs_server$Forms_FieldConfig$initWithData = F2(
+	function (cfg, data) {
+		var state = _cslms$cs_server$Forms_FieldConfig$init(cfg);
+		return A2(_cslms$cs_server$Forms_FieldState$setData, data, state);
+	});
+var _cslms$cs_server$Forms_FieldConfig$state = function (id) {
+	return {
+		data: _elm_lang$core$Maybe$Nothing,
+		errors: {ctor: '[]'},
+		id: id
+	};
+};
+var _cslms$cs_server$Forms_FieldConfig$default = F2(
+	function (text, form) {
+		return _elm_lang$core$Native_Utils.update(
+			form,
+			{
+				$default: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _cslms$cs_server$Forms_FieldConfig$placeholder = F2(
+	function (text, form) {
+		return _elm_lang$core$Native_Utils.update(
+			form,
+			{
+				placeholder: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _cslms$cs_server$Forms_FieldConfig$required = function (field) {
+	return _elm_lang$core$Native_Utils.update(
+		field,
+		{required: true});
+};
+var _cslms$cs_server$Forms_FieldConfig$helpText = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				helpText: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _cslms$cs_server$Forms_FieldConfig$FieldConfig = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {label: a, id: b, inputType: c, $default: d, helpText: e, placeholder: f, required: g, validators: h};
+	});
+var _cslms$cs_server$Forms_FieldConfig$FieldState = F3(
+	function (a, b, c) {
+		return {data: a, errors: b, id: c};
+	});
+var _cslms$cs_server$Forms_FieldConfig$Numeric = {ctor: 'Numeric'};
+var _cslms$cs_server$Forms_FieldConfig$Text = {ctor: 'Text'};
+var _cslms$cs_server$Forms_FieldConfig$defaultConfig = function (id) {
+	return {
+		label: 'Input',
+		id: id,
+		inputType: _cslms$cs_server$Forms_FieldConfig$Text,
+		helpText: _elm_lang$core$Maybe$Nothing,
+		required: false,
+		placeholder: _elm_lang$core$Maybe$Nothing,
+		$default: _elm_lang$core$Maybe$Nothing,
+		validators: {ctor: '[]'}
+	};
+};
+var _cslms$cs_server$Forms_FieldConfig$charField = function (id) {
+	var cfg = _cslms$cs_server$Forms_FieldConfig$defaultConfig(id);
+	return _elm_lang$core$Native_Utils.update(
+		cfg,
+		{inputType: _cslms$cs_server$Forms_FieldConfig$Text});
+};
+var _cslms$cs_server$Forms_FieldConfig$passwordField = function (id) {
+	return _cslms$cs_server$Forms_FieldConfig$charField(id);
+};

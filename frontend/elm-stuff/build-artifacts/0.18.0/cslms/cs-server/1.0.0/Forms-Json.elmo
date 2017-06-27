@@ -1,0 +1,440 @@
+var _cslms$cs_server$Forms_Json_ops = _cslms$cs_server$Forms_Json_ops || {};
+_cslms$cs_server$Forms_Json_ops['?'] = F2(
+	function (enc, x) {
+		var _p0 = x;
+		if (_p0.ctor === 'Nothing') {
+			return _elm_lang$core$Json_Encode$null;
+		} else {
+			return enc(_p0._0);
+		}
+	});
+var _cslms$cs_server$Forms_Json$jsonFormtoValue = function (form) {
+	var $int = _elm_lang$core$Json_Encode$int;
+	var $float = _elm_lang$core$Json_Encode$float;
+	var str = _elm_lang$core$Json_Encode$string;
+	var error = function (err) {
+		var _p1 = err;
+		if (_p1.ctor === 'Valid') {
+			return _elm_lang$core$Json_Encode$list(
+				{ctor: '[]'});
+		} else {
+			return _elm_lang$core$Json_Encode$list(
+				A2(_elm_lang$core$List$map, str, _p1._0));
+		}
+	};
+	var validator = function (val) {
+		var _p2 = val;
+		switch (_p2.ctor) {
+			case 'Decimal':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('decimal')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._2)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'places',
+									_1: $int(_p2._0)
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'size',
+										_1: $int(_p2._1)
+									},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					});
+			case 'FileExtension':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('file-ext')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._1)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'value',
+									_1: _elm_lang$core$Json_Encode$list(
+										A2(_elm_lang$core$List$map, str, _p2._0))
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			case 'RegexMatch':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('regex-match')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._1)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'value',
+									_1: str(_p2._0)
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			case 'MinLength':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('min-length')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._1)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'value',
+									_1: $int(_p2._0)
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			case 'MaxLength':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('max-length')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._1)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'value',
+									_1: $int(_p2._0)
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			case 'MinValue':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('min-value')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._1)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'value',
+									_1: $float(_p2._0)
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			case 'MaxValue':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('max-value')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._1)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'value',
+									_1: $float(_p2._0)
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					});
+			case 'IsNotEmpty':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('not-empty')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._0)
+							},
+							_1: {ctor: '[]'}
+						}
+					});
+			case 'IsNumeric':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('is-numeric')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._0)
+							},
+							_1: {ctor: '[]'}
+						}
+					});
+			case 'IsEmail':
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('is-email')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._0)
+							},
+							_1: {ctor: '[]'}
+						}
+					});
+			default:
+				return _elm_lang$core$Json_Encode$object(
+					{
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'validator',
+							_1: str('is-url')
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'msg',
+								_1: str(_p2._0)
+							},
+							_1: {ctor: '[]'}
+						}
+					});
+		}
+	};
+	var field = function (f) {
+		return _elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'id',
+					_1: str(f.id)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'value',
+						_1: str(f.value)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'label',
+							_1: str(f.label)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'inputType',
+								_1: str(
+									_elm_lang$core$Basics$toString(f.inputType))
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'default',
+									_1: A2(_cslms$cs_server$Forms_Json_ops['?'], str, f.$default)
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'helpText',
+										_1: A2(_cslms$cs_server$Forms_Json_ops['?'], str, f.helpText)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'placeholder',
+											_1: A2(_cslms$cs_server$Forms_Json_ops['?'], str, f.placeholder)
+										},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'required',
+												_1: _elm_lang$core$Json_Encode$bool(f.required)
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'validators',
+													_1: _elm_lang$core$Json_Encode$list(
+														A2(_elm_lang$core$List$map, validator, f.validators))
+												},
+												_1: {
+													ctor: '::',
+													_0: {
+														ctor: '_Tuple2',
+														_0: 'errors',
+														_1: error(f.errors)
+													},
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+	};
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'action',
+				_1: A2(_cslms$cs_server$Forms_Json_ops['?'], str, form.action)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'fields',
+					_1: _elm_lang$core$Json_Encode$list(
+						A2(_elm_lang$core$List$map, field, form.fields))
+				},
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _cslms$cs_server$Forms_Json$toJsonField = function (field) {
+	return {
+		id: _elm_lang$core$Basics$toString(field.id),
+		value: field.value,
+		label: field.label,
+		inputType: field.inputType,
+		$default: field.$default,
+		helpText: field.helpText,
+		placeholder: field.placeholder,
+		required: field.required,
+		validators: field.validators,
+		errors: field.errors
+	};
+};
+var _cslms$cs_server$Forms_Json$toJsonForm = function (form) {
+	return {
+		action: form.action,
+		fields: A2(_elm_lang$core$List$map, _cslms$cs_server$Forms_Json$toJsonField, form.fields)
+	};
+};
+var _cslms$cs_server$Forms_Json$toValue = function (form) {
+	return _cslms$cs_server$Forms_Json$jsonFormtoValue(
+		_cslms$cs_server$Forms_Json$toJsonForm(form));
+};
+var _cslms$cs_server$Forms_Json$encode = F2(
+	function (n, form) {
+		return A2(
+			_elm_lang$core$Json_Encode$encode,
+			n,
+			_cslms$cs_server$Forms_Json$toValue(form));
+	});

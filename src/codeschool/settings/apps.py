@@ -1,27 +1,33 @@
 #
 # List of all installed apps
 #
-
 INSTALLED_APPS = [
     # Codeschool optional apps
     'codeschool.questions.code',
-    #'codeschool.questions.free_form',
+    # 'codeschool.questions.free_form',
     'codeschool.questions.numeric',
     'codeschool.questions.coding_io',
-    #'codeschool.lms.attendance',
-    #'codeschool.lms.classrooms',
-    #'codeschool.lms.academic',
-    #'codeschool.gamification.points',
-    #'codeschool.social.feed',
-    #'codeschool.social.friends',
-    #'codeschool.questions.text',
-    #'codeschool.cli',
+    # 'codeschool.lms.attendance',
+    # 'codeschool.lms.classrooms',
+    # 'codeschool.lms.academic',
+    # 'codeschool.gamification.points',
+    # 'codeschool.social.feed',
+    # 'codeschool.social.friends',
+    # 'codeschool.questions.text',
+    # 'codeschool.cli',
 
-    # These are always required
+    # Extra content
+    'codeschool.extra.fresh_install',
+
+    # Required LMS/Content apps
     'codeschool.questions',
     'codeschool.lms.activities',
-    'codeschool.accounts',
-    'codeschool.core',
+
+    # Core apps
+    'codeschool.core.users.apps.UsersConfig',
+    'codeschool.core.config.apps.ServerConfigConfig',
+    'codeschool.core.files.apps.FilesConfig',
+    'codeschool.core.services.apps.ServicesConfig',
 
     # Related apps
     'model_reference',
@@ -48,9 +54,9 @@ INSTALLED_APPS = [
     'taggit',
 
     # Userena
-    'userena',
-    'easy_thumbnails',
+    # 'userena',
     'guardian',
+    'easy_thumbnails',
 
     # Other 3rd party
     'friendship',
@@ -71,3 +77,6 @@ INSTALLED_APPS = [
     # staticfiles urls in production
     'django.contrib.staticfiles',
 ]
+
+
+

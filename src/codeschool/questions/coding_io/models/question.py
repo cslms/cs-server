@@ -7,8 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 
 import bricks.rpc
 from codeschool import models
-from codeschool.core import get_programming_language
-from codeschool.core.models import ProgrammingLanguage
+from codeschool.core.files import get_programming_language
+from codeschool.core.files.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
 from codeschool.questions.models import Question

@@ -1,0 +1,383 @@
+var _fabiommendes$elm_forms$Forms_Field$viewErrors = F2(
+	function (attrs, errors) {
+		var attrs_ = A2(
+			_elm_lang$core$Basics_ops['++'],
+			attrs,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('error'),
+				_1: {ctor: '[]'}
+			});
+		var viewError = function (x) {
+			return A2(
+				_elm_lang$html$Html$li,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(x),
+					_1: {ctor: '[]'}
+				});
+		};
+		return A2(
+			_elm_lang$html$Html$ul,
+			attrs_,
+			A2(_elm_lang$core$List$map, viewError, errors));
+	});
+var _fabiommendes$elm_forms$Forms_Field$validate = function (field) {
+	var errors = A2(_fabiommendes$elm_forms$Forms_Validation$validateBatch, field.validators, field.value);
+	var errors_ = function () {
+		if (field.required && _elm_lang$core$String$isEmpty(field.value)) {
+			var _p0 = errors;
+			if (_p0.ctor === 'Valid') {
+				return _fabiommendes$elm_forms$Forms_Validation$Errors(
+					{
+						ctor: '::',
+						_0: field.requiredMessage,
+						_1: {ctor: '[]'}
+					});
+			} else {
+				return _fabiommendes$elm_forms$Forms_Validation$Errors(
+					{ctor: '::', _0: field.requiredMessage, _1: _p0._0});
+			}
+		} else {
+			return errors;
+		}
+	}();
+	return _elm_lang$core$Native_Utils.update(
+		field,
+		{errors: errors_});
+};
+var _fabiommendes$elm_forms$Forms_Field$readFloat = function (_p1) {
+	var _p2 = _p1;
+	return _elm_lang$core$String$toFloat(_p2.value);
+};
+var _fabiommendes$elm_forms$Forms_Field$readBool = function (_p3) {
+	var _p4 = _p3;
+	var _p5 = _p4.value;
+	switch (_p5) {
+		case 'true':
+			return _elm_lang$core$Result$Ok(true);
+		case 'false':
+			return _elm_lang$core$Result$Ok(false);
+		default:
+			return _elm_lang$core$Result$Err('invalid boolean value');
+	}
+};
+var _fabiommendes$elm_forms$Forms_Field$read = function (_p6) {
+	var _p7 = _p6;
+	return _p7.value;
+};
+var _fabiommendes$elm_forms$Forms_Field$resetErrors = function (state) {
+	return _elm_lang$core$Native_Utils.update(
+		state,
+		{errors: _fabiommendes$elm_forms$Forms_Validation$Valid});
+};
+var _fabiommendes$elm_forms$Forms_Field$addErrors = F2(
+	function (errors, state) {
+		var _p8 = errors;
+		if (_p8.ctor === '[]') {
+			return state;
+		} else {
+			var errors_ = function () {
+				var _p9 = state.errors;
+				if (_p9.ctor === 'Valid') {
+					return _fabiommendes$elm_forms$Forms_Validation$Errors(errors);
+				} else {
+					return _fabiommendes$elm_forms$Forms_Validation$Errors(
+						A2(_elm_lang$core$Basics_ops['++'], errors, _p9._0));
+				}
+			}();
+			return _elm_lang$core$Native_Utils.update(
+				state,
+				{errors: errors_});
+		}
+	});
+var _fabiommendes$elm_forms$Forms_Field$addError = F2(
+	function (error, state) {
+		return A2(
+			_fabiommendes$elm_forms$Forms_Field$addErrors,
+			{
+				ctor: '::',
+				_0: error,
+				_1: {ctor: '[]'}
+			},
+			state);
+	});
+var _fabiommendes$elm_forms$Forms_Field$setValue = F2(
+	function (value, state) {
+		return _elm_lang$core$Native_Utils.update(
+			state,
+			{value: value});
+	});
+var _fabiommendes$elm_forms$Forms_Field$update = F2(
+	function (msg, field) {
+		var _p10 = msg;
+		if (_p10.ctor === 'UpdateField') {
+			return _elm_lang$core$Native_Utils.eq(_p10._0, field.id) ? A2(_fabiommendes$elm_forms$Forms_Field$setValue, _p10._1, field) : field;
+		} else {
+			return _elm_lang$core$Native_Utils.eq(_p10._0, field.id) ? _fabiommendes$elm_forms$Forms_Field$validate(field) : field;
+		}
+	});
+var _fabiommendes$elm_forms$Forms_Field$required = F2(
+	function (required, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{required: required});
+	});
+var _fabiommendes$elm_forms$Forms_Field$validator = F2(
+	function (validator, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				validators: A2(
+					_elm_lang$core$Basics_ops['++'],
+					field.validators,
+					{
+						ctor: '::',
+						_0: validator,
+						_1: {ctor: '[]'}
+					})
+			});
+	});
+var _fabiommendes$elm_forms$Forms_Field$label = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{label: text});
+	});
+var _fabiommendes$elm_forms$Forms_Field$default = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				$default: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _fabiommendes$elm_forms$Forms_Field$placeholder = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				placeholder: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _fabiommendes$elm_forms$Forms_Field$helpText = F2(
+	function (text, field) {
+		return _elm_lang$core$Native_Utils.update(
+			field,
+			{
+				helpText: _elm_lang$core$Maybe$Just(text)
+			});
+	});
+var _fabiommendes$elm_forms$Forms_Field_ops = _fabiommendes$elm_forms$Forms_Field_ops || {};
+_fabiommendes$elm_forms$Forms_Field_ops['#'] = F2(
+	function (x, y) {
+		return _elm_lang$core$Native_Utils.update(
+			x,
+			{which: y});
+	});
+var _fabiommendes$elm_forms$Forms_Field$typeToString = function (tt) {
+	return _elm_lang$core$String$toLower(
+		_elm_lang$core$Basics$toString(tt));
+};
+var _fabiommendes$elm_forms$Forms_Field$Field = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return {id: a, value: b, label: c, which: d, required: e, requiredMessage: f, validators: g, errors: h, $default: i, helpText: j, placeholder: k};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _fabiommendes$elm_forms$Forms_Field$Email = {ctor: 'Email'};
+var _fabiommendes$elm_forms$Forms_Field$TextArea = {ctor: 'TextArea'};
+var _fabiommendes$elm_forms$Forms_Field$Password = {ctor: 'Password'};
+var _fabiommendes$elm_forms$Forms_Field$Text = {ctor: 'Text'};
+var _fabiommendes$elm_forms$Forms_Field$init = function (id) {
+	return {
+		id: id,
+		which: _fabiommendes$elm_forms$Forms_Field$Text,
+		value: '',
+		label: 'Input',
+		helpText: _elm_lang$core$Maybe$Nothing,
+		required: true,
+		requiredMessage: 'This field is required',
+		placeholder: _elm_lang$core$Maybe$Nothing,
+		$default: _elm_lang$core$Maybe$Nothing,
+		validators: {ctor: '[]'},
+		errors: _fabiommendes$elm_forms$Forms_Validation$Valid
+	};
+};
+var _fabiommendes$elm_forms$Forms_Field$stringToType = function (raw) {
+	var types = {
+		ctor: '::',
+		_0: _fabiommendes$elm_forms$Forms_Field$Text,
+		_1: {
+			ctor: '::',
+			_0: _fabiommendes$elm_forms$Forms_Field$TextArea,
+			_1: {
+				ctor: '::',
+				_0: _fabiommendes$elm_forms$Forms_Field$Password,
+				_1: {
+					ctor: '::',
+					_0: _fabiommendes$elm_forms$Forms_Field$Email,
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+	var strings = A2(_elm_lang$core$List$map, _fabiommendes$elm_forms$Forms_Field$typeToString, types);
+	var dict = _elm_lang$core$Dict$fromList(
+		A3(
+			_elm_lang$core$List$map2,
+			F2(
+				function (x, y) {
+					return {ctor: '_Tuple2', _0: x, _1: y};
+				}),
+			strings,
+			types));
+	return A2(_elm_lang$core$Dict$get, raw, dict);
+};
+var _fabiommendes$elm_forms$Forms_Field$charField = function (id) {
+	return A2(
+		_fabiommendes$elm_forms$Forms_Field_ops['#'],
+		_fabiommendes$elm_forms$Forms_Field$init(id),
+		_fabiommendes$elm_forms$Forms_Field$Text);
+};
+var _fabiommendes$elm_forms$Forms_Field$textField = function (id) {
+	return A2(
+		_fabiommendes$elm_forms$Forms_Field_ops['#'],
+		_fabiommendes$elm_forms$Forms_Field$charField(id),
+		_fabiommendes$elm_forms$Forms_Field$TextArea);
+};
+var _fabiommendes$elm_forms$Forms_Field$passwordField = function (id) {
+	return A2(
+		_fabiommendes$elm_forms$Forms_Field_ops['#'],
+		_fabiommendes$elm_forms$Forms_Field$charField(id),
+		_fabiommendes$elm_forms$Forms_Field$Password);
+};
+var _fabiommendes$elm_forms$Forms_Field$emailField = function (id) {
+	return A2(
+		_fabiommendes$elm_forms$Forms_Field_ops['#'],
+		_fabiommendes$elm_forms$Forms_Field$charField(id),
+		_fabiommendes$elm_forms$Forms_Field$Email);
+};
+var _fabiommendes$elm_forms$Forms_Field$RequestValidation = function (a) {
+	return {ctor: 'RequestValidation', _0: a};
+};
+var _fabiommendes$elm_forms$Forms_Field$UpdateField = F2(
+	function (a, b) {
+		return {ctor: 'UpdateField', _0: a, _1: b};
+	});
+var _fabiommendes$elm_forms$Forms_Field$viewInput = function (_p11) {
+	var _p12 = _p11;
+	var _p15 = _p12.which;
+	var _p14 = _p12;
+	var value = _elm_lang$core$String$isEmpty(_p14.value) ? _p14.$default : _elm_lang$core$Maybe$Just(_p14.value);
+	var attrs = A2(
+		_fabiommendes$elm_forms$Forms_Util_ops['::?'],
+		A2(
+			_fabiommendes$elm_forms$Forms_Util_ops['::?'],
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onInput(
+					_fabiommendes$elm_forms$Forms_Field$UpdateField(_p12.id)),
+				_1: {ctor: '[]'}
+			},
+			A2(_fabiommendes$elm_forms$Forms_Util_ops['|>?'], _p14.placeholder, _elm_lang$html$Html_Attributes$placeholder)),
+		A2(_fabiommendes$elm_forms$Forms_Util_ops['|>?'], value, _elm_lang$html$Html_Attributes$value));
+	var _p13 = _p15;
+	if (_p13.ctor === 'TextArea') {
+		return A2(
+			_elm_lang$html$Html$textarea,
+			attrs,
+			{ctor: '[]'});
+	} else {
+		return A2(
+			_elm_lang$html$Html$input,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_(
+						_fabiommendes$elm_forms$Forms_Field$typeToString(_p15)),
+					_1: {ctor: '[]'}
+				},
+				attrs),
+			{ctor: '[]'});
+	}
+};
+var _fabiommendes$elm_forms$Forms_Field$view = function (field) {
+	var errors = function () {
+		var _p16 = field.errors;
+		if (_p16.ctor === 'Valid') {
+			return {ctor: '[]'};
+		} else {
+			return {
+				ctor: '::',
+				_0: A2(
+					_fabiommendes$elm_forms$Forms_Field$viewErrors,
+					{ctor: '[]'},
+					_p16._0),
+				_1: {ctor: '[]'}
+			};
+		}
+	}();
+	var input = _fabiommendes$elm_forms$Forms_Field$viewInput(field);
+	var children = A2(
+		_fabiommendes$elm_forms$Forms_Util_ops['::?'],
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(field.label),
+			_1: A2(
+				_elm_lang$core$Basics_ops['++'],
+				errors,
+				{
+					ctor: '::',
+					_0: input,
+					_1: {ctor: '[]'}
+				})
+		},
+		A2(
+			_fabiommendes$elm_forms$Forms_Util_ops['|>?'],
+			field.helpText,
+			function (x) {
+				return A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(x),
+						_1: {ctor: '[]'}
+					});
+			}));
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('form-field'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$label,
+				{ctor: '[]'},
+				children),
+			_1: {ctor: '[]'}
+		});
+};
