@@ -32,16 +32,15 @@ Classes
 
 import mock
 import pytest
-from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db.models import QuerySet
 from lazyutils import delegate_to
 from mock import patch, Mock
 
-from codeschool.core.users.factories import UserFactory
-from codeschool.lms.activities.models import \
-    Activity, Progress, Submission, Feedback
 from .mocks import submit_for, queryset_mock, wagtail_page
+from ..core.users.factories import UserFactory
+from ..core.users.models import User
+from ..lms.activities.models import Activity, Progress, Submission, Feedback
 
 
 #
@@ -104,7 +103,7 @@ class ActivityFixtures:
     def user(self):
         "An user"
 
-        return UserFactory.build(id=2, username='user')
+        return UserFactory.build(id=2, alias='user')
 
     # Properties
     progress_class = delegate_to('activity_class')
@@ -197,8 +196,8 @@ class ActivityTests(ActivityFixtures):
             assert isinstance(submissions, QuerySet)
 
     def test_clean_activity(self, activity):
-        activity.owner = User(username='user', first_name='John',
-                              last_name='Smith', email='foo@bar.com')
+        activity.owner = User(alias='user', name='John Smith',
+                              email='foo@bar.com', school_id='1234')
         activity.clean()
         assert activity.author_name == 'John Smith <foo@bar.com>'
 
