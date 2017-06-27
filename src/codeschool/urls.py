@@ -22,17 +22,17 @@ from wagtail.wagtailcore import urls as wagtail_urls
 from . import settings
 from .api import router, import_api_modules
 from .core.config.views import index_view
-from .core.users.views import start_view
 
 import_api_modules()
 
 # Basic URLS
 urlpatterns = [
     url(r'^$', index_view, name='index'),
-    url(r'^login/$', start_view, name='login'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),
     url(r'^api/', include(router.urls)),
     url(r'^admin/', include('wagtail.wagtailadmin.urls')),
+    url(r'^', include('codeschool.core.users.urls', namespace='auth')),
+
 ]
 
 # Optional debug views
@@ -73,7 +73,7 @@ if apps.is_installed('codeschool.lms.classrooms'):
 
 # Optional cli/clt interface
 if apps.is_installed('codeschool.cli'):
-    from codeschool.cli import api as jsonrpc_api
+    from codeschool.extra.cli import api as jsonrpc_api
 
     urlpatterns += [
         url(r'^cli/jsonrpc/', include(jsonrpc_api.urls)),

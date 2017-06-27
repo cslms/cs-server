@@ -1,11 +1,22 @@
 from django import http
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
-from django.views.generic import TemplateView
 
+from codeschool import settings
 from . import bricks
 from .forms import LoginForm, UserForm, ProfileForm
+
+
+def context():
+    return dict(
+        active_tab='login',
+        login_form=LoginForm(),
+        user_form=UserForm(),
+        profile_form=ProfileForm(),
+    )
 
 
 def login_view_post(request):
@@ -13,11 +24,49 @@ def login_view_post(request):
     Handles a POST request via login form.
     """
 
+    ctx = context()
+    ctx['login_form'] = form = LoginForm(request.POST)
 
-def signup_view_post(request):
+    if form.is_valid():
+        # Login
+        email = form.cleaned_data['email']
+        password = form.cleaned_data['password']
+        user = authenticate(**form.cleaned_data)
+        login(request, user, backend=settings.AUTHENTICATION_BACKENDS[-1])
+
+        # Redirect
+        redirect_url = request.GET.get('redirect', 'index')
+        return redirect(redirect_url)
+    else:
+        return render(request, 'users/start.jinja2', ctx)
+
+
+def register_view_post(request):
     """
     Handles a POST request via the signup form.
     """
+
+    ctx = context()
+    ctx['user_form'] = user_form = UserForm(request.POST)
+    ctx['profile_form'] = profile_form = ProfileForm(request.POST)
+    ctx['active_tab'] = 'register'
+
+    if user_form.is_valid() and profile_form.is_valid():
+        with transaction.atomic():
+            user = user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.id = user.id
+            profile.user = user
+            profile.save()
+
+        user = authenticate(**user_form.cleaned_data)
+        login(request, user, backend=settings.AUTHENTICATION_BACKENDS[-1])
+
+        # Redirect
+        redirect_url = request.GET.get('redirect', 'index')
+        return redirect(redirect_url)
+    else:
+        return render(request, 'users/start.jinja2', ctx)
 
 
 def start_view(request):
@@ -30,92 +79,13 @@ def start_view(request):
         action = request.POST['action']
         if action == 'login':
             return login_view_post(request)
-        elif action == 'signup':
-            return signup_view_post(request)
+        elif action == 'register':
+            return register_view_post(request)
         else:
             return http.HttpResponseBadRequest('invalid action')
 
     else:
-        ctx = dict(
-            login_form=LoginForm(),
-            user_form=UserForm(),
-            profile_form=ProfileForm(),
-        )
-        return render(request, 'users/start.jinja2', ctx)
-
-
-class LoginView(TemplateView):
-    """
-    View for the default login page.
-    """
-
-    template_name = 'users/login.jinja2'
-
-    def get_context_data(self, **kwargs):
-
-        return super().get_context_data(
-            login_form=LoginForm(),
-            user_form=UserForm(),
-            profile_form=ProfileForm(),
-            **kwargs
-        )
-
-    def post(self, request):
-        if request.POST['action'] == 'signup':
-            return self.post_signup(request)
-        else:
-            return self.post_signin(request)
-
-    def post_signin(self, request):
-        return views.signin(
-            request,
-            template_name='auth/login.jinja2',
-            extra_context=self.get_context_data(action='signin')
-        )
-
-    def post_signup(self, request):
-        context = self.get_context_data(action='signup')
-        form = SignupForm(request.POST)
-        opt_form = SignupOptionalForm(request.POST)
-
-        # Render forms if they are invalid
-        if not (opt_form.is_valid() and form.is_valid()):
-            context['signup'] = form
-            context['signup_opt'] = opt_form
-            return super().render_to_response(context)
-
-        # Validate and proceed
-        context['signup_opt'] = opt_form
-        response = views.signup(
-            request,
-            signup_form=SignupForm,
-            template_name=self.template_name,
-            extra_context=context,
-            success_url='/',
-        )
-
-        # It redirects on success: we intercept and add extra
-        # information
-        if isinstance(response, http.HttpResponseRedirect):
-            # Fill extra info in signup form
-            aux = form.cleaned_data
-            user = User.objects.get(username=aux['username'])
-            user.first_name = aux['first_name']
-            user.last_name = aux['last_name']
-
-            # Fill extra profile info
-            opt_form = SignupOptionalForm(request.POST)
-            opt_form.is_valid()
-            aux = opt_form.cleaned_data
-            user.profile.about_me = aux['about_me']
-            user.profile.gender = aux['gender']
-            user.profile.date_of_birth = aux['date_of_birth']
-
-            # Save modifications and go
-            user.save()
-            user.profile.save()
-            return redirect('index')
-        return response
+        return render(request, 'users/start.jinja2', context())
 
 
 @login_required
@@ -130,3 +100,13 @@ def profile_view(request):
         navbar=bricks.navbar(user),
     )
     return render(request, 'base.jinja2', context)
+
+
+def logout_view(request):
+    ctx = {
+        'post': request.method == 'POST',
+    }
+
+    if request.method == 'POST' and not request.user.is_anonymous():
+        logout(request)
+    return render(request, 'users/logout.jinja2', ctx)

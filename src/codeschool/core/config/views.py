@@ -17,7 +17,7 @@ def index_view(request):
 
     initial = config_options.get('initial-page', None)
     if initial is None:
-        if apps.is_installed('fresh_install'):
+        if apps.is_installed('codeschool.extra.fresh_install'):
             from codeschool.extra.fresh_install.views import \
                 configure_server_view
             return configure_server_view(request)
@@ -25,7 +25,7 @@ def index_view(request):
             return http.HttpResponseBadRequest('initial-page is not set!')
 
     if request.user.is_anonymous():
-        return redirect('login')
+        return redirect('auth:login')
 
     return redirect(config_options['initial-page'])
 

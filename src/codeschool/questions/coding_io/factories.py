@@ -3,7 +3,7 @@ import os
 from django.test import RequestFactory
 
 import codeschool.questions
-from codeschool.core.models import get_wagtail_root_page
+from codeschool.core.config.models import get_wagtail_root_page
 from codeschool.questions.coding_io.loaders import import_markio_from_path
 from codeschool.questions.coding_io.models import CodingIoQuestion
 

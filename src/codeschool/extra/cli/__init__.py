@@ -4,7 +4,7 @@ the `codeschool` and `codeschoolclt` programs.
 
 All these endpoints are based on a JSON-RPC
 """
-default_app_config = 'codeschool.cli.apps.CliConfig'
+default_app_config = 'codeschool.extra.cli.apps.CliConfig'
 
 from jsonrpc.backend.django import JSONRPCAPI
 

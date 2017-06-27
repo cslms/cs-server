@@ -7,8 +7,8 @@ from django.shortcuts import render
 from codeschool import models
 from codeschool import settings
 from codeschool.core.config import config_options, global_data_store
+from codeschool.core.config.views import index_view
 from codeschool.core.users.models import Profile
-from codeschool.core.views import index_view
 from .forms import ConfigForm, NewUserForm, \
     SysProfileForm, PasswordForm
 
@@ -96,7 +96,10 @@ def site_has_superuser():
     Return True if site has a superuser defined.
     """
 
-    return models.User.objects.filter(is_superuser=True).count() > 0
+    return models.get_user_model() \
+               .objects \
+               .filter(is_superuser=True) \
+               .count() > 0
 
 
 def fill_maurice_moss_profile(profile: Profile):
@@ -126,7 +129,7 @@ def create_superuser_from_forms(superuser_form, password_form) -> models.User:
     profile, _ = Profile.objects.get_or_create(user=user)
 
     # Easter egg-ish ;-)
-    if user.first_name == 'Maurice' and user.last_name == 'Moss':
+    if user.name == 'Maurice Moss':
         fill_maurice_moss_profile(profile)
 
     return user

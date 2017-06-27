@@ -1,0 +1,23 @@
+{% extends 'users/base.jinja2' %}
+
+{% block title %}{{ _("Logout") }}{% endblock %}
+{% block content_title %}
+    {{ _("You have been signed out.") if post else _('Logout') }}
+{% endblock %}
+
+{% block content_body %}
+    {% if post %}
+        <p>{% trans %}
+            You have been signed out.
+            Click <a href="/login/">here</a> to go to back to the login page.
+        {% endtrans %}</p>
+    {% else %}
+        <form method="POST">
+            <p>One last step...
+                <br>
+                {{ csrf_input }}
+                <input type="submit" value="{{ _('Confirm logout') }}">
+            </p>
+        </form>
+    {% endif %}
+{% endblock %}

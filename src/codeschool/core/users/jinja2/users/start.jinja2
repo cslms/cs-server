@@ -1,40 +1,51 @@
 {% extends "base-ternary.jinja2" %}
-{% set active_tab = action|default('signin') %}
 
 {% block content_title %}{{ _('Welcome to Codeschool!') }}{% endblock %}
-{% set tabs = [('signin', _('Login')), ('signup', _('Sign up'))] %}
 
-{% block main %}
-    <section id="signin" class="mdl-tabs__panel{% if active_tab == 'signin' %} is-active{% endif %}">
-        <form id="signin-form" method="POST">
-            {{ csrf_input}}
-            <input type="hidden" name="action" value="signin">
-            <table class="form">
-                {% if action == 'signin' and form is defined %}
-                    {{ form.as_table() }}
-                {% else %}
-                    {{ signin.as_table() }}
-                {% endif %}
-            </table>
-        </form>
-    </section>
+{% block content_body %}
+    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div class="mdl-tabs__tab-bar dark">
+            <a href="#login"
+               class="mdl-tabs__tab{%- if active_tab|default('login') == 'login'-%}
+                 {{- " is-active" }}
+             {% endif %}">{{ _('Login') }}</a>
+            <a href="#register"
+               class="mdl-tabs__tab{%- if (active_tab == 'register')-%}
+                {{- " is-active" }}{% endif %}">{{ _('Login') }}
+            </a>
+        </div>
 
-    <section id="signup" class="mdl-tabs__panel{% if active_tab == 'signup' %} is-active{% endif %}">
-        <form id="signup-form" method="POST">
-            <input type="hidden" name="action" value="signup">
-            {{ csrf_input}}
-            <h2>{{ _('Required fields') }}</h2>
-            <table class="form">
-                {% if action == 'signup' and form is defined %}
-                    {{ form.as_table() }}
-                {% else %}
-                    {{ signup.as_table() }}
-                {% endif %}
-            </table>
-            <h2>{{ _('Optional fields') }}</h2>
-            <table class="form">{{ signup_opt.as_table() }}</table>
-        </form>
-    </section>
+        <main>
+
+            <section id="login"
+                     class="mdl-tabs__panel{% if active_tab|default('login') == 'login' %} is-active{% endif %}">
+                <form id="login-form" method="POST">
+                    {{ csrf_input }}
+                    <input type="hidden" name="action" value="login">
+                    <table class="form">
+                        {{ login_form.as_table() }}
+                    </table>
+                </form>
+            </section>
+
+            <section id="register"
+                     class="mdl-tabs__panel{% if active_tab == 'register' %} is-active{% endif %}">
+                <form id="register-form" method="POST">
+                    <input type="hidden" name="action" value="register">
+                    {{ csrf_input }}
+                    <h2>{{ _('Required fields') }}</h2>
+                    <table class="form">
+                        {{ user_form.as_table() }}
+                    </table>
+                    <h2>{{ _('Optional fields') }}</h2>
+                    <table class="form">
+                        {{ profile_form.as_table() }}
+                    </table>
+                </form>
+            </section>
+        </main>
+    </div>
+
 {% endblock %}
 
 
@@ -42,10 +53,10 @@
     {{ super() }}
     <script>
         function submit() {
-            if ($('#signin')[0].classList.contains('is-active')) {
-                $('#signin-form')[0].submit();
+            if ($('#login')[0].classList.contains('is-active')) {
+                $('#login-form')[0].submit();
             } else {
-                $('#signup-form')[0].submit();
+                $('#register-form')[0].submit();
             }
         }
     </script>

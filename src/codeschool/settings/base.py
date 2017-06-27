@@ -93,7 +93,7 @@ STATICFILES_FINDERS = [
 ]
 
 STATICFILES_DIRS = [
-    os.path.join(REPO_DIR, 'static'),
+    os.path.join(REPO_DIR, 'frontend', 'assets'),
 ]
 
 COLLECT_DIR = os.path.join(REPO_DIR, 'collect')
@@ -126,7 +126,6 @@ WAGTAIL_SITE_NAME = 'Codeschool'
 
 AUTHENTICATION_BACKENDS = (
     'rules.permissions.ObjectPermissionBackend',
-    'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )

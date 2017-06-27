@@ -19,13 +19,14 @@ class NewUserForm(forms.ModelForm):
 
     class Meta:
         model = models.get_user_model()
-        fields = ['name', 'email', 'alias']
+        fields = 'name', 'email', 'alias', 'school_id'
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('initial', {
             'alias': 'admin',
             'name': 'Maurice Moss',
-            'email': 'moss.m@reynholm.co.uk',
+            'email': 'admin@admin.com',
+            'school_id': '12345',
         })
         super().__init__(*args, **kwargs)
 

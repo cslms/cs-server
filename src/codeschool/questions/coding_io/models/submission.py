@@ -1,6 +1,7 @@
 import json
 
 from codeschool import models
+from codeschool.core.files.models import ProgrammingLanguage
 from codeschool.questions.models import QuestionSubmission
 from codeschool.utils.managers import manager_instance, queryset_class
 
@@ -37,7 +38,7 @@ class CodingIoSubmission(QuestionSubmission):
     """
 
     source = models.TextField(blank=True)
-    language = models.ForeignKey('files.ProgrammingLanguage')
+    language = models.ForeignKey(ProgrammingLanguage)
 
     objects = manager_instance(QuestionSubmission, CodingIoSubmissionQuerySet,
                                use_for_related_fields=True)

@@ -1,4 +1,4 @@
-from codeschool import settings
+from django.apps import apps
 
 
 def make_example_questions(parent):
@@ -7,7 +7,7 @@ def make_example_questions(parent):
     questions = []
 
     # Numeric questions
-    if 'codeschool.questions.numeric' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.questions.numeric'):
         from codeschool.questions.numeric.factories import \
             make_numeric_question_42, make_numeric_question_pi
 
@@ -17,7 +17,7 @@ def make_example_questions(parent):
         ])
 
     # Coding Io questions
-    if 'codeschool.questions.coding_io' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.questions.coding_io'):
         from codeschool.questions.coding_io.factories import \
             make_question_from_markio_example, make_hello_world_question
 
@@ -28,19 +28,19 @@ def make_example_questions(parent):
         ])
 
     # Multiple choice questions
-    if 'codeschool.questions.multiple_choice' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.questions.multiple_choice'):
         questions.extend([
             # TODO: make_multiple_choice
         ])
 
     # Form questions
-    if 'codeschool.questions.form' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.questions.form'):
         questions.extend([
             # TODO: make_form
         ])
 
     # Form questions
-    if 'codeschool.questions.free_text' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.questions.free_text'):
         questions.extend([
             # TODO: make_form
         ])

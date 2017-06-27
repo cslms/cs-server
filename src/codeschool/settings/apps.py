@@ -2,30 +2,30 @@
 # List of all installed apps
 #
 INSTALLED_APPS = [
+    # Extra content
+    'codeschool.extra.fresh_install.apps.FreshInstallConfig',
+    # 'codeschool.cli',
+
     # Codeschool optional apps
     'codeschool.questions.code',
-    # 'codeschool.questions.free_form',
     'codeschool.questions.numeric',
     'codeschool.questions.coding_io',
-    # 'codeschool.lms.attendance',
-    # 'codeschool.lms.classrooms',
-    # 'codeschool.lms.academic',
-    # 'codeschool.gamification.points',
+    # 'codeschool.questions.free_form',
     # 'codeschool.social.feed',
     # 'codeschool.social.friends',
     # 'codeschool.questions.text',
-    # 'codeschool.cli',
-
-    # Extra content
-    'codeschool.extra.fresh_install',
 
     # Required LMS/Content apps
     'codeschool.questions',
     'codeschool.lms.activities',
+    # 'codeschool.lms.attendance',
+    # 'codeschool.lms.classrooms',
+    # 'codeschool.lms.academic',
+    # 'codeschool.gamification.points',
 
     # Core apps
     'codeschool.core.users.apps.UsersConfig',
-    'codeschool.core.config.apps.ServerConfigConfig',
+    'codeschool.core.config.apps.ConfigConfig',
     'codeschool.core.files.apps.FilesConfig',
     'codeschool.core.services.apps.ServicesConfig',
 
@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'taggit',
 
     # Userena
-    # 'userena',
     'guardian',
     'easy_thumbnails',
 
@@ -65,6 +64,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rules',
 
+    # Wagtail admin requires this even in production. We simply disable the
+    # staticfiles urls in production
+    'django.contrib.staticfiles',
+
     # Django
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,11 +75,4 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
-
-    # Wagtail admin requires this even in production. We simply disable the
-    # staticfiles urls in production
-    'django.contrib.staticfiles',
 ]
-
-
-

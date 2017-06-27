@@ -2,35 +2,9 @@ from django.conf.urls import url
 
 from . import views
 
-#
-#
-# def merged_dict(dict_a, dict_b):
-#     """Merges two dicts and returns output. It's purpose is to ease use of
-#     ``auth_views_compat_quirks``
-#     """
-#
-#     dict_a.update(dict_b)
-#     return dict_a
-#
-#
-# def setting_success_url(func, url, keywords):
-#     """
-#     Revert success url and apply to func.
-#     """
-#
-#     def decorated(request, *args, **kwargs):
-#         success_url = reverse(url, kwargs={
-#             k: v for k, v in kwargs.items() if k in keywords
-#             })
-#         kwargs['success_url'] = success_url
-#         return func(request, *args, **kwargs)
-#
-#     return decorated
-#
-#
-
 urlpatterns = [
-    url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^login/$', views.start_view, name='login'),
+    url(r'^auth/logout/$', views.logout_view, name='logout'),
 ]
 
 #     # Signup, signin and signout

@@ -1,6 +1,7 @@
 import datetime
 
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, \
+    BaseUserManager
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.utils import timezone
@@ -84,6 +85,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         _('date joined'),
         default=timezone.now
     )
+
+    objects = BaseUserManager()
+
+    # Temporary properties defined for compatibility
+    username = property(lambda x: x.alias)
 
     def save(self, *args, **kwargs):
         new = self.id is None
