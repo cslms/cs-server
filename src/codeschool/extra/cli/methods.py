@@ -1,6 +1,5 @@
-from codeschool.cli import api
-
-from codeschool.extra.cli.utils import JSONEncodedError, get_parent_from_hint, \
+from . import api
+from .utils import JSONEncodedError, get_parent_from_hint, \
     validate_user, check_write_permissions, normalize_resource_type, get_loader, \
     wrap_json_rpc, resource_to_url
 

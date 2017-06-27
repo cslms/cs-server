@@ -4,7 +4,7 @@ from markio import parse_markio
 from codeschool.questions.coding_io.ejudge import expand_from_code
 from iospec import parse, Out, In, StandardTestCase
 
-from codeschool.core import get_programming_language
+from codeschool.core.files import get_programming_language
 from codeschool.lms.activities.models import Feedback
 from codeschool.questions.coding_io import factories
 from codeschool.questions.coding_io.models.question import expand_tests

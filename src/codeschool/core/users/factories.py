@@ -1,35 +1,35 @@
 import datetime as dt
 import random
+import string
 
 import factory.django
 from django.db import IntegrityError
 from django.db.models import signals
 from mommys_boy import DjangoMommyFactory, SubFactory, Faker
 
-from . import models
-from .models import Profile
 from codeschool.factories import fake
+from . import models
 
-PROFILE_GENDER = {'male': Profile.GENDER_MALE, 'female': Profile.GENDER_FEMALE}
+PROFILE_GENDER = {
+    'male': models.Profile.GENDER_MALE,
+    'female': models.Profile.GENDER_FEMALE,
+}
 
 
 @factory.django.mute_signals(signals.pre_save, signals.post_save)
 class UserFactory(DjangoMommyFactory):
-
     class Meta:
         model = models.User
         recipe = 'global'
 
 
 class FullUserFactory(DjangoMommyFactory):
-
     class Meta:
         model = models.User
         recipe = 'global'
 
 
 class ProfileFactory(DjangoMommyFactory):
-
     class Meta:
         model = models.Profile
 
@@ -49,7 +49,8 @@ def birthday(age=None):
     return dt.date(year, 1, 1) + dt.timedelta(days=day)
 
 
-def make_user(username, email, password, update=False, commit=True, **kwargs):
+def make_user(alias, email, password, update=False, commit=True,
+              school_id=None, is_teacher=False, **kwargs):
     """
     Creates a user and sets its password.
 
@@ -61,11 +62,27 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
     """
 
     user_fields = {field.name for field in models.User._meta.fields}
+    user_fields.update(['first_name', 'last_name'])
     user_kwargs = {k: v for k, v in kwargs.items() if k in user_fields}
     profile_kwargs = {k: v for k, v in kwargs.items() if k not in user_fields}
 
+    # Sets school id
+    if school_id is None:
+        school_id = random_school_id()
+    user_kwargs.update(alias=alias, email=email, school_id=school_id)
+
+    # Set role
+    if is_teacher:
+        user_kwargs.update(role=models.User.ROLE_TEACHER)
+
+    # Fix name = first_name + last_name
+    if 'first_name' in user_kwargs:
+        user_kwargs['name'] = user_kwargs.pop('first_name')
+        if 'last_name' in user_kwargs:
+            user_kwargs['name'] += ' ' + user_kwargs.pop('last_name')
+
     # Create user
-    user = models.User(username=username, email=email, **user_kwargs)
+    user = models.User(**user_kwargs)
     user.set_password(password)
     if commit:
         try:
@@ -73,7 +90,7 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
         except IntegrityError:
             if not update:
                 raise
-            old = models.User.objects.get(username=username)
+            old = models.User.objects.get(alias=alias)
             user.id = old.id
             user.save()
 
@@ -83,10 +100,10 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
         profile_kwargs['gender'] = PROFILE_GENDER.get(value, value)
 
     # Create profile
-    profile = Profile(user=user, **profile_kwargs)
+    profile = models.Profile(user=user, **profile_kwargs)
     try:
-        profile.id = Profile.objects.get(user=user).id
-    except Profile.DoesNotExist:
+        profile.id = models.Profile.objects.get(user=user).id
+    except models.Profile.DoesNotExist:
         pass
     if commit:
         profile.save()
@@ -94,14 +111,18 @@ def make_user(username, email, password, update=False, commit=True, **kwargs):
     return user
 
 
+def random_school_id():
+    letters = string.ascii_letters + string.digits
+    return ''.join(random.choice(letters) for _ in range(10))
+
+
 def make_yoda_teacher():
     curr_date = dt.datetime.now().date()
     return make_user(
         update=True,
         is_teacher=True,
-        username='yoda',
-        first_name='Yoda',
-        last_name='Master',
+        alias='yoda',
+        name='Yoda',
         password='thereisnotry',
         email='master.yoda@dagobah.com',
         gender='male',
@@ -113,7 +134,7 @@ def make_girafales_teacher():
     return make_user(
         update=True,
         is_teacher=True,
-        username='girafales123',
+        alias='girafales123',
         first_name='Inocêncio',
         last_name='Girafales',
         password='florinda',
@@ -128,7 +149,7 @@ def make_helena_teacher():
     return make_user(
         update=True,
         is_teacher=True,
-        username='helena',
+        alias='helena',
         first_name='Helena',
         last_name='Jacinta',
         password='carrosel',
@@ -142,7 +163,7 @@ def make_miyagi_teacher():
     return make_user(
         update=True,
         is_teacher=True,
-        username='prof.miyagi',
+        alias='prof.miyagi',
         first_name='Keisuke',
         last_name='Miyagi',
         password='karatekid',
@@ -155,7 +176,7 @@ def make_miyagi_teacher():
 def make_joe_user():
     return make_user(
         update=True,
-        username='joe',
+        alias='joe',
         first_name='Joe',
         last_name='Smith',
         password='joe',
@@ -173,7 +194,7 @@ def make_random_student():
         name = fake.first_name_female()
     try:
         return make_user(
-            username=fake.user_name(),
+            alias=fake.user_name(),
             first_name=name,
             last_name=fake.last_name(),
             password=fake.password(),
@@ -188,7 +209,7 @@ def make_random_student():
 def make_maurice_moss():
     return make_user(
         update=True,
-        username='admin',
+        alias='admin',
         first_name='Maurice',
         last_name='Moss',
         password='admin',
@@ -205,7 +226,7 @@ def make_maurice_moss():
 def make_mr_robot():
     return make_user(
         update=True,
-        username='mr_robot',
+        alias='mr_robot',
         first_name='<script>alert("you\'ve been pwnd!")</script>',
         last_name='<script>alert("you\'ve been pwnd!")</script>',
         password='robot',

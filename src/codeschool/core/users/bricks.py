@@ -10,7 +10,7 @@ mugshot = lambda profile: \
     img(class_='mugshot', src=profile.get_mugshot_url(), alt=_('Your mugshot'))
 
 
-def profile(profile: 'accounts.Profile', **kwargs):
+def profile(profile: 'codeschool.core.users.Profile', **kwargs):
     """
     Base profile brick for a given user profile.
     """
@@ -47,7 +47,8 @@ def navbar(user, **kwargs):
         bricks.navsection(
             _('Profile'), map(hyperlink, [
                 _('Edit </profile/edit/>'),
-                _('Change password </profile/change-password/>'),
+                _('Change password </profile/password/>'),
+                _('Change password </profile/email/>'),
             ]))
     ]
     return bricks.navbar(sections)

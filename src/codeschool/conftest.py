@@ -5,7 +5,8 @@ Functions and fixtures that aids writing unit tests.
 import pytest
 from mommys_boy import mommy, fake
 
-from codeschool.accounts.factories import UserFactory, FullUserFactory, birthday
+from codeschool.core.users.factories import \
+    UserFactory, FullUserFactory, birthday
 from sulfur import Driver as _SulfurDriver
 from sulfur.django import client
 

@@ -1,7 +1,7 @@
 import pytest
 
 from codeschool import models
-from codeschool.core import get_wagtail_root
+from codeschool.core.config import get_wagtail_root
 from codeschool.extra.cli.methods import push_resource_worker
 from codeschool.questions.coding_io.factories import \
     source_from_example as markio_example

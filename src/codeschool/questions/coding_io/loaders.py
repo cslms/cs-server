@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from markio import Markio, parse_markio
 
-from codeschool.core import get_programming_language
+from codeschool.core.files import get_programming_language
 from codeschool.questions.coding_io.utils import markdown_to_blocks, \
     blocks_to_markdown
 

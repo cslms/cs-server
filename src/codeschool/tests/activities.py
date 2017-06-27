@@ -38,7 +38,7 @@ from django.db.models import QuerySet
 from lazyutils import delegate_to
 from mock import patch, Mock
 
-from codeschool.accounts.factories import UserFactory
+from codeschool.core.users.factories import UserFactory
 from codeschool.lms.activities.models import \
     Activity, Progress, Submission, Feedback
 from .mocks import submit_for, queryset_mock, wagtail_page
@@ -173,7 +173,7 @@ class ActivityTests(ActivityFixtures):
         cls = self.activity_class
 
         with patch.object(cls, 'progress_set', Mock(for_user=for_user)), \
-                submit_for(cls):
+             submit_for(cls):
             sub = activity.submit(request, **self.submission_payload)
 
         assert isinstance(sub, Submission)

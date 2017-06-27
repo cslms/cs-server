@@ -24,5 +24,4 @@ def import_api_modules():
                 importlib.import_module(api_module)
             except ImportError:
                 pass
-            else:
-                log.debug('imported module: %s' % api_module)
+            # log.debug('imported module: %s' % api_module)

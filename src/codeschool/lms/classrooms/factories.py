@@ -1,4 +1,4 @@
-from codeschool.accounts.factories import make_yoda_teacher, make_students
+from codeschool.core.users.factories import make_yoda_teacher, make_students
 from codeschool.factories import make_page
 
 from codeschool.lms.academic.factories import make_cs101_discipline

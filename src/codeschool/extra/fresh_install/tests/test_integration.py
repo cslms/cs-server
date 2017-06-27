@@ -1,15 +1,17 @@
 import model_reference
 import pytest
-from iospec import IoSpec
 
 from codeschool import settings
 from codeschool.conftest import model_fixture
-from codeschool.core import models, get_wagtail_root, get_programming_language
-from codeschool.core.models import get_wagtail_root_page, ProgrammingLanguage
+from codeschool.core.config import models, get_wagtail_root
+from codeschool.core.config.models import get_wagtail_root_page
+from codeschool.core.files import get_programming_language
+from codeschool.core.files.models import ProgrammingLanguage
+from codeschool.core.users.factories import make_yoda_teacher, make_teachers, \
+    make_students, make_joe_user
 from codeschool.lms.activities.factories import make_basic_activities
 from codeschool.models import Page
-from codeschool.accounts.factories import make_yoda_teacher, make_teachers, \
-    make_students, make_joe_user
+from iospec import IoSpec
 
 pytestmark = pytest.mark.integration
 
@@ -35,12 +37,14 @@ def root(db):
 
 @pytest.fixture
 def hello_world_question(root):
-    from codeschool.questions.coding_io.factories import make_hello_world_question
+    from codeschool.questions.coding_io.factories import \
+        make_hello_world_question
     return make_hello_world_question(root)
 
 
 def test_hello_world_submissions(hello_world_question, joe_user):
-    from codeschool.questions.coding_io.factories import make_hello_world_submissions
+    from codeschool.questions.coding_io.factories import \
+        make_hello_world_submissions
     sub1, sub2 = make_hello_world_submissions(hello_world_question, joe_user)
 
 

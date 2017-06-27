@@ -6,22 +6,27 @@ INSTALLED_APPS = [
     'codeschool.extra.fresh_install.apps.FreshInstallConfig',
     # 'codeschool.cli',
 
-    # Codeschool optional apps
+    # Codeschool optional questions
     'codeschool.questions.code',
     'codeschool.questions.numeric',
     'codeschool.questions.coding_io',
+    'codeschool.questions.text',
     # 'codeschool.questions.free_form',
-    # 'codeschool.social.feed',
-    # 'codeschool.social.friends',
-    # 'codeschool.questions.text',
 
     # Required LMS/Content apps
     'codeschool.questions',
     'codeschool.lms.activities',
-    # 'codeschool.lms.attendance',
-    # 'codeschool.lms.classrooms',
-    # 'codeschool.lms.academic',
+    'codeschool.lms.attendance',
+    'codeschool.lms.classrooms',
+    'codeschool.lms.academic',
+
+    # Gamification platform
     # 'codeschool.gamification.points',
+
+    # Optional social apps
+    # 'codeschool.social.feed',
+    # 'codeschool.social.friends',
+    # 'codeschool.questions.text',
 
     # Core apps
     'codeschool.core.users.apps.UsersConfig',

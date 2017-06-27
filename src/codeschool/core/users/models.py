@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, ugettext as __
-from lazyutils import delegate_to
+from lazyutils import delegate_to, lazy
 
 from codeschool import models
 
@@ -91,13 +91,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Temporary properties defined for compatibility
     username = property(lambda x: x.alias)
 
+    @property
+    def profile(self):
+        if self.id is None:
+            return self._lazy_profile
+
+        try:
+            return self.profile_ref
+        except AttributeError:
+            self.profile_ref = Profile(user=self)
+            return self.profile_ref
+
+    @lazy
+    def _lazy_profile(self):
+        return Profile(user=self)
+
     def save(self, *args, **kwargs):
         new = self.id is None
 
         if new:
             with transaction.atomic():
                 super().save(*args, **kwargs)
-                Profile(user=self).save()
+                self.profile.save()
         else:
             super().save(*args, **kwargs)
 
@@ -148,7 +163,7 @@ class Profile(models.TimeStampedModel):
     user = models.OneToOneField(
         User,
         verbose_name=_('user'),
-        related_name='profile',
+        related_name='profile_ref',
     )
     phone = models.CharField(
         _('Phone'),
