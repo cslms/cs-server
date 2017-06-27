@@ -1,0 +1,21 @@
+var _user$project$Codeschool_User$fake = {
+	name: 'Albert Einstein',
+	email: 'emc2@hotmail.com',
+	username: 'aeinstein',
+	profile: {
+		url: _elm_lang$core$Maybe$Just('https://eistein.blogspot.com/')
+	}
+};
+var _user$project$Codeschool_User$empty = {
+	name: '?',
+	email: '',
+	username: '?',
+	profile: {url: _elm_lang$core$Maybe$Nothing}
+};
+var _user$project$Codeschool_User$User = F4(
+	function (a, b, c, d) {
+		return {name: a, email: b, username: c, profile: d};
+	});
+var _user$project$Codeschool_User$Profile = function (a) {
+	return {url: a};
+};

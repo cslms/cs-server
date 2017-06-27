@@ -13,7 +13,8 @@ INSTALLED_APPS = [
     'codeschool.lms.academic',
     # 'codeschool.gamification',
     # 'codeschool.social.feed',
-    # 'codeschool.social.friends',
+    'codeschool.social.friends',
+    'codeschool.questions.text',
     'codeschool.cli',
 
     # These are always required
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'guardian',
 
     # Other 3rd party
+    'friendship',
     'polymorphic',
     'django_extensions',
     'rest_framework',

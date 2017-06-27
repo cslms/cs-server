@@ -11,10 +11,10 @@ class CodeQuestionAdmin(QuestionAdmin):
         model = models.FreeFormQuestion
 
     content_panels = [
-            ...,
+        ...,
 
-            panels.MultiFieldPanel([
-                panels.FieldPanel('type'),
-                panels.FieldPanel('filter'),
-            ], heading=_('Options')),
-        ]
+        panels.MultiFieldPanel([
+            panels.FieldPanel('type'),
+            panels.FieldPanel('filter'),
+        ], heading=_('Options')),
+    ]

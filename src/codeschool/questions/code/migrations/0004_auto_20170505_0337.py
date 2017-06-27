@@ -16,11 +16,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='codequestion',
             name='disabled',
-            field=models.BooleanField(default=bool, help_text='Activities can be automatically disabled when Codeshool encounters an error. This usually produces a message saved on the .disabled_message attribute. This field is not controlled directly by users.', verbose_name='Disabled'),
+            field=models.BooleanField(
+                default=bool, help_text='Activities can be automatically disabled when Codeshool encounters an error. This usually produces a message saved on the .disabled_message attribute. This field is not controlled directly by users.', verbose_name='Disabled'),
         ),
         migrations.AlterField(
             model_name='codequestion',
             name='visible',
-            field=models.BooleanField(default=codeschool.lms.activities.models.activity.bool_to_true, help_text='Makes activity invisible to users.', verbose_name='Invisible'),
+            field=models.BooleanField(default=codeschool.lms.activities.models.activity.bool_to_true,
+                                      help_text='Makes activity invisible to users.', verbose_name='Invisible'),
         ),
     ]

@@ -1,9 +1,4 @@
 engines:
-  csslint:
-    enabled: true
-    checks:
-      important:
-        enabled: false
   duplication:
     enabled: true
     config:
@@ -12,8 +7,6 @@ engines:
         python:
           python_version: 3
           mass_threshold: 60
-  eslint:
-    enabled: true
   fixme:
     enabled: true
   radon:
@@ -23,13 +16,21 @@ engines:
     checks:
       E501:
         enabled: false
-      E111:
+      E731:
         enabled: false
-      E114:
-        enabled: false
+  csslint:
+    enabled: true
+  eslint:
+    enabled: true
 ratings:
   paths:
   - "src/codeschool/**.py"
 exclude_paths:
-  - src/codeschool/**/migrations/
+  - "src/codeschool/**/migrations/"
   - "__init__.py"
+  - "node_modules/**/*"
+  - "static/**/*"
+  - "docker/**/*"
+  - "collect/**/*"
+  - "docs/**/*"
+  - "static_src/**/elm-stuff/**/*"

@@ -63,7 +63,7 @@ class NumericQuestion(Question):
         return ctx
 
     def filter_user_submission_payload(self, request, payload):
-        return {'value': float(payload.get('value', None) or 0)}
+        return {'value': float(payload.get('value') or 0)}
 
 
 class NumericProgress(QuestionProgress):

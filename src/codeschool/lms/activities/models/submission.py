@@ -7,8 +7,9 @@ from codeschool import models
 from codeschool.errors import InvalidSubmissionError, GradingError
 from codeschool.utils.misc import update_state
 from codeschool.utils.string import md5hash
-from .mixins import FromProgressAttributesMixin, CommitMixin
-from ..managers.submission import submission_manager
+from .mixins import FromProgressAttributesMixin
+from .mixins import CommitMixin
+from ..managers.submission import SubmissionManager
 from ..signals import submission_graded_signal
 
 logger = logging.getLogger('codeschool.lms.activities')

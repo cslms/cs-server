@@ -6,6 +6,7 @@ from . import models
 
 
 class QuestionAdmin(ShortDecriptionAdmin):
+
     class Meta:
         model = models.Question
         abstract = True

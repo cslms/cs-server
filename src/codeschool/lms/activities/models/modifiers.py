@@ -157,8 +157,8 @@ class Deadline(models.Model):
               (self.hard_deadline is None and self.deadline is not None
                and now > self.deadline)):
             return 'expired'
-        elif (self.hard_deadline is not None and now < self.hard_deadline and
-              self.deadline is not None and now > self.deadline):
+        elif (self.hard_deadline is not None and self.deadline < now < self.hard_deadline and
+              self.deadline is not None):
             return 'penalty'
         else:
             return 'valid'

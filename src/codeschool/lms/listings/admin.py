@@ -8,6 +8,7 @@ admin.site.register(ActivitySection)
 
 
 class ActivityListAdmin(admin.ShortDecriptionAdmin):
+
     class Meta:
         model = ActivityList
 
@@ -15,8 +16,8 @@ class ActivityListAdmin(admin.ShortDecriptionAdmin):
     subpage_types = ['ActivitySection']
 
 
-
 class ActivitySectionAdmin(admin.ShortDecriptionAdmin):
+
     class Meta:
         model = ActivitySection
 

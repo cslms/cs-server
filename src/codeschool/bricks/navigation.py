@@ -27,7 +27,7 @@ def navsection(title, links, href=None):
         title,
         ul(class_='cs-nav__block-items')[[
             li(elem) for elem in links
-            ]],
+        ]],
     ]
 
 

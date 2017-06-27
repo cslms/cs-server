@@ -8,12 +8,14 @@ WAGTAIL_ADMIN_CLASSES = {}
 
 
 class WagtailAdminMeta:
+
     def __init__(self, model=None, abstract=False):
         self.model = model
         self.abstract = abstract
 
 
 class WagtailAdminBase(type):
+
     def __new__(cls, name, bases, ns):
         meta = ns.pop('Meta', None)
         meta_ns = (
@@ -58,8 +60,8 @@ def expand_panel(cls, attr):
     return panels
 
 
-
 class WagtailAdmin(metaclass=WagtailAdminBase):
+
     class Meta:
         abstract = True
 
@@ -110,6 +112,7 @@ class WagtailAdmin(metaclass=WagtailAdminBase):
 
 
 class DecoupledAdminPage(Page):
+
     class Meta:
         abstract = True
 
@@ -120,4 +123,3 @@ class DecoupledAdminPage(Page):
             return admin().get_edit_handler()
         else:
             return super().get_edit_handler()
-

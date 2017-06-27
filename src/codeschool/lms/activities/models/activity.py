@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.types.rules import Rules
-from .mixins import CommitMixin
+from codeschool.mixins import CommitMixin
 from .utils import AuxiliaryClassIntrospection
 from ..managers.activity import ActivityManager
 from ..meta import ActivityMeta
@@ -176,7 +176,8 @@ class Activity(CommitMixin,
 
         # Dispatch to the progress object
         user = request.user
-        logger.info('%r, submission from user %r' % (self.title, user.username))
+        logger.info('%r, submission from user %r' %
+                    (self.title, user.username))
         progress = self.progress_set.for_user(user)
         return progress.submit(request, kwargs, commit=_commit)
 

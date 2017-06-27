@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.utils.request import get_ip
-from .mixins import CommitMixin
+from codeschool.mixins import CommitMixin
 from ..managers.progress import ProgressManager
 
 logger = logging.getLogger('codeschool.lms.activities')
@@ -129,7 +129,7 @@ class Progress(CommitMixin,
         # Check if it is the best submission
         grade = feedback.given_grade_pc
         if (self.best_submission is None or
-                    self.best_submission.feedback.given_grade_pc < grade):
+                self.best_submission.feedback.given_grade_pc < grade):
             self.best_submission = submission
 
         # Update grades for activity considering past submissions

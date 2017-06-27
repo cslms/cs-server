@@ -11,12 +11,12 @@ class CodeQuestionAdmin(QuestionAdmin):
         model = models.CodeQuestion
 
     content_panels = [
-            ...,
+        ...,
 
-            panels.MultiFieldPanel([
-                panels.FieldPanel('grader'),
-                panels.FieldPanel('reference'),
-                panels.FieldPanel('function_name'),
-                panels.FieldPanel('timeout'),
-            ], heading=_('Options')),
-        ]
+        panels.MultiFieldPanel([
+            panels.FieldPanel('grader'),
+            panels.FieldPanel('reference'),
+            panels.FieldPanel('function_name'),
+            panels.FieldPanel('timeout'),
+        ], heading=_('Options')),
+    ]
