@@ -1,6 +1,5 @@
-from django.utils.translation import ugettext_lazy as _
-
 from codeschool import models
+from django.utils.translation import ugettext_lazy as _
 from codeschool.lms.activities.models import Activity
 from django.core.validators import MinValueValidator, MaxValueValidator
 
