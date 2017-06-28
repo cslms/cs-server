@@ -3,7 +3,6 @@ import pytest
 from mock import patch, Mock
 from codeschool.models import User
 from types import SimpleNamespace
-from codeschool.lms.activities.tests.mocks import wagtail_page
 from codeschool.sparta.models import SpartaActivity, UserGrade
 from codeschool.sparta.models.activity import read_csv_file
 
@@ -15,8 +14,7 @@ class TestActivity:
     @pytest.fixture
     def activity(self):
         cls = self.activity_class
-        with wagtail_page(cls):
-            result = cls(title='Test', id=1)
+        result = cls(title='Test', id=1)
         result.specific = result
         return result
 
