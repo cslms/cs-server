@@ -2,6 +2,7 @@ import pytest
 
 from mock import patch, Mock
 from codeschool.models import User
+from types import SimpleNamespace
 from codeschool.lms.activities.tests.mocks import wagtail_page
 from codeschool.sparta.models import SpartaActivity, UserGrade
 from codeschool.sparta.models.activity import read_csv_file
@@ -42,14 +43,25 @@ class TestActivity:
         assert grade1.grade == 1.0
 
     def test_create_post_grade_csv(self, activity: SpartaActivity):
-        csv_data_should_be = 'a;1\nb;4;\nc;5\n'
-        users_grade = [
-            UserGrade(user=Mock(id=1), grade=1, activity=activity),
-            UserGrade(user=Mock(id=2), grade=2, post_grade=4, activity=activity),
-            UserGrade(user=Mock(id=3), grade=3, post_grade=5, activity=activity)
-        ]
+        csv_data_should_be = 'a;1\nb;4\nc;5\n'
 
-        with patch.object(User.objects, 'all', lambda self: users_grade):
-            csv = activity.create_post_grade_csv()
+        with patch.object(UserGrade, 'user', None):
+            users = [
+                Mock(spec=User, id=1, username='a'),
+                Mock(spec=User, id=2, username='b'),
+                Mock(spec=User, id=3, username='c')
+            ]
 
-        assert csv == csv_data_should_be
+            users_grade = [
+                UserGrade(user=users[0], grade=1, activity=activity),
+                UserGrade(user=users[1], grade=2, post_grade=4, activity=activity),
+                UserGrade(user=users[2], grade=3, post_grade=5, activity=activity)
+            ]
+
+
+            ns = SimpleNamespace(all=lambda: users_grade)
+
+            with patch.object(SpartaActivity, 'user_grades', ns):
+                csv = activity.create_post_grade_csv()
+
+                assert csv == csv_data_should_be

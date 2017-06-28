@@ -49,7 +49,7 @@ class SpartaActivity(Activity):
         else:
             return user_grades
 
-    def create_post_grade_csv(self):
+    def create_post_grade_csv(self) -> str:
         """
         Create string list with user post_grades.
 
@@ -57,19 +57,21 @@ class SpartaActivity(Activity):
             String with user post_grades
         """
 
-        lines = str
+        lines = []
 
         for user_grade in self.user_grades.all():
-            line_user_grade = user.username
-            if user_grade.post_grade == None:
-                line_user_grade += (';', user_grade.grade)
+            lines.append(user_grade.user.username)
+
+            if user_grade.post_grade is None:
+                lines.append(';')
+                lines.append(str(user_grade.grade))
             else:
-                line_user_grade += (';', user_grade.post_grade)
+                lines.append(';')
+                lines.append(str(user_grade.post_grade))
 
-            lines += line_user_grade
-            lines += '\n'
+            lines.append('\n')
 
-        return lines
+        return "".join(lines)
 
 
 class UserGrade(models.Model):
