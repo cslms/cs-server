@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
 from codeschool.types.rules import Rules
-from .mixins import CommitMixin
+from codeschool.mixins import CommitMixin
 from .utils import AuxiliaryClassIntrospection
 from ..managers.activity import ActivityManager
 from ..meta import ActivityMeta
@@ -15,7 +15,14 @@ logger = logging.getLogger('codeschool.lms.activities')
 ZERO = decimal.Decimal(0)
 
 
-class Activity(CommitMixin, models.RoutablePageExt, metaclass=ActivityMeta):
+def bool_to_true():
+    return True
+
+
+class Activity(CommitMixin,
+               models.RoutableViewsPage,
+               models.DecoupledAdminPage,
+               metaclass=ActivityMeta):
     """
     Represents a gradable activity inside a course. Activities may not have an
     explicit grade, but yet may provide points to the students via the
@@ -44,9 +51,10 @@ class Activity(CommitMixin, models.RoutablePageExt, metaclass=ActivityMeta):
             'The author\'s name, if not the same user as the question owner.'
         ),
     )
+    # Do we need this? Can we use wagtail's live attribute?
     visible = models.BooleanField(
         _('Invisible'),
-        default=bool,
+        default=bool_to_true,
         help_text=_(
             'Makes activity invisible to users.'
         ),
@@ -81,7 +89,8 @@ class Activity(CommitMixin, models.RoutablePageExt, metaclass=ActivityMeta):
         help_text=_(
             'Activities can be automatically disabled when Codeshool '
             'encounters an error. This usually produces a message saved on '
-            'the .disabled_message attribute.'
+            'the .disabled_message attribute. '
+            'This field is not controlled directly by users.'
         )
     )
     disabled_message = models.TextField(
@@ -167,7 +176,8 @@ class Activity(CommitMixin, models.RoutablePageExt, metaclass=ActivityMeta):
 
         # Dispatch to the progress object
         user = request.user
-        logger.info('%r, submission from user %r' % (self.title, user.username))
+        logger.info('%r, submission from user %r' %
+                    (self.title, user.username))
         progress = self.progress_set.for_user(user)
         return progress.submit(request, kwargs, commit=_commit)
 
@@ -177,7 +187,9 @@ class Activity(CommitMixin, models.RoutablePageExt, metaclass=ActivityMeta):
         dictionary with only those arguments that should be passed to the
         .submit() function.
         """
-        return {}
+
+        data_fields = self.submission_class.data_fields()
+        return {k: v for (k, v) in payload.items() if k in data_fields}
 
     def submit_with_user_payload(self, request, payload):
         """

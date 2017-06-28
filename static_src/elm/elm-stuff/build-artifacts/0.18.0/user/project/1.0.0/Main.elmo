@@ -1,0 +1,703 @@
+var _user$project$Main$longDescription = function (data) {
+	var description = function (item) {
+		var _p0 = item;
+		switch (_p0.ctor) {
+			case 'Markdown':
+				return A2(
+					_evancz$elm_markdown$Markdown$toHtml,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('cs-markdown'),
+						_1: {ctor: '[]'}
+					},
+					_p0._0);
+			case 'Html':
+				return A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p0._0),
+						_1: {ctor: '[]'}
+					});
+			default:
+				return A2(
+					_elm_lang$html$Html$span,
+					{ctor: '[]'},
+					{ctor: '[]'});
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h2,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('cs-banner'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Description'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$article,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('question-stem'),
+						_1: {ctor: '[]'}
+					},
+					A2(_elm_lang$core$List$map, description, data)),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Main$contentHeader = F2(
+	function (title, subtitle) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(title),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$String$isEmpty(subtitle) ? title : subtitle),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$Main$footer = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('cs-foot mdl-cell mdl-cell--12-col'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('cs-foot__copyright'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Copyright 2016 -'),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$href('http://github.com/fabiommendes/codeschool'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Codeschool'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Site gerenciado por Fábio M. Mendes na UnB/Gama.'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Main$header = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('cs-head mdl-cell mdl-cell--12-col'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('cs-logo'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('cs-logo__img'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src('/static/img/logo.svg'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$nav,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('cs-head__nav'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('cs-head__links'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$href('/questions/'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Questions'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$span,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('cs-head__fab mdl-button mdl-js-button mdl-button--fab mdl-button--colored fab-button'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$id('cs-head--dropdown-trigger'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$span,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('dropdown-trigger'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('a'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$ul,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$for('cs-head--dropdown-trigger'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$li,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('mdl-menu__item'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$a,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$href('/profile/'),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Profile'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$li,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('mdl-menu__item'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$a,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$href('/auth/logout/'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Logout'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {question: a, user: b, response: c, showModal: d, showNavbar: e};
+	});
+var _user$project$Main$Response = F2(
+	function (a, b) {
+		return {value: a, feedback: b};
+	});
+var _user$project$Main$Question = F3(
+	function (a, b, c) {
+		return {title: a, shortDescription: b, longDescription: c};
+	});
+var _user$project$Main$Empty = {ctor: 'Empty'};
+var _user$project$Main$Waiting = {ctor: 'Waiting'};
+var _user$project$Main$Error = function (a) {
+	return {ctor: 'Error', _0: a};
+};
+var _user$project$Main$feedback = function (value) {
+	var _p1 = value;
+	if (_p1.ctor === 'Nothing') {
+		return _user$project$Main$Error('Empty string!');
+	} else {
+		return _user$project$Main$Waiting;
+	}
+};
+var _user$project$Main$update = F2(
+	function (msg, _p2) {
+		var _p3 = _p2;
+		var _p8 = _p3.response;
+		var _p7 = _p3;
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'SetResponse':
+				var _p6 = _p4._0;
+				var number = function () {
+					if (_elm_lang$core$String$isEmpty(_p6)) {
+						return _elm_lang$core$Maybe$Nothing;
+					} else {
+						var _p5 = _elm_lang$core$String$toFloat(_p6);
+						if (_p5.ctor === 'Ok') {
+							return _elm_lang$core$Maybe$Just(_p5._0);
+						} else {
+							return _elm_lang$core$Maybe$Nothing;
+						}
+					}
+				}();
+				return _elm_lang$core$Native_Utils.update(
+					_p7,
+					{
+						response: _elm_lang$core$Native_Utils.update(
+							_p8,
+							{value: number})
+					});
+			case 'SubmitResponse':
+				return _elm_lang$core$Native_Utils.update(
+					_p7,
+					{
+						response: _elm_lang$core$Native_Utils.update(
+							_p8,
+							{
+								feedback: _user$project$Main$feedback(_p8.value)
+							}),
+						showModal: true
+					});
+			case 'CloseModal':
+				return _elm_lang$core$Native_Utils.update(
+					_p7,
+					{showModal: false});
+			default:
+				return _p7;
+		}
+	});
+var _user$project$Main$Ignored = {ctor: 'Ignored'};
+var _user$project$Main$Html = function (a) {
+	return {ctor: 'Html', _0: a};
+};
+var _user$project$Main$Markdown = function (a) {
+	return {ctor: 'Markdown', _0: a};
+};
+var _user$project$Main$emptyQuestion = {
+	title: 'The Answer',
+	shortDescription: 'Life the universe and everything',
+	longDescription: {
+		ctor: '::',
+		_0: _user$project$Main$Markdown('What is the answer?'),
+		_1: {ctor: '[]'}
+	}
+};
+var _user$project$Main$model = {
+	user: _user$project$Codeschool_User$fake,
+	question: _user$project$Main$emptyQuestion,
+	response: {value: _elm_lang$core$Maybe$Nothing, feedback: _user$project$Main$Empty},
+	showModal: false,
+	showNavbar: true
+};
+var _user$project$Main$NavbarMsg = {ctor: 'NavbarMsg'};
+var _user$project$Main$CloseModal = {ctor: 'CloseModal'};
+var _user$project$Main$showDialog = F2(
+	function (title, msg) {
+		return A2(
+			_damukles$elm_dialog$Dialog$render,
+			{
+				styles: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'class', _1: 'cs-dialog'},
+					_1: {ctor: '[]'}
+				},
+				title: title,
+				content: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(msg),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				actionBar: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('mdl-button'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$CloseModal),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Close'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			},
+			_damukles$elm_dialog$Dialog$visible);
+	});
+var _user$project$Main$showFeedbackDialog = function (feedback) {
+	var _p9 = feedback;
+	switch (_p9.ctor) {
+		case 'Error':
+			return A2(_user$project$Main$showDialog, 'Error', _p9._0);
+		case 'Waiting':
+			return A2(_user$project$Main$showDialog, 'Waiting...', 'Please wait while codeschool grade your submission');
+		default:
+			return A2(_user$project$Main$showDialog, '', '');
+	}
+};
+var _user$project$Main$SubmitResponse = {ctor: 'SubmitResponse'};
+var _user$project$Main$SetResponse = function (a) {
+	return {ctor: 'SetResponse', _0: a};
+};
+var _user$project$Main$numericInput = A2(
+	_elm_lang$html$Html$section,
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h2,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('cs-banner'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Response'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$label,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Answer:'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$input,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$step('any'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$type_('number'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('type your answer here'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$SetResponse),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('toolbar highlight'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'right'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'margin-top', _1: '20px'},
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('mdl-button mdl-js-button mdl-button--raised'),
+								_1: {
+									ctor: '::',
+									_0: A2(_elm_lang$html$Html_Attributes$attribute, 'form', 'form'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$SubmitResponse),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Enviar'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	});
+var _user$project$Main$contents = function (question) {
+	return A2(
+		_elm_lang$html$Html$main_,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('cs-stripes-layout__main'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('cs-stripes-layout__content'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(_user$project$Main$contentHeader, question.title, question.shortDescription),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _user$project$Main$longDescription(question.longDescription),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Main$numericInput,
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$view = function (_p10) {
+	var _p11 = _p10;
+	var head_ = {
+		ctor: '::',
+		_0: _user$project$Main$header,
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$id('cs-body'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('mdl-grid mdl-grid mdl-grid--no-spacing'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$id('content-area'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('cs-stripes-layout'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _user$project$Codeschool_Navbar$render(_p11.showNavbar),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Main$contents(_p11.question),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	};
+	var modal = _p11.showModal ? {
+		ctor: '::',
+		_0: _user$project$Main$showFeedbackDialog(_p11.response.feedback),
+		_1: {ctor: '[]'}
+	} : {ctor: '[]'};
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('cs-base-page'),
+			_1: {
+				ctor: '::',
+				_0: A2(_elm_lang$html$Html_Attributes$attribute, 'unresolved', 'unresolved'),
+				_1: {ctor: '[]'}
+			}
+		},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			head_,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				modal,
+				{
+					ctor: '::',
+					_0: _user$project$Main$footer,
+					_1: {ctor: '[]'}
+				})));
+};
+var _user$project$Main$main = _elm_lang$html$Html$beginnerProgram(
+	{model: _user$project$Main$model, view: _user$project$Main$view, update: _user$project$Main$update})();

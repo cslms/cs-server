@@ -1,0 +1,72 @@
+{% extends "questions/detail.jinja2" %}
+
+{% block form_options %}{% endblock %}
+
+{% block response_form %}
+    <h2 class="cs-banner">{{ _('Type your answer here.') }}</h2>
+    <div class="mdl-shadow--4dp" style="font-size: 1.1em">
+        <div id="editor"></div>
+    </div>
+{% endblock %}
+
+
+{% block javascript %}
+    {{ super() }}
+    <script src="/static_src/js/quill.js"></script>
+    <script>
+        var quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    [{header: [1, 2, 3, false]}],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{script: 'sub'}, {script: 'super'}],
+                    ['code-block', {list: 'ordered'}, {list: 'bullet'}]
+                ]
+            },
+            placeholder: '{{ _('Your text here...') }}',
+            theme: 'snow',
+        });
+
+        $(function () {
+            $("#form").submit(function (event) {
+                event.preventDefault();
+                bricks('./submit-response.api/', {
+                    data: $('#editor .ql-editor').html()
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+
+
+{% block style %}
+    {{ super() }}
+    <link href="/static/css/quill.css" rel="stylesheet">
+    <style>
+        #editor h1,
+        #editor h2,
+        #editor h3 {
+            margin-bottom: 0.5em;
+            margin-top: 1.5em;
+        }
+
+        #editor h1 {
+            font-size: 3.0em;
+        }
+
+        #editor h2 {
+            font-size: 2.5em;
+        }
+
+        #editor h3 {
+            font-size: 2.0em;
+        }
+
+        #editor h1:first-child,
+        #editor h2:first-child,
+        #editor h3:first-child {
+            margin-top: 0;
+        }
+    </style>
+{% endblock %}

@@ -43,7 +43,7 @@
 
     <!-- CSS and styles -->
     {% block style %}
-        <link rel="stylesheet" href="{{ static('css/main.css') }}">
+        <link rel="stylesheet" href="{{ static('main.css') }}">
         {% if content_color %}
             <style>
                 #content-area main > *:nth-child(odd) {
@@ -81,31 +81,41 @@
                 {{ navbar|render }}
             {% endif %}
 
-            <main class="cs-stripes-layout__main">
-                <ul class="cs-stripes-layout__breadcrumbs">
-                    {% for item in breadcrumbs|breadcrumbs %}
-                        <li>{{ item|hyperlink }}</li>
-                    {% endfor %}
-                </ul>
-                <div class="cs-stripes-layout__content">
-                    {% block content %}
-                        <section>
-                            {% block content_head %}
-                                <h1>{% block content_title %}
-                                    {{ content_title|e }}{% endblock %}</h1>
-                            {% endblock %}
-                        </section>
+            {% block main %}
+                {% if main is defined %}
+                    {{ main }}
+                {% else %}
+                    <main class="cs-stripes-layout__main">
+                        {% if breadcrumbs %}
+                            <ul class="cs-stripes-layout__breadcrumbs">
+                                {% for item in breadcrumbs|breadcrumbs %}
+                                    <li>{{ item|hyperlink }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
-                        {% block content_sessions %}
-                            <section>
-                                {% block content_body %}
-                                    {{ content_body }}
+                        <div class="cs-stripes-layout__content">
+                            {% block content %}
+                                <section>
+                                    {% block content_head %}
+                                        <h1>{% block content_title %}
+                                            {{ content_title|e }}{% endblock %}</h1>
+                                    {% endblock %}
+                                </section>
+
+                                {% block content_sessions %}
+                                    <section>
+                                        {% block content_body %}
+                                            {{ content_body }}
+                                        {% endblock %}
+                                    </section>
                                 {% endblock %}
-                            </section>
-                        {% endblock %}
-                    {% endblock %}
-                </div>
-            </main>
+                            {% endblock %}
+                        </div>
+                    </main>
+
+                {% endif %}
+            {% endblock %}
         </div>
 
         {% if not disable_footer %}
@@ -133,6 +143,7 @@
     <script src="{{ static('js/bricks/actions.js') }}"></script>
     <script src="{{ static('js/main.js') }}"></script>
     <script src="{{ static('js/plugins.js') }}"></script>
+    {{ script|default('') }}
 {% endblock %}
 
 {% if google_analytics|default(False) %}

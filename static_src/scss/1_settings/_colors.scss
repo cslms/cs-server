@@ -50,8 +50,9 @@ $color-code-bg: #e6e6e6;
 // Background Colors
 $base-background-color: #fff;
 $secondary-background-color: tint($color-light-gray, 75%);
-$color-primary-tint: $color-yellow;
+// $color-primary-tint: $color-yellow;
 $color-primary-tint: $color-blue;
+$color-primary-contrast: $color-white;
 
 
 // Color states

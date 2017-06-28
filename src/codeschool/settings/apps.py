@@ -4,6 +4,8 @@
 
 INSTALLED_APPS = [
     # Codeschool optional apps
+    'codeschool.questions.code',
+    'codeschool.questions.free_form',
     'codeschool.sparta',
     'codeschool.questions.numeric',
     'codeschool.questions.coding_io',
@@ -12,7 +14,8 @@ INSTALLED_APPS = [
     'codeschool.lms.academic',
     # 'codeschool.gamification',
     # 'codeschool.social.feed',
-    # 'codeschool.social.friends',
+    'codeschool.social.friends',
+    'codeschool.questions.text',
     'codeschool.cli',
 
     # These are always required
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
     'guardian',
 
     # Other 3rd party
+    'friendship',
     'polymorphic',
     'django_extensions',
     'rest_framework',

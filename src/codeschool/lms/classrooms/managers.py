@@ -3,7 +3,7 @@ from codeschool import models
 
 class ClassroomQuerySet(models.PageQuerySet):
 
-    def enrolled(self, user):
+    def user_enrolled(self, user):
         """
         Return a list of all courses in which the user is either as a student,
         a teacher or staff member.
@@ -13,12 +13,12 @@ class ClassroomQuerySet(models.PageQuerySet):
                 | user.classrooms_as_student.all()
                 | user.classrooms_as_staff.all())
 
-    def can_enroll(self, user):
+    def user_can_enroll(self, user):
         """
         List of courses that the user can enroll.
         """
 
-        user_courses = self.enrolled(user)
+        user_courses = self.user_enrolled(user)
         qs = self.filter(is_public=True, accept_subscriptions=True, live=True)
 
         # This works on Django 1.11

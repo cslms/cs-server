@@ -2,7 +2,7 @@ from wagtail.wagtailcore.models import PageBase
 
 EXTRA_META_VARS = {
     'instant_feedback': True,
-    'automatic_grading': True,
+    'autograde': True,
     'progress_class': None,
     'submission_class': None,
     'feedback_class': None,
@@ -15,7 +15,7 @@ class ActivityMeta(PageBase):
     """
 
     def __new__(metaclass, name, bases, namespace):
-        meta = namespace.get('Meta', None)
+        meta = namespace.get('Meta')
         extra_fields, meta = extract_extra_meta_fields(meta)
         if 'Meta' in namespace:
             namespace['Meta'] = meta
@@ -40,6 +40,7 @@ def extract_extra_meta_fields(meta):
 
 def update_extra_meta_fields(cls, fields):
     meta = cls._meta
+    fields = fields or {}
     for subclass in cls.__mro__:
         if hasattr(subclass, '_meta'):
             for attr, value in EXTRA_META_VARS.items():

@@ -3,14 +3,34 @@ engines:
     enabled: true
     config:
       languages:
-        - python:
-            mass_threshold: 50
+        count_threshold: 3
+        python:
+          python_version: 3
+          mass_threshold: 60
   fixme:
     enabled: true
   radon:
+    enabled: true
+  pep8:
+    enabled: true
+    checks:
+      E501:
+        enabled: false
+      E731:
+        enabled: false
+  csslint:
+    enabled: true
+  eslint:
     enabled: true
 ratings:
   paths:
   - "src/codeschool/**.py"
 exclude_paths:
-  - src/codeschool/**/migrations/
+  - "src/codeschool/**/migrations/"
+  - "__init__.py"
+  - "node_modules/**/*"
+  - "static/**/*"
+  - "docker/**/*"
+  - "collect/**/*"
+  - "docs/**/*"
+  - "static_src/**/elm-stuff/**/*"

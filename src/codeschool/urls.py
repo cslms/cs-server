@@ -20,7 +20,10 @@ from wagtail.wagtailcore import urls as wagtail_urls
 
 from codeschool import settings
 from codeschool.accounts.views import profile_view
+from codeschool.api import router, import_api_modules
 from codeschool.core.views import index_view
+
+import_api_modules()
 
 # Basic URLS
 urlpatterns = [
@@ -29,6 +32,8 @@ urlpatterns = [
     url(r'^sparta/', include('codeschool.sparta.urls')),
     url(r'^profile/$', profile_view, name='profile-view'),
     url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),
+    url(r'^api/', include(router.urls)),
 ]
 
 # Optional debug views
@@ -38,7 +43,7 @@ if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
     urlpatterns += [
         url(r'^_admin/', django.contrib.admin.site.urls),
         url(r'^_debug/', include('codeschool.core.urls')),
-        url(r'^_components/', include('codeschool.components.urls')),
+        url(r'^_bricks/', include('codeschool.bricks.urls')),
     ]
 
 # Optional "social" urls
@@ -71,7 +76,14 @@ if 'codeschool.cli' in settings.INSTALLED_APPS:
         url(r'^cli/jsonrpc/', include(jsonrpc_api.urls)),
     ]
 
-# Wagtail endpoint (these must come last)
+# Django serves static urls for the dev server.
+# Production relies on Nginx.
+if os.environ.get('DJANGO_SERVE_STATIC', False) or settings.DEBUG:
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    urlpatterns += staticfiles_urlpatterns()
+
+# Wagtail endpoint (these must be last)
 urlpatterns += [
     wagtail_urls.urlpatterns[0],
     url(r'^((?:[\w\-\.]+/)*)$',
@@ -79,10 +91,3 @@ urlpatterns += [
     url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:bricks|json|api)/?)$',
         wagtail_urls.views.serve, name='wagtail-api-serve'),
 ]
-
-# Django serves static urls for the dev server.
-# Production relies on Nginx.
-if os.environ.get('DJANGO_SERVE_STATIC', False) or settings.DEBUG:
-    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
-    urlpatterns += staticfiles_urlpatterns()

@@ -1,0 +1,24 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>a title</title>
+<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700|Roboto|Roboto+Mono" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<link href=/static/main.css rel=stylesheet>
+<script src="/static/main.js"></script>
+
+<body></body>
+<script src="/_compile/App.elm"></script> <!-- this will fail in production -->
+<script src="/elm-bundle.js"></script> <!-- this will fail in development -->
+
+<script>
+var app
+var flags = {}
+
+try {
+  app = Elm.App.fullscreen(flags)
+  /* app.ports is now available */
+} catch (e) {
+  runElmProgram();
+}
+</script>

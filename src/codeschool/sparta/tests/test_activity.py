@@ -2,7 +2,7 @@ import pytest
 
 from mock import patch, Mock, MagicMock, mock
 from codeschool.models import User
-from codeschool.lms.activities.tests.mocks import wagtail_page
+from types import SimpleNamespace
 from codeschool.sparta.models import SpartaActivity, UserGrade
 from codeschool.sparta.models.activity import read_csv_file
 
@@ -14,8 +14,7 @@ class TestActivity:
     @pytest.fixture
     def activity(self):
         cls = self.activity_class
-        with wagtail_page(cls):
-            result = cls(title='Test', id=1)
+        result = cls(title='Test', id=1)
         result.specific = result
         return result
 
@@ -42,17 +41,25 @@ class TestActivity:
         assert grade1.grade == 1.0
 
     def test_create_post_grade_csv(self, activity: SpartaActivity):
+        csv_data_should_be = 'a;1\nb;4\nc;5\n'
 
-        csv_data_should_be = 'a;1\nb;4;\nc;5\n'
-
-        with mock.patch.object(UserGrade, 'user', None):
-            users_grade = [
-                UserGrade(user=Mock(spec=User, id=1, username='a'), grade=1, activity=activity),
-                UserGrade(user=Mock(spec=User, id=2, username='b'), grade=2, post_grade=4, activity=activity),
-                UserGrade(user=Mock(spec=User, id=3, username='c'), grade=3, post_grade=5, activity=activity)
+        with patch.object(UserGrade, 'user', None):
+            users = [
+                Mock(spec=User, id=1, username='a'),
+                Mock(spec=User, id=2, username='b'),
+                Mock(spec=User, id=3, username='c')
             ]
-            activity.user_grades = users_grade
-        #with mock.patch.object(, 'all', lambda self: users_grade):
-            csv = activity.create_post_grade_csv()
 
-            assert csv == csv_data_should_be
+            users_grade = [
+                UserGrade(user=users[0], grade=1, activity=activity),
+                UserGrade(user=users[1], grade=2, post_grade=4, activity=activity),
+                UserGrade(user=users[2], grade=3, post_grade=5, activity=activity)
+            ]
+
+
+            ns = SimpleNamespace(all=lambda: users_grade, select_related=lambda self: ns)
+
+            with patch.object(SpartaActivity, 'user_grades', ns):
+                csv = activity.create_post_grade_csv()
+
+                assert csv == csv_data_should_be

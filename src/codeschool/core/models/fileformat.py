@@ -89,7 +89,7 @@ class ProgrammingLanguage(FileFormat):
         # We save ProgrammingLanguage instances in a cache for fast access.
         # This way we avoid unnecessary trips to the db.
         ref = FORMAT_ALIASES.get(ref, ref)
-        lang = PROGRAMMING_LANGUAGES_CACHE.get(ref, None)
+        lang = PROGRAMMING_LANGUAGES_CACHE.get(ref)
         if lang is not None:
             return lang
 
