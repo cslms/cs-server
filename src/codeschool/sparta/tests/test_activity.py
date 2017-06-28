@@ -1,6 +1,6 @@
 import pytest
 
-from mock import patch, Mock
+from mock import patch, Mock, MagicMock, mock
 from codeschool.models import User
 from types import SimpleNamespace
 from codeschool.sparta.models import SpartaActivity, UserGrade
