@@ -1,18 +1,35 @@
 import model_reference
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets
 
-from .components import navbar_classroom, navbar_list
+from . import serializers
+from .bricks import navbar_classroom, navbar_list
 from .forms import EnrollForm
 from .models import Classroom
 from .rules import is_registered
 
 
+#
+# API Views
+#
+class ClassroomViewSet(viewsets.ModelViewSet):
+    """
+    List of classrooms.
+    """
+
+    queryset = Classroom.objects.all()
+    serializer_class = serializers.ClassroomSerializer
+
+
+#
+# Regular views
+#
 @login_required
 def list_of_classrooms(request):
     root = model_reference.load('classroom-root')
     context = {
-        'classroom_list': Classroom.objects.enrolled(request.user),
+        'classroom_list': Classroom.objects.user_enrolled(request.user),
         'navbar': navbar_list(root, request.user),
     }
     return render(request, 'classrooms/list.jinja2', context)
@@ -40,7 +57,7 @@ def classroom_detail(request, slug):
 @login_required
 def enroll_in_classroom(request):
     context = {
-        'classroom_list': Classroom.objects.can_enroll(request.user),
+        'classroom_list': Classroom.objects.user_can_enroll(request.user),
         'navbar': navbar_list(None, request.user),
     }
     return render(request, 'classrooms/enroll.jinja2', context)

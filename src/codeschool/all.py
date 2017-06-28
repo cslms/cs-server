@@ -25,7 +25,7 @@ from django.contrib.auth.models import *
 
 # Example deferred objects
 python = Deferred(ProgrammingLanguage.objects.get, ref='python')
-user = Deferred(lambda: User.objects.all()[1])
+user = Deferred(lambda: User.objects.first())
 
 # Optional components -- LMS
 if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
@@ -37,12 +37,12 @@ if 'codeschool.lms.attendance' in settings.INSTALLED_APPS:
 if 'codeschool.questions.coding_io' in settings.INSTALLED_APPS:
     from .questions.coding_io.models import *
     coding_io = Deferred(CodingIoQuestion.objects.first)
-if 'codeschool.questions.coding_func' in settings.INSTALLED_APPS:
-    from .questions.coding_func.models import *
-    coding_func = Deferred(CodingFuncQuestion.objects.first)
+if 'codeschool.questions.code' in settings.INSTALLED_APPS:
+    from .questions.code.models import *
+    code = Deferred(CodeQuestion.objects.first)
 if 'codeschool.questions.free_text' in settings.INSTALLED_APPS:
-    from .questions.free_text.models import *
-    free_text = Deferred(FreeTextQuestion.objects.first)
+    from .questions.free_form.models import *
+    free_text = Deferred(FreeFormQuestion.objects.first)
 if 'codeschool.questions.numeric' in settings.INSTALLED_APPS:
     from .questions.numeric.models import *
     numeric = Deferred(NumericQuestion.objects.first)

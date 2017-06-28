@@ -20,10 +20,14 @@
 
  #}
 {% block content_body %}
-    {% if page.body is defined %}
-        {{ page.body }}
+    {% if content_body is defined %}
+        {{ content_body }}
     {% else %}
-        {{ page }}
+        {% if page.body is defined %}
+            {{ page.body }}
+        {% else %}
+            {{ page }}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -43,7 +47,9 @@
             </p>
             {% if user == page.owner %}
                 <ul>
-                    <li><a href="{{ parent_page.get_admin_url() }}">{{ _("Edit") }}</a></li>
+                    <li>
+                        <a href="{{ parent_page.get_admin_url() }}">{{ _("Edit") }}</a>
+                    </li>
                 </ul>
             {% endif %}
         </nav>

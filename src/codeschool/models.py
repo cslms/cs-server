@@ -27,7 +27,7 @@ from model_utils.choices import Choices
 from model_utils.models import StatusModel, TimeFramedModel, TimeStampedModel
 from model_utils.managers import QueryManager, InheritanceManager, QuerySet, InheritanceQuerySet
 
-from .fixes.wagtailroutes import RoutablePage as RoutablePageExt
+from .fixes.wagtailroutes import RoutableViewsPage
 from .fixes.wagtailadmin import DecoupledAdminPage
 from .managers import *
 from .mixins import AbsoluteUrlMixin
@@ -37,3 +37,9 @@ from .mixins import AbsoluteUrlMixin
 #
 Page.__bases__ = (AbsoluteUrlMixin,) + Page.__bases__
 Page.nav_sections = lambda self, request: []
+
+__all__ = (
+    'Model', 'ContentType', 'User', 'Group', 'Permission', 'Page', 'Orderable',
+    'PageManager', 'PageQuerySet', 'RoutablePage', 'RoutablePageMixin',
+    'RoutableViewsPage', 'route',
+)

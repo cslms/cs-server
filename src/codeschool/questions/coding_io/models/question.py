@@ -1,12 +1,11 @@
 import logging
-from difflib import Differ
 
-import bricks.rpc
 from annoying.functions import get_config
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+from django.utils.translation import ugettext_lazy as _
 
+import bricks.rpc
 from codeschool import models
 from codeschool.core import get_programming_language
 from codeschool.core.models import ProgrammingLanguage
@@ -19,7 +18,6 @@ from .submission import CodingIoSubmission
 from .. import ejudge
 from .. import validators
 
-differ = Differ()
 logger = logging.getLogger('codeschool.questions.coding_io')
 
 
@@ -165,6 +163,16 @@ class CodingIoQuestion(Question):
             pass
 
     submission_class = CodingIoSubmission
+
+    def submit(self, request, language=None, **kwargs):
+        # Cannot set language if question specifies a required lnaguage
+        if language and self.language and language != self.language:
+            args = language, self.language
+            raise ValueError('cannot set language: %r != %r' % args)
+
+        language = self.language or language
+        language = get_programming_language(language)
+        return super().submit(request, language=language, **kwargs)
 
     def load_post_file_data(self, file_data):
         fake_post = super().load_post_file_data(file_data)
@@ -340,21 +348,6 @@ class CodingIoQuestion(Question):
 
         print('scheduling full code validation... (we are now executing on the'
               'foreground).')
-        self.mark_invalid_code_fields()
-
-    def mark_invalid_code_fields(self):
-        """
-        Performs a full code validation with .full_clean_code() and marks all
-        errors found in the question.
-        """
-
-        return
-        try:
-            self.full_clean(force_expansions=True)
-        except ValidationError as ex:
-            print(ex)
-            print(dir(ex))
-            raise
 
     def validate_tests(self):
         """
@@ -504,17 +497,6 @@ class CodingIoQuestion(Question):
             if key.has_changed_source():
                 return True
         return False
-
-    # Actions
-    def submit(self, user_or_request, language=None, **kwargs):
-        if language and self.language:
-            if language != self.language:
-                args = language, self.language
-                raise ValueError('cannot set language: %r != %r' % args)
-        if self.language:
-            language = self.language
-        language = get_programming_language(language)
-        return super().submit(user_or_request, language=language, **kwargs)
 
     def run_post_grading(self, **kwargs):
         """

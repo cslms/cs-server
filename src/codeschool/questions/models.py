@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 import bricks.rpc
+from bricks.html5 import p, div, h2
 from codeschool import blocks
 from codeschool import mixins
 from codeschool import models
@@ -15,16 +16,10 @@ QUESTION_BODY_BLOCKS = [
 ]
 
 
-class Question(models.DecoupledAdminPage,
-               mixins.ShortDescriptionPage,
-               Activity):
+class Question(mixins.ShortDescriptionPage, Activity):
     """
     Base abstract class for all question types.
     """
-
-    class Meta:
-        abstract = True
-        permissions = (("download_question", "Can download question files"),)
 
     body = models.StreamField(
         QUESTION_BODY_BLOCKS,
@@ -37,6 +32,7 @@ class Question(models.DecoupledAdminPage,
             'ambiguous.'
         ),
     )
+
     comments = models.RichTextField(
         _('Comments'),
         blank=True,
@@ -54,24 +50,18 @@ class Question(models.DecoupledAdminPage,
         )
     )
 
+    class Meta:
+        abstract = True
+        permissions = (("download_question", "Can download question files"),)
+
     def get_navbar(self, user):
         """
         Returns the navbar for the given question.
         """
 
-        from .components import navbar_question
+        from .bricks import navbar_question
 
         return navbar_question(self, user)
-
-    # Serve pages
-    def get_context(self, request, *args, **kwargs):
-        context = dict(
-            super().get_context(request, *args, **kwargs),
-            question=self,
-            form_name='response-form',
-            navbar=self.get_navbar(request.user)
-        )
-        return context
 
     #
     # Ajax submissions for user responses
@@ -81,14 +71,23 @@ class Question(models.DecoupledAdminPage,
         Render a user-facing message from the supplied submission.
         """
 
-        if submission.recycled and submission.feedback:
+        if not self._meta.autograde:
+            return \
+                div()[
+                    h2('Congratulations!'),
+                    p(_('Submission sent! Please wait while someone will '
+                        'grade it!')),
+                ]
+
+        # Check options for autograde questions
+        if submission.recycled and submission.has_feedback:
             feedback = submission.feedback
             return feedback.render_message()
         elif self._meta.instant_feedback:
             feedback = submission.auto_feedback()
             return feedback.render_message()
         else:
-            return 'Your submission is on the correction queue!'
+            return _('Your submission is on the correction queue!')
 
     def serve_ajax_submission(self, client, **kwargs):
         """

@@ -3,6 +3,7 @@ from django.db import IntegrityError
 
 from codeschool import models
 from codeschool.utils.phrases import phrase
+from itertools import cycle
 
 
 class SpartaGroup(models.TimeStampedModel):
@@ -20,7 +21,7 @@ class SpartaGroup(models.TimeStampedModel):
         max_length=140,
     )
     status = models.IntegerField(
-        default = STATUS_INACTIVE,
+        default=STATUS_INACTIVE,
         choices=[
             (STATUS_INACTIVE, _('inactive')),
             (STATUS_ACTIVE, _('active')),
@@ -65,7 +66,7 @@ class SpartaGroup(models.TimeStampedModel):
                 if n == max_iter - 1:
                     raise
 
-    def add_user(self, user, role):
+    def add_users(self, users, quantity_tutors):
         """
         Add new user to group.
 
@@ -75,9 +76,18 @@ class SpartaGroup(models.TimeStampedModel):
              role (str):
                 The user role on the group 'learner' or 'tutor'.
         """
+        # Irá atribuir a role tutor ao usuario com maior nota, adiciona-lo ao grupo e exclui-lo do dicionario
+        for _ in quantity_tutors:
+            user_grade_max = max(users, key=users.get)
+            role = ROLE_MAPPING[ROLE_TUTOR]
+            SpartaMembership.objects.create(group=self, user=user_grade_max, role=role)
+            users.pop(user_grade_max)
 
-        role = ROLE_MAPPING[role]
-        SpartaMembership.objects.create(group=self, user=user, role=role)
+        # Irá adicionar a role learner aos usuarios restantes, adiciona-los ao grupo e excluir do dicionario
+        for user in users:
+            role = ROLE_MAPPING[ROLE_LEARNER]
+            SpartaMembership.objects.create(group=self, user=user, role=role)
+            users.pop(user)
 
 
 class SpartaMembership(models.TimeStampedModel):
@@ -108,7 +118,7 @@ ROLE_MAPPING = {
 }
 
 
-def organize_groups(users, group_size):
+def organize_groups(mapping, group_size):
     """
     Receives a mapping from users to grades and return a list of groups
     with the approximate ``group_size``.
@@ -121,64 +131,39 @@ def organize_groups(users, group_size):
             A dictionary from users to their respective grades.
         group_size (int):
             The desired group size.
-
     Examples:
 
         >>> users = {'john': 10, 'paul': 9, 'george': 8, 'ringo': 6}
         >>> organize_groups(users, 2)
-        [['john', 'ringo'], ['paul', 'george']]
+        [{'john': 10,'ringo': 6}, {'paul': 8, 'george': 8}]
     """
-    assert isinstance(group_size, int)
+    users_quantity = len(mapping)
 
-    users_quantity = len(users)
+    if group_size > users_quantity:
+        return [mapping.copy()]
 
-    # Cannot create group if group_size is greater than users quantity
-    assert group_size <= users_quantity
-
-    possible_groups_quantity = users_quantity // group_size
+    n_groups = users_quantity // group_size
     remaining_users = users_quantity % group_size
 
-    # from collections import OrderedDict
-    # Put the grades as the keys of dict
-    # users_with_grade_as_key = {grade: user for user, grade in users.items()}
-    # sorted_users = OrderedDict(sorted(users_with_grade_as_key.items()))
-
     # Initialize possible groups as empty lists
-    grouped_users = []
-    for n in range(possible_groups_quantity):
-        grouped_users.append([])
+    groups = [{} for _ in range(n_groups)]
 
-    new_remaing_users = users # 5
-    while len(new_remaing_users) > remaining_users:
-        new_remaing_users = group_users(grouped_users, new_remaing_users)
-        # 1 => grouped_users = [[]]
-        # 1 => grouped_users = [[1, 2]]
+    sorted_users = sorted(mapping.items(), key=lambda x: x[1])
 
+    for idx in cycle([0, -1]):
+        if len(sorted_users) < n_groups:
+            break
 
-def group_users(users_groups, users):
-    users_copy = users
-    for group in users_groups:
-        max_grade_user, users_dict = get_max_grade_user(users_copy)
-        min_grade_user, new_users_dict = get_max_grade_user(users_dict)
-        group.append(max_grade_user)
-        group.append(min_grade_user)
-        users_copy = new_users_dict
-    return users_copy
+        for i in range(n_groups):
+            name, grade = sorted_users.pop(idx)
+            groups[i][name] = grade
 
-
-def get_max_grade_user(users):
-    new_users_dict = users
-    for user, grade in users.items():
-        if grade is max(users.values()):
-            del new_users_dict[user]
-            return (user, new_users_dict)
-    return
-
-
-def get_min_grade_user(users):
-    new_users_dict = users
-    for user, grade in users.items():
-        if grade is min(users.values()):
-            del new_users_dict[user]
-            return (user, new_users_dict)
-    return
+    j = 0
+    for i, user in enumerate(sorted_users):
+        name = user[0]
+        grade = user[1]
+        if j == n_groups:
+            j = 0
+        groups[j][name] = grade
+        j += 1
+    return groups

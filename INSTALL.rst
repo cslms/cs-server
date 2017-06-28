@@ -82,5 +82,4 @@ Finally, run the development sever and point your browser to http://localhost:80
     $ python manage.py migrate
     $ python manage.py runserver
 
-
 .. _invoke: http://www.pyinvoke.org

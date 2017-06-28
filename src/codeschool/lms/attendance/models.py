@@ -243,7 +243,7 @@ class AttendanceCheck(models.Model):
         self.save()
 
 
-class AttendancePage(models.DecoupledAdminPage, models.RoutablePageExt):
+class AttendancePage(models.DecoupledAdminPage, models.RoutableViewsPage):
     """
     A Page object that exhibit an attendance sheet.
     """

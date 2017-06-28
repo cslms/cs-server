@@ -49,8 +49,8 @@ class PasswordForm(forms.Form):
 
     def clean(self):
         data = super().clean()
-        password = data.get('password', None)
-        confirmation = data.get('password_confirmation', None)
+        password = data.get('password')
+        confirmation = data.get('password_confirmation')
         if password != confirmation:
             raise ValidationError(
                 {'password_confirmation': _('Passwords must be equal!')})

@@ -3,18 +3,68 @@ import logging
 import model_reference
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
+from rest_framework import viewsets
 
-from codeschool import config_options, global_data_store
 from codeschool import models
 from codeschool import settings
 from codeschool.accounts.models import Profile
+from codeschool.core import config_options, global_data_store
 from codeschool.core.debug_info import DebugInfo
 from codeschool.core.forms import ConfigForm, NewUserForm, SysProfileForm, \
     PasswordForm
+from . import serializers
+from .models import ProgrammingLanguage, FileFormat, DataEntryKeyValuePair, \
+    ConfigOptionKeyValuePair
 
 log = logging.getLogger('codeschool.core')
 
 
+#
+# API views
+#
+class ProgrammingLanguageViewSet(viewsets.ModelViewSet):
+    """
+    A ProgrammingLanguage instance represents a programming language
+    support inside Codeschool.
+
+    Can be used to personalize source code highlighting or to define the
+    programming language of a source code submission.
+    """
+
+    queryset = ProgrammingLanguage.objects.all()
+    serializer_class = serializers.ProgrammingLanguageSerializer
+
+
+class FileFormatViewSet(viewsets.ModelViewSet):
+    """
+    A file format that can be used on Codeschool.
+    """
+
+    queryset = FileFormat.objects.all()
+    serializer_class = serializers.FileFormatSerializer
+
+
+class DataEntryKeyValuePairViewSet(viewsets.ModelViewSet):
+    """
+    Advanced interface for configurable server data.
+    """
+
+    queryset = DataEntryKeyValuePair.objects.all()
+    serializer_class = serializers.DataEntryKeyValuePair
+
+
+class ConfigOptionKeyValuePairViewSet(viewsets.ModelViewSet):
+    """
+    Advanced interface for configurable server options.
+    """
+
+    queryset = ConfigOptionKeyValuePair.objects.all()
+    serializer_class = serializers.ConfigOptionKeyValuePairSerializer
+
+
+#
+# Views
+#
 def debug_page_view(request):
     """
     Shows debug information about codeschool.
