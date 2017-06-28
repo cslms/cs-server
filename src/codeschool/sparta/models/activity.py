@@ -59,7 +59,7 @@ class SpartaActivity(Activity):
 
         lines = []
 
-        for user_grade in self.user_grades.all():
+        for user_grade in self.user_grades.select_related('user').all():
             lines.append(user_grade.user.username)
 
             if user_grade.post_grade is None:

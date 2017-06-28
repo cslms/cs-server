@@ -59,7 +59,7 @@ class TestActivity:
             ]
 
 
-            ns = SimpleNamespace(all=lambda: users_grade)
+            ns = SimpleNamespace(all=lambda: users_grade, select_related=lambda self: ns)
 
             with patch.object(SpartaActivity, 'user_grades', ns):
                 csv = activity.create_post_grade_csv()
