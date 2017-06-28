@@ -57,19 +57,24 @@ class SpartaActivity(Activity):
             String with user post_grades
         """
 
-        lines = str
-
+        lines = []
+        print('UAHSUAHSUAHSUHAUSHAUSHUAHS')
         for user_grade in self.user_grades.all():
-            line_user_grade = user.username
+            print('UAHSUAHSUAHSUHAUSHAUSHUAHS')
+            print(user_grade)
+            line_user_grade = user_grade.username
             if user_grade.post_grade == None:
-                line_user_grade += (';', user_grade.grade)
+                line_user_grade.append(';')
+                line_user_grade.append(str(user_grade.grade))
             else:
-                line_user_grade += (';', user_grade.post_grade)
+                line_user_grade.append(';')
+                line_user_grade.append(str(user_grade.post_grade))
 
-            lines += line_user_grade
-            lines += '\n'
+            lines.append(line_user_grade)
+            lines.append('\n')
+            print(''.join(lines))
 
-        return lines
+        return ''.join(lines)
 
 
 class UserGrade(models.Model):
