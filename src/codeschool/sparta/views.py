@@ -22,10 +22,16 @@ def activities(request):
     return render(request, 'sparta/activities.jinja2', ctx)
 
 def rating(request):
-    membership = SpartaMembership.objects.get(user=request.user)
-    group = membership.group
+    if request.method == 'POST':
+        membership = SpartaMembership.objects.get(pk=request.POST['member_ship'])
+        membership.rating = request.POST['rate']
 
-    members = group.members.all()
+    try:
+        membership = SpartaMembership.objects.get(user=request.user)
+        group = membership.group
+        members = group.members.all()
+    except:
+        members = []
 
     ctx = {
         'content_title':'Avaliação dos Membros',
