@@ -113,15 +113,6 @@ class SpartaMembership(models.TimeStampedModel):
             ('user', 'group', 'role'),
         ]
 
-    def save(self, *args, **kwargs):
-        try:
-            UserRating.objects.get(user=self.user)
-        except:
-            user_rating = UserRating()
-            user_rating.user = self.user
-            user_rating.save()
-        return super().save(args, kwargs)
-
 ROLE_MAPPING = {
     'learner': SpartaMembership.ROLE_LEARNER,
     'tutor': SpartaMembership.ROLE_TUTOR,

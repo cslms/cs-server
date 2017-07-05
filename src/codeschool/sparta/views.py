@@ -26,12 +26,9 @@ def rating(request):
         membership = SpartaMembership.objects.get(pk=request.POST['member_ship'])
         membership.rating = request.POST['rate']
 
-    try:
-        membership = SpartaMembership.objects.get(user=request.user)
-        group = membership.group
-        members = group.members.all()
-    except:
-        members = []
+    membership = SpartaMembership.objects.get(user=request.user)
+    group = membership.group
+    members = group.members.all()
 
     ctx = {
         'content_title':'Avaliação dos Membros',

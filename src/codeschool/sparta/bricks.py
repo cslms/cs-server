@@ -2,6 +2,7 @@ from codeschool.bricks import navbar as _navbar, navsection, navsection_page_adm
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr, div, h2, button, div, form, button
 from codeschool.bricks import card_container, simple_card, with_class
 from django.urls import reverse
+from .models.activity import UserRating
 # import members_list from back end
 
 
@@ -55,22 +56,34 @@ def activities_layout():
 
 
 def rating_layout(members):
+    user_rows = []
+    for user in members:
+        try:
+            evaluations = UserRating.objects.filter(user_evaluated=user)
+        except:
+            evaluations = []
 
-    user_rows = [
-        form()[
-            tr()[
-                td(class_="mdl-data-table__cell--non-numeric")[
-                    user.first_name + ' ' + user.last_name],
-                td()['3 Aluno(s)'],
-                td()['10'],
-                td()[
-                    div(class_="cs-sparta__rateYo"),
-                    button(type="submit")['Submit']
-                ],
+        average = 0.0
+        for evaluation in evaluations:
+            average += evaluation.rating
+
+        if average > 0:
+            average /= len(evaluations)
+        
+        user_rows.append(
+            form(action='')[
+                tr()[
+                    td(class_="mdl-data-table__cell--non-numeric")[
+                        user.first_name + ' ' + user.last_name],
+                    td()[str(len(evaluations)) + ' Aluno(s)'],
+                    td()[str(average)],
+                    td()[
+                        div(class_="cs-sparta__rateYo"),
+                        button(type="submit")['Submit']
+                    ],
+                ]
             ]
-        ]
-        for user in members
-    ]
+        )
 
     layout = ul(class_="demo-list-icon mdl-list")[
         table(class_="mdl-data-table mdl-js-data-table mdl-shadow--2dp")[
