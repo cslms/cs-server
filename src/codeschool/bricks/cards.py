@@ -8,7 +8,7 @@ from . import mdl
 
 def simple_card(title=None, text=None, href=None, icon='help', faded=False,
                 onclick=None, id=None, class_=None, empty=False, double=False,
-                center=True):
+                center=True, attrs=None):
     """
     Returns HTML for a cs-card block.
 
@@ -30,6 +30,8 @@ def simple_card(title=None, text=None, href=None, icon='help', faded=False,
             Action to be associated with the onclick event.
         id/class_:
             Card's id/class attributes.
+        attrs:
+            A dictionary of attributes for the main card div
     """
     # Defaults for empty cards
     if empty:
@@ -45,9 +47,10 @@ def simple_card(title=None, text=None, href=None, icon='help', faded=False,
                       class_)
     icon = mdl.icon(class_='cs-card__icon')[icon]
     icon = a_or_span(href=href, onclick=onclick, class_='cs-card__link')[icon]
+    attrs = attrs or {}
 
     return \
-        div(class_=class_, id=id)[
+        div(class_=class_, id=id, **attrs)[
             icon,
             title and h1(class_='cs-card__title')[title],
             text and p(text)

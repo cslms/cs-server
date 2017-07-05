@@ -30,7 +30,17 @@ def navbar():
 
 def layout():
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-    cards = [ simple_card(post.text, 'Author: {}'.format(post.author.username), icon='forum', double=True, center=False) for post in posts ]
+    cards = [
+        simple_card(
+            post.text, 
+            'Author: {}'.format(post.author.username), 
+            href='post/{}'.format(post.id),
+            icon='forum', 
+            double=True, 
+            center=False
+        ) 
+        for post in posts 
+    ]
 
     # TODO: Kassia
     from types import SimpleNamespace
@@ -46,6 +56,16 @@ def layout():
                 'Avaliar membros', href='#')
     ]
     return card_container(cards, title='Membros', description=b)
+
+def detail_layout(post):
+    card = simple_card(
+        post.text, 
+        'Author: {}'.format(post.author.username), 
+        icon='forum', 
+        double=True, 
+        center=False
+    ) 
+    return card
 
 def posts_layout():
 

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from bricks.contrib.mdl import button, div
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
-from .bricks import navbar, layout, posts_layout, comments_layout
+from .bricks import navbar, layout, posts_layout, comments_layout, detail_layout
 
 # Create your views here.
 def index(request):
@@ -19,15 +19,19 @@ def index(request):
     }
     return render(request, 'blog/index.jinja2', ctx)
 
+@login_required
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    ctx = {
+        'main':detail_layout(post),
+        'navbar':navbar(),
+    }
+    return render(request, 'blog/post_detail.jinja2', ctx)
+
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     ctx = {'posts' : posts}
     return render(request, 'blog/post_list.html', ctx)
-
-@login_required
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
 
 @login_required
 def post_new(request):
