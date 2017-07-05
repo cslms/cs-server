@@ -33,6 +33,13 @@ class Statistics(Sequence):
     def max(self, key=lambda x: x, default=None):
         """
         Return the greatest value in data.
+
+        Args:
+            key (callable):
+                If given, it will compare the result of calling key(x) to each
+                term of the sequence.
+            default:
+                Default value for empty sequences
         """
 
         default = 0 if default is None else self.default

@@ -1,0 +1,21 @@
+figure {
+  margin: 0;
+}
+
+
+// Fluid images
+img,
+picture {
+  margin: 0;
+  max-width: 100%;
+  font-style: italic;
+  vertical-align: middle;
+}
+
+
+// Image is not fluid if width or height is set
+img[width],
+img[height] {
+  max-width: none;
+}
+

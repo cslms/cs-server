@@ -1,0 +1,47 @@
+body.ternary {
+    min-height: 100vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    background: #666 url('../../img/bg/gray_noise.png') repeat;
+}
+
+.ternary {
+    .mdl-tabs__tab-bar {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    header {
+        margin: 0 0 $small-spacing;
+        flex-grow: 1;
+    }
+
+    .header-title {
+        padding: 40px 40px 0;
+        color: #eee;
+        margin: auto auto 0;
+        max-width: 800px;
+    }
+
+    header h1 {
+        font-size: 3.5em;
+    }
+
+    main {
+        background: white;
+    }
+
+    main > * {
+        max-width: 600px;
+        min-width: 300px;
+        width: 50%;
+        margin: 0 auto;
+        padding: 30px;
+    }
+
+    footer {
+        text-align: right;
+        padding: 40px;
+        flex-grow: 1;
+    }
+}

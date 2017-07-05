@@ -1,0 +1,190 @@
+/* Alert boxes
+
+   Alert boxes have the .error and .success roles, which change the background
+   color.
+ */
+.box {
+    padding: 10px;
+    border: 2px solid white;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 30px auto;
+    max-width: 450px;
+}
+
+@media only screen and (min-width: 640px) {
+    .box {
+        padding: 20px 20px 20px 30px;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .box {
+        padding-left: 40px;
+    }
+}
+
+.box.error {
+    background: rgba(172, 16, 16, 0.75);
+}
+
+.box.success {
+    background: rgba(78, 154, 6, 0.75);
+}
+
+
+/* Alert banners
+
+   Alert banners can have a large material-icon together with a block element
+   of text. The icon is colored differently depending on a secondary class.
+   The secondary roles are the same as the alert boxes.
+
+ */
+.material-icons.alert {
+    font-size: 300%;
+    border-radius: 50%;
+    background-color: darkgrey;
+    color: white;
+    padding: 5px;
+    margin-right: 30px;
+}
+
+button > i.material-icons.alert {
+    margin-right: 0 !important;
+}
+
+.alert-button {
+    box-shadow: none;
+    min-height: 64px;
+}
+
+.alert-message .material-icons.alert {
+    display: block;
+}
+
+.alert-message {
+    display: flex;
+    align-items: center;
+}
+
+.success .material-icons.alert {
+    background-color: #74aa3d;
+    border: 6px solid white;
+}
+
+.error .material-icons.alert {
+    background-color: darkred;
+    border: 6px solid white;
+}
+
+/* Toolbars */
+.toolbar.highlight {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.toolbar {
+    text-align: right;
+    padding: 15px;
+    margin-bottom: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.toolbar.top {
+    margin-bottom: inherit;
+    margin-top: -10px;
+}
+
+.toolbar > .separated,
+.toolbar > .form__delete-button {
+    float: left;
+}
+
+@media only screen and (min-width: 600px) {
+    .toolbar {
+        margin-bottom: -20px;
+        margin-left: -30px;
+        margin-right: -20px;
+        padding-left: 30px !important;
+    }
+    .toolbar.top {
+        margin-top: -20px;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .toolbar {
+        margin-left: -40px;
+        padding-left: 40px !important;
+    }
+}
+
+/* Button roles */
+.primary,
+.form__save-button {
+    font-weight: bold;
+    margin: auto 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #008080;
+}
+
+.primary.flat {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.button.danger,
+button.danger,
+input[type=button].danger,
+input[type=submit].danger,
+input[type=reset].danger,
+.form__delete-button {
+    background: #ff2626;
+    color: white;
+}
+
+.button.danger.flat,
+button.danger.flat,
+input[type=button].danger.flat,
+input[type=submit].danger.flat,
+input[type=reset].danger.flat {
+    color: darkred;
+}
+
+/* Lists of objects */
+.object-list li {
+    margin-bottom: 30px;
+}
+.list-item-title {
+    font-family: Roboto, sans-serif;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+.list-item-title,
+.list-item-title * {
+    font-weight: bold;
+}
+
+.list-item-description {
+    color: #666;
+}
+
+/* Titles and title highlights */
+
+/* Markdown expansion areas */
+.long-description pre {
+    padding: 20px;
+    background: #eee;
+}
+
+/* Gradebook tables */
+table.gradebook {
+    margin: 10px auto;
+}
+table.gradebook tr > * {
+    padding: 5px;
+}
+
+table.gradebook thead {
+    background: lightgray;
+    border-bottom: 1px solid black;
+}

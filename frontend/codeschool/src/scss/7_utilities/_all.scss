@@ -1,0 +1,31 @@
+// These are generic styles that can override any styles in the page
+@import 'print';
+@import 'colors';
+@import 'layouts';
+
+
+.clearfix {
+    @include clearfix();
+}
+
+.visually-hidden {
+    @include visually-hidden();
+}
+
+
+.hidden {
+  display: none !important;
+}
+
+
+.visually-visible {
+    @include visually-visible();
+}
+
+// Redefine styles for situations we ant an e.g. h2, by need to apply an h3
+//styling
+@for $i from 1 through 6 {
+    h#{$i} {
+        @extend h#{$i};
+    }
+}

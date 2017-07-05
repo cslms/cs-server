@@ -1,0 +1,7 @@
+.cs-card-container {
+    &__aside {
+        @include block-padding;
+
+        padding-left: $huge-spacing;
+    }
+}

@@ -1,0 +1,33 @@
+.cs-submission {
+    &__title {
+        padding: $small-spacing;
+        background: $color-light-gray;
+        color: $color-dark-gray;
+        font-family: $amatic-sc;
+        font-weight: bold;
+        position: relative;
+    }
+
+    &__title-handle {
+        position: absolute;
+        right: $medium-spacing;
+    }
+
+    &__content {
+        @include block-padding;
+    }
+
+    &__description {
+        padding-bottom: $large-spacing;
+    }
+
+    &__detail {
+        h3 {
+            margin-bottom: $small-spacing;
+        }
+
+        dl {
+            margin-top: $small-spacing;
+        }
+    }
+}

@@ -1,0 +1,128 @@
+// Padding and geometry
+@mixin block-padding {
+    padding: $medium-spacing;
+}
+
+
+@mixin block-padding-large {
+    padding: $large-spacing $large-spacing $large-spacing $huge-spacing;
+}
+
+
+// Titles
+@mixin title-emph {
+    font-family: $amatic-sc;
+    font-size: 2em;
+}
+
+
+@mixin title-emph-large {
+    font-family: $amatic-sc;
+    font-size: 2em;
+}
+
+
+// Icons
+@mixin icon () {
+    font-family: 'wagtail';
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-decoration: none;
+    width: 1.3em;
+    line-height: 1em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: left;
+    vertical-align: middle;
+    margin-right: 0.2em;
+}
+
+@mixin icon-big {
+    font-size: 4em;
+}
+
+
+// Visibility
+@mixin visually-hidden() {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+
+    &:active,
+    &:focus {
+        clip: auto;
+        height: auto;
+        margin: 0;
+        overflow: visible;
+        position: static;
+        width: auto;
+    }
+}
+
+
+@mixin visually-visible() {
+    clip: none;
+    height: auto;
+    width: auto;
+    margin: auto;
+    overflow: visible;
+    position: initial;
+}
+
+
+// Fonts
+@mixin webfont($fontname, $filestub, $weight, $style:normal) {
+    @font-face {
+        font-family: '#{$fontname}';
+        src: url('#{$wagtail-font-root}#{$filestub}.woff2') format('woff2'),
+           url('#{$wagtail-font-root}#{$filestub}.woff') format('woff'),
+           url('#{$wagtail-font-root}#{$filestub}.ttf') format('truetype');
+        font-weight: $weight;
+        font-style: $style;
+    }
+}
+
+
+// Other styles
+@mixin unlist() {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-type: none;
+    font-style: normal;
+
+    li {
+        list-style-type: none;
+        font-style: normal;
+    }
+}
+
+@mixin transition($transition...) {
+    body.ready & {
+        transition: $transition;
+    }
+}
+
+
+// Clearfix
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: ' ';
+        display: table !important;
+        clear: both !important;
+    }
+}
+
+
+
+
+
+

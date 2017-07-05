@@ -1,0 +1,114 @@
+header {
+    @extend .paper;
+    position: relative;
+    z-index: 10;
+}
+
+
+.page-logo {
+    img {width: 150px;}
+    position: absolute;
+    left: 80px;
+}
+
+
+.page-header {
+    margin: 0;
+    padding: 0;
+    padding-right: 20px;
+    padding-top: 15px;
+    background-color: #fafafa;
+    width: 100%;
+    height: 110px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    vertical-align: baseline;
+
+    box-shadow: 
+    &__notification,
+    &__link {
+        color: #444;
+        margin: 0;
+        
+    }
+
+    &__link {
+        text-decoration: none;
+        font: 1.9em 'Amatic SC', cursive;
+        font-weight: bold;
+        height: 100%;
+        margin: 0;
+
+        :host slot {
+            margin: 0;
+        }
+    }
+
+    &__notification {
+        margin: 15px;
+    }
+
+    @keyframes linkdarken {
+        from {background-color: white;}
+        to {background-color: #eee;}
+    }
+    
+    
+    &__link:hover {
+        color: black;
+        animation: linkdarken 300ms;
+        animation-fill-mode: forwards;
+    }
+
+
+    &__notification:hover {
+        color: black;
+    }
+    
+
+    &__user-menu {
+        paper-listbox {
+            min-width: 250px;
+        }
+    }
+
+    &__user-menu {
+        paper-listbox {
+            @extend .paper;
+        }
+    }
+    &__user-menu-button {
+        border-radius: 50%;
+        color: white;
+        background-color: $color-green !important;
+        
+        .dropdown-trigger {
+            font: 1.7em 'Amatic SC', cursive;
+            font-weight: bold;
+            color: white;
+        }
+    }
+
+    &__user-menu-icon {
+        text-align: center;
+        background-color: #eee;
+        margin-top: -8px;
+        i {
+            font-size: 3em;
+        }
+    }
+
+    &__user-menu-title {
+        min-width: 120px;
+        margin: 10px;         
+        h1 {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    }
+
+    &__user-menu-button:hover {
+        background-color: lighten($color-green, 5) !important;
+    }
+}

@@ -1,0 +1,22 @@
+// Progressively decrease heading sizes by a factor of $heading-decrease-factor
+$heading-decrease-factor: 0.8 !default;
+$base-heading-size: 4em !default;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: $heading-font-family;
+    font-weight: 500;
+    line-height: $heading-line-height;
+    margin: 0 0 $small-spacing;
+}
+
+@for $i from 1 through 6 {
+    h#{$i} {
+        font-size: modular-scale($i, $base-heading-size, $heading-decrease-factor);
+    }
+}
+

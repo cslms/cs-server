@@ -1,3 +1,0 @@
-var _cslms$cs_server$Forms_FormConfig$FormConfig = function (a) {
-	return {fields: a};
-};

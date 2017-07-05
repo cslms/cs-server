@@ -8,6 +8,15 @@ from lazyutils import delegate_ro, delegate_to, readonly  # noqa
 class delegate_to_or_none(delegate_to):  # noqa: N801
     """
     Like delegate_to(), but return None if delegate is None.
+
+    Examples:
+
+        >>> class Breakfast:
+        ...     data = {'ham': 'spam', 'bacon': 'eggs'}
+        ...     key = delegate_to_or_none("data")
+        >>> x = Breakfast()
+        >>> x.key('ham')
+        'spam'
     """
 
     def __get__(self, obj, cls=None):

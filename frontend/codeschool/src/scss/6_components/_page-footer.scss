@@ -1,0 +1,55 @@
+footer {
+    position: relative;
+    box-shadow: 0 -4px 5px 0 rgba(0, 0, 0, 0.14),
+                0 -1px 10px 0 rgba(0, 0, 0, 0.12),
+                0 -2px 4px -1px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    border-top: 10px solid rbga(0, 0, 0, 0.5);
+}
+
+
+
+.page-footer {
+    &__main {
+        padding: 20px;
+        background: #666 url('../../img/bg/gray_noise.png') repeat;
+        color: #ddd;
+
+        > div {
+            margin: 0 auto;
+        }
+    }
+
+    &__block {
+        @include block-padding;
+    }
+
+    &__block-title {
+        font-weight: 500;
+        margin-left: -$medium-spacing;
+    }
+
+    &__copyright {
+        @include block-padding;
+        background: $color-dark-gray url('../../img/bg/dark_noise.png') repeat;
+
+        p {
+            margin: $small-spacing;
+            text-align: center;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        a {
+            color: white;
+        }
+    }
+}
+
+@media only screen and (min-width: 640px) {
+    .page-footer__main > div {
+        display: flex;
+        justify-content: space-between;
+        width: 85%;
+    }
+}

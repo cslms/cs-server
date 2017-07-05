@@ -1,0 +1,44 @@
+.cs-card {
+    @include block-padding;
+    @extend .mdl-cell--6-col;
+    @extend .mdl-cell--12-col-tablet;
+
+    display: flex;
+    background-color: white;
+    min-height: 100px;
+    color: $color-dark-gray;
+    vertical-align: center;
+
+    &__title {
+        @include title-emph;
+    }
+
+    &__content {
+        margin-top: $small-spacing;
+    }
+
+    &__icon {
+        @include icon-big;
+        margin-right: $large-spacing;
+    }
+
+    &__link {
+        display: block;
+        text-decoration: none;
+    }
+
+    &--faded {
+        background-color: rgba(220, 220, 220, 170);
+    }
+}
+
+@media only screen and (min-width: $breakpoint-medium-screen) {
+    .cs-card {
+        display: block;
+        text-align: center;
+
+        &__icon {
+            margin-right: inherit;
+        }
+    }
+}

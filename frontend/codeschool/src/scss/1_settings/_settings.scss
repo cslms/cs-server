@@ -1,0 +1,75 @@
+// Breakpoints
+$breakpoint-medium-screen: 480px;
+$breakpoint-large-screen: 840px;
+
+// Don't change: MDL and Wagtail breaking point variables
+$grid-desktop-breakpoint: $breakpoint-large-screen;
+$grid-tablet-breakpoint: $breakpoint-medium-screen;
+$breakpoint-mobile: $breakpoint-medium-screen;
+$breakpoint-tablet: $breakpoint-large-screen;
+
+
+// Typography
+$roboto: Roboto, Helvetica, Arial, Tahoma, Verdana, sans-serif;
+$roboto-condensed: "Roboto Condensed", Helvetica, Arial, Tahoma, Verdana, sans-serif;
+$raleway: Raleway, Helvetica, Arial, Tahoma, Verdana, sans-serif;
+$open-sans: "Open Sans", Helvetica, Arial, Tahoma, Verdana, sans-serif;
+$open-sans-condensed: "Open Sans Condensed", Helvetica, Arial, Tahoma, Verdana, sans-serif;
+$lato: Lato, Helvetica, Arial, Tahoma, Verdana, sans-serif;
+$amatic-sc: "Amatic SC", cursive;
+$font-sans: $roboto;
+$font-serif: $amatic-sc;
+$base-font-family: $lato;
+$heading-font-family: $lato;
+$font-monospace: monospace;
+
+// Font Sizes and colors
+$base-font-size: 1em;
+$base-heading-size: 2.5em;
+$heading-decrease-factor: 0.85;
+$base-font-color: darken($color-dark-gray, 10);
+
+
+// Line heights, spacings and paddings
+$base-line-height: 1.5;
+$heading-line-height: 1.2;
+$base-spacing: $base-line-height * 1em;
+$small-spacing: 10px;
+$base-z-index: 0;
+
+// Border
+$base-border-color: $color-light-gray;
+$base-border: 1px solid $base-border-color;
+$base-border-radius: 3px;
+$mobile-nice-padding: 20px;
+$desktop-nice-padding: 50px;
+
+// Forms
+$form-box-shadow: inset 0 1px 3px rgba(#000, 0.06);
+$form-box-shadow-focus: $form-box-shadow, 0 0 5px adjust-color($action-color, $lightness: -5%, $alpha: -0.3);
+
+// Animations
+$base-duration: 150ms;
+$base-timing: ease;
+
+// Grid settings
+$grid-columns: 12;
+$grid-gutter-width: 3%;
+$grid-max-width: $breakpoint-large-screen;
+$grid-content-indent: 0.7;
+
+// Misc sizing
+$thumbnail-width: 130px;
+$menu-width: 200px;
+
+
+// Spacing
+$small-spacing: 5px;
+$medium-spacing: 12px;
+$large-spacing: 20px;
+$huge-spacing: 40px;
+
+// Misc wagtail definitions
+$wagtail-static-root: '../../';
+$wagtail-images-root: $wagtail-static-root + 'wagtailadmin/images/';
+$wagtail-font-root: '../../wagtailadmin/fonts/';

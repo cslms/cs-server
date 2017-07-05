@@ -1,0 +1,16 @@
+.simple-hero {
+    background-color: $color-primary-tint;
+    width: 100%;
+    color: white;
+
+    &__title {
+        padding: 25px 0px 10px 0px;
+        font-family: $amatic-sc;
+        font-weight: bold;
+        font-size: 3.2em;
+    }
+
+    &__description > *:nth-child(odd) {
+        color: lighten($color-primary-tint, 0.9);
+    }
+}

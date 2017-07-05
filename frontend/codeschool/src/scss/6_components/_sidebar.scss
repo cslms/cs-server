@@ -1,0 +1,64 @@
+$barcolor: #aaa;
+
+
+.sidebar {
+  @extend .paper;
+  
+  width: 40px;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  background: $barcolor;
+  border-right: 1px solid darken(#666, 0.05);
+
+  &__icon {
+      color: #eee;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      margin: 20px 10px;
+  }
+
+  &__item:hover {
+      color: white;
+      background: darken(#666, 0.1);
+      height: 60px;
+
+      .sidebar__text {
+          vertical-align: center;
+      }
+  }
+
+  &__text {
+      opacity: 0;
+      position: absolute;
+      left: 45px;
+      margin-top: 20px;
+      color: white;
+      height: 60px;
+  }
+}
+
+
+@keyframes sidebar--open {
+    from {width: 40px; opacity: 1; }
+    to {width: 200px; opacity: 0.98;}
+}
+
+.sidebar:hover {
+      background: lighten($barcolor, 0.1);
+      animation: 150ms sidebar--open;
+      animation-fill-mode: forwards;
+      width: 200px;
+
+      &__item:hover {
+          .sidebar__text {
+              animation: none;
+          }
+      }
+
+      .sidebar__text {
+          opacity: 1;
+      }
+}
+        

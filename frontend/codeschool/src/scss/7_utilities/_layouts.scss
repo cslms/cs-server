@@ -1,0 +1,49 @@
+.bg-primary {
+    background-color: $color-primary-tint;
+    color: $color-primary-contrast;
+}
+
+.color-primary {
+    color: $color-primary-tint;
+}
+
+
+.container {
+    width: calc(70% + 200px);
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.paper {
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    z-index: 2;
+}
+
+
+.paper-flat {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10),
+                0 1px 5px 0 rgba(0, 0, 0, 0.18),
+                0 3px 1px -2px rgba(0, 0, 0, 0.15);
+    z-index: 1;
+}
+
+
+.content-fab {
+    float: right;
+    top: -50px;
+
+    //top: 20px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.large-emoticon {
+    font-size: 6em;
+    text-align: center;
+    margin: 30px;
+    color: #666;
+}

@@ -1,0 +1,28 @@
+ul,
+ol {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    ul, ol {
+        list-style: inherit;
+        padding-left: 20px;
+    }
+}
+
+dl {
+    margin: 0;
+    padding: $large-spacing;
+}
+
+dt {
+    font-weight: 600;
+    margin: 0 $large-spacing 0 0;
+    float: left;
+}
+
+dd {
+    margin: 0;
+}

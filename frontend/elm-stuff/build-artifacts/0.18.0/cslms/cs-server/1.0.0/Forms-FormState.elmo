@@ -1,3 +1,0 @@
-var _cslms$cs_server$Forms_FormState$FormState = function (a) {
-	return {fields: a};
-};
