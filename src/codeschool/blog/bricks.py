@@ -2,27 +2,37 @@ from codeschool.bricks import navbar as _navbar, navsection, navsection_page_adm
 from bricks.html5 import a, div, h1, h2, ul, li, button
 from codeschool.bricks import card_container, simple_card, with_class
 from simple_search import search_filter
+<<<<<<< HEAD
 from .models import Post, Comment
 from codeschool.models import User
 
 # import members_list from back end
+=======
+
+#Posts
+from django.utils import timezone
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
+from django.contrib.auth.decorators import login_required
+>>>>>>> colocando posts do usuário
 
 def navbar():
     return _navbar([
         navsection('Menu',
+<<<<<<< HEAD
             [a('Home Blog', href='#'),
             a('Mensagens', href='#')
+=======
+            [a('Posts', href='#'),
+            a('Minhas postagens', href='#')
+>>>>>>> colocando posts do usuário
         ])])
 
-@with_class('cs-sparta')
 def layout():
-    cards = [
-        simple_card('card1','bla bla bla', double=True, center=False),
-        simple_card('Atividades','Atividades a fazer', icon='assignment', href='/sparta/activities'),
-        simple_card('Notas','Atividades avaliadas', icon='star', href='#'),
-    ]
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    cards = [ simple_card(post.text, 'Author: {}'.format(post.author.username), icon='forum', double=True, center=False) for post in posts ]
 
-    # TODO: Import from backend
+    # TODO: Kassia
     from types import SimpleNamespace
     Member = SimpleNamespace
     all_users = Post.objects.all()
@@ -37,7 +47,19 @@ def layout():
     ]
     return card_container(cards, title='Membros', description=b)
 
-def activities_layout():
+def posts_layout():
+
+    # TODO: Import from backend
+    from types import SimpleNamespace
+    Activity = SimpleNamespace
+    activities_list = [Activity(name="Atividade 1"), Activity(name="Atividade 2"), Activity(name="Atividade 3", url="dfsdf")]
+
+    # activities_list = activity_filter()
+
+    cards = [ simple_card(activity.name, double=True, center=False) for activity in activities_list ]
+    return card_container(cards)
+
+def comments_layout():
 
     # TODO: Import from backend
     from types import SimpleNamespace
