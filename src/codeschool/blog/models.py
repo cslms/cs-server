@@ -20,7 +20,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey('blog.Post', related_name='comments')
-    author = models.CharField(max_length=200)
+    #author = models.CharField(max_length=200)
+    author = models.ForeignKey('auth.User')
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
@@ -30,4 +31,4 @@ class Comment(models.Model):
         self.save()
 
     def __str__(self):
-        return self.tex
+        return self.text
