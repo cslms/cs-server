@@ -4,6 +4,21 @@ from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 
+#bricks modules
+from bricks.contrib.mdl import button, div
+from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
+from codeschool.bricks import navbar as _navbar, navsection
+from .bricks import navbar, layout, activities_layout
+
+# Create your views here.
+def index(request):
+
+    ctx = {
+    'main':layout(),
+    'navbar':navbar(),
+    }
+    return render(request, 'blog/index.jinja2', ctx)
+
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     context = {'posts' : posts}
