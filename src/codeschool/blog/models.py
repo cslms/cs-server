@@ -1,8 +1,12 @@
+from django.utils.translation import ugettext_lazy as _
+
 from django.db import models
 from django.utils import timezone
 
+from codeschool import models
+
 class Post(models.Model):
-    author = models.ForeignKey('auth.User')
+    author = models.ForeignKey(models.User, related_name='author_post')
     title = models.CharField(max_length=200)
     text = models.TextField()
     created_date = models.DateTimeField(
@@ -22,7 +26,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey('blog.Post', related_name='comments')
-    author = models.ForeignKey('auth.User')
+    author = models.ForeignKey(models.User)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
