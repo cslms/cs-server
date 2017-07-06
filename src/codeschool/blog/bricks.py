@@ -2,30 +2,18 @@ from codeschool.bricks import navbar as _navbar, navsection, navsection_page_adm
 from bricks.html5 import a, div, h1, h2, ul, li, button
 from codeschool.bricks import card_container, simple_card, with_class
 from simple_search import search_filter
-<<<<<<< HEAD
-from .models import Post, Comment
-from codeschool.models import User
-
-# import members_list from back end
-=======
 
 #Posts
 from django.utils import timezone
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
->>>>>>> colocando posts do usuário
 
 def navbar():
     return _navbar([
         navsection('Menu',
-<<<<<<< HEAD
-            [a('Home Blog', href='#'),
-            a('Mensagens', href='#')
-=======
             [a('Posts', href='#'),
             a('Minhas postagens', href='#')
->>>>>>> colocando posts do usuário
         ])])
 
 def layout():
