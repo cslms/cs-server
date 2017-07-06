@@ -46,7 +46,7 @@ def add_comment_to_post(request, pk):
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     ctx = {'posts' : posts}
-    return render(request, 'blog/post_list.html', ctx)
+    return render(request, 'blog/post_list.jinja2', ctx)
 
 @login_required
 def post_new(request):
@@ -59,7 +59,7 @@ def post_new(request):
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/post_edit.html', {'form': form})
+    return render(request, 'blog/post_edit.jinja2', {'form': form})
 
 @login_required
 def post_edit(request, pk):
@@ -73,7 +73,7 @@ def post_edit(request, pk):
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+    return render(request, 'blog/post_edit.jinja2', {'form': form})
 
 @login_required
 def post_remove(request, pk):
