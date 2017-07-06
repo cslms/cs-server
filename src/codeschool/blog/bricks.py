@@ -2,12 +2,15 @@ from codeschool.bricks import navbar as _navbar, navsection, navsection_page_adm
 from bricks.html5 import a, div, h1, h2, ul, li, button
 from codeschool.bricks import card_container, simple_card, with_class
 from simple_search import search_filter
+from .models import Post, Comment
+from codeschool.models import User
+
 # import members_list from back end
 
 def navbar():
     return _navbar([
         navsection('Menu',
-            [a('Home Sparta', href='#'),
+            [a('Home Blog', href='#'),
             a('Mensagens', href='#')
         ])])
 
@@ -22,11 +25,12 @@ def layout():
     # TODO: Import from backend
     from types import SimpleNamespace
     Member = SimpleNamespace
-    members_list = [Member(name="Goku"), Member(name="Ronaldo"), Member(name="Florentina", url="dfsdf")]
+    all_users = Post.objects.all()
+
 
     b = div()[
         ul(class_="cs-sparta__members-list",)[[
-            li(a(member.name, href='#')) for member in members_list
+            li(a(post.title, href='#')) for post in all_users
         ]],
         button(class_="button")(
                 'Avaliar membros', href='#')
