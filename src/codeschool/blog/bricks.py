@@ -32,7 +32,7 @@ def layout():
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     cards = [
         simple_card(
-            post.text, 
+            post.title, 
             'Author: {}'.format(post.author.username), 
             href='post/{}'.format(post.id),
             icon='forum', 
@@ -61,11 +61,12 @@ def detail_layout(post):
     card = simple_card(
         post.text, 
         'Author: {}'.format(post.author.username), 
-        icon='forum', 
+        icon='comment', 
+        href='post/{}/comment/'.format(post.id),
         double=True, 
         center=False
     ) 
-    return card
+    return card_container(card, title=post.title)
 
 def posts_layout():
 

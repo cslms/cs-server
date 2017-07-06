@@ -6,7 +6,11 @@ from django.utils import timezone
 from codeschool import models
 
 class Post(models.Model):
+<<<<<<< HEAD
     author = models.ForeignKey(models.User, related_name='author_post')
+=======
+    author = models.ForeignKey('auth.User', related_name='user')
+>>>>>>> Subistituindo texto pelo titulo
     title = models.CharField(max_length=200)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
