@@ -6,7 +6,7 @@ from django.utils import timezone
 from codeschool import models
 
 class Post(models.Model):
-    author = models.ForeignKey('auth.User', related_name='user')
+    author = models.ForeignKey(models.User, related_name='users')
     title = models.CharField(max_length=200)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)

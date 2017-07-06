@@ -30,15 +30,10 @@ def layout():
         for post in posts 
     ]
 
-    # TODO: Kassia
-    from types import SimpleNamespace
-    Member = SimpleNamespace
-    all_users = Post.objects.all()
-
-
+    #Retirar daqui e colocar em um método separado
     b = div()[
         ul(class_="cs-sparta__members-list",)[[
-            li(a(post.title, href='#')) for post in all_users
+            li(a(user.author.username, href='post/{}'.format(user.id),)) for user in posts
         ]],
         button(class_="button")(
                 'Avaliar membros', href='#')
