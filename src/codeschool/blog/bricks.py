@@ -1,5 +1,5 @@
 from codeschool.bricks import navbar as _navbar, navsection, navsection_page_admin
-from bricks.html5 import a, div, h1, h2, ul, li, button
+from bricks.html5 import a,p, div, h1, h2, ul, li, button
 from codeschool.bricks import card_container, simple_card, with_class
 from simple_search import search_filter
 
@@ -16,8 +16,7 @@ def navbar():
             a('Minhas postagens', href='#')
         ])])
 
-def layout():
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+def layout(posts, users):
     cards = [
         simple_card(
             post.title, 
@@ -30,10 +29,9 @@ def layout():
         for post in posts 
     ]
 
-    #Retirar daqui e colocar em um método separado
     b = div()[
         ul(class_="cs-sparta__members-list",)[[
-            li(a(user.author.username, href='post/{}'.format(user.id),)) for user in posts
+            li(a(user.username, href='post/{}'.format(user.id),)) for user in users
         ]],
         button(class_="button")(
                 'Avaliar membros', href='#')
@@ -45,11 +43,29 @@ def detail_layout(post):
         post.text, 
         'Author: {}'.format(post.author.username), 
         icon='comment', 
-        href='post/{}/comment/'.format(post.id),
         double=True, 
         center=False
-    ) 
-    return card_container(card, title=post.title)
+    )
+
+    card2 = [
+        p("Comentários: {}".format(post.comments.count()))
+
+    ]
+
+    cards = [
+        simple_card(
+            comment.text, 
+            'Author: {}'.format(comment.author.username), 
+            icon='forum', 
+            double=True, 
+            center=False
+        ) 
+        for comment in post.comments.all()
+    ]
+    cards.insert(0,card)
+    cards.insert(1,card2)
+
+    return card_container(cards, title=post.title)
 
 def posts_layout():
 
