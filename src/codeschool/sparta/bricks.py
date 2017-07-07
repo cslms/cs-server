@@ -64,7 +64,7 @@ def rating_layout(members):
                 td()['3 Aluno(s)'],
                 td()['10'],
                 td()[
-                    div(class_="rateYo"),
+                    div(class_="cs-sparta__rateYo"),
                     button(type="submit")['Submit']
                 ],
             ]
