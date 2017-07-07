@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 #bricks modules
 from bricks.contrib.mdl import button, div
@@ -13,8 +14,16 @@ from .bricks import navbar, layout, posts_layout, comments_layout, detail_layout
 # Create your views here.
 def index(request):
 
+    posts = (
+        Post.objects
+            .filter(published_date__lte=timezone.now())
+            .order_by('-published_date')
+            .select_related('author')
+    )
+    users = User.objects.filter(id__in={post.author_id for post in posts }) 
+
     ctx = {
-    'main':layout(),
+    'main':layout(posts, users),
     'navbar':navbar(),
     }
     return render(request, 'blog/index.jinja2', ctx)
