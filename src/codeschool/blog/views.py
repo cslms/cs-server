@@ -59,7 +59,7 @@ def post_new(request):
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/post_edit.jinja2', {'form': form})
+    return render(request, 'blog/post_edit.jinja2', { 'form': form, 'type': "New Post" })
 
 @login_required
 def post_edit(request, pk):
@@ -73,7 +73,7 @@ def post_edit(request, pk):
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.jinja2', {'form': form})
+    return render(request, 'blog/post_edit.jinja2', { 'form': form, 'type': "Edit Post" })
 
 @login_required
 def post_remove(request, pk):

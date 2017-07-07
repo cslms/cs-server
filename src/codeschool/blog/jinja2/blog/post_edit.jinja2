@@ -1,7 +1,7 @@
 {% extends 'base.jinja2' %}
 
 {% block content_title %}
-Edited Post
+{{ type }}
 {% endblock %}
 
 {% block content_body %}
@@ -21,7 +21,7 @@ Edited Post
         {% endfor %}
         <div class="post-form-button">
             <button type="submit" class="save btn btn-default">Save</button>
-            <button type="cancel" class="cancel btn btn-default">Cancel</a>
+            <button type="cancel" class="cancel btn btn-default">Cancel</button>
         </div>
     </form>
 {% endblock %}
