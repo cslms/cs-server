@@ -29,8 +29,8 @@ import_api_modules()
 # Basic URLS
 urlpatterns = [
     url(r'^admin/', include('wagtail.wagtailadmin.urls')),
-    url(r'^$', index_view, name='index'),
-    url(r'^blog/', include('codeschool.blog.urls')),
+    url(r'^$', index_view),
+    url(r'^blog/', include('codeschool.blog.urls', namespace='blog')),
     url(r'^sparta/', include('codeschool.sparta.urls')),
     url(r'^profile/$', profile_view, name='profile-view'),
     url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
