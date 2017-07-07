@@ -51,12 +51,24 @@
                 }
             </style>
         {% endif %}
+        {% for style in css_links %}
+            <link rel="stylesheet" href="{{ static(style) }}"
+        {% endfor %}
+        {% for style in css_external_links %}
+            <link rel="stylesheet" href="{{ style }}"
+        {% endfor %}
     {% endblock %}
 
     <!-- Javascript -->
     {% block javascript_header %}
         <script src="{{ static('js/vendor/modernizr-2.8.3.min.js') }}"></script>
         <script src="{{ static('main.js') }}"></script>
+        {% for script in script_links %}
+            <script src="{{ static(script) }}"></script>
+        {% endfor %}
+        {% for script in script_external_links %}
+            <script src="{{ script }}"></script>
+        {% endfor %}
     {% endblock %}
 </head>
 

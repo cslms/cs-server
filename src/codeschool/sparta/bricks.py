@@ -1,5 +1,5 @@
 from codeschool.bricks import navbar as _navbar, navsection, navsection_page_admin
-from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr, div, h2, button
+from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr, div, h2, button, div, form, button
 from codeschool.bricks import card_container, simple_card, with_class
 from django.urls import reverse
 # import members_list from back end
@@ -57,14 +57,17 @@ def activities_layout():
 def rating_layout(members):
 
     user_rows = [
-        tr()[
-            td(class_="mdl-data-table__cell--non-numeric")[
-                user.first_name + ' ' + user.last_name],
-            td()['3 Aluno(s)'],
-            td()['10'],
-            td()[
-                i(class_="material-icons", id='tt1')['done'],
-            ],
+        form()[
+            tr()[
+                td(class_="mdl-data-table__cell--non-numeric")[
+                    user.first_name + ' ' + user.last_name],
+                td()['3 Aluno(s)'],
+                td()['10'],
+                td()[
+                    div(class_="rateYo"),
+                    button(type="submit")['Submit']
+                ],
+            ]
         ]
         for user in members
     ]
