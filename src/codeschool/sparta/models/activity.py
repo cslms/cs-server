@@ -92,6 +92,13 @@ class UserGrade(models.Model):
     class Meta:
         unique_together = [('activity', 'user')]
 
+class UserRating(models.Model):
+    rating = models.FloatField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+
+    # activity = models.ForeignKey(SpartaActivity, related_name='user_evaluation')
+    user = models.ForeignKey(models.User)
 
 def read_csv_file(csv_data):
     """

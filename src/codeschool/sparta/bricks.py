@@ -59,7 +59,7 @@ def rating_layout(members):
     user_rows = [
         tr()[
             td(class_="mdl-data-table__cell--non-numeric")[
-                user.username],
+                user.first_name + ' ' + user.last_name],
             td()['3 Aluno(s)'],
             td()['10'],
             td()[
