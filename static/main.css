@@ -19352,10 +19352,22 @@ dialog.wide,
 .cs-sparta__members-list a {
   color: #eee;
   transition: color 150ms ease;
-  font-size: 17px; }
+  font-size: 17px;
+  text-decoration: none; }
+
+.cs-sparta__button-container {
+  text-align: center;
+  margin-top: 20px; }
 
 .cs-sparta__rateYo {
   float: right; }
+
+.cs-sparta__your-rating {
+  text-align: center;
+  margin-top: 20px; }
+  .cs-sparta__your-rating p {
+    font-size: 32px;
+    margin-top: 10px; }
 
 @media print {
   *,
