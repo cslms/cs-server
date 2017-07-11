@@ -6,22 +6,18 @@
 
 {% block content_body %}
     <form method="POST" class="post-form-blog">{{ csrf_input }}
+        <fieldset>
         {% for field in form %}
-            <div class="post-field-blog">
+        <div class="post-field-blog">
             {{ field.name|capitalize }}
             {{ field }}
-            {% if field.errors %}
-            <ul class="errorlist">
-                {% for error in field.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            </div>
+            {{ field.errors }}
+        </div>
         {% endfor %}
         <div class="post-form-button">
             <button type="submit" class="save btn btn-default">Save</button>
-            <button type="cancel" class="cancel btn btn-default">Cancel</button>
+            <a title="" href="{{ url('blog:blog_index') }}">Cancel</a>
         </div>
+        </fieldset>
     </form>
 {% endblock %}

@@ -9,11 +9,10 @@ from django.contrib.auth.models import User
 from bricks.contrib.mdl import button, div
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
-from .bricks import navbar, layout, posts_layout, comments_layout, detail_layout
+from .bricks import navbar, layout, posts_layout, comments_layout, detail_layout, navbar_configuration
 
 # Create your views here.
 def index(request):
-
     posts = (
         Post.objects
             .filter(published_date__lte=timezone.now())
@@ -31,10 +30,16 @@ def index(request):
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    ctx = {
-        'main':detail_layout(post),
-        'navbar':navbar(),
-    }
+    if post.author_id == request.user.id:
+        ctx = {
+            'main':detail_layout(post),
+            'navbar':navbar_configuration(),
+        }
+    else:
+        ctx = {
+            'main':detail_layout(post),
+            'navbar':navbar(),
+        }
     return render(request, 'blog/post_detail.jinja2', ctx)
 
 @login_required
@@ -64,30 +69,34 @@ def post_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.save()
+            post.publish()
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/post_edit.jinja2', { 'form': form, 'type': "New Post" })
+    return render(request, 'blog/post_edit.jinja2', {'form': form, 'type': "New Post", 'navbar':navbar()})
 
 @login_required
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('blog:postdetail', pk=post.pk)
+    if request.user.id == post.author_id:
+        if request.method == "POST":
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                return redirect('blog:postdetail', pk=post.pk)
+        else:
+            form = PostForm(instance=post)
+        return render(request, 'blog/post_edit.jinja2', {'form': form, 'type': "Edit Post", 'navbar': navbar()})
     else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.jinja2', { 'form': form, 'type': "Edit Post" })
+        return redirect('blog:blog_index') # Criar pagina 404 para redirecionar aqui
 
 @login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    post.delete()
+    if request.user.id == post.author_id:
+        post.delete()
     return redirect('blog:postlist')
 
 @login_required
