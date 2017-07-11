@@ -40,7 +40,19 @@ def post_detail(request, pk):
         'main':detail_layout(post),
         'navbar':navbar(),
     }
-    return render(request, 'blog/post_detail.j2', ctx)
+    if post.author_id == request.user.id:
+        ctx = {
+            'navbar':navbar_configuration(),
+            'post': post,
+            'comment': comment,
+        }
+    else:
+        ctx = {
+            'navbar':navbar(),
+            'post': post,
+            'comment': comment,
+        }
+    return render(request, 'blog/post_detail.jinja2', ctx)
 
 @login_required
 def user_posts(request, pk):
@@ -64,6 +76,7 @@ def user_posts(request, pk):
         'posts': posts_of_user,
     }
     return render(request, 'blog/user_posts.j2', ctx)
+    comment = Comment.objects.filter(post_id=post.id)
 
 @login_required
 def add_comment_to_post(request, pk):
