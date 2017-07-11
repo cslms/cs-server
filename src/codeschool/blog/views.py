@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from bricks.contrib.mdl import button, div
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
-from .bricks import navbar, layout, posts_layout, comments_layout, detail_layout, navbar_configuration
+from .bricks import navbar, posts_layout, comments_layout, detail_layout
 
 # Create your views here.
 def index(request):
@@ -21,41 +21,49 @@ def index(request):
     )
     users = User.objects.filter(id__in={post.author_id for post in posts }) 
 
-    ctx = {
-    'main':layout(posts, users),
+    ctx1 = {
+    'main':posts_layout(posts, users),
     'navbar':navbar(),
     }
-    return render(request, 'blog/index.jinja2', ctx)
+    ctx = {'posts' : posts, 'users':users}
+    return render(request, 'blog/index.j2', ctx)
+
+def post_list(request):
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    ctx = {'posts' : posts}
+    return render(request, 'blog/post_list.j2', ctx)
 
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if post.author_id == request.user.id:
-        ctx = {
-            'main':detail_layout(post),
-            'navbar':navbar_configuration(),
-        }
-    else:
-        ctx = {
-            'main':detail_layout(post),
-            'navbar':navbar(),
-        }
-    return render(request, 'blog/post_detail.jinja2', ctx)
+    ctx = {
+        'main':detail_layout(post),
+        'navbar':navbar(),
+    }
+    return render(request, 'blog/post_detail.j2', ctx)
 
 @login_required
-def my_posts(request, pk):
+def user_posts(request, pk):
     user = get_object_or_404(User, pk=pk)
-    posts = (
+    posts_of_user = (
         Post.objects
-            .filter(author__eq=user)
+            .filter(author__username=user.username)
             .order_by('-published_date')
             .select_related('author')
     )
+
+    all_posts = (
+    Post.objects
+        .filter(published_date__lte=timezone.now())
+        .order_by('-published_date')
+        .select_related('author')
+    )
+    users = User.objects.filter(id__in={post.author_id for post in all_posts }) 
     ctx = {
-        'main':my_posts_layout(post),
-        'navbar':navbar(),
+        'users': users,
+        'posts': posts_of_user,
     }
-    return render(request, 'blog/my_posts.jinja2', ctx)
+    return render(request, 'blog/user_posts.j2', ctx)
 
 @login_required
 def add_comment_to_post(request, pk):
@@ -70,12 +78,7 @@ def add_comment_to_post(request, pk):
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = CommentForm()
-    return render(request, 'blog/add_comment_to_post.jinja2', {'form': form})
-
-def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-    ctx = {'posts' : posts}
-    return render(request, 'blog/post_list.jinja2', ctx)
+    return render(request, 'blog/add_comment_to_post.j2', {'form': form})
 
 @login_required
 def post_new(request):
@@ -88,7 +91,7 @@ def post_new(request):
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/post_edit.jinja2', {'form': form, 'type': "New Post", 'navbar':navbar()})
+    return render(request, 'blog/post_edit.j2', { 'form': form, 'type': "New Post" })
 
 @login_required
 def post_edit(request, pk):
@@ -105,7 +108,8 @@ def post_edit(request, pk):
             form = PostForm(instance=post)
         return render(request, 'blog/post_edit.jinja2', {'form': form, 'type': "Edit Post", 'navbar': navbar()})
     else:
-        return redirect('blog:blog_index') # Criar pagina 404 para redirecionar aqui
+        form = PostForm(instance=post)
+    return render(request, 'blog/post_edit.j2', { 'form': form, 'type': "Edit Post" })
 
 @login_required
 def post_remove(request, pk):
