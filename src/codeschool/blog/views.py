@@ -30,15 +30,18 @@ def index(request):
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    comment = Comment.objects.filter(post_id=post.id)
     if post.author_id == request.user.id:
         ctx = {
-            'main':detail_layout(post),
             'navbar':navbar_configuration(),
+            'post': post,
+            'comment': comment,
         }
     else:
         ctx = {
-            'main':detail_layout(post),
             'navbar':navbar(),
+            'post': post,
+            'comment': comment,
         }
     return render(request, 'blog/post_detail.jinja2', ctx)
 
