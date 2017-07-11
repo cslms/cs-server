@@ -1,1 +1,40 @@
 {% extends 'base.jinja2' %}
+
+{% block content_title %}
+{{ post.title|capitalize }}
+{% endblock %}
+
+{% block content_body %}
+<div class="blog-post">
+    <p class="post-text">
+        {{ post.text|capitalize }}
+    </p>
+    <br>
+    <h5 class="post-author">
+        Author: {{ post.author|capitalize }}
+    </h5>
+</div>
+<hr>
+Comentarios
+<hr>
+{% for comment in comments %}
+<div class="comment">
+    <div class="comments-box">
+        <div class="box">
+            {{ comment.text }}
+            <h5 class="comment-author">
+                Author: {{ comment.author|capitalize }}
+            </h5>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="no-comments">
+    <div class="no-comments-box">
+        <div class="box">
+            <p>No comments made in the post</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

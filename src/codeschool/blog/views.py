@@ -9,11 +9,10 @@ from django.contrib.auth.models import User
 from bricks.contrib.mdl import button, div
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
-from .bricks import navbar, posts_layout, comments_layout, detail_layout
+from .bricks import navbar, posts_layout, detail_layout, navbar_configuration
 
 # Create your views here.
 def index(request):
-
     posts = (
         Post.objects
             .filter(published_date__lte=timezone.now())
@@ -37,10 +36,20 @@ def post_list(request):
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    ctx = {
-        'main':detail_layout(post),
-        'navbar':navbar(),
-    }
+    comments = post.comments.all()
+    
+    if post.author_id == request.user.id:
+        ctx = {
+            'navbar':navbar_configuration(),
+            'post': post,
+            'comments': comments,
+        }
+    else:
+        ctx = {
+            'navbar':navbar(),
+            'post': post,
+            'comments': comments,
+        }
     return render(request, 'blog/post_detail.j2', ctx)
 
 @login_required
@@ -65,7 +74,7 @@ def user_posts(request, pk):
         'posts': posts_of_user,
     }
     return render(request, 'blog/user_posts.j2', ctx)
-
+    
 @login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -88,7 +97,7 @@ def post_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.save()
+            post.publish()
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm()
@@ -97,13 +106,17 @@ def post_new(request):
 @login_required
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('blog:postdetail', pk=post.pk)
+    if request.user.id == post.author_id:
+        if request.method == "POST":
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                return redirect('blog:postdetail', pk=post.pk)
+        else:
+            form = PostForm(instance=post)
+        return render(request, 'blog/post_edit.jinja2', {'form': form, 'type': "Edit Post", 'navbar': navbar()})
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.j2', { 'form': form, 'type': "Edit Post" })
@@ -111,7 +124,8 @@ def post_edit(request, pk):
 @login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    post.delete()
+    if request.user.id == post.author_id:
+        post.delete()
     return redirect('blog:postlist')
 
 @login_required

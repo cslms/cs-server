@@ -1,5 +1,5 @@
 from codeschool.bricks import navbar as _navbar, navsection, navsection_page_admin
-from bricks.html5 import a,p, div, h1, h2, ul, li, button
+from bricks.html5 import a,p, div, h1, h2, ul, li, button, br
 from codeschool.bricks import card_container, simple_card, with_class
 from simple_search import search_filter
 
@@ -12,7 +12,8 @@ from django.contrib.auth.decorators import login_required
 def navbar():
     return _navbar([
         navsection('Menu',
-            [a('Posts', href='#'),
+            [a('New Post', href='/blog/post/new'),
+            a('Posts', href='#'),
             a('Minhas postagens', href='#')
         ])])
 
@@ -80,14 +81,16 @@ def my_posts(posts):
 
     return card_container(cards, title=post.title)
 
-def comments_layout():
 
-    # TODO: Import from backend
-    from types import SimpleNamespace
-    Activity = SimpleNamespace
-    activities_list = [Activity(name="Atividade 1"), Activity(name="Atividade 2"), Activity(name="Atividade 3", url="dfsdf")]
-
-    # activities_list = activity_filter()
-
-    cards = [ simple_card(activity.name, double=True, center=False) for activity in activities_list ]
-    return card_container(cards)
+def navbar_configuration():
+    return _navbar([
+        navsection('Menu',
+            [a('New Post', href='/blog/post/new'),
+            a('Posts', href='#'),
+            a('Minhas postagens', href='#')
+        ]), 
+        br,
+        navsection('Configurations',
+            [a('Edit Post', href='edit'),
+            a('Remove Post', href='remove'),
+        ])])
