@@ -16,7 +16,7 @@ def navbar():
             a('Minhas postagens', href='#')
         ])])
 
-def layout(posts, users):
+def posts_layout(posts, users):
     cards = [
         simple_card(
             post.title, 
@@ -33,8 +33,6 @@ def layout(posts, users):
         ul(class_="cs-sparta__members-list",)[[
             li(a(user.username, href='user/{}'.format(user.id),)) for user in users
         ]],
-        button(class_="button")(
-                'Avaliar membros', href='#')
     ]
     return card_container(cards, title='Membros', description=b)
 
@@ -81,18 +79,6 @@ def my_posts(posts):
     ]
 
     return card_container(cards, title=post.title)
-
-def posts_layout():
-
-    # TODO: Import from backend
-    from types import SimpleNamespace
-    Activity = SimpleNamespace
-    activities_list = [Activity(name="Atividade 1"), Activity(name="Atividade 2"), Activity(name="Atividade 3", url="dfsdf")]
-
-    # activities_list = activity_filter()
-
-    cards = [ simple_card(activity.name, double=True, center=False) for activity in activities_list ]
-    return card_container(cards)
 
 def comments_layout():
 
