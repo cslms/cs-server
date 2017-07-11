@@ -15,8 +15,8 @@ from .bricks import navbar, posts_layout, detail_layout, navbar_configuration
 def index(request):
     posts = (
         Post.objects
-            .filter(published_date__lte=timezone.now())
-            .order_by('-published_date')
+            .filter(created_date__lte=timezone.now())
+            .order_by('-created_date')
             .select_related('author')
     )
     users = User.objects.filter(id__in={post.author_id for post in posts }) 
@@ -26,7 +26,7 @@ def index(request):
     return render(request, 'blog/index.j2', ctx)
 
 def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('-created_date')
     ctx = {'posts' : posts}
     return render(request, 'blog/post_list.j2', ctx)
 
@@ -36,17 +36,21 @@ def post_detail(request, pk):
     comments = post.comments.all()
     user_id = post.author_id
 
+    form = CommentForm()
+
     if request.user.id == user_id:
         ctx = {
             'navbar':navbar_configuration(user_id=user_id),
             'post': post,
             'comments': comments,
+            'form': form,
         }
     else:
         ctx = {
             'navbar':navbar(user_id=user_id),
             'post': post,
             'comments': comments,
+            'form': form,
         }
     return render(request, 'blog/post_detail.j2', ctx)
 
@@ -56,14 +60,14 @@ def user_posts(request, pk):
     posts_of_user = (
         Post.objects
             .filter(author__username=user.username)
-            .order_by('-published_date')
+            .order_by('-created_date')
             .select_related('author')
     )
 
     all_posts = (
     Post.objects
-        .filter(published_date__lte=timezone.now())
-        .order_by('-published_date')
+        .filter(created_date__lte=timezone.now())
+        .order_by('-created_date')
         .select_related('author')
     )
     users = User.objects.filter(id__in={post.author_id for post in all_posts }) 
@@ -77,7 +81,7 @@ def user_posts(request, pk):
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST, instance=post)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.author = request.user
@@ -104,6 +108,7 @@ def post_new(request):
 @login_required
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    user_id = request.user.id
     if request.user.id == post.author_id:
         if request.method == "POST":
             form = PostForm(request.POST, instance=post)
@@ -114,7 +119,7 @@ def post_edit(request, pk):
                 return redirect('blog:postdetail', pk=post.pk)
         else:
             form = PostForm(instance=post)
-        return render(request, 'blog/post_edit.jinja2', {'form': form, 'type': "Edit Post", 'navbar': navbar()})
+        return render(request, 'blog/post_edit.j2', {'form': form, 'type': "Edit Post", 'navbar': navbar(user_id=user_id)})
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.j2', { 'form': form, 'type': "Edit Post" })
@@ -125,23 +130,6 @@ def post_remove(request, pk):
     if request.user.id == post.author_id:
         post.delete()
     return redirect('blog:postlist')
-
-@login_required
-def post_draft_list(request):
-    posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
-    return render(request, 'blog/post_draft_list.html', {'posts': posts})
-
-@login_required
-def post_publish(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.publish()
-    return redirect('blog:postlist')
-
-@login_required
-def comment_approve(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    comment.approve()
-    return redirect('blog:postdetail', pk=comment.post.pk)
 
 @login_required
 def comment_remove(request, pk):
