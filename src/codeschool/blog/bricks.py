@@ -9,14 +9,6 @@ from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 
-def navbar():
-    return _navbar([
-        navsection('Menu',
-            [a('New Post', href='/blog/post/new'),
-            a('Posts', href='#'),
-            a('Minhas postagens', href='#')
-        ])])
-
 def posts_layout(posts, users):
     cards = [
         simple_card(
@@ -81,27 +73,25 @@ def my_posts(posts):
 
     return card_container(cards, title=post.title)
 
-def comments_layout():
-
-    # TODO: Import from backend
-    from types import SimpleNamespace
-    Activity = SimpleNamespace
-    activities_list = [Activity(name="Atividade 1"), Activity(name="Atividade 2"), Activity(name="Atividade 3", url="dfsdf")]
-
-    # activities_list = activity_filter()
-
-    cards = [ simple_card(activity.name, double=True, center=False) for activity in activities_list ]
-    return card_container(cards)
-
-def navbar_configuration():
+def navbar(user_id):
     return _navbar([
         navsection('Menu',
             [a('New Post', href='/blog/post/new'),
-            a('Posts', href='#'),
-            a('Minhas postagens', href='#')
+            a('Posts', href='/blog'),
+            a('Minhas postagens', href='/blog/user/{}/'.format(user_id))
+        ])])
+
+
+def navbar_configuration(user_id):
+    return _navbar([
+        navsection('Menu',
+            [a('New Post', href='/blog/post/new'),
+            a('Posts', href='/blog'),
+             a('Minhas postagens', href='/blog/user/{}/'.format(user_id))
         ]), 
         br,
         navsection('Configurations',
             [a('Edit Post', href='edit'),
-            a('Remove Post', href='remove'),
+            a('Remove Post', href='remove', onclick="return confirm('Are you sure you want to delete this item?'"),
+
         ])])

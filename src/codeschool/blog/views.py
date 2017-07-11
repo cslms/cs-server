@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from bricks.contrib.mdl import button, div
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
-from .bricks import navbar, posts_layout, comments_layout, detail_layout
+from .bricks import navbar, posts_layout, detail_layout
 
 # Create your views here.
 def index(request):
@@ -21,10 +21,7 @@ def index(request):
     )
     users = User.objects.filter(id__in={post.author_id for post in posts }) 
 
-    ctx1 = {
-    'main':posts_layout(posts, users),
-    'navbar':navbar(),
-    }
+
     ctx = {'posts' : posts, 'users':users}
     return render(request, 'blog/index.j2', ctx)
 
@@ -36,19 +33,18 @@ def post_list(request):
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    ctx = {
-        'main':detail_layout(post),
-        'navbar':navbar(),
-    }
-    if post.author_id == request.user.id:
+    comments = post.comments.all()
+    user_id = post.author_id
+
+    if request.user.id == user_id:
         ctx = {
-            'navbar':navbar_configuration(),
+            'navbar':navbar_configuration(user_id=user_id),
             'post': post,
             'comment': comment,
         }
     else:
         ctx = {
-            'navbar':navbar(),
+            'navbar':navbar(user_id=user_id),
             'post': post,
             'comment': comment,
         }
