@@ -31,7 +31,7 @@ def layout(posts, users):
 
     b = div()[
         ul(class_="cs-sparta__members-list",)[[
-            li(a(user.username, href='post/{}'.format(user.id),)) for user in users
+            li(a(user.username, href='user/{}'.format(user.id),)) for user in users
         ]],
         button(class_="button")(
                 'Avaliar membros', href='#')
@@ -42,7 +42,7 @@ def detail_layout(post):
     card = simple_card(
         post.text, 
         'Author: {}'.format(post.author.username), 
-        icon='comment', 
+        icon='forum', 
         double=True, 
         center=False
     )
@@ -56,7 +56,7 @@ def detail_layout(post):
         simple_card(
             comment.text, 
             'Author: {}'.format(comment.author.username), 
-            icon='forum', 
+            icon='comment', 
             double=True, 
             center=False
         ) 
@@ -64,6 +64,21 @@ def detail_layout(post):
     ]
     cards.insert(0,card)
     cards.insert(1,card2)
+
+    return card_container(cards, title=post.title)
+
+
+def my_posts(posts):
+
+    cards = [
+        simple_card(
+            post.text, 
+            icon='forum', 
+            double=True, 
+            center=False
+        ) 
+        for post in posts
+    ]
 
     return card_container(cards, title=post.title)
 

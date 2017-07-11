@@ -38,6 +38,21 @@ def post_detail(request, pk):
     return render(request, 'blog/post_detail.jinja2', ctx)
 
 @login_required
+def my_posts(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    posts = (
+        Post.objects
+            .filter(author__eq=user)
+            .order_by('-published_date')
+            .select_related('author')
+    )
+    ctx = {
+        'main':my_posts_layout(post),
+        'navbar':navbar(),
+    }
+    return render(request, 'blog/my_posts.jinja2', ctx)
+
+@login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
