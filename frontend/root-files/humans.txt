@@ -1,0 +1,20 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Fábio Macêdo Mendes -- main developer -- https://github.com/fabiommendes/
+
+# THANKS
+
+    University of Brasília at Gama
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, Sass, HTML5
+    Django, wagtail, bricks
+    webpack, Elm, Ace, Quill, mathJax, jQuery
+
+    This is an open source project. Go to our github page and contribute!
+
+        http://github.com/cslms/cs-server

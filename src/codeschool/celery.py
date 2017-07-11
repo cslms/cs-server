@@ -8,7 +8,7 @@ try:
 except ImportError:
     log.info('celery not loaded')
 else:
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'codeschool.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'codeschool.settings.local')
     app = Celery('codeschool')
     app.config_from_object('django.conf:settings')
     app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

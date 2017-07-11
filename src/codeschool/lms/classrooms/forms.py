@@ -8,7 +8,8 @@ class EnrollForm(forms.Form):
         label=_('Passphrase'),
         help_text=_(
             'This is the secret registration passphrase your teacher provided. '
-            'You need to type the correct value in order to register in this classroom.'
+            'You need to type the correct value in order to register in this '
+            'classroom.'
         )
     )
 

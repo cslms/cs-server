@@ -1,8 +1,7 @@
 from codeschool.core.users.factories import make_yoda_teacher, make_students
 from codeschool.factories import make_page
-
-from codeschool.lms.academic.factories import make_cs101_discipline
-
+from ..organizations.factories import make_cs101_discipline
+from .models import Classroom
 
 def make_cs101_course(teacher=None, discipline=None, students=None):
     course = make_page(
@@ -23,4 +22,6 @@ def make_cs101_course(teacher=None, discipline=None, students=None):
 def make_example_course_list(students=None):
     cs101 = make_cs101_course(students=students)
     course_list = [cs101]
-    return Course.objects.filter(id__in=[course.id for course in course_list])
+    return Classroom.objects.filter(
+        id__in=[course.id for course in course_list]
+    )

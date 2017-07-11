@@ -1,6 +1,8 @@
 from django.apps import AppConfig
+from django.utils.translation import ugettext_lazy as _
 
 
-class TextConfig(AppConfig):
+class TextQuestionConfig(AppConfig):
     name = 'codeschool.questions.text'
-    verbose_name = 'Text Questions'
+    label = 'question_text'
+    verbose_name = _('Text-based questions')

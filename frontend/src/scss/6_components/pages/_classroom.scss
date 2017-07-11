@@ -1,0 +1,92 @@
+
+.classroom-info-card {
+    @extend .paper-flat;
+    
+    padding: 0;
+    background: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    margin: 25px 15px;
+    align-self: stretch;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    > * {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.2em;
+        font-family: Roboto;
+        font-weight: 500;
+        margin-bottom: 1em;
+        background: $color-teal;
+        color: white;
+    }
+
+    &__teacher {
+        position: absolute;
+        top: 45px;
+        right: -5px;
+    }
+
+    &__toolbar {
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        text-align: right;
+        background: #eee;
+        width: 100%;
+    }
+}
+
+
+.classroom-info-card:hover {
+    @extend .paper;
+}
+
+.long-description {
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+
+.classroom-lesson {
+    @extend .paper-flat;
+
+    padding: 20px;
+    margin: 20px;
+    background: $color-salmon-light;
+    
+    
+    h1 {
+        font-family: Roboto;
+        font-size: 1.2em;
+    }
+
+    &__date {
+        float: right;
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+    
+}
+
+
+.classroom-lesson:hover {
+    @extend .paper;
+}
+
+
+@media only screen and (min-width: $breakpoint-medium-screen) {
+    .classroom-info-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .classroom-info-card {
+        flex: 1;
+        min-width: 40%;
+    }
+}

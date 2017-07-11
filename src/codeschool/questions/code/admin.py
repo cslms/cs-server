@@ -1,7 +1,7 @@
 from django.utils.text import ugettext_lazy as _
 
 from codeschool import panels
-from codeschool.questions.admin import QuestionAdmin
+from codeschool.questions.base.admin import QuestionAdmin
 from . import models
 
 

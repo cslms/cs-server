@@ -2,11 +2,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool.lms.classrooms.managers import ClassroomManager
 from codeschool.utils.phrases import phrase
-
-# User-facing strings
-ACTIVITY_DESCRIPTION = _('Activities for the %(name)s course')
+from .managers import ClassroomManager
 
 
 def random_subscription_passphase():
@@ -29,13 +26,9 @@ class Classroom(models.TimeStampedModel):
         primary_key=True,
     )
     discipline = models.ForeignKey(
-        'academic.Discipline',
-        blank=True, null=True,
-        on_delete=models.SET_NULL,
-    )
-    course = models.ForeignKey(
-        'academic.Course',
-        blank=True, null=True,
+        'organizations.Discipline',
+        blank=True,
+        null=True,
         on_delete=models.SET_NULL,
     )
     teacher = models.ForeignKey(
@@ -55,14 +48,6 @@ class Classroom(models.TimeStampedModel):
         related_name='classrooms_as_staff',
         blank=True,
     )
-    weekly_lessons = models.BooleanField(
-        _('weekly lessons'),
-        default=False,
-        help_text=_(
-            'If true, the lesson spans a whole week. Otherwise, each lesson '
-            'would correspond to a single day/time slot.'
-        ),
-    )
     accept_subscriptions = models.BooleanField(
         _('accept subscriptions'),
         default=True,
@@ -72,7 +57,7 @@ class Classroom(models.TimeStampedModel):
     )
     is_public = models.BooleanField(
         _('is it public?'),
-        default=True,
+        default=False,
         help_text=_(
             'If true, all students will be able to see the contents of the '
             'course. Most activities will not be available to non-subscribed '

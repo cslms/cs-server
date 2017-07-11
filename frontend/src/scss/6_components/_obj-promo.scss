@@ -1,0 +1,39 @@
+.promo-table {
+    margin: 0 20px;
+}
+
+
+.promo-simple {
+    margin: 20px;
+    padding: 20px;
+    vertical-align: center;
+    text-align: center;
+
+    > i {
+        font-size: 4em;
+        color: $color-teal-darker;
+    }
+
+    > h1 {
+        font-size: 2.2em;
+        font-family: $amatic-sc;
+        font-weight: bold;
+        color: $color-teal-darker;
+    }
+}
+
+.promo-simple:hover {
+    @extend .paper;
+    position: relative;
+    top: -2px;
+}
+
+@media only screen and (min-width: $breakpoint-medium-screen) {
+    .promo-table {
+        display: flex;
+    }
+
+    .promo-simple {
+        flex: 0 1 33%;
+    }
+}

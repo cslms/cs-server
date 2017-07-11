@@ -1,4 +1,4 @@
-from codeschool.settings import *
+from .dev import *
 
 
 # Make sure all apps are installed during testing.

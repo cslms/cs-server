@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool.questions.models import Question, QuestionFeedback, \
+from codeschool.questions.base.models import Question, QuestionFeedback, \
     QuestionSubmission, QuestionProgress
 
 

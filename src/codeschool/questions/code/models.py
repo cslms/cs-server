@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from bricks.html5 import div, h2, p, pre
-from codeschool.questions.models import Question, QuestionProgress, \
+from codeschool.questions.base.models import Question, QuestionProgress, \
     QuestionSubmission, QuestionFeedback
 from .grader import code_errors
 

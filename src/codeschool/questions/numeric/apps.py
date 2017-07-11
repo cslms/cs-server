@@ -1,6 +1,8 @@
 from django.apps import AppConfig
+from django.utils.translation import ugettext_lazy as _
 
 
-class NumericConfig(AppConfig):
+class NumericQuestionConfig(AppConfig):
     name = 'codeschool.questions.numeric'
-    verbose_name = 'Numeric Questions'
+    label = 'question_numeric'
+    verbose_name = _('Numeric Questions')

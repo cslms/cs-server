@@ -17,7 +17,7 @@ import sys
 import os
 import django
 sys.path.insert(0, os.path.abspath('..'))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'codeschool.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'codeschool.settings.local'
 django.setup()
 
 # If extensions (or modules to document with autodoc) are in another directory,

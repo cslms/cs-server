@@ -1,9 +1,8 @@
 from django.apps import AppConfig
+from django.utils.translation import ugettext_lazy as _
 
 
-class CodingIoConfig(AppConfig):
-    name = 'coding_io'
-
-    def ready(self):
-        # Register files
-        from . import render
+class CodingIoQuestionConfig(AppConfig):
+    name = 'codeschool.questions.coding_io'
+    label = 'question_codingio'
+    verbose_name = _('IO-based programming questions')

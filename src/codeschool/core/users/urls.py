@@ -10,22 +10,22 @@ urlpatterns = [
     url(
         r'^login/$',
         views.start,
-        name='auth-login',
+        name='login',
     ),
     url(
         r'^auth/logout/$',
         views.logout,
-        name='auth-logout',
+        name='logout',
     ),
     url(
         r'^auth/password/$',
         views.change_password,
-        name='auth-change-password',
+        name='change-password',
     ),
     url(
         r'^auth/email/$',
         views.change_email,
-        name='auth-change-email',
+        name='change-email',
     ),
     url(
         r'profile/$',

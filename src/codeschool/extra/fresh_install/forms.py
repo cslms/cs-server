@@ -1,10 +1,10 @@
 from django import forms
+from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.utils.text import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
-from codeschool import settings
 
 
 def address_validator(value):
@@ -70,13 +70,13 @@ class ConfigForm(forms.Form):
     )]
 
     INITIAL_PAGE_OPTIONS = [('question-list', 'List of Questions')]
-    if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.lms.classrooms'):
         INITIAL_PAGE_OPTIONS.append(('course-list', 'List of courses'))
         PAGE_DESCRIPTION += [_(
             '<dt>Courses</dt> <dd>Present a list of all courses related to the '
             'user.</dd>\n'
         )]
-    if 'codeschool.social' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.social'):
         INITIAL_PAGE_OPTIONS.append(('social:timeline', 'Social network'))
         PAGE_DESCRIPTION += [_(
             '<dt>Social</dt> <dd>Start at user\'s news feed.</dd>\n'
@@ -122,7 +122,7 @@ class SysProfileForm(forms.Form):
             'examples that help you get started with Codeshool.'
         )
     )
-    if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
+    if apps.is_installed('codeschool.lms.classrooms'):
         example_courses = forms.BooleanField(
             initial=True,
             required=False,
@@ -159,7 +159,9 @@ class SysProfileForm(forms.Form):
         populate = data.get('populate_courses', False)
         examples = data.get('example_courses', False)
         if populate and not examples:
-            raise ValidationError({'populate_courses': _(
-                'Must create courses first! Please confirm the "example '
-                'courses" option.'
-            )})
+            raise ValidationError({
+                'populate_courses': _(
+                    'Must create courses first! Please confirm the "example '
+                    'courses" option.'
+                )
+            })

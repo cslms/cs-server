@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700|Roboto|Roboto+Mono" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="main.css" rel="stylesheet">
-    <link href="/static/main.css" rel="stylesheet">
     <title>Elm App</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700|Amatica+SC:400,700|Roboto:400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato|Open+Sans+Condensed:300i,700|Open+Sans:400,600|Roboto+Condensed:400,500,600,700"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/scss/main.css">
+
+    <!-- Polymer imports -->
+    <script src="/js/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+    <!-- Iron Elements -->
+    <link rel="import" href="/js/bower_components/iron-icon/iron-icon.html">
+    <link rel="import" href="/js/bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+
+    <!-- Buttons -->
+    <link rel="import" href="/js/bower_components/paper-button/paper-button.html">
+    <link rel="import" href="/js/bower_components/paper-menu-button/paper-menu-button.html">
+    <link rel="import" href="/js/bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="/js/bower_components/paper-fab/paper-fab.html">
+
+    <!-- Menus -->
+    <link rel="import" href="/js/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+    <link rel="import" href="/js/bower_components/paper-menu-button/paper-menu-button.html">
+    <link rel="import" href="/js/bower_components/paper-item/paper-item.html">
+    <link rel="import" href="/js/bower_components/paper-listbox/paper-listbox.html">
+
+
+    <!-- Components -->
+    <link rel="import" href="/js/bower_components/paper-toolbar/paper-toolbar.html">
+
+    <!-- Other -->
+    <link rel="import" href="/js/bower_components/paper-styles/paper-styles.html">
+
+    <script src="/_compile/src/App.elm"></script>
 </head>
+
 <body>
-    <noscript>
-        You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
+    <script type="text/javascript">
+         Elm.App.fullscreen("index");
+    </script>
 </body>
+
 </html>

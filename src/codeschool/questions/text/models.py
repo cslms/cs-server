@@ -1,12 +1,13 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+from django.utils.translation import ugettext_lazy as _
+from re import match
+from unidecode import unidecode
 
 from codeschool import models
 from codeschool import panels
-from codeschool.questions.models import Question, QuestionFeedback, \
+from codeschool.questions.base.models import Question, QuestionFeedback, \
     QuestionSubmission, QuestionProgress
-from unidecode import unidecode
-from re import match
+
 
 class TextQuestion(Question):
     """

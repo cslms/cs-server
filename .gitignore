@@ -21,7 +21,7 @@ static_src/elm/elm-stuff/
 .cs-debug.log
 geckodriver.log
 ghostdriver.log
-log/
+local/log/
 
 # Build directories
 build/

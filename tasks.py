@@ -1,6 +1,9 @@
-import os
+import subprocess
 import sys
+import threading
+from time import sleep
 
+import os
 from python_boilerplate.tasks import *
 from python_boilerplate.tasks import django
 from python_boilerplate.tasks import js
@@ -35,7 +38,7 @@ def develop(ctx):
 
 
 @task
-def run(ctx, production=False,  port='8000'):
+def run(ctx, production=False, port='8000'):
     """
     Runs the development server.
     """
@@ -211,3 +214,45 @@ def celery(ctx):
     """
 
     ctx.run('celery --app=codeschool.celery:app worker --loglevel=INFO')
+
+
+#
+# Frontend
+#
+@task
+def frontend(ctx):
+    """
+    Starts frontend development.
+    """
+
+    # Prepare sub-processes
+    sass = subprocess.Popen(
+        ['sass', 'main.scss:main.css', '--watch'],
+        cwd='frontend/src/scss'
+    )
+    sass_thread = threading.Thread(
+        target=sass.communicate,
+        args=('',),
+        daemon=True,
+    )
+
+    # Prepare sub-processes
+    elm = subprocess.Popen(
+        ['elm-app', 'start'],
+        cwd='frontend/'
+    )
+    elm_thread = threading.Thread(
+        target=elm.communicate,
+        args=('',),
+        daemon=True,
+    )
+
+    try:
+        sass_thread.start()
+        elm_thread.start()
+
+        while True:
+            sleep(0.1)
+    finally:
+        sass_thread.kill()
+        elm_thread.kill()

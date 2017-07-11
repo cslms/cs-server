@@ -13,7 +13,7 @@ class ClassroomSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'url', 'name', 'slug', 'discipline', 'course', 'teacher',
             'short_description', 'description',
-            'students', 'staff', 'weekly_lessons',
+            'students', 'staff',
             'subscription_passphrase',
             'accept_subscriptions', 'is_public',
         )

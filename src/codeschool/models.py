@@ -31,7 +31,7 @@ from .fixes.wagtailroutes import RoutableViewsPage
 from .fixes.wagtailadmin import DecoupledAdminPage
 from .managers import *
 from .mixins import AbsoluteUrlMixin
-from codeschool.settings import AUTH_USER_MODEL as User
+from annoying.functions import get_config
 from django.contrib.auth import get_user_model
 
 #
@@ -39,6 +39,7 @@ from django.contrib.auth import get_user_model
 #
 Page.__bases__ = (AbsoluteUrlMixin,) + Page.__bases__
 Page.nav_sections = lambda self, request: []
+User = get_config('AUTH_USER_MODEL')
 
 
 __all__ = (
@@ -46,3 +47,4 @@ __all__ = (
     'PageManager', 'PageQuerySet', 'RoutablePage', 'RoutablePageMixin',
     'RoutableViewsPage', 'route',
 )
+

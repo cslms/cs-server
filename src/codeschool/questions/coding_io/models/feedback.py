@@ -1,10 +1,10 @@
 from django.utils.translation import ugettext_lazy as _
-from iospec.feedback import Feedback
 from lazyutils import lazy, delegate_to
 
 from codeschool import models
 from codeschool.questions.coding_io.ejudge import grade_code
-from codeschool.questions.models import QuestionFeedback
+from codeschool.questions.base.models import QuestionFeedback
+from iospec.feedback import Feedback
 from ..render import render
 
 

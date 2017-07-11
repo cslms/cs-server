@@ -14,12 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 import os
-
-from django.apps import apps
+from annoying.functions import get_config
 from django.conf.urls import url, include
 from wagtail.wagtailcore import urls as wagtail_urls
 
-from . import settings
 from .api import router, import_api_modules
 from .core.config.views import index_view
 
@@ -36,7 +34,8 @@ urlpatterns = [
 ]
 
 # Optional debug views
-if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
+DEBUG = get_config('DEBUG')
+if get_config('CODESCHOOL_DEBUG_VIEWS', False) or DEBUG:
     import django.contrib.admin
     from .core.config.views import debug_page_view
 
@@ -49,39 +48,39 @@ if settings.CODESCHOOL_DEBUG_VIEWS or settings.DEBUG:
             include('codeschool.bricks.urls', namespace='bricks')),
     ]
 
-# Optional "social" urls
-if apps.is_installed('codeschool.social'):
-    urlpatterns += [
-        url(r'^social/', include('codeschool.social.urls', namespace='social')),
-    ]
-
-# Global questions list
-if settings.CODESCHOOL_GLOBAL_QUESTIONS:
-    from codeschool.lms.activities.views import main_question_list
-
-    urlpatterns += [
-        url(r'^questions/$', main_question_list, name='question-list'),
-    ]
-
-# Codeschool classrooms
-if apps.is_installed('codeschool.lms.classrooms'):
-    from codeschool.lms.classrooms import urls as classrooms_urls
-
-    urlpatterns += [
-        url(r'^classes/', include(classrooms_urls, namespace='classrooms')),
-    ]
-
-# Optional cli/clt interface
-if apps.is_installed('codeschool.cli'):
-    from codeschool.extra.cli import api as jsonrpc_api
-
-    urlpatterns += [
-        url(r'^cli/jsonrpc/', include(jsonrpc_api.urls)),
-    ]
+# # Optional "social" urls
+# if apps.is_installed('codeschool.social'):
+#     urlpatterns += [
+#         url(r'^social/', include('codeschool.social.urls', namespace='social')),
+#     ]
+#
+# # Global questions list
+# if settings.CODESCHOOL_GLOBAL_QUESTIONS:
+#     from codeschool.lms.activities.views import main_question_list
+#
+#     urlpatterns += [
+#         url(r'^questions/$', main_question_list, name='question-list'),
+#     ]
+#
+# # Codeschool classrooms
+# if apps.is_installed('codeschool.lms.classrooms'):
+#     from codeschool.lms.classrooms import urls as classrooms_urls
+#
+#     urlpatterns += [
+#         url(r'^classes/', include(classrooms_urls, namespace='classrooms')),
+#     ]
+#
+# # Optional cli/clt interface
+# if apps.is_installed('codeschool.cli'):
+#     from codeschool.extra.cli import api as jsonrpc_api
+#
+#     urlpatterns += [
+#         url(r'^cli/jsonrpc/', include(jsonrpc_api.urls)),
+#     ]
 
 # Django serves static urls for the dev server.
 # Production relies on Nginx.
-if os.environ.get('DJANGO_SERVE_STATIC', False) or settings.DEBUG:
+if os.environ.get('DJANGO_SERVE_STATIC', False) or DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
     urlpatterns += staticfiles_urlpatterns()

@@ -1,9 +1,8 @@
+from django.utils.translation import ugettext_lazy as _
 from enum import IntEnum
 
-from django.utils.translation import ugettext_lazy as _
-
 from codeschool import models
-from codeschool.questions.models import Question, QuestionProgress, \
+from codeschool.questions.base.models import Question, QuestionProgress, \
     QuestionSubmission, QuestionFeedback
 
 

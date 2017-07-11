@@ -5,44 +5,66 @@ only in the cli.
 # flake8: noqa
 
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'codeschool.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'codeschool.settings.local'
 import django
 django.setup()
-
+from django.apps import apps
+from annoying.functions import get_config
 
 from .types.deferred import Deferred
-
-
-# Unconditional imports
-from . import *
-from .core import *
-from .core.models import *
-from .lms.activities.models import *
-from .questions.models import *
-from . import settings
-from .factories import *
+from .settings import dev as settings
 from django.contrib.auth.models import *
 
-# Example deferred objects
+
+# Core modules
+from .core.files.models import *
+from .core.services.models import *
+from .core.users.models import *
+from .core.config.models import *
+
 python = Deferred(ProgrammingLanguage.objects.get, ref='python')
 user = Deferred(lambda: User.objects.first())
 
-# Optional components -- LMS
-if 'codeschool.lms.courses' in settings.INSTALLED_APPS:
-    from .lms.courses.models import *
-if 'codeschool.lms.attendance' in settings.INSTALLED_APPS:
-    from .lms.attendance.models import *
 
-# Optional questions
-if 'codeschool.questions.coding_io' in settings.INSTALLED_APPS:
-    from .questions.coding_io.models import *
-    coding_io = Deferred(CodingIoQuestion.objects.first)
-if 'codeschool.questions.code' in settings.INSTALLED_APPS:
-    from .questions.code.models import *
-    code = Deferred(CodeQuestion.objects.first)
-if 'codeschool.questions.free_text' in settings.INSTALLED_APPS:
-    from .questions.free_form.models import *
-    free_text = Deferred(FreeFormQuestion.objects.first)
-if 'codeschool.questions.numeric' in settings.INSTALLED_APPS:
-    from .questions.numeric.models import *
-    numeric = Deferred(NumericQuestion.objects.first)
+# LMS models
+from .lms.activities.models import *
+from .lms.activity_lists.models import *
+from .lms.attendance.models import *
+# from .lms.calendars.models import *
+from .lms.classrooms.models import *
+from .lms.organizations.models import *
+
+
+# Extra
+# from .extra.code_carrousel.models import *
+# from .extra.code_exhibit.models import *
+from .extra.fresh_install.models import *
+
+
+# Gamification
+#from .gamification.badges.models import *
+#from .gamification.points.models import *
+
+
+# Methods
+#from .methods.kanban.models import *
+#from .methods.pairings_boards.models import *
+#from .methods.sentiment_boards.models import *
+#from .methods.sprints.models import *
+
+
+# Questions
+from .questions.base.models import *
+from .questions.code.models import *
+from .questions.coding_io.models import *
+# from .questions.form.models import *
+from .questions.free_form.models import *
+#from .questions.multiple_choice.models import *
+from .questions.numeric.models import *
+from .questions.text.models import *
+
+
+# Social
+#from .social.feed.models import *
+from .social.friends.models import *
+#from .social.teams.models import *

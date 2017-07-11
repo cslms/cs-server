@@ -1,4 +1,4 @@
-from codeschool.questions.models import QuestionProgress
+from codeschool.questions.base.models import QuestionProgress
 from codeschool.utils.managers import manager_instance, queryset_class
 
 

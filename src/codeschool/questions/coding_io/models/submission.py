@@ -2,7 +2,7 @@ import json
 
 from codeschool import models
 from codeschool.core.files.models import ProgrammingLanguage
-from codeschool.questions.models import QuestionSubmission
+from codeschool.questions.base.models import QuestionSubmission
 from codeschool.utils.managers import manager_instance, queryset_class
 
 
