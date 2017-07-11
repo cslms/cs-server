@@ -1,0 +1,47 @@
+{% extends 'base.jinja2' %}
+{% block content_title %}
+<h1>Blog</h1>
+
+{% endblock %}
+{% block content_body %}
+<section class="cs-card-container mdl-grid mdl-grid--no-spacing">
+   <aside class="cs-card-container__aside mdl-cell mdl-cell--3-col">
+      <h1>Membros</h1>
+      <p>
+      <div>
+        {% for user in users%}
+         <ul class="cs-sparta__members-list">
+            <li><a href="{{ url('blog:userposts', args=[user.pk]) }}">{{user.username}}</a></li>
+         </ul>
+        {% endfor %}
+      </div>
+      </p>
+   </aside>
+   <article class="mdl-cell mdl-cell--9-col">
+      {% for post in posts %}
+      <div class="cs-card-aside__content mdl-grid">
+         <div class="cs-card mdl-shadow--4dp mdl-cell mdl-cell--12-col cs-card--left">
+            <i class="material-icons cs-card__icon">forum</i>
+            <h1 class="cs-card__title">{{post.title}}</h1>
+            <p>Author: {{post.author}}</p>
+            <p>{{ '{}/{}/{} - {}:{}'
+                .format(
+                    post.published_date.day, 
+                    post.published_date.month, 
+                    post.published_date.year, 
+                    post.published_date.hour, 
+                    post.published_date.minute 
+                )}}
+            </p>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postdetail', args=[post.pk]) }}">
+                    Comentário: {{ post.comments.count() }}
+                </a>
+            </div>
+         </div>
+     </div
+    {% endfor%}
+   </article>
+   
+</section>
+{% endblock %}
