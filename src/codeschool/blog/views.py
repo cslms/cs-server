@@ -21,10 +21,7 @@ def index(request):
     )
     users = User.objects.filter(id__in={post.author_id for post in posts }) 
 
-    ctx1 = {
-    'main':posts_layout(posts, users),
-    'navbar':navbar(),
-    }
+
     ctx = {'posts' : posts, 'users':users}
     return render(request, 'blog/index.j2', ctx)
 
@@ -37,16 +34,17 @@ def post_list(request):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comments.all()
-    
-    if post.author_id == request.user.id:
+    user_id = post.author_id
+
+    if request.user.id == user_id:
         ctx = {
-            'navbar':navbar_configuration(),
+            'navbar':navbar_configuration(user_id=user_id),
             'post': post,
             'comments': comments,
         }
     else:
         ctx = {
-            'navbar':navbar(),
+            'navbar':navbar(user_id=user_id),
             'post': post,
             'comments': comments,
         }
