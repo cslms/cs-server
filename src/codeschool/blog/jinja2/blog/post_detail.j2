@@ -22,9 +22,9 @@
 <div class="mdl-card__actions mdl-card--border">
     <a href="{{ url('blog:addcomment', args=[post.pk]) }}">Add comentario</a>
 </div>
-
-Comentarios
 <hr>
+Comentarios
+
 
    <article class="mdl-cell mdl-cell--12-col">
     {% for comment in comments %}
@@ -44,10 +44,10 @@ Comentarios
             </p>
             {% if user_id == comment.author.id %}
             <div class="mdl-card__actions mdl-card--border">
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postdetail', args=[post.pk]) }}">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:addcomment', args=[post.pk]) }}">
                     Alterar
                 </a>
-                <a class="mdl-button mdl-button--accent" href="{{ url('blog:postdetail', args=[post.pk]) }}">
+                <a class="mdl-button mdl-button--accent" href="{{ url('blog:commentremove', args=[comment.pk]) }}">
                     Excluir
                 </a>
             </div>
