@@ -28,7 +28,7 @@ def posts_layout(posts, users):
     ]
     return card_container(cards, title='Membros', description=b)
 
-def navbar(user_id, users={}):
+def navbar(user_id, users):
 
     return _navbar([
         navsection('Menu',
