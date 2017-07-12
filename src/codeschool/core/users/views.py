@@ -6,6 +6,7 @@ from django.db import transaction
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
 from rest_framework import viewsets
+from annoying.functions import get_config
 
 from . import bricks
 from . import models
@@ -109,8 +110,10 @@ def post_login_form(request):
 
     if form.is_valid():
         # Login
+        auth_backend = get_config('AUTHENTICATION_BACKENDS')
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
+        print(form.cleaned_data)
         user = authenticate(**form.cleaned_data)
         login(request, user, backend=authentication_backend)
 
