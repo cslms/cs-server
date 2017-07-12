@@ -1,10 +1,7 @@
 from codeschool.bricks import navbar as _navbar, navsection, navsection_page_admin
-from bricks.html5 import a,p, div, h1, h2, ul, li, button, br
-from codeschool.bricks import card_container, simple_card, with_class
-from simple_search import search_filter
+from bricks.html5 import a, div, ul, li, button, br
+from codeschool.bricks import card_container, simple_card
 
-#Posts
-from django.utils import timezone
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
