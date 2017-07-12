@@ -20,15 +20,45 @@ def index(request):
             .select_related('author')
     )
     users = User.objects.filter(id__in={post.author_id for post in posts }) 
+    user_id = request.user.id    
 
+    ctx = {
+        'navbar':navbar(user_id=user_id, users=users), 
+        'posts' : posts, 
+        'users':users
+    }
+    return render(request,   'blog/post_list.j2', ctx)
 
-    ctx = {'posts' : posts, 'users':users}
-    return render(request, 'blog/index.j2', ctx)
+@login_required
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all()
+    user_id = post.author_id
 
-def post_list(request):
-    posts = Post.objects.filter(created_date__lte=timezone.now()).order_by('-created_date')
-    ctx = {'posts' : posts}
-    return render(request, 'blog/post_list.j2', ctx)
+    posts = (
+    Post.objects
+        .filter(created_date__lte=timezone.now())
+        .order_by('-created_date')
+        .select_related('author')
+    )
+    users = User.objects.filter(id__in={post.author_id for post in posts }) 
+    form = CommentForm(request.POST)
+
+    if request.user.id == user_id:
+        ctx = {
+            'navbar':navbar_configuration(user_id=user_id, users=users),
+            'post': post,
+            'comments': comments,
+            'form': form,
+        }
+    else:
+        ctx = {
+            'navbar':navbar(user_id=user_id, users=users),
+            'post': post,
+            'comments': comments,
+            'form': form,
+        }
+    return render(request, 'blog/post_detail.j2', ctx)
 
 @login_required
 def user_posts(request, pk):
@@ -46,12 +76,13 @@ def user_posts(request, pk):
         .order_by('-created_date')
         .select_related('author')
     )
+    user_id = request.user.id
     users = User.objects.filter(id__in={post.author_id for post in all_posts }) 
     ctx = {
-        'users': users,
+        'navbar':navbar(user_id=user_id, users=users),
         'posts': posts_of_user,
     }
-    return render(request, 'blog/user_posts.j2', ctx)
+    return render(request, 'blog/post_list.j2', ctx)
     
 @login_required
 def add_comment_to_post(request, pk):
@@ -115,30 +146,6 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.j2', { 'form': form, 'type': "Edit Post" })
-
-@login_required
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comments.all()
-    user_id = post.author_id
-
-    form = CommentForm(request.POST)
-
-    if request.user.id == user_id:
-        ctx = {
-            'navbar':navbar_configuration(user_id=user_id),
-            'post': post,
-            'comments': comments,
-            'form': form,
-        }
-    else:
-        ctx = {
-            'navbar':navbar(user_id=user_id),
-            'post': post,
-            'comments': comments,
-            'form': form,
-        }
-    return render(request, 'blog/post_detail.j2', ctx)
 
 @login_required
 def post_remove(request, pk):
