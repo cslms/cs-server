@@ -31,7 +31,6 @@ urlpatterns = [
     url(r'^admin/', include('wagtail.wagtailadmin.urls')),
     url(r'^$', index_view),
     url(r'^blog/', include('codeschool.blog.urls', namespace='blog')),
-    url(r'^sparta/', include('codeschool.sparta.urls')),
     url(r'^profile/$', profile_view, name='profile-view'),
     url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),
