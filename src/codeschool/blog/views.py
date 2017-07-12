@@ -124,19 +124,20 @@ def post_edit(request, pk):
         else:
             form = PostForm(instance=post)
         return render(request, 'blog/post_edit.j2', {'form': form, 'type': "Edit Post", 'navbar': navbar(user_id=user_id)})
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.j2', { 'form': form, 'type': "Edit Post" })
 
 @login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    post.delete()
-    return redirect('blog:blog_index')
+    user_id = request.user.id
+    if user_id == post.author_id:
+        post.delete()
+        return redirect('blog:blog_index')
 
 @login_required
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
+    user_id = request.user.id
     post_pk = comment.post.pk
-    comment.delete()
-    return redirect('blog:postdetail', pk=post_pk)
+    if user_id == comment.author_id:
+        comment.delete()    
+        return redirect('blog:postdetail', pk=post_pk)
