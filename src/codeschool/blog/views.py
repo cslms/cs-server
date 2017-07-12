@@ -50,6 +50,7 @@ def post_detail(request, pk):
             'post': post,
             'comments': comments,
             'form': form,
+            'user_id': user_id,
         }
     else:
         ctx = {
@@ -57,6 +58,7 @@ def post_detail(request, pk):
             'post': post,
             'comments': comments,
             'form': form,
+            'user_id': user_id,
         }
     return render(request, 'blog/post_detail.j2', ctx)
 

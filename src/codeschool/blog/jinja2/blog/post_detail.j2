@@ -42,8 +42,19 @@ Comentarios
                     comment.created_date.minute 
                 )}}
             </p>
+            {% if user_id == comment.author.id %}
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postdetail', args=[post.pk]) }}">
+                    Alterar
+                </a>
+                <a class="mdl-button mdl-button--accent" href="{{ url('blog:postdetail', args=[post.pk]) }}">
+                    Excluir
+                </a>
+            </div>
+            {% endif %}
             </div>
         </div
+
     
     {% else %}
         <div class="cs-card-aside__content mdl-grid">
