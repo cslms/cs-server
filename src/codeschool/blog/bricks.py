@@ -45,29 +45,3 @@ def navbar(user_id, users={}):
             ]
         ),
     ])
-
-
-def navbar_configuration(user_id, users={}):
-    return _navbar([
-        navsection('Menu',
-            [
-                a('New Post', href='/blog/post/new'),
-                a('Posts', href='/blog'),
-                a('Minhas postagens', href='/blog/user/{}/'.format(user_id))
-            ]
-        ), 
-        br,
-        navsection('Configurations',
-            [
-                a('Edit Post', href='edit'),
-                a('Remove Post', href='remove', onclick="return confirm('Are you sure you want to delete this item?'"),
-            ]
-        ),
-        br,
-        navsection('Membros',
-            [
-               a(user.username, href='/blog/user/{}'.format(user.id),) for user in users
-            ]
-        ),
-    ])
-

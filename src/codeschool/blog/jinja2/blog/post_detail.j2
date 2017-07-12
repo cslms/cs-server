@@ -13,6 +13,14 @@
         <p class="post-author">
             Autor: {{ post.author|capitalize }}
         </p>
+        {% if user_id == post.author.id %}
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postedit', args=[post.pk]) }}">
+                Alterar
+            </a>
+            <a class="mdl-button mdl-button--accent" href="{{ url('blog:postremove', args=[post.pk]) }}">
+                Excluir
+            </a>
+        {% endif %}
     </div>
 </div
 

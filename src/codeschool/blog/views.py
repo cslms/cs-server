@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from bricks.contrib.mdl import button, div
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
-from .bricks import navbar, posts_layout, navbar_configuration
+from .bricks import navbar, posts_layout
 
 # Create your views here.
 def index(request):
@@ -25,7 +25,8 @@ def index(request):
     ctx = {
         'navbar':navbar(user_id=user_id, users=users), 
         'posts' : posts, 
-        'users':users
+        'users':users,
+        'user_id':user_id,
     }
     return render(request,   'blog/post_list.j2', ctx)
 
@@ -33,7 +34,7 @@ def index(request):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comments.filter(created_date__lte=timezone.now()).order_by('-created_date')
-    user_id = post.author_id
+    user_id = request.user.id
 
     posts = (
     Post.objects
@@ -44,22 +45,14 @@ def post_detail(request, pk):
     users = User.objects.filter(id__in={post.author_id for post in posts }) 
     form = CommentForm(request.POST)
 
-    if request.user.id == user_id:
-        ctx = {
-            'navbar':navbar_configuration(user_id=user_id, users=users),
-            'post': post,
-            'comments': comments,
-            'form': form,
-            'user_id': user_id,
-        }
-    else:
-        ctx = {
-            'navbar':navbar(user_id=user_id, users=users),
-            'post': post,
-            'comments': comments,
-            'form': form,
-            'user_id': user_id,
-        }
+    ctx = {
+        'navbar':navbar(user_id=user_id, users=users),
+        'post': post,
+        'comments': comments,
+        'form': form,
+        'user_id': user_id,
+    }
+   
     return render(request, 'blog/post_detail.j2', ctx)
 
 @login_required
@@ -83,6 +76,7 @@ def user_posts(request, pk):
     ctx = {
         'navbar':navbar(user_id=user_id, users=users),
         'posts': posts_of_user,
+        'user_id': user_id,
     }
     return render(request, 'blog/post_list.j2', ctx)
     

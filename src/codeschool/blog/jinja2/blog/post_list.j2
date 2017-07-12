@@ -24,7 +24,15 @@
             <div class="mdl-card__actions mdl-card--border">
                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postdetail', args=[post.pk]) }}">
                     Comentário: {{ post.comments.count() }}
-                </a>
+                </a>       
+                {% if user_id == post.author.id %}
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postedit', args=[post.pk]) }}">
+                        Alterar
+                    </a>
+                    <a class="mdl-button mdl-button--accent" href="{{ url('blog:postremove', args=[post.pk]) }}">
+                        Excluir
+                    </a>
+                 {% endif %}
             </div>
         </div>
     </div
