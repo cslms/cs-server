@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^post/new/$', views.post_new, name='post_new'),
     url(r'^post/(?P<pk>\d+)/remove/$', views.post_remove, name='postremove'),
     url(r'^post/(?P<pk>\d+)/comment/$', views.add_comment_to_post, name='addcomment'),
-	url(r'^comment/(?P<pk>\d+)/remove/$', views.comment_remove, name='comment_remove'),
+	url(r'^comment/(?P<pk>\d+)/remove/$', views.comment_remove, name='commentremove'),
 ]
