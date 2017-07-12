@@ -105,6 +105,9 @@ setup(
         'iospec>=0.3.16',
         'ejudge>=0.5.17',
         'boxed>=0.3.11',
+
+        # Sparta
+        'django-simple-search==1.0.2',
     ],
     extras_require={
         'dev': [
