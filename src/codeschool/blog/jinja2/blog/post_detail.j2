@@ -17,24 +17,13 @@
 </div
 
 <hr>
-    <form method="POST" class="comment-form-blog">{{ csrf_input }}
-        <fieldset>
-        {% for field in form %}
-        <div class="post-field-blog">
-            {{ field.name|capitalize }}
-            {{ field }}
-            {{ field.errors }}
-        </div>
-        {% endfor %}
-        <div class="post-form-button">
-            <button type="submit" class="save btn btn-default">Save</button>
-            <a title="" href="{{ url('blog:blog_index') }}">Cancel</a>
-        </div>
-        </fieldset>
-    </form>
 
-Comentarios
+<div class="mdl-card__actions mdl-card--border">
+    <a href="{{ url('blog:addcomment', args=[post.pk]) }}">Add comentario</a>
+</div>
+
 <hr>
+Comentarios
 
    <article class="mdl-cell mdl-cell--12-col">
     {% for comment in comments %}

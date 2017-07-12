@@ -31,30 +31,6 @@ def post_list(request):
     return render(request, 'blog/post_list.j2', ctx)
 
 @login_required
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    comments = post.comments.all()
-    user_id = post.author_id
-
-    form = CommentForm()
-
-    if request.user.id == user_id:
-        ctx = {
-            'navbar':navbar_configuration(user_id=user_id),
-            'post': post,
-            'comments': comments,
-            'form': form,
-        }
-    else:
-        ctx = {
-            'navbar':navbar(user_id=user_id),
-            'post': post,
-            'comments': comments,
-            'form': form,
-        }
-    return render(request, 'blog/post_detail.j2', ctx)
-
-@login_required
 def user_posts(request, pk):
     user = get_object_or_404(User, pk=pk)
     posts_of_user = (
@@ -76,12 +52,12 @@ def user_posts(request, pk):
         'posts': posts_of_user,
     }
     return render(request, 'blog/user_posts.j2', ctx)
-    
+
 @login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        form = CommentForm(request.POST, instance=post)
+        form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.author = request.user
@@ -91,6 +67,7 @@ def add_comment_to_post(request, pk):
     else:
         form = CommentForm()
     return render(request, 'blog/add_comment_to_post.j2', {'form': form})
+
 
 @login_required
 def post_new(request):
@@ -109,7 +86,7 @@ def post_new(request):
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     user_id = request.user.id
-    if request.user.id == post.author_id:
+    if user_id == post.author_id:
         if request.method == "POST":
             form = PostForm(request.POST, instance=post)
             if form.is_valid():
@@ -123,6 +100,30 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.j2', { 'form': form, 'type': "Edit Post" })
+
+@login_required
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all()
+    user_id = post.author_id
+
+    form = CommentForm(request.POST)
+
+    if request.user.id == user_id:
+        ctx = {
+            'navbar':navbar_configuration(user_id=user_id),
+            'post': post,
+            'comments': comments,
+            'form': form,
+        }
+    else:
+        ctx = {
+            'navbar':navbar(user_id=user_id),
+            'post': post,
+            'comments': comments,
+            'form': form,
+        }
+    return render(request, 'blog/post_detail.j2', ctx)
 
 @login_required
 def post_remove(request, pk):
