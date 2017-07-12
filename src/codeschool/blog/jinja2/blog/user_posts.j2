@@ -27,11 +27,11 @@
             <p>Author: {{post.author}}</p>
             <p>{{ '{}/{}/{} - {}:{}'
                 .format(
-                    post.published_date.day, 
-                    post.published_date.month, 
-                    post.published_date.year, 
-                    post.published_date.hour, 
-                    post.published_date.minute 
+                    post.created_date.day, 
+                    post.created_date.month, 
+                    post.created_date.year, 
+                    post.created_date.hour, 
+                    post.created_date.minute 
                 )}}
             </p>
             <div class="mdl-card__actions mdl-card--border">
