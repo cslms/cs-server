@@ -27,6 +27,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'codeschool.urls'
@@ -119,6 +120,7 @@ AUTHENTICATION_BACKENDS = (
     'rules.permissions.ObjectPermissionBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.github.GithubOAuth2',
 )
 ANONYMOUS_USER_ID = 1
 AUTH_USER_MODEL = 'users.User'
@@ -131,8 +133,8 @@ SOCIAL_AUTH_LOGIN_URL = '/auth/login/'
 
 # OAUTH keys (not working yet, should read from secrets!)
 
-SOCIAL_AUTH_GITHUB_KEY = ''
-SOCIAL_AUTH_GITHUB_SECRET = ''
+SOCIAL_AUTH_GITHUB_KEY = '8e921f9a75515cfe8043'
+SOCIAL_AUTH_GITHUB_SECRET = '0f30ca10c82fa3240905047a4d18a332eb170250'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ''
