@@ -9,15 +9,8 @@ class Post(models.Model):
     author = models.ForeignKey(models.User, related_name='users')
     title = models.CharField(max_length=200)
     text = models.TextField()
-    created_date = models.DateTimeField(
-            default=timezone.now)
-    published_date = models.DateTimeField(
-            blank=True, null=True)
-
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
-
+    created_date = models.DateTimeField(default=timezone.now)
+    
     def __str__(self):
         return '{}; Author:{} '.format(self.title, self.author.username)
 
