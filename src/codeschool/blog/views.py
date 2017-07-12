@@ -32,7 +32,7 @@ def index(request):
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    comments = post.comments.all()
+    comments = post.comments.filter(created_date__lte=timezone.now()).order_by('-created_date')
     user_id = post.author_id
 
     posts = (
@@ -86,21 +86,6 @@ def user_posts(request, pk):
     }
     return render(request, 'blog/post_list.j2', ctx)
     
-@login_required
-def add_comment_to_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.post = post
-            comment.save()
-            return redirect('blog:postdetail', pk=post.pk)
-    else:
-        form = CommentForm()
-    return render(request, 'blog/add_comment_to_post.j2', {'form': form})
-
 @login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
