@@ -55,33 +55,31 @@ def activities_layout():
     return card_container(cards)
 
 
-def rating_layout(members):
+def rating_layout(members, user_evaluatee):
     user_rows = []
-    for user in members:
+    for user_evaluated in members:
         try:
-            evaluations = UserRating.objects.filter(user_evaluated=user)
+            evaluations =  UserRating.objects.filter(user_evaluated=user_evaluated)
+            
         except:
             evaluations = []
 
-        average = 0.0
-        for evaluation in evaluations:
-            average += evaluation.rating
+        try:
+            evaluation =  UserRating.objects.get(user_evaluated=user_evaluated,
+                                    user_evaluatee=user_evaluatee).rating
+        except:
+            evaluation = 0            
 
-        if average > 0:
-            average /= len(evaluations)
-        
         user_rows.append(
-            form(action='')[
-                tr()[
-                    td(class_="mdl-data-table__cell--non-numeric")[
-                        user.first_name + ' ' + user.last_name],
-                    td()[str(len(evaluations)) + ' Aluno(s)'],
-                    td()[str(average)],
-                    td()[
-                        div(class_="cs-sparta__rateYo"),
-                        button(type="submit")['Submit']
-                    ],
-                ]
+            tr()[
+                td(class_="mdl-data-table__cell--non-numeric")[
+                    user_evaluated.first_name + ' ' + user_evaluated.last_name],
+                td(id="RLen-"+str(user_evaluated.id))[str(len(evaluations)) + ' Aluno(s)'],
+                td()[str(evaluation)],
+                td()[
+                    div(class_="cs-sparta__rateYo", 
+                        id='RUser-'+str(user_evaluated.id)+'-'+str(evaluation))
+                ],
             ]
         )
 
