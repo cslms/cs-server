@@ -23,39 +23,10 @@ def posts_layout(posts, users):
 
     b = div()[
         ul(class_="cs-sparta__members-list",)[[
-            li(a(user.username, href='user/{}'.format(user.id),)) for user in users
+            li(a(user.username, href='/blog/user/{}'.format(user.id),)) for user in users
         ]],
     ]
     return card_container(cards, title='Membros', description=b)
-
-def detail_layout(post):
-    card = simple_card(
-        post.text, 
-        'Author: {}'.format(post.author.username), 
-        icon='forum', 
-        double=True, 
-        center=False
-    )
-
-    card2 = [
-        p("Comentários: {}".format(post.comments.count()))
-
-    ]
-
-    cards = [
-        simple_card(
-            comment.text, 
-            'Author: {}'.format(comment.author.username), 
-            icon='comment', 
-            double=True, 
-            center=False
-        ) 
-        for comment in post.comments.all()
-    ]
-    cards.insert(0,card)
-    cards.insert(1,card2)
-
-    return card_container(cards, title=post.title)
 
 def navbar(user_id, users={}):
 
