@@ -131,9 +131,8 @@ def post_edit(request, pk):
 @login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if request.user.id == post.author_id:
-        post.delete()
-    return redirect('blog:postlist')
+    post.delete()
+    return redirect('blog:blog_index')
 
 @login_required
 def comment_remove(request, pk):
