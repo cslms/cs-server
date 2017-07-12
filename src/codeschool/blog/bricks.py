@@ -7,7 +7,6 @@ from simple_search import search_filter
 from django.utils import timezone
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
-from django.contrib.auth.decorators import login_required
 
 def posts_layout(posts, users):
     cards = [
@@ -58,40 +57,46 @@ def detail_layout(post):
 
     return card_container(cards, title=post.title)
 
+def navbar(user_id, users={}):
 
-def my_posts(posts):
-
-    cards = [
-        simple_card(
-            post.text, 
-            icon='forum', 
-            double=True, 
-            center=False
-        ) 
-        for post in posts
-    ]
-
-    return card_container(cards, title=post.title)
-
-def navbar(user_id):
     return _navbar([
         navsection('Menu',
-            [a('New Post', href='/blog/post/new'),
-            a('Posts', href='/blog'),
-            a('Minhas postagens', href='/blog/user/{}/'.format(user_id))
-        ])])
+            [
+                a('New Post', href='/blog/post/new'),
+                a('Posts', href='/blog'),
+                a('Minhas postagens', href='/blog/user/{}/'.format(user_id))
+            ]
+        ),
+        br,
+        navsection('Membros',
+            [
+               a(user.username, href='/blog/user/{}'.format(user.id),) for user in users
+            ]
+        ),
+    ])
 
 
-def navbar_configuration(user_id):
+def navbar_configuration(user_id, users={}):
     return _navbar([
         navsection('Menu',
-            [a('New Post', href='/blog/post/new'),
-            a('Posts', href='/blog'),
-             a('Minhas postagens', href='/blog/user/{}/'.format(user_id))
-        ]), 
+            [
+                a('New Post', href='/blog/post/new'),
+                a('Posts', href='/blog'),
+                a('Minhas postagens', href='/blog/user/{}/'.format(user_id))
+            ]
+        ), 
         br,
         navsection('Configurations',
-            [a('Edit Post', href='edit'),
-            a('Remove Post', href='remove', onclick="return confirm('Are you sure you want to delete this item?'"),
+            [
+                a('Edit Post', href='edit'),
+                a('Remove Post', href='remove', onclick="return confirm('Are you sure you want to delete this item?'"),
+            ]
+        ),
+        br,
+        navsection('Membros',
+            [
+               a(user.username, href='/blog/user/{}'.format(user.id),) for user in users
+            ]
+        ),
+    ])
 
-        ])])
