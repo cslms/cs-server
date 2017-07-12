@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from bricks.contrib.mdl import button, div
 from bricks.html5 import ul, li, a, i, select, option, input, table, tbody, thead, th, td, tr
 from codeschool.bricks import navbar as _navbar, navsection
-from .bricks import navbar, posts_layout, detail_layout, navbar_configuration
+from .bricks import navbar, posts_layout, navbar_configuration
 
 # Create your views here.
 def index(request):
@@ -122,7 +122,7 @@ def post_new(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.publish()
+            post.save()
             return redirect('blog:postdetail', pk=post.pk)
     else:
         form = PostForm()
