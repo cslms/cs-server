@@ -102,6 +102,23 @@ def add_comment_to_post(request, pk):
 
 
 @login_required
+def edit_comment_to_post(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    post_pk = comment.post.pk
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = comment.post
+            comment.save()
+            return redirect('blog:postdetail', pk=post_pk)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'blog/add_comment_to_post.j2', {'form': form})
+
+
+@login_required
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)

@@ -52,7 +52,7 @@ Comentarios
             </p>
             {% if user_id == comment.author.id %}
             <div class="mdl-card__actions mdl-card--border">
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:addcomment', args=[post.pk]) }}">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:editcomment', args=[comment.pk]) }}">
                     Alterar
                 </a>
                 <a class="mdl-button mdl-button--accent" href="{{ url('blog:commentremove', args=[comment.pk]) }}">
