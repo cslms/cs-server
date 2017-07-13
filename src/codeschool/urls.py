@@ -17,6 +17,7 @@ import os
 
 from django.conf.urls import url, include
 from wagtail.wagtailcore import urls as wagtail_urls
+from django.contrib import admin
 
 from codeschool import settings
 from codeschool.accounts.views import profile_view
@@ -28,7 +29,8 @@ import_api_modules()
 # Basic URLS
 urlpatterns = [
     url(r'^admin/', include('wagtail.wagtailadmin.urls')),
-    url(r'^$', index_view, name='index'),
+    url(r'^$', index_view),
+    url(r'^blog/', include('codeschool.blog.urls', namespace='blog')),
     url(r'^profile/$', profile_view, name='profile-view'),
     url(r'^auth/', include('codeschool.accounts.urls', namespace='auth')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest-auth')),

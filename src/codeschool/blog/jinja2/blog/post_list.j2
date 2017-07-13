@@ -1,0 +1,44 @@
+{% extends 'base.jinja2' %}
+
+{% block content_title %}
+<h1>Blog</h1>
+{% endblock %}
+
+
+{% block content_body %}
+{% for post in posts %}
+    <div class="cs-card-aside__content mdl-grid">
+        <div class="cs-card mdl-shadow--4dp mdl-cell mdl-cell--12-col cs-card--left">
+            <i class="material-icons cs-card__icon">forum</i>
+            <h1 class="cs-card__title">{{post.title}}</h1>
+            <p>Author: {{post.author}}</p>
+            <p>{{ '{}/{}/{} - {}:{}'
+                .format(
+                    post.created_date.day, 
+                    post.created_date.month, 
+                    post.created_date.year, 
+                    post.created_date.hour, 
+                    post.created_date.minute 
+                )}}
+            </p>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postdetail', args=[post.pk]) }}">
+                    Comentário: {{ post.comments.count() }}
+                </a>       
+                {% if user_id == post.author.id %}
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ url('blog:postedit', args=[post.pk]) }}">
+                        Alterar
+                    </a>
+                    <a class="mdl-button mdl-button--accent" href="{{ url('blog:postremove', args=[post.pk]) }}">
+                        Excluir
+                    </a>
+                 {% endif %}
+            </div>
+        </div>
+    </div
+{% endfor%}
+{% endblock %}
+
+
+
+      
