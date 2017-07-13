@@ -123,6 +123,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
 )
 ANONYMOUS_USER_ID = 1
 AUTH_USER_MODEL = 'users.User'
@@ -137,9 +138,12 @@ SOCIAL_AUTH_LOGIN_URL = '/auth/login/'
 
 SOCIAL_AUTH_GITHUB_KEY = '8e921f9a75515cfe8043'
 SOCIAL_AUTH_GITHUB_SECRET = '0f30ca10c82fa3240905047a4d18a332eb170250'
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1094116472448-rci3i1hrsjtiqc6pvvrmidbmsjf9mqka'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Oo0D8GBxaMwyh8sSGBVCg6zc'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+]
 SOCIAL_AUTH_FACEBOOK_KEY = '1702734920031800'
 SOCIAL_AUTH_FACEBOOK_SECRET = '578f7ace1bfd044730c179ce82bfb8a4'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
