@@ -1,0 +1,25 @@
+.cs-sparta {
+    &__members-list {
+        a {
+            color: #eee;
+            transition: color 150ms ease;
+            font-size: 17px;
+            text-decoration: none;
+        } 
+    }
+    &__button-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+    &__rateYo {
+        float: right;
+    }
+    &__your-rating {
+        text-align: center;
+        margin-top: 20px;
+        p {
+            font-size: 32px;
+            margin-top: 10px;
+        }
+    }
+}
