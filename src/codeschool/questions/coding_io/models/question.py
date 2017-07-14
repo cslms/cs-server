@@ -12,17 +12,40 @@ from codeschool.core.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
 from codeschool.questions.models import Question
-from codeschool.utils.string import md5hash_seq
 from iospec import parse as parse_iospec, IoSpec
 from .submission import CodingIoSubmission
 from .. import ejudge
 from .. import validators
+from lazyutils import lazy, delegate_to
+from .data_access import DataAccess
+from .validation import Validation
+from .actions import Actions
 
 logger = logging.getLogger('codeschool.questions.coding_io')
 
 
+class Placeholder(models.Model):
+
+    placeholder = models.TextField(
+        _('placeholder source code'),
+        blank=True,
+        help_text=_(
+            'This optional field controls which code should be placed in '
+            'the source code editor when a question is opened. This is '
+            'useful to put boilerplate or even a full program that the '
+            'student should modify. It is possible to configure a global '
+            'per-language boilerplate and leave this field blank.'
+        ),
+    )
+
+    class Meta:
+        verbose_name = _('placeholder')
+        verbose_name_plural = _('placeholders')
+
+
 @register_parent_prefetch
 class CodingIoQuestion(Question):
+
     """
     CodeIo questions evaluate source code and judge them by checking if the
     inputs and corresponding outputs match an expected pattern.
@@ -180,14 +203,6 @@ class CodingIoQuestion(Question):
         fake_post['post_tests_source'] = self.post_tests_source
         return fake_post
 
-    # Expanding and controlling the tests state
-    def has_test_state_changed(self):
-        """
-        Return True if test state has changed.
-        """
-
-        return self.test_state_hash == compute_test_state_hash(self)
-
     def get_current_test_state(self, update=False):
         """
         Return a current TestState object synchronized with the current
@@ -197,10 +212,7 @@ class CodingIoQuestion(Question):
         recreation of the test state.
         """
 
-        if update:
-            hash = compute_test_state_hash(self)
-        else:
-            hash = self.test_state_hash
+        hash = self.test_state_hash
 
         try:
             return TestState.objects.get(question=self, hash=hash)
@@ -209,8 +221,8 @@ class CodingIoQuestion(Question):
             post_tests = self.post_tests
 
             def expand(x):
-                result = expand_tests(self, x)
-                check_expansions_with_all_programs(self, result)
+                result = ExpandTests.expand_tests(self, x)
+                ExpandTests.check_expansions_with_all_programs(self, result)
                 return result
 
             pre_source = expand(pre_tests).source()
@@ -298,8 +310,6 @@ class CodingIoQuestion(Question):
 
     # Saving & validation
     def save(self, *args, **kwargs):
-        self.test_state_hash = compute_test_state_hash(self)
-
         if not self.author_name and self.owner:
             name = self.owner.get_full_name() or self.owner.username
             email = self.owner.email
@@ -307,16 +317,25 @@ class CodingIoQuestion(Question):
 
         super().save(*args, **kwargs)
 
+    @lazy
+    def _validation(self):
+        return Validation
+
+    def schedule_validation(self):
+        return self._validation.schedule_validation(self)
+
+    def validate_tests(self):
+        return self._validation.validate_tests(self)
+
+    def _expand_from_answer_keys(self):
+        return self._validation._expand_from_answer_keys(self)
+
     def clean(self):
         super().clean()
 
-        if self.has_test_state_changed() or self.has_code_changed():
-            logger.debug('%r: recomputing tests' % self.title)
-            self.schedule_validation()
-
-    def full_clean(self, *args, **kwargs):
-        if self.__answers:
-            self.answers = self.__answers
+    def full_clean(coding_io, *args, **kwargs):
+        if coding_io.__answers:
+            coding_io.answers = coding_io.__answers
         super().full_clean(*args, **kwargs)
 
     def full_clean_expansions(self):
@@ -338,69 +357,6 @@ class CodingIoQuestion(Question):
         self.full_clean(*args, **kwargs)
         self.full_clean_answer_keys()
         self.full_clean_expansions()
-
-    def schedule_validation(self):
-        """
-        Schedule full validation to be performed in the background.
-
-        This executes the full_clean_code() method
-        """
-
-        print('scheduling full code validation... (we are now executing on the'
-              'foreground).')
-
-    def validate_tests(self):
-        """
-        Triggered when (pre|post)_test_source changes or on the first time the
-        .clean() method is called.
-        """
-
-        # Check if new source is valid
-        for attr in ['pre_tests_source', 'post_tests_source']:
-            try:
-                source = getattr(self, attr)
-                if source:
-                    iospec = parse_iospec(source)
-                else:
-                    iospec = None
-                setattr(self, attr[:-7], iospec)
-            except Exception as ex:
-                self.clear_tests()
-                raise ValidationError(
-                    {attr: _('invalid iospec syntax: %s' % ex)}
-                )
-
-        # Computes temporary expansions for all sources. A second step may be
-        # required in which we use the reference source in answer key to further
-        # expand iospec data structures
-        iospec = self.pre_tests.copy()
-        iospec.expand_inputs(self.number_of_pre_expansions)
-        self.pre_tests_expanded = iospec
-
-        if self.pre_tests_source and self.post_tests_source:
-            iospec = ejudge.combine_iospecs(self.pre_tests, self.post_tests)
-        elif self.post_tests_source:
-            iospec = self.post_tests.copy()
-        elif self.pre_tests_source:
-            iospec = self.pre_tests.copy()
-        else:
-            raise ValidationError(_(
-                'either pre_tests_source or post_tests_source must be given!'
-            ))
-        iospec.expand_inputs(self.number_of_post_expansions)
-        # assert len(iospec) >= self.number_of_expansions, iospec
-        self.post_tests_expanded = iospec
-
-        if self.pre_tests_expanded.is_expanded and \
-                self.post_tests_expanded.is_expanded:
-            self.pre_tests_expanded_source = self.pre_tests_expanded.source()
-            self.post_tests_expanded_source = self.post_tests_expanded.source()
-
-        else:
-            self._expand_from_answer_keys()
-
-        # Iospec is valid: save the hash
-        self.tests_state_hash = self.current_tests_hash
 
     def _expand_from_answer_keys(self):
         # If the source requires expansion, we have to check all answer keys
@@ -427,7 +383,7 @@ class CodingIoQuestion(Question):
                 ex_post = post_list[0]
             else:
                 def validate(L, field):
-                    first, *tail = L
+                    first, tail = L
                     for i, elem in enumerate(tail, 1):
                         if first == elem:
                             continue
@@ -451,33 +407,22 @@ class CodingIoQuestion(Question):
             self.post_tests_expanded = ex_pre
             self.post_tests_expanded_source = ex_post.source()
 
-    # Data access
-    def get_placeholder(self, language=None):
-        """
-        Return the placeholder text for the given language.
-        """
+        return self._validation._expand_from_answer_keys(self)
 
-        key = self.answers.get(language or self.language, None)
-        if key is None:
-            return self.default_placeholder
-        return key.placeholder
+    # Data access
+
+    @lazy
+    def _data_access(self):
+        return DataAccess
+
+    def get_placeholder(self, language=None):
+        return self._data_access.get_placeholder(self, language)
 
     def get_reference_source(self, language=None):
-        """
-        Return the reference source code for the given language or None, if no
-        reference is found.
-        """
-
-        if language is None:
-            language = self.language
-        qs = self.answers.all().filter(
-            language=get_programming_language(language))
-        if qs:
-            return qs.get().source
-        return ''
+        return self._data_access.get_reference_source(self, language)
 
     def filter_user_submission_payload(self, request, payload):
-        return dict(language=payload['language'], source=payload['source'])
+        return self._data_access.filter_user_submission_payload(self, request, payload)
 
     # Access answer key queryset
     def answers_with_code(self):
@@ -486,17 +431,6 @@ class CodingIoQuestion(Question):
         """
 
         return self.answers.exclude(source='')
-
-    def has_code_changed(self):
-        """
-        True if some answer source for a valid code has changed.
-        """
-
-        keys = self.answers_with_code()
-        for key in keys:
-            if key.has_changed_source():
-                return True
-        return False
 
     def run_post_grading(self, **kwargs):
         """
@@ -569,122 +503,111 @@ class CodingIoQuestion(Question):
     #
     # Actions
     #
-    def regrade_post(self):
-        """
-        Regrade all submissions using the post tests.
-        """
+    @lazy
+    def _actions(self):
+        return Actions
 
-        self.responses.regrade_with(self.post_tests_expanded)
+    def regrade_post(self):
+        return self._actions.regrade_post(self)
 
     def action_expand_tests(self, client, *args, **kwargs):
-        self._expand_tests()
-        pre = escape(self.pre_tests_expanded_source)
-        post = escape(self.post_tests_expanded_source)
-        client.dialog('<h2>Pre-tests</h2><pre>%s</pre>'
-                      '<h2>Post-test</h2><pre>%s</pre>' % (pre, post))
+        return self._actions.action_expand_tests(self, client, args, kwargs)
 
     def action_grade_with_post_tests(self, client, *args, **kwargs):
-        self.regrade_post()
-        client.dialog('<p>Successful operation!</p>')
+        return self._actions.action_grade_with_post_tests(self, client, args, kwargs)
 
 
-def compute_test_state_hash(question):
-    source_hashes = question.answers.values_list('source_hash', flat=True)
-    return md5hash_seq([
-        question.pre_tests_source,
-        question.post_tests_source,
-        '%x%x%f' % (question.num_pre_tests, question.num_post_tests,
-                    question.timeout),
-        '\n'.join(source_hashes),
-    ])
+class ExpandTests(object):
 
-
-#
-# Utility functions
-#
-def expand_tests(question, tests: IoSpec) -> IoSpec:
     """
-    Expand tests and return a new expanded IoSpec object.
+    Expand tests from program and check it
     """
 
-    if tests.is_simple:
-        return tests.copy()
+    @classmethod
+    def expand_tests(cls, question, tests: IoSpec) -> IoSpec:
+        """
+        Expand tests and return a new expanded IoSpec object.
+        """
 
-    # Check if result is usable after a simple expansion
-    tests = tests.copy()
-    tests.expand_inputs()
-    if tests.is_simple:
-        return tests
+        if tests.is_simple:
+            return tests.copy()
 
-    # Further expansion requires a reference program to automatically
-    # compute all the inputs and outputs
-    qs = question.answers_with_code()
-    if qs:
-        language = qs.first().language
-    else:
-        raise ValidationError(_(
-            'No program was provided to expand the given test cases.'
-        ))
-
-    return expand_tests_from_program(question, tests, language)
-
-
-def expand_tests_from_program(question, tests: IoSpec, language=None):
-    """
-    Uses source code from source code reference in the provided language
-    to expand tests.
-    """
-
-    language = get_programming_language(language)
-    answer_key = question.answers.get(language=language)
-
-    if not answer_key.source:
-        raise ValueError('cannot expand from %s: no program set' % language)
-
-    source = answer_key.source
-    language_ref = language.ejudge_ref()
-
-    if tests.is_simple:
-        return tests.copy()
-
-    if tests.is_standard_test_case:
+        # Check if result is usable after a simple expansion
         tests = tests.copy()
         tests.expand_inputs()
-
         if tests.is_simple:
             return tests
 
-    return question.run_code(source, tests, language)
+        # Further expansion requires a reference program to automatically
+        # compute all the inputs and outputs
+        qs = question.answers_with_code()
+        if qs:
+            language = qs.first().language
+        else:
+            raise ValidationError(_(
+                'No program was provided to expand the given test cases.'
+            ))
 
+        return ExpandTests.expand_tests_from_program(question, tests, language)
 
-def check_expansions_with_all_programs(question, tests: IoSpec):
-    """
-    Test if source code was expanded in expectancy of what the iospec tests
-    provides.
+    @classmethod
+    def expand_tests_from_program(cls, question, tests: IoSpec, language=None):
+        """
+        Uses source code from source code reference in the provided language
+        to expand tests.
+        """
 
-    Remember to expand all commands from the given iospec otherwise each
-    program may be run with a different set of inputs.
-    """
+        language = get_programming_language(language)
+        answer_key = question.answers.get(language=language)
 
-    answers = list(question.answers_with_code())
+        if not answer_key.source:
+            raise ValueError(
+                'cannot expand from %s: no program set' % language)
 
-    # We can get away with providing no checker program if the tests are
-    # simple.
-    if not answers and tests.is_expanded:
-        return
+        source = answer_key.source
 
-    # Other cases require more work: first we expand for each possible
-    # language. Collect tuples of (expansion, language)
-    languages = [answer.language for answer in answers]
-    first, *tail = [
-        (expand_tests_from_program(question, tests, language), language)
-        for language in languages]
+        if tests.is_simple:
+            return tests.copy()
 
-    # All expansions should be equal.
-    for expansion in tail:
-        if expansion[0] != first[0]:
-            raise RuntimeError('different expansions yielded different ')
+        if tests.is_standard_test_case:
+            tests = tests.copy()
+            tests.expand_inputs()
 
-    question.check_with_code(answers[0].source, tests, answers[0].language,
-                             question.timeout)
-    return first[0]
+            if tests.is_simple:
+                return tests
+
+        return question.run_code(source, tests, language)
+
+    @classmethod
+    def check_expansions_with_all_programs(cls, question, tests: IoSpec):
+        """
+        Test if source code was expanded in expectancy of what the iospec tests
+        provides.
+
+        Remember to expand all commands from the given iospec otherwise each
+        program may be run with a different set of inputs.
+        """
+
+        answers = list(question.answers_with_code())
+
+        # We can get away with providing no checker program if the tests are
+        # simple.
+        if not answers and tests.is_expanded:
+            return
+
+        # Other cases require more work: first we expand for each possible
+        # language. Collect tuples of (expansion, language)
+        languages = [answer.language for answer in answers]
+        first, *tail = [
+            (ExpandTests.expand_tests_from_program(
+                question, tests, language), language)
+            for language in languages]
+
+        # All expansions should be equal.
+        for expansion in tail:
+            if expansion[0] != first[0]:
+                raise RuntimeError('different expansions yielded different ')
+
+        question.check_with_code(answers[0].source, tests, answers[0].language,
+                                 question.timeout)
+        return first[0]
