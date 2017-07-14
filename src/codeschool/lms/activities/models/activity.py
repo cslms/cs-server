@@ -15,14 +15,7 @@ logger = logging.getLogger('codeschool.lms.activities')
 ZERO = decimal.Decimal(0)
 
 
-def bool_to_true():
-    return True
-
-
-class Activity(CommitMixin,
-               models.RoutableViewsPage,
-               models.DecoupledAdminPage,
-               metaclass=ActivityMeta):
+class Activity(CommitMixin, metaclass=ActivityMeta):
     """
     Represents a gradable activity inside a course. Activities may not have an
     explicit grade, but yet may provide points to the students via the
@@ -34,18 +27,22 @@ class Activity(CommitMixin,
     Each concrete activity is represented by a different subclass.
     """
 
-    author_name = models.CharField(
-        _('Author\'s name'),
-        max_length=100,
-        blank=True,
+    VISIBILITY_PRIVATE = VISIBILITY_STAFF, VISIBILITY_PUBLIC = range(3)
+    VISIBILITY_CHOICES = [
+        (VISIBILITY_PRIVATE, _('Private')),
+        (VISIBILITY_STAFF, _('STAFF')),
+        (VISIBILITY_PUBLIC, _('Public'))
+    ]
+
+    owner = models.ForeignKey(
+        _('Owner'),
         help_text=_(
-            'The author\'s name, if not the same user as the question owner.'
+            'The activity\'s owner.'
         ),
     )
-    # Do we need this? Can we use wagtail's live attribute?
-    visible = models.BooleanField(
-        _('Invisible'),
-        default=bool_to_true,
+    visibility = models.PositiveSmallIntegerField(
+        _('Visibility'),
+        choices=VISIBILITY_CHOICES,
         help_text=_(
             'Makes activity invisible to users.'
         ),

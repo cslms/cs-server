@@ -7,6 +7,7 @@ static_src/elm/elm-stuff/
 *.pyo
 *.pyd
 *.so
+*.css.map
 *.dll
 *.egg
 *.sqlite3
@@ -16,6 +17,7 @@ static_src/elm/elm-stuff/
 .tox/
 .sass-cache/
 .coverage
+.frontend/src/scss/main.css
 
 # Logs
 .cs-debug.log
@@ -35,14 +37,11 @@ elm-stuff/
 *.html.py
 *.txt.py
 
-# Sensible information
-db/redis/*
-db/*.*
-security/*
-docker/volumes/redis/dump.rdb
-docker/db/db.sqlite3
-collect/media/
+# Private and local information
+local/*
 
 # A pycharm bug keeps re-creating this file!
 src/__init__.py
+
+
 

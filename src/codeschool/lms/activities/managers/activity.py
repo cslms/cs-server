@@ -1,7 +1,7 @@
 from codeschool import models
 
 
-class ActivityQueryset(models.PageQuerySet):
+class ActivityQueryset(models.QuerySet):
 
     def auth(self, user, role=None):
         """
@@ -18,4 +18,4 @@ class ActivityQueryset(models.PageQuerySet):
         return self.model.load_from_file(path, parent)
 
 
-ActivityManager = models.PageManager.from_queryset(ActivityQueryset)
+ActivityManager = ActivityQueryset.as_manager()

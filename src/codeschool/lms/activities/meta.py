@@ -1,4 +1,5 @@
-from wagtail.wagtailcore.models import PageBase
+from codeschool import models
+
 
 EXTRA_META_VARS = {
     'instant_feedback': True,
@@ -9,7 +10,7 @@ EXTRA_META_VARS = {
 }
 
 
-class ActivityMeta(PageBase):
+class ActivityMeta(models.Model):
     """
     Metaclass for Activity
     """

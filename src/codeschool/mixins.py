@@ -115,7 +115,7 @@ class AbsoluteUrlMixin:
         return '\n'.join(lines)
 
 
-class CommitMixin:
+class CommitMixin(Model):
     """
     Methods that saves object or not depending on the value of the commit
     variable.

@@ -5,21 +5,23 @@ Installation instructions
 First step is to clone the git repository::
 
     $ git clone https://github.com/cslms/cs-server.git
+    $ cd cs-server
 
 At this point you might want to create a virtualenv, in order to isolate
-Codeschool and its many dependencies from your Python environment. Please
-install ``virtualenvwrapper`` from pip (``pip install virtualenvwrapper``) or
-from your distribution packages, then execute::
+Codeschool and its many dependencies from your Python environment. First check
+if virtualenvwrapper is available in your distribution (e.g., ``sudo apt-get install virtualenvwrapper``)
+If it is not available, install it from pip (``pip install virtualenvwrapper``),
+then execute::
 
     $ virtualenvwrapper.sh
-    $ mkvirtualenv codeschool -p python3
+    $ mkvirtualenv codeschool -p /usr/bin/python3
     $ workon codeschool
 
 Move to the source tree and install all pip dependencies. This may take a while.
 
 ::
 
-    $ cd codeschool
+    $ python setup.py develop
     $ pip install -e .[dev]
 
 
@@ -27,9 +29,12 @@ Javascript deps
 ---------------
 
 If you want to make any frontend development, the next step should be installing
-the correct Javascript packages from npm. Codeschool uses `Webpack`_ to create
-"bundles" of web resources. This makes more efficient javascript and CSS and
-allow us to use a CSS pre-processor (Sass).
+the correct Javascript packages from npm. Codeschool uses Elm + Polymer as the
+main frontend language/framework. It also uses `Webpack`_ to create "bundles" of
+web resources and to generate the final production build. Stylesheets are handled
+using the Sass pre-processor.
+
+Each of those technologies require a different
 
 You need node.js and npm to make it work::
 
