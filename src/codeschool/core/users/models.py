@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     Base user model.
     """
 
-    REQUIRED_FIELDS = ['alias', 'name', 'school_id', 'role']
+    REQUIRED_FIELDS = ['alias', 'name', 'school_id']
     USERNAME_FIELD = 'email'
     ROLE_STUDENT, ROLE_TEACHER, ROLE_STAFF, ROLE_ADMIN = range(4)
     ROLE_CHOICES = enumerate([
@@ -81,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
     )
     role = models.IntegerField(
-        _('Main'),
+        _('role'),
         choices=ROLE_CHOICES,
         default=ROLE_STUDENT,
         help_text=_(
@@ -118,7 +118,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     # Temporary properties defined for compatibility
-    username = property(lambda x: x.alias)
+    username = property(lambda x: x.email)
 
     @property
     def profile(self):

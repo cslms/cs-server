@@ -1,6 +1,5 @@
 import random
 from .models import User
-from IPython import embed
 
 USER_FIELDS = ['alias', 'email', 'school_id']
 
@@ -12,7 +11,7 @@ def set_random_school_id():
 
     return school_id
 
-def create_user(strategy, details, backend, user=None, *args, **kwargs):
+def create_user(strategy, details, backend, request=None, user=None, *args, **kwargs):
 
     if user:
         return {'is_new': False}
