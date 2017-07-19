@@ -19,25 +19,26 @@ class KeyValuePair(models.Model):
     class Meta:
         abstract = True
 
+    TYPE_STR, TYPE_INT, TYPE_FLOAT, TYPE_BOOL = range(4)
     name = models.CharField(max_length=30, unique=True)
     value = models.CharField(max_length=100)
     type = models.IntegerField(choices=[
-        (0, 'str'),
-        (1, 'int'),
-        (2, 'float'),
-        (3, 'bool'),
+        (TYPE_STR, 'str'),
+        (TYPE_INT, 'int'),
+        (TYPE_FLOAT, 'float'),
+        (TYPE_BOOL, 'bool'),
     ])
 
     @property
     def data(self):
         raw_data = self.value
-        if self.type == 0:
+        if self.type == self.TYPE_STR:
             return raw_data
-        elif self.type == 1:
+        elif self.type == self.TYPE_INT:
             return int(raw_data)
-        elif self.type == 2:
+        elif self.type == self.TYPE_FLOAT:
             return float(raw_data)
-        elif self.type == 3:
+        elif self.type == self.TYPE_BOOL:
             return bool(int(raw_data))
         else:
             raise ValueError(self.type)
@@ -66,7 +67,11 @@ class KeyValuePair(models.Model):
         """
 
         try:
-            return {str: 0, int: 1, float: 2, bool: 3}[type(value)]
+            return {
+                str: cls.TYPE_STR, int: cls.TYPE_INT,
+                float: cls.TYPE_FLOAT, bool: cls.TYPE_BOOL,
+            }[type(value)]
+
         except KeyError:
             type_name = value.__class__.__name__
             raise TypeError('invalid config value type: %r' % type_name)
@@ -95,5 +100,5 @@ DataDict._key_value_pair_model = DataEntryKeyValuePair
 
 
 @model_reference.factory('root-page')
-def get_wagtail_root_page():
+def wagtail_root_page():
     return models.Page.objects.get(path='00010001')

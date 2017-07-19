@@ -1,17 +1,48 @@
 import pytest
 from django.core.exceptions import ValidationError
-from markio import parse_markio
-from codeschool.questions.coding_io.ejudge import expand_from_code
-from iospec import parse, Out, In, StandardTestCase
 
-from codeschool.core.files import get_programming_language
+from codeschool.core.config import wagtail_root
+from codeschool.core.files import programming_language
 from codeschool.lms.activities.models import Feedback
 from codeschool.questions.coding_io import factories
+from codeschool.questions.coding_io.ejudge import expand_from_code
 from codeschool.questions.coding_io.models.question import expand_tests
+from iospec import IoSpec
+from iospec import parse, Out, In, StandardTestCase
+from markio import parse_markio
 
 pytestmark = pytest.mark.integration
 example = factories.question_from_example
 source = factories.source_from_example
+
+
+@pytest.fixture
+def hello_world_question(root):
+    from codeschool.questions.coding_io.factories import \
+        make_hello_world_question
+    return make_hello_world_question(root)
+
+
+def test_hello_world_submissions(hello_world_question, joe_user):
+    from codeschool.questions.coding_io.factories import \
+        make_hello_world_submissions
+    sub1, sub2 = make_hello_world_submissions(hello_world_question, joe_user)
+
+
+def test_create_basic_coding_io_questions(db):
+    parent = wagtail_root()
+    from codeschool.questions.coding_io.factories import \
+        make_hello_world_question, make_question_from_markio_example
+    make_hello_world_question(parent)
+    make_question_from_markio_example('simple.md', parent)
+
+
+def test_basic_coding_io_can_expand_tests(hello_world_question):
+    question = hello_world_question
+    pre = question.get_expanded_pre_tests()
+    post = question.get_expand_post_tests()
+    assert isinstance(pre, IoSpec)
+    assert pre == post
 
 
 @pytest.mark.skip
@@ -177,7 +208,7 @@ def test_do_not_validate_bad_pre_tests_source(db):
 
 def test_validate_multiple_answer_keys(db):
     question = example('simple')
-    question.answers.create(language=get_programming_language('c'),
+    question.answers.create(language=programming_language('c'),
                             source=source('hello.c'))
     question.full_clean_all()
 
@@ -210,3 +241,26 @@ def test_do_not_validate_negative_timeout(db):
     with pytest.raises(ValidationError) as ex:
         question.full_clean()
     assert 'timeout' in ex.value.args[0]
+
+
+def test_consecutive_submissions_recycle(db, hello_world_question, user,
+                                         request_with_user):
+    qst = hello_world_question
+    sub1 = qst.submit(request_with_user, source='print("hello")',
+                      language='python')
+    sub2 = qst.submit(request_with_user, source='print("hello")',
+                      language='python')
+
+    hash = sub1.compute_hash()
+    assert sub1.hash == hash
+    assert sub1.hash == sub2.hash
+    assert sub1.id == sub2.id
+    assert sub2.num_recycles == 1
+
+
+def test_can_send_submission_and_autograde(db, hello_world_question, user,
+                                           request_with_user):
+    submission = hello_world_question.submit(
+        request_with_user, source='print("hello")', language='python')
+    feedback = submission.auto_feedback()
+    assert feedback.given_grade_pc == 0

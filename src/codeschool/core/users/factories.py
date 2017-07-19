@@ -1,8 +1,8 @@
 import datetime as dt
-import random
 import string
 
 import factory.django
+import random
 from django.db import IntegrityError
 from django.db.models import signals
 from mommys_boy import DjangoMommyFactory, SubFactory, Faker
@@ -101,13 +101,15 @@ def make_user(alias, email, password, update=False, commit=True,
 
     # Create profile
     profile = models.Profile(user=user, **profile_kwargs)
-    try:
-        profile.id = models.Profile.objects.get(user=user).id
-    except models.Profile.DoesNotExist:
-        pass
     if commit:
-        profile.save()
-
+        try:
+            profile.id = models.Profile.objects.get(user=user).id
+        except models.Profile.DoesNotExist:
+            pass
+        else:
+            profile.save()
+    else:
+        user.profile = profile
     return user
 
 
@@ -116,10 +118,11 @@ def random_school_id():
     return ''.join(random.choice(letters) for _ in range(10))
 
 
-def make_yoda_teacher():
+def make_yoda_teacher(commit=True):
     curr_date = dt.datetime.now().date()
     return make_user(
         update=True,
+        commit=commit,
         is_teacher=True,
         alias='yoda',
         name='Yoda',
@@ -130,10 +133,11 @@ def make_yoda_teacher():
     )
 
 
-def make_girafales_teacher():
+def make_girafales_teacher(commit=True):
     return make_user(
         update=True,
         is_teacher=True,
+        commit=commit,
         alias='girafales123',
         first_name='Inocêncio',
         last_name='Girafales',
@@ -145,10 +149,11 @@ def make_girafales_teacher():
     )
 
 
-def make_helena_teacher():
+def make_helena_teacher(commit=True):
     return make_user(
         update=True,
         is_teacher=True,
+        commit=commit,
         alias='helena',
         first_name='Helena',
         last_name='Jacinta',
@@ -159,10 +164,11 @@ def make_helena_teacher():
     )
 
 
-def make_miyagi_teacher():
+def make_miyagi_teacher(commit=True):
     return make_user(
         update=True,
         is_teacher=True,
+        commit=commit,
         alias='prof.miyagi',
         first_name='Keisuke',
         last_name='Miyagi',
@@ -173,12 +179,13 @@ def make_miyagi_teacher():
     )
 
 
-def make_joe_user():
+def make_joe_user(commit=True):
     return make_user(
         update=True,
         alias='joe',
         first_name='Joe',
         last_name='Smith',
+        commit=commit,
         password='joe',
         email='joe@hotmail.com',
         gender='male',
@@ -186,7 +193,7 @@ def make_joe_user():
     )
 
 
-def make_random_student():
+def make_random_student(commit=True):
     gender = random.choice(['male', 'female'])
     if gender == 'male':
         name = fake.first_name_male()
@@ -197,6 +204,7 @@ def make_random_student():
             alias=fake.user_name(),
             first_name=name,
             last_name=fake.last_name(),
+            commit=commit,
             password=fake.password(),
             email=fake.email(),
             gender=gender,
@@ -206,12 +214,13 @@ def make_random_student():
         pass
 
 
-def make_maurice_moss():
+def make_maurice_moss(commit=True):
     return make_user(
         update=True,
         alias='admin',
         first_name='Maurice',
         last_name='Moss',
+        commit=commit,
         password='admin',
         nickname='moss',
         phone='555-123-456',
@@ -223,10 +232,11 @@ def make_maurice_moss():
     )
 
 
-def make_mr_robot():
+def make_mr_robot(commit=True):
     return make_user(
         update=True,
         alias='mr_robot',
+        commit=commit,
         first_name='<script>alert("you\'ve been pwnd!")</script>',
         last_name='<script>alert("you\'ve been pwnd!")</script>',
         password='robot',
@@ -240,18 +250,14 @@ def make_mr_robot():
     )
 
 
-def make_teachers():
-    teachers = [
-        make_yoda_teacher(),
-        make_helena_teacher(),
-        make_girafales_teacher(),
-        make_miyagi_teacher()
+def make_teachers(commit=True):
+    return [
+        make_yoda_teacher(commit=commit),
+        make_helena_teacher(commit=commit),
+        make_girafales_teacher(commit=commit),
+        make_miyagi_teacher(commit=commit)
     ]
-    ids = [x.id for x in teachers]
-    return models.User.objects.filter(id__in=ids)
 
 
-def make_students(size=5):
-    students = [make_random_student() for _ in range(size)]
-    ids = [x.id for x in students]
-    return models.User.objects.filter(id__in=ids)
+def make_students(size=5, commit=True):
+    return [make_random_student(commit=commit) for _ in range(size)]

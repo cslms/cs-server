@@ -2,34 +2,35 @@ import model_reference
 
 from codeschool import models
 from codeschool.core.config import global_data_store
+from codeschool.core.users.factories import make_joe_user
+from codeschool.lms.activities.factories import make_basic_activities
+from codeschool.lms.classrooms.factories import make_example_course_list
 
 
 def fill_data(data, user):
     if data.get('joe_user', False):
         fill_joe_user()
-    #TODO: populate database
-    # if data.get('basic_activities', False):
-    #     fill_basic_activities()
-    # if data.get('example_questions', False):
-    #     fill_example_questions(user)
-    # if data.get('example_courses', False):
-    #     fill_example_courses()
-    # if data.get('populate_courses', False):
-    #     fill_courses_with_users()
-    # if data.get('example_submissions', False):
-    #     fill_example_submissions()
+
+        # TODO: populate database
+        # if data.get('basic_activities', False):
+        #     fill_basic_activities()
+        # if data.get('example_questions', False):
+        #     fill_example_questions(user)
+        # if data.get('example_courses', False):
+        #     fill_example_courses()
+        # if data.get('populate_courses', False):
+        #     fill_courses_with_users()
+        # if data.get('example_submissions', False):
+        #     fill_example_submissions()
 
 
 def fill_joe_user():
-    from codeschool.core.users.factories import make_joe_user
-
     joe = make_joe_user()
     global_data_store['joe-user-id'] = joe.id
+    return joe
 
 
 def fill_basic_activities():
-    from codeschool.lms.activities.factories import make_basic_activities
-
     if 'main-question-list' not in global_data_store:
         global_data_store['main-question-list'] = 'basic'
         make_basic_activities()
@@ -48,8 +49,6 @@ def fill_example_questions(user):
 
 
 def fill_example_courses():
-    from codeschool.lms.classrooms.factories import make_example_course_list
-
     if not global_data_store.get('example-courses', False):
         global_data_store['example-courses'] = True
         cs101, *other_courses = make_example_course_list()

@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import bricks.rpc
 from codeschool import models
-from codeschool.core.files import get_programming_language
+from codeschool.core.files import programming_language
 from codeschool.core.files.models import ProgrammingLanguage
 from codeschool.fixes.parent_refresh import register_parent_prefetch
 from codeschool.questions.coding_io.models import TestState
@@ -171,7 +171,7 @@ class CodingIoQuestion(Question):
             raise ValueError('cannot set language: %r != %r' % args)
 
         language = self.language or language
-        language = get_programming_language(language)
+        language = programming_language(language)
         return super().submit(request, language=language, **kwargs)
 
     def load_post_file_data(self, file_data):
@@ -262,7 +262,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = get_programming_language(language or self.language)
+        language = programming_language(language or self.language)
         timeout = timeout or self.timeout
         ejudge.check_with_code(source, tests, language, timeout)
 
@@ -272,7 +272,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = get_programming_language(language or self.language)
+        language = programming_language(language or self.language)
         timeout = timeout or self.timeout
         return ejudge.run_code(source, tests, language, timeout)
 
@@ -282,7 +282,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = get_programming_language(language or self.language)
+        language = programming_language(language or self.language)
         timeout = timeout or self.timeout
         return ejudge.grade_code(source, inputs, language, timeout)
 
@@ -292,7 +292,7 @@ class CodingIoQuestion(Question):
         and language as default.
         """
 
-        language = get_programming_language(language or self.language)
+        language = programming_language(language or self.language)
         timeout = timeout or self.timeout
         return ejudge.expand_from_code(source, inputs, language, timeout)
 
@@ -471,7 +471,7 @@ class CodingIoQuestion(Question):
         if language is None:
             language = self.language
         qs = self.answers.all().filter(
-            language=get_programming_language(language))
+            language=programming_language(language))
         if qs:
             return qs.get().source
         return ''
@@ -550,7 +550,7 @@ class CodingIoQuestion(Question):
                 return None
             language = self.language
         else:
-            language = get_programming_language(language)
+            language = programming_language(language)
 
         return super().serve_ajax_submission(
             client=client,
@@ -635,7 +635,7 @@ def expand_tests_from_program(question, tests: IoSpec, language=None):
     to expand tests.
     """
 
-    language = get_programming_language(language)
+    language = programming_language(language)
     answer_key = question.answers.get(language=language)
 
     if not answer_key.source:

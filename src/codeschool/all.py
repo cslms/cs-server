@@ -38,7 +38,6 @@ from .lms.organizations.models import *
 # Extra
 # from .extra.code_carrousel.models import *
 # from .extra.code_exhibit.models import *
-from .extra.fresh_install.models import *
 
 
 # Gamification

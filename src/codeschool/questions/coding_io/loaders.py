@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from markio import Markio, parse_markio
 
-from codeschool.core.files import get_programming_language
+from codeschool.core.files import programming_language
 from codeschool.questions.coding_io.utils import markdown_to_blocks, \
     blocks_to_markdown
 
@@ -64,7 +64,7 @@ def update_markio_data(question, data):
     question.pre_tests_source = md.tests_source or question.pre_tests_source
     question.post_tests_source = md.hidden_tests_source
     if md.language is not None:
-        question.language = get_programming_language(md.language)
+        question.language = programming_language(md.language)
     if md.points is not None:
         question.points_total = md.points
     if md.stars is not None:
@@ -76,7 +76,7 @@ def update_markio_data(question, data):
     # Add answer keys
     answer_keys = OrderedDict()
     for (lang, answer_key) in md.answer_key.items():
-        language = get_programming_language(lang)
+        language = programming_language(lang)
         key = question.answers.create(question=question,
                                       language=language,
                                       source=answer_key)
@@ -87,7 +87,7 @@ def update_markio_data(question, data):
         try:
             answer_keys[lang].placeholder = placeholder
         except KeyError:
-            language = get_programming_language(lang)
+            language = programming_language(lang)
             question.answers.create(language=language,
                                     placeholder=placeholder)
     question.__answers = list(answer_keys.values())

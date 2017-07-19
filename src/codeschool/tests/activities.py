@@ -62,20 +62,12 @@ class ActivityFixtures:
     @pytest.fixture
     def activity(self):
         "An activity instance that does not touch the db."
-
-        cls = self.activity_class
-        with wagtail_page(cls):
-            result = cls(title='Test', id=1)
-        result.specific = result
-        return result
+        return self.activity_class(title='Test', id=1)
 
     @pytest.fixture
     def activity_db(self):
         "A saved activity instance."
-
-        result = self.activity_class(title='Test', id=1)
-        result.specific = result
-        return result
+        return self.activity_class(title='Test', id=1)
 
     @pytest.yield_fixture
     def progress(self, activity, user):
@@ -87,8 +79,7 @@ class ActivityFixtures:
             pytest.skip('Progress class is abstract')
 
         with patch.object(cls, 'user', user):
-            progress = cls(activity_page=activity, id=1)
-            yield progress
+            yield cls(activity_page=activity, id=1)
 
     @pytest.fixture
     def progress_db(self, progress):

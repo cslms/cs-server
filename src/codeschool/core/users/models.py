@@ -124,6 +124,13 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.profile_ref = Profile(user=self)
             return self.profile_ref
 
+    @profile.setter
+    def profile(self, value):
+        if self.id is None:
+            self._lazy_profile = value
+        else:
+            self.profile_ref = value
+
     @lazy
     def _lazy_profile(self):
         return Profile(user=self)

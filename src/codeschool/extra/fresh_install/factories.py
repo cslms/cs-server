@@ -1,8 +1,11 @@
 from logging import getLogger
+
 from django.apps import apps
 
 from codeschool.core.users.models import Profile
+
 log = getLogger('codeschool.fresh_install')
+
 
 def make_example_questions(parent):
     basic = parent.get_children().get(slug='basic')

@@ -10,7 +10,7 @@ def get_sys_page(name):
     return model_reference.load(name)
 
 
-def get_wagtail_root():
+def wagtail_root():
     """
     Returns the Wagtail's root page.
     """

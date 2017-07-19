@@ -1,5 +1,5 @@
 
-def get_programming_language(language, raises=True):
+def programming_language(language, raises=True):
     """
     Return the :cls:`codeschool.core.models.ProgrammingLanguage` object
     associated with the given language reference.
