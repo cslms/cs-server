@@ -1,3 +1,4 @@
+import random
 from .models import User
 from IPython import embed
 
@@ -22,7 +23,7 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
     fields['alias'] = details['username']
 
 
-    field['school_id'] = set_random_school_id()
+    fields['school_id'] = set_random_school_id()
 
     if not fields:
         return

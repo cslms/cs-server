@@ -95,6 +95,13 @@ class User(AbstractBaseUser, PermissionsMixin):
             'Designates whether the user can log into this admin site.'
         ),
     )
+    is_dirty = models.BooleanField(
+        _('dirty'),
+        default=True,
+        help_text=_(
+            'Designates whether this user has completed its registration.'
+        )
+    )
     is_active = models.BooleanField(
         _('active'),
         default=True,
