@@ -1,14 +1,13 @@
 import pandas as pd
 from django.utils.translation import ugettext_lazy as _
 
-from codeschool import mixins
 from codeschool import models
 from codeschool.lms.activity_lists.validators import material_icon_validator
 from .managers import ActivityListManager
 from .score_map import ScoreMap
 
 
-class ActivityList(mixins.ShortDescriptionMixin, models.TimeStampedModel):
+class ActivityList(models.TimeStampedModel):
     """
     List of activities.
     """

@@ -4,7 +4,6 @@ from re import match
 from unidecode import unidecode
 
 from codeschool import models
-from codeschool import panels
 from codeschool.questions.base.models import Question, QuestionFeedback, \
     QuestionSubmission, QuestionProgress
 
@@ -13,6 +12,7 @@ class TextQuestion(Question):
     """
     A very simple question with a simple Text answer.
     """
+
     class Meta:
         verbose_name = _('Text question')
         verbose_name_plural = _('Text questions')
@@ -63,16 +63,6 @@ class TextQuestion(Question):
 
     def get_submission_kwargs(self, request, kwargs):
         return {'value': str(kwargs.get('value', None) or 0)}
-
-    # Wagtail admin
-    content_panels = Question.content_panels + [
-        panels.MultiFieldPanel([
-            panels.FieldPanel('correct_answer'),
-            panels.FieldPanel('label'),
-            panels.FieldPanel('help_text'),
-        ], heading=_('Text value'))
-    ]
-    content_panels.append(content_panels.pop(-2))
 
 
 class TextProgress(QuestionProgress):

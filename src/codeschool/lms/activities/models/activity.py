@@ -27,7 +27,7 @@ class Activity(CommitMixin, metaclass=ActivityMeta):
     Each concrete activity is represented by a different subclass.
     """
 
-    VISIBILITY_PRIVATE = VISIBILITY_STAFF, VISIBILITY_PUBLIC = range(3)
+    VISIBILITY_PRIVATE, VISIBILITY_STAFF, VISIBILITY_PUBLIC = range(3)
     VISIBILITY_CHOICES = [
         (VISIBILITY_PRIVATE, _('Private')),
         (VISIBILITY_STAFF, _('STAFF')),
@@ -35,7 +35,8 @@ class Activity(CommitMixin, metaclass=ActivityMeta):
     ]
 
     owner = models.ForeignKey(
-        _('Owner'),
+        models.User,
+        verbose_name=_('Owner'),
         help_text=_(
             'The activity\'s owner.'
         ),

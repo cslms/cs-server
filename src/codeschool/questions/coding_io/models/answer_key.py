@@ -26,7 +26,7 @@ class AnswerKey(models.Model):
         verbose_name_plural = _('answer keys')
         unique_together = [('question', 'language')]
 
-    question = models.ParentalKey(
+    question = models.ForeignKey(
         CodingIoQuestion,
         related_name='answers'
     )

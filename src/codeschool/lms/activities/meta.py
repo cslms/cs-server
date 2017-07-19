@@ -10,7 +10,7 @@ EXTRA_META_VARS = {
 }
 
 
-class ActivityMeta(models.Model):
+class ActivityMeta(type(models.Model)):
     """
     Metaclass for Activity
     """

@@ -1,3 +1,4 @@
+from annoying.functions import get_config
 from django import http
 from django.contrib.auth import authenticate, login, logout as do_logout
 from django.contrib.auth.decorators import login_required
@@ -6,11 +7,12 @@ from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
 from rest_framework import viewsets
 
-from codeschool import settings
 from . import bricks
 from . import models
 from . import serializers
 from .forms import LoginForm, UserForm, ProfileForm
+
+authentication_backend = get_config('AUTHENTICATION_BACKENDS')[-1]
 
 
 #
@@ -110,7 +112,7 @@ def post_login_form(request):
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
         user = authenticate(**form.cleaned_data)
-        login(request, user, backend=settings.AUTHENTICATION_BACKENDS[-1])
+        login(request, user, backend=authentication_backend)
 
         # Redirect
         redirect_url = request.GET.get('redirect', 'index')
@@ -138,7 +140,7 @@ def post_register_form(request):
             profile.save()
 
         user = authenticate(**user_form.cleaned_data)
-        login(request, user, backend=settings.AUTHENTICATION_BACKENDS[-1])
+        login(request, user, backend=authentication_backend)
 
         # Redirect
         redirect_url = request.GET.get('redirect', 'index')

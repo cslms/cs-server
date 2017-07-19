@@ -1,6 +1,7 @@
-from django.db.models import Model, CharField
-from django.utils.translation import ugettext_lazy as _
+from django.db.models import Model
 from wagtail.wagtailcore.models import Page
+
+from .fields import CodeschoolShortDescriptionField
 
 
 class ShortDescriptionPage(Page):
@@ -11,13 +12,7 @@ class ShortDescriptionPage(Page):
     class Meta:
         abstract = True
 
-    short_description = CharField(
-        _('short description'),
-        max_length=140,
-        help_text=_(
-            'A short textual description to be used in titles, lists, etc.'
-        )
-    )
+    short_description = CodeschoolShortDescriptionField()
 
     def full_clean(self, *args, **kwargs):
         if self.short_description and not self.seo_title:
@@ -25,26 +20,6 @@ class ShortDescriptionPage(Page):
         if not self.short_description:
             self.short_description = self.seo_title or self.title
         return super().full_clean(*args, **kwargs)
-
-
-class ShortDescriptionMixin(Model):
-    """
-    A describable page model that only adds the short_description field,
-    leaving the long_description/body definition to the user.
-    """
-
-    class Meta:
-        abstract = True
-
-    short_description = CharField(
-        _('short description'),
-        max_length=140,
-        blank=True,
-        help_text=_(
-            'A very brief one-phrase description used in listings.\n'
-            'This field accepts mardown markup.'
-        ),
-    )
 
 
 class AbsoluteUrlMixin:
@@ -126,6 +101,9 @@ class CommitMixin(Model):
 
     LAST_COMMIT_ID = 0
     DISABLE_COMMIT = False
+
+    class Meta:
+        abstract = True
 
     def commit(self, commit, *args, **kwargs):
         """

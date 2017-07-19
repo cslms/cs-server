@@ -13,6 +13,28 @@ from codeschool import models
 strptime = datetime.datetime.strptime
 
 
+class UserManager(BaseUserManager):
+    """
+    A manager that mimics the interface of Django's default User manager.
+    """
+
+    def create_user(self, *args, username=None, commit=True, **kwargs):
+        if username is not None:
+            kwargs['alias'] = username
+        new = User(**kwargs)
+        new.set_password(kwargs.get('password'))
+        if commit:
+            new.save()
+        return new
+
+    def create_superuser(self, *args, commit=True, **kwargs):
+        user = self.create_user(*args, commit=False, **kwargs)
+        user.is_staff = user.is_superuser = True
+        if commit:
+            user.save()
+        return user
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     Base user model.
@@ -86,7 +108,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=timezone.now
     )
 
-    objects = BaseUserManager()
+    objects = UserManager()
 
     # Temporary properties defined for compatibility
     username = property(lambda x: x.alias)

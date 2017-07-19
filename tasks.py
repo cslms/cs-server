@@ -56,12 +56,14 @@ def run(ctx, production=False, port='8000'):
 
 
 @task
-def db(ctx, run=False):
+def db(ctx, run=False, hard_reset=False):
     """
     Executes the makemigrations and migrate commands.
     """
 
     ctx.run('python manage.py makemigrations', pty=True)
+    if hard_reset:
+        ctx.run('rm -y local/db/db.sqlite3')
     ctx.run('python manage.py migrate', pty=True)
     if run:
         ctx.run('python manage.py runserver', pty=True)

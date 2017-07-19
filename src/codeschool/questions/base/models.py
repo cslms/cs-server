@@ -16,11 +16,12 @@ QUESTION_BODY_BLOCKS = [
 ]
 
 
-class Question(mixins.ShortDescriptionPage, Activity):
+class Question(Activity):
     """
     Base abstract class for all question types.
     """
 
+    short_description = models.CodeschoolShortDescriptionField()
     body = models.StreamField(
         QUESTION_BODY_BLOCKS,
         blank=True,

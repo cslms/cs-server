@@ -18,4 +18,7 @@ class ActivityQueryset(models.QuerySet):
         return self.model.load_from_file(path, parent)
 
 
-ActivityManager = ActivityQueryset.as_manager()
+ActivityManager = models.Manager.from_queryset(
+    ActivityQueryset,
+    'ActivityManager',
+)

@@ -1,7 +1,6 @@
 from django import forms
 from django.apps import apps
 from django.core.exceptions import ValidationError
-from django.utils.text import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from codeschool import models
@@ -62,30 +61,6 @@ class ConfigForm(forms.Form):
     Config server settings.
     """
 
-    # Prepare valid initial page choices
-    PAGE_DESCRIPTION = [_(
-        '<span>Chooses which page is presented to users just after login.'
-    ), '</span>\n <dl>\n', _(
-        '<dt>Questions</dt> <dd>Show a global list of questions.</dd>\n'
-    )]
-
-    INITIAL_PAGE_OPTIONS = [('question-list', 'List of Questions')]
-    if apps.is_installed('codeschool.lms.classrooms'):
-        INITIAL_PAGE_OPTIONS.append(('course-list', 'List of courses'))
-        PAGE_DESCRIPTION += [_(
-            '<dt>Courses</dt> <dd>Present a list of all courses related to the '
-            'user.</dd>\n'
-        )]
-    if apps.is_installed('codeschool.social'):
-        INITIAL_PAGE_OPTIONS.append(('social:timeline', 'Social network'))
-        PAGE_DESCRIPTION += [_(
-            '<dt>Social</dt> <dd>Start at user\'s news feed.</dd>\n'
-            '</dl>'
-        )]
-    PAGE_DESCRIPTION += ['</dl>\n']
-    PAGE_DESCRIPTION = ''.join(map(str, PAGE_DESCRIPTION))
-
-    # Fields
     address = forms.CharField(
         max_length=200,
         label=_('Server address'),
@@ -94,10 +69,6 @@ class ConfigForm(forms.Form):
             'Full network address for the Codeschool server.'
         ),
         validators=[address_validator],
-    )
-    initial_page = forms.ChoiceField(
-        INITIAL_PAGE_OPTIONS,
-        help_text=mark_safe(PAGE_DESCRIPTION)
     )
 
 
