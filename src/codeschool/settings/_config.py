@@ -186,6 +186,10 @@ SOCIAL_AUTH_PIPELINE = (
     # a similar email address. Disabled by default.
     # 'social_core.pipeline.social_auth.associate_by_email',
 
+    # Partial pipeline for completing user registration
+    # (in case his email or any other mandatory field is not available)
+    'codeschool.core.users.oauth_pipeline.complete_user_registration',
+
     # Create a user account if we haven't found one yet.
     'codeschool.core.users.oauth_pipeline.create_user',
 

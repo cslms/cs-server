@@ -1,5 +1,7 @@
 import random
 from .models import User
+from social_core.pipeline.partial import partial
+from django.shortcuts import render
 
 USER_FIELDS = ['alias', 'email', 'school_id']
 
@@ -31,3 +33,7 @@ def create_user(strategy, details, backend, request=None, user=None, *args, **kw
         'is_new': True,
         'user': strategy.create_user(**fields)
     }
+
+@partial
+def complete_user_registration(backend, username, *args, **kwargs):
+    return
