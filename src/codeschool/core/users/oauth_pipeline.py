@@ -5,13 +5,8 @@ from django.shortcuts import render
 
 USER_FIELDS = ['alias', 'email', 'school_id']
 
-def set_random_school_id():
-    school_id = str(random.randint(0, (10**21)-1))
-
-    while(User.objects.filter(school_id = school_id).count() != 0):
-        school_id = str(random.randint(0, (10**21)-1))
-
-    return school_id
+def set_temp_school_id(email):
+    return email[:20]
 
 def create_user(strategy, details, backend, request=None, user=None, *args, **kwargs):
 
@@ -22,9 +17,7 @@ def create_user(strategy, details, backend, request=None, user=None, *args, **kw
                   for name in backend.setting('USER_FIELDS', USER_FIELDS))
 
     fields['alias'] = details['username']
-
-
-    fields['school_id'] = set_random_school_id()
+    fields['school_id'] = set_temp_school_id(fields['email'])
 
     if not fields:
         return
@@ -33,7 +26,3 @@ def create_user(strategy, details, backend, request=None, user=None, *args, **kw
         'is_new': True,
         'user': strategy.create_user(**fields)
     }
-
-@partial
-def complete_user_registration(backend, username, *args, **kwargs):
-    return
