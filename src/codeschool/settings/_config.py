@@ -6,6 +6,7 @@ import sys
 import os
 
 from . import _paths as paths
+from . import _secrets as secrets
 from ._debug import DEBUG
 
 # Quick-start development settings - unsuitable for production
@@ -136,14 +137,17 @@ SOCIAL_AUTH_LOGIN_URL = '/auth/login/'
 
 # OAUTH keys (not working yet, should read from secrets!)
 
-SOCIAL_AUTH_GITHUB_KEY = '4988bcc07177fc591d8a'
-SOCIAL_AUTH_GITHUB_SECRET = 'b5682f654ce3962b91719834929a204c5b66079e'
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '860085436116-8soo1tr4sd96eb9beanh23b0stpbcr10'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'joJPhBpfdnZiTFSeWAqpNjLw'
-SOCIAL_AUTH_FACEBOOK_KEY = '1928546690755902'
-SOCIAL_AUTH_FACEBOOK_SECRET = '057644e185599e54300a024937732aa4'
-SOCIAL_AUTH_TWITTER_KEY = 'EFG3wuvDw2ja8Ck1eclHcYrAm'
-SOCIAL_AUTH_TWITTER_SECRET = '6RexLlM6otce3n0PYJZvW57V0FwjrNK3DBh0e0hdU9PQyd9QIA'
+keys = secrets.OAUTH_KEYS
+secret_keys = secrets.OAUTH_SECRET_KEYS
+
+SOCIAL_AUTH_GITHUB_KEY = secrets.key_handler(keys, 'github')
+SOCIAL_AUTH_GITHUB_SECRET = secrets.key_handler(secret_keys, 'github')
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secrets.key_handler(keys, 'google-oauth2')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secrets.key_handler(secret_keys, 'google-oauth2')
+SOCIAL_AUTH_FACEBOOK_KEY = secrets.key_handler(keys, 'facebook')
+SOCIAL_AUTH_FACEBOOK_SECRET = secrets.key_handler(secret_keys, 'facebook')
+SOCIAL_AUTH_TWITTER_KEY = secrets.key_handler(keys, 'twitter')
+SOCIAL_AUTH_TWITTER_SECRET = secrets.key_handler(secret_keys, 'twitter')
 
 # Social OAuth scopes
 
