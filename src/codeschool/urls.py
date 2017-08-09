@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^admin/', include('wagtail.wagtailadmin.urls')),
     url(r'^', include('codeschool.core.users.urls', namespace='auth')),
-
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
 ]
 
 # Optional debug views
@@ -46,6 +46,7 @@ if get_config('CODESCHOOL_DEBUG_VIEWS', False) or DEBUG:
             debug_page_view, name='config-debug-page'),
         url(r'^_bricks/',
             include('codeschool.bricks.urls', namespace='bricks')),
+       
     ]
 
 # # Optional "social" urls
@@ -86,10 +87,11 @@ if os.environ.get('DJANGO_SERVE_STATIC', False) or DEBUG:
     urlpatterns += staticfiles_urlpatterns()
 
 # Wagtail endpoint (these must be last)
-urlpatterns += [
-    wagtail_urls.urlpatterns[0],
-    url(r'^((?:[\w\-\.]+/)*)$',
-        wagtail_urls.views.serve, name='wagtail_serve'),
-    url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:bricks|json|api)/?)$',
-        wagtail_urls.views.serve, name='wagtail-api-serve'),
-]
+
+# urlpatterns += [
+#     wagtail_urls.urlpatterns[0],
+#     url(r'^((?:[\w\-\.]+/)*)$',
+#         wagtail_urls.views.serve, name='wagtail_serve'),
+#     url(r'^((?:[\w\-\.]+/)*[\w\-\.]+\.(?:bricks|json|api)/?)$',
+#         wagtail_urls.views.serve, name='wagtail-api-serve'),
+# ]

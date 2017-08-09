@@ -68,6 +68,7 @@ setup(
         'json-rpc',
         'editdistance',
         'placeholder',
+        
 
         # Services
         'invoke',
@@ -92,6 +93,8 @@ setup(
         'rules',
         'djangorestframework',
         'werkzeug',
+        'social-auth-app-django',
+        
 
         # Wagtail
         'wagtail~=1.10',

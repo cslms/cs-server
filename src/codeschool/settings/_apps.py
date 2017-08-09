@@ -79,5 +79,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
+
+    # OAuth Social Authentication 
+    'social_django',
 ]
 #

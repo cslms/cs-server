@@ -6,6 +6,7 @@ import sys
 import os
 
 from . import _paths as paths
+from . import _secrets as secrets
 from ._debug import DEBUG
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +28,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'codeschool.urls'
@@ -119,6 +121,10 @@ AUTHENTICATION_BACKENDS = (
     'rules.permissions.ObjectPermissionBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
 )
 ANONYMOUS_USER_ID = 1
 AUTH_USER_MODEL = 'users.User'
@@ -131,16 +137,41 @@ SOCIAL_AUTH_LOGIN_URL = '/auth/login/'
 
 # OAUTH keys (not working yet, should read from secrets!)
 
-SOCIAL_AUTH_GITHUB_KEY = ''
-SOCIAL_AUTH_GITHUB_SECRET = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ''
-SOCIAL_AUTH_FACEBOOK_KEY = '1085127354890672'
-SOCIAL_AUTH_FACEBOOK_SECRET = '9f6ba5c8721172acaf25a733c4c81a99'
+keys = secrets.OAUTH_KEYS
+secret_keys = secrets.OAUTH_SECRET_KEYS
+
+SOCIAL_AUTH_GITHUB_KEY = secrets.key_handler(keys, 'github')
+SOCIAL_AUTH_GITHUB_SECRET = secrets.key_handler(secret_keys, 'github')
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secrets.key_handler(keys, 'google-oauth2')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secrets.key_handler(secret_keys, 'google-oauth2')
+SOCIAL_AUTH_FACEBOOK_KEY = secrets.key_handler(keys, 'facebook')
+SOCIAL_AUTH_FACEBOOK_SECRET = secrets.key_handler(secret_keys, 'facebook')
+SOCIAL_AUTH_TWITTER_KEY = secrets.key_handler(keys, 'twitter')
+SOCIAL_AUTH_TWITTER_SECRET = secrets.key_handler(secret_keys, 'twitter')
+
+# Social OAuth scopes
+
+SOCIAL_AUTH_TWITTER_SCOPE = ['user']
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_TWITTER_KEY = 'JrIVXbXZguPeUsnqcjtbQEWXH'
-SOCIAL_AUTH_TWITTER_SECRET = 'vMZjdO7DsUV8mVo46smQK2SHyhCxnXyc24gxH6J6cH08anWqHA'
+SOCIAL_AUTH_GITHUB_SCOPE = ['user']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+]
+
+#OAuth pipeline
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'codeschool.core.users.oauth_pipeline.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
 
 # Accounts and users
 
